@@ -1,0 +1,238 @@
+// Minimal Login Component Styles
+// Global scroll bar removal - Use ::ng-deep for Angular
+::ng-deep {
+  html, body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  * {
+    box-sizing: border-box !important;
+  }
+}
+
+.auth-container {
+  height: 100vh !important;
+  width: 100vw !important;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.auth-content {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    max-width: 400px;
+    min-height: auto;
+  }
+}
+
+// Left Brand Section
+.brand-section {
+  flex: 1;
+  background: linear-gradient(135deg, #6ba3d6 0%, #5b8bb3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  @media (max-width: 768px) {
+    min-height: 200px;
+  }
+
+  .brand-title {
+    font-size: 3.5rem;
+    font-weight: 300;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 2px;
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+
+    .brand-letter {
+      font-size: 4rem;
+      font-weight: 400;
+
+      @media (max-width: 768px) {
+        font-size: 3rem;
+      }
+    }
+  }
+}
+
+// Right Form Section
+.form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+
+  @media (max-width: 768px) {
+    padding: 30px 20px;
+  }
+}
+
+.form-container {
+  width: 100%;
+  max-width: 350px;
+}
+
+// Login Card Styling - Match register card size
+::ng-deep .login-card {
+  .p-card-body {
+    padding: 1.5rem; // Reduced from 2rem to 1.5rem
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 1.5rem; // Reduced from 2rem to 1.5rem
+
+  h2 {
+    color: #6ba3d6;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+}
+
+// Form Fields - Reduced spacing to match register design
+.field {
+  margin-bottom: 1rem; // Reduced from 1.5rem to 1rem
+
+  .field-label {
+    display: block;
+    color: #6ba3d6;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem; // Reduced from 0.5rem to 0.4rem
+    font-weight: 500;
+  }
+}
+
+// Input Styling - Ensure same height for both fields
+::ng-deep .p-inputtext {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  height: 48px; // Fixed height for consistency
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #6ba3d6;
+    box-shadow: 0 0 0 3px rgba(107, 163, 214, 0.1);
+  }
+}
+
+// Password Field - Match username field height
+::ng-deep .password-field .p-password-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  height: 48px; // Match username field height
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #6ba3d6;
+    box-shadow: 0 0 0 3px rgba(107, 163, 214, 0.1);
+  }
+}
+
+// Ensure password wrapper has same height
+::ng-deep .p-password {
+  width: 100%;
+  
+  .p-password-input {
+    width: 100% !important;
+  }
+}
+
+// Links
+.forgot-link, .register-link-text {
+  color: #6ba3d6;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #5b8bb3;
+    text-decoration: underline;
+  }
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+// Submit Button - Reduced spacing
+.submit-section {
+  text-align: center;
+  margin-bottom: 1rem; // Reduced from 1.5rem to 1rem
+}
+
+::ng-deep .submit-btn {
+  background: linear-gradient(135deg, #6ba3d6, #5b8bb3) !important;
+  border: none !important;
+  padding: 0.75rem 2rem !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: transform 0.2s ease !important;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(107, 163, 214, 0.3) !important;
+  }
+
+  &:disabled {
+    opacity: 0.6 !important;
+  }
+}
+
+// Register Link
+.register-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1rem;
+}
+
+// Messages - Compact spacing
+::ng-deep .p-messages {
+  margin-bottom: 0.75rem; // Reduced from 1rem
+}
+
+// Error messages - Compact styling
+.p-error {
+  color: #e74c3c;
+  font-size: 0.75rem; // Slightly smaller font
+  margin-top: 0.2rem; // Reduced spacing
+  display: block;
+  line-height: 1.2; // Tighter line height
+}

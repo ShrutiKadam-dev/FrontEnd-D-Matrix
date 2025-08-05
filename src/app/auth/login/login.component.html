@@ -1,0 +1,99 @@
+
+<div class="auth-container">
+  <div class="auth-content">
+    <!-- Left side - Brand -->
+    <div class="brand-section">
+      <div class="brand-content">
+        <h1 class="brand-title">
+          <span class="brand-letter">D</span>
+          <br>
+          MATRIX
+        </h1>
+      </div>
+    </div>
+
+    <!-- Right side - Login Form -->
+    <div class="form-section">
+      <div class="form-container">
+        <p-card class="login-card">
+          <div class="login-header">
+            <h2>LOGIN</h2>
+          </div>
+
+          <p-messages 
+            [(value)]="messages" 
+            [enableService]="false"
+            [closable]="true">
+          </p-messages>
+
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+            <!-- Username Field -->
+            <div class="field">
+              <label for="username" class="field-label">Username</label>
+              <input 
+                id="username"
+                type="text" 
+                pInputText 
+                formControlName="username"
+                class="w-full"
+                [class.ng-invalid]="username?.invalid && username?.touched"
+                placeholder="Enter your username" />
+              <small 
+                *ngIf="username?.invalid && username?.touched" 
+                class="p-error">
+                Username is required
+              </small>
+            </div>
+
+            <!-- Password Field -->
+            <div class="field">
+              <label for="password" class="field-label">Password</label>
+              <p-password 
+                id="password"
+                formControlName="password"
+                [toggleMask]="true"
+                styleClass="password-field"
+                inputStyleClass="password-input"
+                [class.ng-invalid]="password?.invalid && password?.touched"
+                placeholder="Enter your password"
+                [feedback]="false">
+              </p-password>
+              <small 
+                *ngIf="password?.invalid && password?.touched" 
+                class="p-error">
+                <span *ngIf="password?.errors?.['required']">Password is required</span>
+                <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+              </small>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="forgot-password">
+              <a href="#" (click)="onForgotPassword()" class="forgot-link">
+                Forgot password?
+              </a>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+              <p-button 
+                type="submit"
+                label="Submit"
+                styleClass="submit-btn"
+                [loading]="loading"
+                [disabled]="loginForm.invalid">
+              </p-button>
+            </div>
+          </form>
+
+          <!-- Register Link -->
+          <div class="register-link">
+            <span>Don't have an account?</span>
+            <a (click)="navigateToRegister()" class="register-link-text">
+              Register Now
+            </a>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+</div>

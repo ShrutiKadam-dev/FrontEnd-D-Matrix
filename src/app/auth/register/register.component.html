@@ -1,0 +1,136 @@
+<div class="auth-container">
+  <div class="auth-content">
+    <!-- Left side - Register Form -->
+    <div class="form-section">
+      <div class="form-container">
+        <p-card class="register-card">
+          <div class="register-header">
+            <h2>REGISTER</h2>
+          </div>
+
+          <p-messages 
+            [(value)]="messages" 
+            [enableService]="false"
+            [closable]="true">
+          </p-messages>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+            <!-- Name Field -->
+            <div class="field">
+              <label for="name" class="field-label">Name</label>
+              <input 
+                id="name"
+                type="text" 
+                pInputText 
+                formControlName="name"
+                class="w-full"
+                [class.ng-invalid]="name?.invalid && name?.touched"
+                placeholder="Enter your full name" />
+              <small 
+                *ngIf="name?.invalid && name?.touched" 
+                class="p-error">
+                <span *ngIf="name?.errors?.['required']">Name is required</span>
+                <span *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</span>
+              </small>
+            </div>
+
+            <!-- Email Field -->
+            <div class="field">
+              <label for="email" class="field-label">Email</label>
+              <input 
+                id="email"
+                type="email" 
+                pInputText 
+                formControlName="email"
+                class="w-full"
+                [class.ng-invalid]="email?.invalid && email?.touched"
+                placeholder="Enter your email" />
+              <small 
+                *ngIf="email?.invalid && email?.touched" 
+                class="p-error">
+                <span *ngIf="email?.errors?.['required']">Email is required</span>
+                <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+              </small>
+            </div>
+
+            <!-- Password Field -->
+            <div class="field">
+              <label for="password" class="field-label">Password</label>
+              <p-password 
+                id="password"
+                formControlName="password"
+                [toggleMask]="true"
+                styleClass="password-field"
+                inputStyleClass="password-input"
+                [class.ng-invalid]="password?.invalid && password?.touched"
+                placeholder="Enter your password"
+                [feedback]="false">
+              </p-password>
+              <small 
+                *ngIf="password?.invalid && password?.touched" 
+                class="p-error">
+                <span *ngIf="password?.errors?.['required']">Password is required</span>
+                <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+              </small>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="field">
+              <label for="confirmPassword" class="field-label">Confirm password</label>
+              <p-password 
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                [toggleMask]="true"
+                styleClass="password-field"
+                inputStyleClass="password-input"
+                [class.ng-invalid]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+                placeholder="Confirm your password"
+                [feedback]="false">
+              </p-password>
+              <small 
+                *ngIf="confirmPassword?.invalid && confirmPassword?.touched" 
+                class="p-error">
+                Confirm password is required
+              </small>
+              <small 
+                *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched" 
+                class="p-error">
+                Passwords do not match
+              </small>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+              <p-button 
+                type="submit"
+                label="Submit"
+                styleClass="submit-btn"
+                [loading]="loading"
+                [disabled]="registerForm.invalid">
+              </p-button>
+            </div>
+          </form>
+
+          <!-- Login Link -->
+          <div class="login-link">
+            <span>Have an account?</span>
+            <a (click)="navigateToLogin()" class="login-link-text">
+              Login Now
+            </a>
+          </div>
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Right side - Brand -->
+    <div class="brand-section">
+      <div class="brand-content">
+        <h1 class="brand-title">
+          <span class="brand-letter">D</span>
+          <br>
+          MATRIX
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
