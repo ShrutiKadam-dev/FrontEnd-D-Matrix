@@ -29,7 +29,8 @@ export interface AuthResponse {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/auth'; // Replace with your API URL
+  
+  private apiUrl = 'https://dmatrix-backend.onrender.com'; // Replace with your API URL
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 

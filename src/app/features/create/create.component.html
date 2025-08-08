@@ -1,1 +1,64 @@
-<p>create works!</p>
+<!-- Trigger Button -->
+<p-button label="Add Entity" icon="pi pi-plus" (onClick)="showModal()" class="mb-3"></p-button>
+
+<!-- Add Entity Dialog -->
+<p-dialog header="Add New Entity" [(visible)]="displayModal" [modal]="true" [closable]="true" [style]="{width: '35vw'}">
+  <form [formGroup]="entityForm" class="p-fluid">
+    <div class="field mb-3">
+      <label for="scripName">Scrip Name</label>
+      <input id="scripName" pInputText formControlName="scripName" placeholder="Enter Scrip Name">
+    </div>
+
+    <div class="field mb-3">
+      <label for="scripCode">Scrip Code</label>
+      <input id="scripCode" pInputText formControlName="scripCode" placeholder="Enter Scrip Code">
+    </div>
+
+    <div class="field mb-3">
+      <label for="nickName">Nick Name</label>
+      <input id="nickName" pInputText formControlName="nickName" placeholder="Optional Nickname">
+    </div>
+
+    <div class="field mb-3">
+      <label for="category">Category</label>
+      <p-dropdown id="category" formControlName="category" [options]="categoryOptions" placeholder="Select Category"></p-dropdown>
+    </div>
+
+    <div class="field mb-3">
+      <label for="subCategory">Sub Category</label>
+      <p-dropdown id="subCategory" formControlName="subCategory" [options]="subCategoryOptions" placeholder="Select Sub Category"></p-dropdown>
+    </div>
+
+    <div class="flex justify-content-end mt-4">
+     <div class="flex justify-content-end gap-2 mt-4">
+  <p-button 
+    label="Cancel" 
+    icon="pi pi-times" 
+    class="p-button-outlined p-button-secondary" 
+    (onClick)="displayModal = false">
+  </p-button>
+
+  <p-button 
+    label="Add" 
+    icon="pi pi-check" 
+    class="p-button-success" 
+    (onClick)="addEntity()" 
+    [disabled]="entityForm.invalid">
+  </p-button>
+</div>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Entity List Display -->
+<div class="mt-4">
+  <h3>Entities</h3>
+  <div *ngFor="let entity of entityList" class="p-3 mb-3 border-round surface-100 shadow-1 flex justify-content-between align-items-center">
+    <div>
+      <div><strong>Scrip Name:</strong> {{ entity.scripName }}</div>
+      <div><strong>ID:</strong> #{{ entity.id }}</div>
+      <div><strong>Benchmark:</strong> {{ entity.benchmark }}</div>
+    </div>
+    <p-button label="Update" icon="pi pi-pencil" class="p-button-rounded p-button-info"></p-button>
+  </div>
+</div>

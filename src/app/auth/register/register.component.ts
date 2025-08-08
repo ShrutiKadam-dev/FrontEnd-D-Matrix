@@ -64,7 +64,7 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.loading = true;
       this.messages = [];
-
+      // this.router.navigate(['/auth/login']);
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
           this.loading = false;

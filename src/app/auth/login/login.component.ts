@@ -30,6 +30,7 @@ import { Message } from 'primeng/api';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -40,7 +41,7 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -53,7 +54,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.loading = false;
-          this.router.navigate(['/dashboard']); // Navigate to your main app
+          this.router.navigate(['/app']); // Navigate to your main app
         },
         error: (error) => {
           this.loading = false;
@@ -85,6 +86,6 @@ export class LoginComponent {
     });
   }
 
-  get username() { return this.loginForm.get('username'); }
+  get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
 }

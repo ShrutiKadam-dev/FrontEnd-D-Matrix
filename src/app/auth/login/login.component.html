@@ -29,19 +29,19 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <!-- Username Field -->
             <div class="field">
-              <label for="username" class="field-label">Username</label>
+              <label for="email" class="field-label">Email</label>
               <input 
-                id="username"
-                type="text" 
+                id="email"
+                type="email" 
                 pInputText 
-                formControlName="username"
+                formControlName="email"
                 class="w-full"
-                [class.ng-invalid]="username?.invalid && username?.touched"
-                placeholder="Enter your username" />
+                [class.ng-invalid]="email?.invalid && email?.touched"
+                placeholder="Enter your email"  />
               <small 
-                *ngIf="username?.invalid && username?.touched" 
+                *ngIf="email?.invalid && email?.touched"
                 class="p-error">
-                Username is required
+                Email is required
               </small>
             </div>
 

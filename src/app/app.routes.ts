@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AppComponent } from './app.component';
 
 export const routes: Routes = [
     {
@@ -6,12 +7,12 @@ export const routes: Routes = [
         loadChildren: () => import('./auth/auth.routes').then(m => m.authRoutes)
     },
     {
-        path: 'features',
-        loadChildren: () => import('./features/features.routes').then(m => m.featuresRoutes)
+        path: 'app',
+        component:AppComponent
     },
     {
-        path: 'shared',
-        loadChildren: () => import('./auth/auth.routes').then(m => m.authRoutes)
+        path: 'features',
+        loadChildren: () => import('./features/features.routes').then(m => m.featuresRoutes)
     },
     { path: '', redirectTo: '/auth', pathMatch: 'full' },
     { path: '**', redirectTo: '/auth' },

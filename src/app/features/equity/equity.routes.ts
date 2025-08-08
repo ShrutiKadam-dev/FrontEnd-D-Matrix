@@ -7,10 +7,14 @@ export const equityRoutes: Routes = [
         component: EquityComponent,
         children: [
             {
+                path: '',
+                redirectTo: 'mutual-funds',
+                pathMatch: 'full'
+            },
+            {
                 path: 'mutual-funds',
                 loadComponent: () => import('./mutual-funds/mutual-funds.component').then(c => c.MutualFundsComponent)
-            }
-
+            },
         ]
     }
 ];
