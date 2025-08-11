@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -11,6 +11,8 @@ import { FeaturesService } from '../features.service';
 import { MessageModule } from 'primeng/message';
 import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
+import { Table, TableModule } from 'primeng/table';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-create',
@@ -24,7 +26,9 @@ import { MessagesModule } from 'primeng/messages';
     DropdownModule,
     CommonModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    TableModule,
+    InputTextModule
   ],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
@@ -35,7 +39,12 @@ export class CreateComponent implements OnInit {
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
   private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
+
   messages: Message[] = [];
+  @ViewChild('dt') dt!: Table;
+  displayEditChoiceModal = false;
+  selectedEntity: any = null;
 
   categoryOptions = [
     { label: 'Equity', value: 'Equity' },
@@ -87,21 +96,29 @@ export class CreateComponent implements OnInit {
     this.displayModal = true;
   }
 
-getEntities() {
-  this.featuresService.getAllEntities().subscribe({
-    next: (data: any) => {
-      console.log('Entities API Response:', data);
-      this.entityList = Array.isArray(data.data) ? data.data : [];
-    },
-    error: (err) => {
-      this.messages = [{
-        severity: 'error',
-        summary: 'Error',
-        detail: err.error?.message || 'Failed to load entities'
-      }];
+  onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) {
+      this.dt.filter(input.value, 'global', 'contains');
     }
-  });
-}
+  }
+
+
+  getEntities() {
+    this.featuresService.getAllEntities().subscribe({
+      next: (data: any) => {
+        console.log('Entities API Response:', data);
+        this.entityList = Array.isArray(data.data) ? data.data : [];
+      },
+      error: (err) => {
+        this.messages = [{
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to load entities'
+        }];
+      }
+    });
+  }
 
 
   getCategoryLabel(value: string): string {
@@ -118,11 +135,7 @@ getEntities() {
 
     this.featuresService.createEntity(formData).subscribe({
       next: () => {
-        this.messages = [{
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Entity added successfully'
-        }];
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Entity added successfully' });
         this.entityForm.reset();
         this.displayModal = false;
         this.getEntities();
@@ -135,5 +148,29 @@ getEntities() {
         }];
       }
     });
+  }
+
+  openAddModal() {
+    this.displayModal = true;
+  }
+
+  updateEntity(entity: any) {
+    this.selectedEntity = entity;
+    this.displayEditChoiceModal = true;
+  }
+
+  editEntity(entity: any){
+
+  }
+  updateUnderlyingTable() {
+    this.displayEditChoiceModal = false;
+    console.log("Updating Underlying Table for:", this.selectedEntity);
+    // You can open another form/modal here or route to a page
+  }
+
+  updateContractNoteTable() {
+    this.displayEditChoiceModal = false;
+    console.log("Updating Contract Note Table for:", this.selectedEntity);
+    // You can open another form/modal here or route to a page
   }
 }

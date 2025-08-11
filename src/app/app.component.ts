@@ -7,10 +7,11 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { CardModule } from 'primeng/card';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, PanelMenuModule, CardModule],
+  imports: [RouterOutlet, CommonModule, PanelMenuModule, CardModule,ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

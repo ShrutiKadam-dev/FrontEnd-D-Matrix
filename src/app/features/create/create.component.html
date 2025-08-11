@@ -1,10 +1,17 @@
-<p-button 
-  label="Add Entity" 
-  icon="pi pi-plus" 
-  (onClick)="showModal()" 
-  styleClass="add-entity-btn mb-3">
+<!-- Add Entity Button -->
+<p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn">
 </p-button>
 
+<!-- Search Box Below Add Entity -->
+<div class="search-container half-width">
+  <span class="p-input-icon-left search-bar">
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+  </span>
+</div>
+
+
+<!-- Add Entity Dialog -->
 <p-dialog header="Add New Entity" [(visible)]="displayModal" [modal]="true" [closable]="true"
   [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
 
@@ -42,32 +49,63 @@
       <label for="benchmark">Benchmark</label>
       <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark">
     </div>
-    
+
     <div class="dialog-actions">
-      <p-button label="Cancel" icon="pi pi-times" class="p-button-outlined p-button-secondary"
-        (onClick)="displayModal = false" styleClass="add-entity-btn mb-3">
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn" (click)="displayModal = false">
       </p-button>
 
-      <p-button label="Add" icon="pi pi-check" class="p-button-success" (onClick)="addEntity()"
-        [disabled]="entityForm.invalid" styleClass="add-entity-btn mb-3">
+      <p-button label="Add" icon="pi pi-check" styleClass="add-entity-btn" (click)="addEntity()"
+        [disabled]="entityForm.invalid">
       </p-button>
     </div>
   </form>
 </p-dialog>
 
-<div class="mt-4">
-  <h3>Entities</h3>
-  <div *ngFor="let entity of entityList || []"
-    class="p-3 mb-3 border-round surface-100 shadow-1 flex justify-content-between align-items-center">
+<!-- Entity Table -->
+<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10, 25, 50]"
+  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Scrip Name</th>
+      <th>Scrip Code</th>
+      <th>Benchmark</th>
+      <th>Action</th>
+    </tr>
+  </ng-template>
 
-    <div>
-      <div><strong>Scrip Name:</strong> {{ entity.scripname }}</div>
-      <div><strong>Category:</strong> {{ getCategoryLabel(entity.category) }}</div>
-      <div><strong>Sub Category:</strong> {{ getSubCategoryLabel(entity.category, entity.subcategory) }}</div>
-      <div><strong>Benchmark:</strong> {{ entity.benchmark }}</div>
-    </div>
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scripname }}</td>
+      <td>{{ entity.scripcode }}</td>
+      <td>{{ entity.benchmark }}</td>
+      <td>
+        <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
+          (click)="editEntity(entity)">
+        </p-button>
+      </td>
+      <td>
+        <p-button label="Update" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
+          (click)="updateEntity(entity)">
+        </p-button>
+      </td>
 
-    <p-button label="Update" icon="pi pi-pencil" class="p-button-rounded p-button-info">
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Edit Choice Dialog -->
+<p-dialog header="Select Table to Update" [(visible)]="displayEditChoiceModal" [modal]="true" [closable]="true"
+  [style]="{ width: '25vw' }">
+
+  <p>Which table would you like to update?</p>
+
+  <div class="edit-choice-buttons">
+    <p-button label="Underlying" icon="pi pi-database" styleClass="p-button-success mr-2"
+      (click)="updateUnderlyingTable()">
+    </p-button>
+
+    <p-button label="Contract Note" icon="pi pi-file" styleClass="p-button-info" (click)="updateContractNoteTable()">
     </p-button>
   </div>
-</div>
+
+</p-dialog>

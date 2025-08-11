@@ -1,4 +1,4 @@
-import { Component, OnInit, inject  } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,8 +10,11 @@ import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
-
+import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../auth.service';
+import { RippleModule } from 'primeng/ripple';
+import { MessageService } from 'primeng/api';
+
 export interface AppMessage {
   severity?: 'success' | 'info' | 'warn' | 'error';
   summary?: string;
@@ -27,20 +30,24 @@ export interface AppMessage {
     PasswordModule,
     CardModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    ToastModule,
+    RippleModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  
+
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private messageService = inject(MessageService);
 
   loginForm!: FormGroup;
   loading = false;
-messages: AppMessage[] = [];
+  messages: AppMessage[] = [];
+
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -56,11 +63,13 @@ messages: AppMessage[] = [];
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
+          this.messageService.add({ severity: 'success', summary: 'Login Successful', detail: 'Welcome back!' });
           this.loading = false;
           this.router.navigate(['/features/home']); // Navigate to your main app
         },
         error: (error) => {
           this.loading = false;
+          this.messageService.add({ severity: 'error', summary: 'Login Failed', detail: 'error.error?.message' });
           this.messages = [{
             severity: 'error',
             summary: 'Login Failed',
@@ -91,4 +100,5 @@ messages: AppMessage[] = [];
 
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
+
 }

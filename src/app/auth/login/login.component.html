@@ -1,4 +1,3 @@
-
 <div class="auth-container">
   <div class="auth-content">
     <!-- Left side - Brand -->
@@ -20,27 +19,16 @@
             <h2>LOGIN</h2>
           </div>
 
-          <p-messages 
-            [(value)]="messages" 
-            [enableService]="false"
-            [closable]="true">
+          <p-messages [(value)]="messages" [enableService]="false" [closable]="true">
           </p-messages>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <!-- Username Field -->
             <div class="field">
               <label for="email" class="field-label">Email</label>
-              <input 
-                id="email"
-                type="email" 
-                pInputText 
-                formControlName="email"
-                class="w-full"
-                [class.ng-invalid]="email?.invalid && email?.touched"
-                placeholder="Enter your email"  />
-              <small 
-                *ngIf="email?.invalid && email?.touched"
-                class="p-error">
+              <input id="email" type="email" pInputText formControlName="email" class="w-full"
+                [class.ng-invalid]="email?.invalid && email?.touched" placeholder="Enter your email" />
+              <small *ngIf="email?.invalid && email?.touched" class="p-error">
                 Email is required
               </small>
             </div>
@@ -48,19 +36,11 @@
             <!-- Password Field -->
             <div class="field">
               <label for="password" class="field-label">Password</label>
-              <p-password 
-                id="password"
-                formControlName="password"
-                [toggleMask]="true"
-                styleClass="password-field"
-                inputStyleClass="password-input"
-                [class.ng-invalid]="password?.invalid && password?.touched"
-                placeholder="Enter your password"
-                [feedback]="false">
+              <p-password id="password" formControlName="password" [toggleMask]="true" styleClass="password-field"
+                inputStyleClass="password-input" [class.ng-invalid]="password?.invalid && password?.touched"
+                placeholder="Enter your password" [feedback]="false">
               </p-password>
-              <small 
-                *ngIf="password?.invalid && password?.touched" 
-                class="p-error">
+              <small *ngIf="password?.invalid && password?.touched" class="p-error">
                 <span *ngIf="password?.errors?.['required']">Password is required</span>
                 <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
               </small>
@@ -75,11 +55,7 @@
 
             <!-- Submit Button -->
             <div class="submit-section">
-              <p-button 
-                type="submit"
-                label="Submit"
-                styleClass="submit-btn"
-                [loading]="loading"
+              <p-button type="submit" label="Submit" styleClass="submit-btn" [loading]="loading"
                 [disabled]="loginForm.invalid">
               </p-button>
             </div>
@@ -97,3 +73,4 @@
     </div>
   </div>
 </div>
+
