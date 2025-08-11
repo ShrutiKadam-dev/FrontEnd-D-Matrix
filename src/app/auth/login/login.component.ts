@@ -12,8 +12,11 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/api';
-
+export interface AppMessage {
+  severity?: 'success' | 'info' | 'warn' | 'error';
+  summary?: string;
+  detail?: string;
+}
 @Component({
   selector: 'app-login',
   imports: [
@@ -37,7 +40,7 @@ export class LoginComponent {
 
   loginForm!: FormGroup;
   loading = false;
-  messages: Message[] = [];
+messages: AppMessage[] = [];
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -54,7 +57,7 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.loading = false;
-          this.router.navigate(['/app']); // Navigate to your main app
+          this.router.navigate(['/features/home']); // Navigate to your main app
         },
         error: (error) => {
           this.loading = false;

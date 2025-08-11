@@ -12,8 +12,11 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 
 import { AuthService } from '../auth.service';
-import { Message } from 'primeng/api';
-
+export interface AppMessage {
+  severity?: 'success' | 'info' | 'warn' | 'error';
+  summary?: string;
+  detail?: string;
+}
 // Custom validator for password confirmation
 export function passwordMatchValidator(control: AbstractControl): { [key: string]: any } | null {
   const password = control.get('password');
@@ -49,7 +52,7 @@ export class RegisterComponent {
 
   registerForm!: FormGroup;
   loading = false;
-  messages: Message[] = [];
+messages: AppMessage[] = [];
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({

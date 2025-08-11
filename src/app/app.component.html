@@ -1,23 +1,14 @@
-<!-- Show login screen only when logged out -->
-<app-login *ngIf="loggedOut"></app-login>
-
-<!-- Main layout when logged in -->
-<div class="layout-container" *ngIf="loggedIn">
-
-  <!-- Sidebar always shown on the left -->
-  <div class="sidebar-container">
+<div class="layout-container">
+  <div *ngIf="showSidebar" class="sidebar-container">
     <div class="logo">D MATRIX</div>
-
-    <p-panelMenu
+    <p-panelMenu 
       [model]="menuItems"
       [style.width]="'100%'"
       styleClass="custom-menu">
     </p-panelMenu>
   </div>
 
-  <!-- Routed components shown on the right -->
   <div class="content-container">
     <router-outlet></router-outlet>
   </div>
-
-</div>
+ </div>
