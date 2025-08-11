@@ -16,13 +16,17 @@ export interface CreateEntity {
 })
 export class FeaturesService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://dmatrix-backend.onrender.com'; // Replace with your actual API URL
+  private apiUrl = 'https://dmatrix-backend.onrender.com'; // backend URL
 
   createEntity(data: CreateEntity): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/entity_table`, data);
   }
 
   getAllEntities(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllentity`); // <-- Adjust endpoint
+    return this.http.get<any[]>(`${this.apiUrl}/getAllentity`);
+  }
+
+  updateEntity(id: number, entityData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/entity_table/${id}`, entityData);
   }
 }

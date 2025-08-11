@@ -1,4 +1,3 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +18,6 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    HttpClientModule,
     DialogModule,
     ButtonModule,
     InputTextModule,
@@ -38,13 +36,15 @@ export class CreateComponent implements OnInit {
   entityForm: FormGroup;
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
+  isEditMode = false;
+  displayUpdateChoiceModal = false;
+  selectedEntity: any = null;
+  messages: Message[] = [];
+
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
-  messages: Message[] = [];
   @ViewChild('dt') dt!: Table;
-  displayEditChoiceModal = false;
-  selectedEntity: any = null;
 
   categoryOptions = [
     { label: 'Equity', value: 'Equity' },
@@ -93,6 +93,8 @@ export class CreateComponent implements OnInit {
   }
 
   showModal() {
+    this.isEditMode = false; // Always set to create mode
+    this.entityForm.reset(); // Clear previous form values
     this.displayModal = true;
   }
 
@@ -103,11 +105,9 @@ export class CreateComponent implements OnInit {
     }
   }
 
-
   getEntities() {
     this.featuresService.getAllEntities().subscribe({
       next: (data: any) => {
-        console.log('Entities API Response:', data);
         this.entityList = Array.isArray(data.data) ? data.data : [];
       },
       error: (err) => {
@@ -118,16 +118,6 @@ export class CreateComponent implements OnInit {
         }];
       }
     });
-  }
-
-
-  getCategoryLabel(value: string): string {
-    return this.categoryOptions.find(opt => opt.value === value)?.label || value;
-  }
-
-  getSubCategoryLabel(categoryValue: string, subValue: string): string {
-    const subOptions = this.allSubCategoryOptions[categoryValue] || [];
-    return subOptions.find(opt => opt.value === subValue)?.label || subValue;
   }
 
   addEntity() {
@@ -150,27 +140,57 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  openAddModal() {
+  editEntity(entity: any) {
+    this.isEditMode = true;
+    this.selectedEntity = entity;
+
+    this.entityForm.patchValue({
+      scripname: entity.scripname,
+      scripcode: entity.scripcode,
+      nickname: entity.nickname,
+      benchmark: entity.benchmark,
+      category: entity.category,
+      subcategory: entity.subcategory
+    });
+
+    this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
     this.displayModal = true;
   }
 
+  saveUpdatedEntity() {
+    const updatedData = this.entityForm.value;
+    this.featuresService.updateEntity(this.selectedEntity.id, updatedData).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Entity updated successfully' });
+        this.resetForm();
+        this.getEntities();
+      },
+      error: (error) => {
+        this.messages = [{
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        }];
+      }
+    });
+  }
+
   updateEntity(entity: any) {
-    this.selectedEntity = entity;
-    this.displayEditChoiceModal = true;
+    this.displayUpdateChoiceModal = true;
   }
 
-  editEntity(entity: any){
-
+  resetForm() {
+    this.entityForm.reset();
+    this.isEditMode = false;
+    this.selectedEntity = null;
+    this.displayModal = false;
   }
+
   updateUnderlyingTable() {
-    this.displayEditChoiceModal = false;
-    console.log("Updating Underlying Table for:", this.selectedEntity);
-    // You can open another form/modal here or route to a page
+    this.displayUpdateChoiceModal = false;
   }
 
   updateContractNoteTable() {
-    this.displayEditChoiceModal = false;
-    console.log("Updating Contract Note Table for:", this.selectedEntity);
-    // You can open another form/modal here or route to a page
+    this.displayUpdateChoiceModal = false;
   }
 }

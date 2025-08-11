@@ -10,10 +10,9 @@
   </span>
 </div>
 
-
-<!-- Add Entity Dialog -->
-<p-dialog header="Add New Entity" [(visible)]="displayModal" [modal]="true" [closable]="true"
-  [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+<!-- Add/Update Entity Dialog -->
+<p-dialog [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'" [(visible)]="displayModal" [modal]="true"
+  [closable]="true" [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
 
   <form [formGroup]="entityForm" class="p-fluid">
     <div class="field">
@@ -54,8 +53,8 @@
       <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn" (click)="displayModal = false">
       </p-button>
 
-      <p-button label="Add" icon="pi pi-check" styleClass="add-entity-btn" (click)="addEntity()"
-        [disabled]="entityForm.invalid">
+      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check" styleClass="add-entity-btn"
+        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" [disabled]="entityForm.invalid">
       </p-button>
     </div>
   </form>
@@ -82,19 +81,16 @@
         <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
           (click)="editEntity(entity)">
         </p-button>
-      </td>
-      <td>
         <p-button label="Update" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
           (click)="updateEntity(entity)">
         </p-button>
       </td>
-
     </tr>
   </ng-template>
 </p-table>
 
 <!-- Edit Choice Dialog -->
-<p-dialog header="Select Table to Update" [(visible)]="displayEditChoiceModal" [modal]="true" [closable]="true"
+<p-dialog header="Select Table to Update" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
   [style]="{ width: '25vw' }">
 
   <p>Which table would you like to update?</p>
@@ -107,5 +103,4 @@
     <p-button label="Contract Note" icon="pi pi-file" styleClass="p-button-info" (click)="updateContractNoteTable()">
     </p-button>
   </div>
-
 </p-dialog>
