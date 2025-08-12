@@ -173,3 +173,16 @@ label {
   margin-right: 6px; /* space between Edit and Update */
 }
 
+::ng-deep .custom-btn {
+  background-color: #7c9bc5 !important; /* your desired color */
+  border: none !important;
+  color: white !important;
+  font-weight: 500;
+  border-radius: 6px !important;
+  padding: 0.5rem 1.2rem !important;
+  margin: 4px;
+}
+
+::ng-deep .custom-btn:hover {
+  background-color: #4e77c7 !important; /* hover color */
+}

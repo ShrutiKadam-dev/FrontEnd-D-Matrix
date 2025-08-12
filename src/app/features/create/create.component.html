@@ -62,7 +62,7 @@
 
 <!-- Entity Table -->
 <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,25, 50]"
-  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']">
+  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']" scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
       <th>Scrip Name</th>
@@ -78,10 +78,10 @@
       <td>{{ entity.scripcode }}</td>
       <td>{{ entity.benchmark }}</td>
       <td>
-        <p-button label="Edit" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
+        <p-button label="Edit" icon="pi pi-pencil" styleClass="custom-btn"
           (click)="editEntity(entity)">
         </p-button>
-        <p-button label="Update" icon="pi pi-pencil" styleClass="p-button-sm p-button-warning action-btn"
+        <p-button label="Update" icon="pi pi-file-edit" styleClass="custom-btn"
           (click)="updateEntity(entity)">
         </p-button>
       </td>
@@ -96,8 +96,8 @@
   <div class="p-fluid">
     <p>Which table would you like to update?</p>
     <div class="edit-choice-buttons">
-      <p-button label="Contract Note" icon="pi pi-table" class="mb-2" (click)="updateActionTable(selectedEntity)"></p-button>
-      <p-button label="Underlying" icon="pi pi-list" class="mb-2" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
+      <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn" (click)="updateActionTable(selectedEntity)"></p-button>
+      <p-button label="Underlying" icon="pi pi-list" styleClass="add-entity-btn" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
     </div>
 
   </div>
