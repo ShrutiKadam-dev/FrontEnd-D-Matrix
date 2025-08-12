@@ -186,3 +186,81 @@ label {
 ::ng-deep .custom-btn:hover {
   background-color: #4e77c7 !important; /* hover color */
 }
+
+/* ===== Underlying Data Modal Styling ===== */
+
+.underlying-modal {
+  padding: 1rem;
+  background: #fff;
+}
+
+.underlying-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.underlying-table th,
+.underlying-table td {
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.underlying-table th {
+  background: #f4f6f8;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.underlying-table input {
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.underlying-table input:focus {
+  border-color: #2196f3;
+  outline: none;
+}
+
+.add-row-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-row-btn:hover {
+  background: #43a047;
+}
+
+.remove-row-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-row-btn:hover {
+  background: #d32f2f;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.p-button {
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}

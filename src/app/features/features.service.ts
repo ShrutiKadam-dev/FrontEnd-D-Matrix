@@ -25,16 +25,18 @@ export class FeaturesService {
   getAllEntities(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllentity`);
   }
-  
-  updateEntity(entityData: any): Observable<any> {
-  return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
-}
-  addUnderlyingTable(data: any) {
-   return this.http.post<any>(`${this.apiUrl}/underlying_table`, data);
-}
 
-insertActionTable(data: any) {
-  return this.http.post(`${this.apiUrl}/action_table`, data); // replace URL with actual insert API
-}
+  updateEntity(entityData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
+  }
+
+  addUnderlyingTable(data: any) {
+    return this.http.post<any>(`${this.apiUrl}/underlying_table`, data);
+  }
+
+  insertActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/action_table`, data); // replace URL with actual insert API
+  }
+
 
 }

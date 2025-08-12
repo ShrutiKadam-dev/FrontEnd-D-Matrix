@@ -12,6 +12,7 @@ import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
+import { FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-create',
@@ -41,9 +42,10 @@ export class CreateComponent implements OnInit {
   selectedEntity: any = null;
   messages: Message[] = [];
   displayUnderlyingModal = false;
-  underlyingForm: FormGroup;
+  underlyingForm!: FormGroup;
   displayActionTableModal = false;
   actionTableForm: FormGroup;
+  selectedEntityId: string | null = null;
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -110,13 +112,6 @@ export class CreateComponent implements OnInit {
       subcategory: ['', Validators.required],
     });
 
-    this.underlyingForm = this.fb.group({
-      company_name: ['', Validators.required],
-      scripcode: ['', Validators.required],
-      weightage: ['', Validators.required],
-      sector: ['', Validators.required],
-      isin_code: ['', Validators.required]
-    });
 
     this.actionTableForm = this.fb.group({
       scrip_code: ['', Validators.required],
@@ -149,6 +144,48 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     this.getEntities();
+
+    this.underlyingForm = this.fb.group({
+      rows: this.fb.array([this.createRow()])
+    });
+
+  }
+
+  get rows(): FormArray {
+    return this.underlyingForm.get('rows') as FormArray;
+  }
+
+  createRow(): FormGroup {
+    return this.fb.group({
+      company_name: ['', Validators.required],
+      scripcode: ['', Validators.required],
+      sector: ['', Validators.required],
+      weightage: ['', Validators.required],
+      isin_code: ['', Validators.required]
+    });
+  }
+
+  addRow() {
+    this.rows.push(this.createRow());
+  }
+
+  removeRow(index: number): void {
+    this.rows.removeAt(index);
+  }
+
+  openUnderlyingModal(): void {
+    this.displayUnderlyingModal = true;
+    if (this.rows.length === 0) {
+      this.addRow();
+    }
+  }
+
+
+  showUnderlyingModal(entity?: any) {
+    this.underlyingForm.reset();
+    this.rows.clear();
+    this.addRow(); // start with 1 row
+    this.displayUnderlyingModal = true;
   }
 
   showModal() {
@@ -216,27 +253,27 @@ export class CreateComponent implements OnInit {
     this.displayModal = true;
   }
 
-saveUpdatedEntity() {
-  const updatedData = {
-    id: this.selectedEntity.id, 
-    ...this.entityForm.value
-  };
+  saveUpdatedEntity() {
+    const updatedData = {
+      id: this.selectedEntity.id,
+      ...this.entityForm.value
+    };
 
-  this.featuresService.updateEntity(updatedData).subscribe({
-    next: () => {
-      this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Entity updated successfully' });
-      this.resetForm();
-      this.getEntities();
-    },
-    error: (error) => {
-      this.messages = [{
-        severity: 'error',
-        summary: 'Failed',
-        detail: error.error?.message || 'Update failed'
-      }];
-    }
-  });
-}
+    this.featuresService.updateEntity(updatedData).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Entity updated successfully' });
+        this.resetForm();
+        this.getEntities();
+      },
+      error: (error) => {
+        this.messages = [{
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        }];
+      }
+    });
+  }
 
   updateEntity(entity: any) {
     this.selectedEntity = entity;
@@ -250,43 +287,41 @@ saveUpdatedEntity() {
     this.displayModal = false;
   }
 
-  updateUnderlyingTable(entity: any) {
-    this.selectedEntity = entity;
-    this.displayUpdateChoiceModal = false;
-    this.underlyingForm.reset();
-    this.displayUnderlyingModal = true;
-  }
+updateUnderlyingTable(entity: any) {
+  this.selectedEntityId = entity.entityid; // or entity.entityid depending on your API
+  this.underlyingForm.reset();
+  this.rows.clear();
+  this.addRow(); // start with one row
+  this.displayUnderlyingModal = true;
+}
+
+
   updateContractNoteTable() {
     this.displayUpdateChoiceModal = false;
   }
 
-  saveUnderlyingData() {
-    if (this.underlyingForm.invalid || !this.selectedEntity?.entityid) return;
+  submitUnderlyingData(): void {
+    if (this.underlyingForm.valid && this.selectedEntityId) {
+      const payload = {
+        entityid: this.selectedEntityId,
+        rows: this.underlyingForm.value.rows
+      };
 
-    const data = {
-      ...this.underlyingForm.value,
-      entityid: this.selectedEntity.entityid
-    };
-
-    this.featuresService.addUnderlyingTable(data).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Underlying data added successfully'
-        });
-        this.displayUnderlyingModal = false;
-      },
-      error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to add underlying data'
-        });
-      }
-    });
+      this.featuresService.addUnderlyingTable(payload).subscribe({
+        next: (res: any) => {
+          console.log('Data saved successfully', res);
+          this.displayUnderlyingModal = false;
+          this.underlyingForm.reset();
+          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+        },
+        error: (err: any) => {
+          console.error('Error saving data', err);
+        }
+      });
+    } else {
+      this.underlyingForm.markAllAsTouched();
+    }
   }
-
   onUpdate(entity: any) {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = true;
