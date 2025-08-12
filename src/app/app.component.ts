@@ -54,7 +54,7 @@ export class AppComponent implements OnInit {
           { 
             label: 'Mutual Funds', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/home'],
+            routerLink: ['/features/equity/mutual-funds'],
             styleClass: 'submenu-item-custom'
           },
           { 

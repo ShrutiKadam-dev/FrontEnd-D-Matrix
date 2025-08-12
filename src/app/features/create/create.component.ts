@@ -58,6 +58,15 @@ export class CreateComponent implements OnInit {
     { label: 'Commodities', value: 'Commodities' }
   ];
 
+  orderTypeOptions = [
+    { label: 'Purchase', value: 'Purchase' },
+    { label: 'Sell', value: 'Sell' }
+  ];
+
+  modeOptions = [
+    { label: 'Demat', value: 'Demat' }
+  ];
+
   allSubCategoryOptions: Record<string, any[]> = {
     Equity: [
       { label: 'Direct Equity', value: 'Direct Equity' },
@@ -92,6 +101,7 @@ export class CreateComponent implements OnInit {
     { key: 'unit', label: 'Unit' },
     { key: 'redeem_amount', label: 'Redeem Amount' },
     { key: 'purchase_amount', label: 'Purchase Amount' },
+    { key: 'purchase_value', label: 'Purchase Value' },
     { key: 'cgst', label: 'CGST' },
     { key: 'sgst', label: 'SGST' },
     { key: 'ugst', label: 'UGST' },
@@ -101,6 +111,12 @@ export class CreateComponent implements OnInit {
     { key: 'net_amount', label: 'Net Amount' },
   ];
 
+  private calculatePurchaseValue(): void {
+    const unit = Number(this.actionTableForm.get('unit')?.value) || 0;
+    const nav = Number(this.actionTableForm.get('nav')?.value) || 0;
+    const total = unit * nav;
+    this.actionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
+  }
 
   constructor(private fb: FormBuilder) {
     this.entityForm = this.fb.group({
@@ -110,6 +126,7 @@ export class CreateComponent implements OnInit {
       benchmark: [''],
       category: ['', Validators.required],
       subcategory: ['', Validators.required],
+      isin: ['', Validators.required],
     });
 
 
@@ -126,6 +143,7 @@ export class CreateComponent implements OnInit {
       unit: ['', Validators.required],
       redeem_amount: ['', Validators.required],
       purchase_amount: ['', Validators.required],
+      purchase_value: [{ value: '', disabled: true }, Validators.required],
       cgst: ['', Validators.required],
       sgst: ['', Validators.required],
       ugst: ['', Validators.required],
@@ -134,7 +152,12 @@ export class CreateComponent implements OnInit {
       cess_value: ['', Validators.required],
       net_amount: ['', Validators.required],
       entityid: ['', Validators.required] // Hidden field for entity ID
+
     });
+
+    // Auto-calculate purchase_value when unit or nav changes
+    this.actionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.actionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
 
     this.entityForm.get('category')?.valueChanges.subscribe(selectedCategory => {
       this.subCategoryOptions = this.allSubCategoryOptions[selectedCategory] || [];
@@ -287,13 +310,13 @@ export class CreateComponent implements OnInit {
     this.displayModal = false;
   }
 
-updateUnderlyingTable(entity: any) {
-  this.selectedEntityId = entity.entityid; // or entity.entityid depending on your API
-  this.underlyingForm.reset();
-  this.rows.clear();
-  this.addRow(); // start with one row
-  this.displayUnderlyingModal = true;
-}
+  updateUnderlyingTable(entity: any) {
+    this.selectedEntityId = entity.entityid; // or entity.entityid depending on your API
+    this.underlyingForm.reset();
+    this.rows.clear();
+    this.addRow(); // start with one row
+    this.displayUnderlyingModal = true;
+  }
 
 
   updateContractNoteTable() {
@@ -330,15 +353,28 @@ updateUnderlyingTable(entity: any) {
   updateActionTable(entity: any) {
     this.selectedEntity = entity;
     this.actionTableForm.reset();
-    this.actionTableForm.patchValue({ entityid: entity.entityid });
+
+    this.actionTableForm.patchValue({
+      entityid: entity.entityid,
+      scrip_code: entity.scripcode,
+      scrip_name: entity.scripname,
+      isin: entity.isin
+    });
+
     this.displayUpdateChoiceModal = false;
     this.displayActionTableModal = true;
+  }
+
+  isReadOnlyField(key: string): boolean {
+    return ['scrip_code', 'scrip_name', 'isin'].includes(key);
   }
 
   saveActionTableData() {
     if (this.actionTableForm.invalid) return;
 
-    this.featuresService.insertActionTable(this.actionTableForm.value).subscribe({
+    const payload = this.actionTableForm.getRawValue();
+
+    this.featuresService.insertActionTable(payload).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

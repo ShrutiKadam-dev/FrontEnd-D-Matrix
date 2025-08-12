@@ -1,33 +1,17 @@
 <!-- Add Entity Button -->
-<p-button
-  label="Create Entity"
-  icon="pi pi-plus"
-  (click)="showModal()"
-  styleClass="add-entity-btn"
-></p-button>
+<p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn"></p-button>
 
 <!-- Search Box -->
 <div class="search-container half-width">
   <span class="p-input-icon-left search-bar">
     <i class="pi pi-search"></i>
-    <input
-      pInputText
-      type="text"
-      (input)="onGlobalFilter($event)"
-      placeholder="Search..."
-    />
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
   </span>
 </div>
 
 <!-- Add/Update Entity Dialog -->
-<p-dialog
-  [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'"
-  [(visible)]="displayModal"
-  [modal]="true"
-  [closable]="true"
-  [style]="{ width: '35vw', 'max-height': '90vh' }"
-  [contentStyle]="{ 'overflow-y': 'auto' }"
->
+<p-dialog [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'" [(visible)]="displayModal" [modal]="true"
+  [closable]="true" [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
   <form [formGroup]="entityForm" class="p-fluid">
     <div class="field">
       <label for="scripname">Scrip Name</label>
@@ -46,26 +30,15 @@
 
     <div class="field">
       <label for="category">Category</label>
-      <p-dropdown
-        id="category"
-        formControlName="category"
-        [options]="categoryOptions"
-        placeholder="Select Category"
-        appendTo="body"
-      ></p-dropdown>
+      <p-dropdown id="category" formControlName="category" [options]="categoryOptions" placeholder="Select Category"
+        appendTo="body"></p-dropdown>
     </div>
 
     <div class="field">
       <label for="subcategory">Sub Category</label>
-      <p-dropdown
-        id="subcategory"
-        formControlName="subcategory"
-        [options]="subCategoryOptions"
-        placeholder="Select Sub Category"
-        appendTo="body"
-        panelStyleClass="subcategory-panel"
-        dropdownPosition="top"
-      ></p-dropdown>
+      <p-dropdown id="subcategory" formControlName="subcategory" [options]="subCategoryOptions"
+        placeholder="Select Sub Category" appendTo="body" panelStyleClass="subcategory-panel"
+        dropdownPosition="top"></p-dropdown>
     </div>
 
     <div class="field">
@@ -73,36 +46,24 @@
       <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark" />
     </div>
 
-    <div class="dialog-actions">
-      <p-button
-        label="Cancel"
-        icon="pi pi-times"
-        styleClass="add-entity-btn"
-        (click)="displayModal = false"
-      ></p-button>
+    <div class="field">
+      <label for="isin">ISIN Code</label>
+      <input id="isin" pInputText formControlName="isin" placeholder="Enter ISIN Code" />
+    </div>
 
-      <p-button
-        [label]="isEditMode ? 'Update' : 'Add'"
-        icon="pi pi-check"
-        styleClass="add-entity-btn"
-        (click)="isEditMode ? saveUpdatedEntity() : addEntity()"
-        [disabled]="entityForm.invalid"
-      ></p-button>
+    <div class="dialog-actions">
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn" (click)="displayModal = false"></p-button>
+
+      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check" styleClass="add-entity-btn"
+        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" [disabled]="entityForm.invalid"></p-button>
     </div>
   </form>
 </p-dialog>
 
 <!-- Entity Table -->
-<p-table
-  #dt
-  [value]="entityList"
-  dataKey="id"
-  [paginator]="true"
-  [rows]="5"
-  [rowsPerPageOptions]="[5,10,25,50]"
+<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,25,50]"
   [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-  scrollHeight="700px"
->
+  scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
       <th>Scrip Name</th>
@@ -118,19 +79,10 @@
       <td>{{ entity.scripcode }}</td>
       <td>{{ entity.benchmark }}</td>
       <td>
-        <p-button
-          label="Edit"
-          icon="pi pi-pencil"
-          styleClass="custom-btn"
-          (click)="editEntity(entity)"
-        ></p-button>
+        <p-button label="Edit" icon="pi pi-pencil" styleClass="custom-btn" (click)="editEntity(entity)"></p-button>
 
-        <p-button
-          label="Update"
-          icon="pi pi-file-edit"
-          styleClass="custom-btn"
-          (click)="updateEntity(entity)"
-        ></p-button>
+        <p-button label="Update" icon="pi pi-file-edit" styleClass="custom-btn"
+          (click)="updateEntity(entity)"></p-button>
 
       </td>
     </tr>
@@ -138,41 +90,22 @@
 </p-table>
 
 <!-- Update Choice Dialog -->
-<p-dialog
-  header="Update Table"
-  [(visible)]="displayUpdateChoiceModal"
-  [modal]="true"
-  [closable]="true"
-  [style]="{ width: '25vw' }"
->
+<p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
+  [style]="{ width: '25vw' }">
   <div class="p-fluid">
     <p>Which table would you like to update?</p>
     <div class="edit-choice-buttons">
-      <p-button
-        label="Contract Note"
-        icon="pi pi-table"
-        styleClass="add-entity-btn"
-        (click)="updateActionTable(selectedEntity)"
-      ></p-button>
-      <p-button
-        label="Underlying"
-        icon="pi pi-list"
-        styleClass="add-entity-btn"
-        (click)="updateUnderlyingTable(selectedEntity)"
-      ></p-button>
+      <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
+        (click)="updateActionTable(selectedEntity)"></p-button>
+      <p-button label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
+        (click)="updateUnderlyingTable(selectedEntity)"></p-button>
     </div>
   </div>
 </p-dialog>
 
 <!-- Add Underlying Table Dialog -->
-<p-dialog
-  header="Add Underlying Data"
-  [(visible)]="displayUnderlyingModal"
-  [modal]="true"
-  [style]="{ width: '70vw' }"
-  [closable]="true"
-  class="underlying-modal"
->
+<p-dialog header="Add Underlying Data" [(visible)]="displayUnderlyingModal" [modal]="true" [style]="{ width: '70vw' }"
+  [closable]="true" class="underlying-modal">
   <form [formGroup]="underlyingForm">
     <table class="underlying-table">
       <thead>
@@ -193,12 +126,7 @@
           <td><input type="text" formControlName="weightage" placeholder="Enter weightage" /></td>
           <td><input type="text" formControlName="isin_code" placeholder="Enter ISIN" /></td>
           <td>
-            <button
-              type="button"
-              class="remove-row-btn"
-              *ngIf="rows.length > 1"
-              (click)="removeRow(i)"
-            >
+            <button type="button" class="remove-row-btn" *ngIf="rows.length > 1" (click)="removeRow(i)">
               Remove
             </button>
           </td>
@@ -209,49 +137,40 @@
     <button type="button" class="add-row-btn" (click)="addRow()">+ Add Row</button>
 
     <div class="modal-actions">
-      <p-button
-        label="Cancel"
-        class="p-button-secondary"
-        (click)="displayUnderlyingModal = false"
-      ></p-button>
-      <p-button
-        label="Save"
-        class="p-button-primary"
-        (click)="submitUnderlyingData()"
-      ></p-button>
+      <p-button label="Cancel" class="p-button-secondary" (click)="displayUnderlyingModal = false"></p-button>
+      <p-button label="Save" class="p-button-primary" (click)="submitUnderlyingData()"></p-button>
     </div>
   </form>
 </p-dialog>
 
 <!-- Add Action Table Dialog -->
-<p-dialog
-  header="Add Action Table Data"
-  [(visible)]="displayActionTableModal"
-  [modal]="true"
-  [closable]="true"
-  [style]="{ width: '40vw' }"
-  [contentStyle]="{ 'overflow-y': 'auto' }"
->
+<p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"
+  [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
   <form [formGroup]="actionTableForm" class="p-fluid">
     <div class="field" *ngFor="let field of actionTableFields">
       <label [for]="field.key">{{ field.label }}</label>
-      <input [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
+      <!-- For dropdown fields -->
+      <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
+        placeholder="Select Order Type">
+      </p-dropdown>
+
+      <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode" placeholder="Select Mode">
+      </p-dropdown>
+      <!-- For readonly purchase value -->
+      <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
+
+      <input *ngIf="field.key !== 'order_type' && field.key !== 'mode' && field.key !== 'purchase_value'"
+        [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label"
+        [readonly]="isReadOnlyField(field.key)" [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
+
+
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button
-        label="Cancel"
-        icon="pi pi-times"
-        styleClass="add-entity-btn"
-        (click)="displayActionTableModal = false"
-      ></p-button>
-      <p-button
-        label="Save"
-        icon="pi pi-check"
-        [disabled]="actionTableForm.invalid"
-        styleClass="add-entity-btn"
-        (click)="saveActionTableData()"
-      ></p-button>
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn"
+        (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Save" icon="pi pi-check" [disabled]="actionTableForm.invalid" styleClass="add-entity-btn"
+        (click)="saveActionTableData()"></p-button>
     </div>
   </form>
 </p-dialog>
