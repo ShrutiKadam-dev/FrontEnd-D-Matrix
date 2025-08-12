@@ -61,7 +61,7 @@
 </p-dialog>
 
 <!-- Entity Table -->
-<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10, 25, 50]"
+<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,25, 50]"
   [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']">
   <ng-template pTemplate="header">
     <tr>
@@ -90,17 +90,73 @@
 </p-table>
 
 <!-- Edit Choice Dialog -->
-<p-dialog header="Select Table to Update" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
+<!-- Update Choice Dialog -->
+<p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
   [style]="{ width: '25vw' }">
+  <div class="p-fluid">
+    <p>Which table would you like to update?</p>
+    <div class="edit-choice-buttons">
+      <p-button label="Contract Note" icon="pi pi-table" class="mb-2" (click)="updateActionTable(selectedEntity)"></p-button>
+      <p-button label="Underlying" icon="pi pi-list" class="mb-2" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
+    </div>
 
-  <p>Which table would you like to update?</p>
-
-  <div class="edit-choice-buttons">
-    <p-button label="Underlying" icon="pi pi-database" styleClass="p-button-success mr-2"
-      (click)="updateUnderlyingTable()">
-    </p-button>
-
-    <p-button label="Contract Note" icon="pi pi-file" styleClass="p-button-info" (click)="updateContractNoteTable()">
-    </p-button>
   </div>
+</p-dialog>
+
+<!-- Add Underlying Table Dialog -->
+<p-dialog header="Add Underlying Data" [(visible)]="displayUnderlyingModal" [modal]="true" [closable]="true"
+  [style]="{ width: '30vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+
+  <form [formGroup]="underlyingForm" class="p-fluid">
+    <div class="field">
+      <label for="company_name">Company Name</label>
+      <input id="company_name" pInputText formControlName="company_name" placeholder="Enter Company Name">
+    </div>
+
+    <div class="field">
+      <label for="scripcode">Scrip Code</label>
+      <input id="scripcode" pInputText formControlName="scripcode" placeholder="Enter Scrip Code">
+    </div>
+
+    <div class="field">
+      <label for="weightage">Weightage (%)</label>
+      <input id="weightage" type="number" pInputText formControlName="weightage" placeholder="Enter Weightage">
+    </div>
+
+    <div class="field">
+      <label for="sector">Sector</label>
+      <input id="sector" pInputText formControlName="sector" placeholder="Enter Sector">
+    </div>
+
+    <div class="field">
+      <label for="isin_code">ISIN Code</label>
+      <input id="isin_code" pInputText formControlName="isin_code" placeholder="Enter ISIN Code">
+    </div>
+
+    <div class="dialog-actions flex justify-content-end gap-2 mt-3">
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn"
+        (click)="displayUnderlyingModal = false"></p-button>
+      <p-button label="Save" icon="pi pi-check" [disabled]="underlyingForm.invalid" styleClass="add-entity-btn"
+        (click)="saveUnderlyingData()"></p-button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Add Action Table Dialog -->
+<p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"
+  [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+
+  <form [formGroup]="actionTableForm" class="p-fluid">
+    <div class="field" *ngFor="let field of actionTableFields">
+      <label [for]="field.key">{{ field.label }}</label>
+      <input [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label">
+    </div>
+
+    <div class="dialog-actions flex justify-content-end gap-2 mt-3">
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn"
+        (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Save" icon="pi pi-check" [disabled]="actionTableForm.invalid" styleClass="add-entity-btn"
+        (click)="saveActionTableData()"></p-button>
+    </div>
+  </form>
 </p-dialog>
