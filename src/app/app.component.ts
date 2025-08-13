@@ -43,6 +43,7 @@ export class AppComponent implements OnInit {
       {
         label: 'Equity',
         icon: 'pi pi-chart-line',
+        routerLink: ['/features/equity'],
         styleClass: 'menu-item-custom',
         items: [
           { 

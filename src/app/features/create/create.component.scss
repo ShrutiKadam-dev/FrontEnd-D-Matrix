@@ -264,3 +264,19 @@ label {
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
 }
+
+.calendar-wrapper {
+  position: relative;
+}
+
+.calendar-wrapper::after {
+  content: "\e909"; /* PrimeIcons calendar icon code */
+  font-family: 'primeicons';
+  font-size: 1.2rem;
+  color: #6c757d;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

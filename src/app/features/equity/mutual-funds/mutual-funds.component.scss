@@ -1,0 +1,195 @@
+.search-section {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.nav-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.card-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.mf-card {
+  width: 300px;
+  min-width: 300px;
+  flex-shrink: 0; // prevents shrinking on navigation
+}
+
+.card-color {
+  height: 4px;
+}
+
+.card-title {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.card-value {
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.status {
+  color: green;
+  margin-top: 0.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* PrimeNG input & dropdown */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-dropdown {
+  border-radius: 6px;
+  height: 38px;
+  font-size: 0.95rem;
+}
+
+/* Dropdown Panel – Unified Rules */
+:host ::ng-deep .p-dropdown-panel {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999 !important;
+  min-width: unset !important;
+  width: auto !important;
+}
+
+/* Custom scrollbar for dropdowns */
+:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar {
+  width: 6px;
+}
+:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}
+:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+/* Dialog Content – Equal Padding Left & Right */
+:host ::ng-deep .p-dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-left: 1.5rem;  
+  padding-right: 1.5rem; 
+}
+
+/* Ensure header/footer also align with form fields */
+:host ::ng-deep .p-dialog .p-dialog-header,
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Action buttons in dialog */
+.dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+:host ::ng-deep .dialog-actions .p-button {
+  width: auto !important;
+  min-width: 110px;
+  border-radius: 6px;
+}
+
+/* Subcategory dropdown panel fix */
+:host ::ng-deep .subcategory-panel.p-dropdown-panel {
+  transform: translateY(-100%) !important;
+  top: auto !important;
+  bottom: 100% !important;
+}
+
+/* Add Entity Button */
+:host ::ng-deep .add-entity-btn.p-button {
+  background: linear-gradient(145deg, #7299cd, #5a7fb8) !important; 
+  border: none !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+:host ::ng-deep .add-entity-btn.p-button:hover {
+  background: linear-gradient(145deg, #7ea7dd, #6a8fbe) !important; 
+}
+
+:host ::ng-deep .add-entity-btn.p-button:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(114, 153, 205, 0.4) !important;
+}
+/* Shared Search Box styling */
+.search-container {
+  margin: 1.5rem 0 1rem 0;
+}
+.search-container.half-width {
+  width: 50%;
+}
+.search-bar {
+  width: 100%;
+}
+.search-bar input {
+  width: 100%;
+  border-radius: 6px;
+  height: 38px;
+  font-size: 0.95rem;
+}
+
+/* Shared Table compact style */
+:host ::ng-deep .p-datatable-tbody > tr > td {
+  padding: 6px 8px;
+  height: 36px;
+  font-size: 0.9rem;
+}
+:host ::ng-deep .p-datatable-thead > tr > th {
+  padding: 6px 8px;
+  height: 36px;
+  font-size: 0.9rem;
+}
+
+
+/* Force fixed table layout so width doesn't shrink */
+:host ::ng-deep .p-datatable table {
+  table-layout: fixed;
+  width: 100%;
+}
+/* Column widths for Action Table */
+:host ::ng-deep .p-datatable th:nth-child(1),
+:host ::ng-deep .p-datatable td:nth-child(1) {
+  width: 20%; /* Units */
+}
+
+:host ::ng-deep .p-datatable th:nth-child(2),
+:host ::ng-deep .p-datatable td:nth-child(2) {
+  width: 25%; /* Date */
+}
+
+:host ::ng-deep .p-datatable th:nth-child(3),
+:host ::ng-deep .p-datatable td:nth-child(3) {
+  width: 25%; /* Action */
+}
+
+:host ::ng-deep .p-datatable th:nth-child(4),
+:host ::ng-deep .p-datatable td:nth-child(4) {
+  width: 30%; /* Amount */
+}

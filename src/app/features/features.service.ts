@@ -38,5 +38,15 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/action_table`, data); // replace URL with actual insert API
   }
 
+  getAllMutualFund(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
+  }
 
+  getAllActionTable(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAction`);
+  }
+  
+  getAllUnderlyingMutualFund(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
+  }
 }

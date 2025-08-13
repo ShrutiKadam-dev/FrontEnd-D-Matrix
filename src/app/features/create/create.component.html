@@ -146,24 +146,35 @@
 <!-- Add Action Table Dialog -->
 <p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"
   [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+
   <form [formGroup]="actionTableForm" class="p-fluid">
     <div class="field" *ngFor="let field of actionTableFields">
       <label [for]="field.key">{{ field.label }}</label>
-      <!-- For dropdown fields -->
+
+      <!-- Dropdown: Order Type -->
       <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
         placeholder="Select Order Type">
       </p-dropdown>
 
+      <!-- Dropdown: Mode -->
       <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode" placeholder="Select Mode">
       </p-dropdown>
-      <!-- For readonly purchase value -->
+
+      <!-- Calendar: Order Date -->
+      <div *ngIf="field.key === 'order_date'" class="calendar-wrapper">
+        <p-calendar formControlName="order_date" view="month" dateFormat="dd/mm/yy" [monthNavigator]="true"
+          [yearNavigator]="true" yearRange="2000:2030">
+        </p-calendar>
+      </div>
+
+      <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
 
-      <input *ngIf="field.key !== 'order_type' && field.key !== 'mode' && field.key !== 'purchase_value'"
+      <!-- Default Input -->
+      <input
+        *ngIf="field.key !== 'order_type' && field.key !== 'mode' && field.key !== 'purchase_value' && field.key !== 'order_date'"
         [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label"
         [readonly]="isReadOnlyField(field.key)" [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
-
-
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">

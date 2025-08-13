@@ -1,1 +1,75 @@
-<p>mutual-funds works!</p>
+<!-- Search Section -->
+<div class="search-section">
+  <p-autoComplete [(ngModel)]="selectedMfName" [suggestions]="filteredMfNames" (completeMethod)="searchMfs($event)"
+    (onSelect)="scrollToMf($event)" field="nickname" placeholder="Search MF..." [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedMfName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Navigation + Cards -->
+<div class="nav-section" *ngIf="!selectedMfName">
+  <button pButton icon="pi pi-chevron-left" (click)="prevPage()" [disabled]="currentIndex === 0">
+  </button>
+
+  <div class="card-container">
+    <p-card *ngFor="let mf of displayMfs" styleClass="mf-card">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
+      </ng-template>
+      <div class="card-title">{{ mf.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ mf.subcategory || 'No Name' }}</div>
+      <div class="status">{{ mf.entityid }}</div>
+    </p-card>
+  </div>
+
+  <button pButton icon="pi pi-chevron-right" (click)="nextPage()"
+    [disabled]="currentIndex + itemsPerPage >= allMfs.length">
+  </button>
+</div>
+
+<!-- Search Result Card -->
+<div *ngIf="selectedMfName" class="card-container">
+  <p-card *ngFor="let mf of displayMfs" styleClass="mf-card">
+    <ng-template pTemplate="header">
+      <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
+    </ng-template>
+
+  </p-card>
+</div>
+
+
+<!-- Search Box -->
+<div class="search-container half-width">
+  <span class="p-input-icon-left search-bar">
+    <i class="pi pi-search"></i>
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+  </span>
+</div>
+
+<p-table #dt [value]="actionTableList" dataKey="id" 
+  [paginator]="true" 
+  [rows]="5" 
+  [rowsPerPageOptions]="[5,10,25,50]"
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount']"
+  scrollHeight="700px">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Units</th>
+      <th>Date</th>
+      <th>Action</th>
+      <th>Amount</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.unit }}</td>
+      <td>{{ entity.order_date }}</td>
+      <td>{{ entity.order_type }}</td>
+      <td>{{ entity.purchase_amount }}</td>
+    </tr>
+  </ng-template>
+</p-table>

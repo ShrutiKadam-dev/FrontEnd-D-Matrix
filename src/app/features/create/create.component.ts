@@ -13,6 +13,7 @@ import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { FormArray } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-create',
@@ -21,6 +22,7 @@ import { FormArray } from '@angular/forms';
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
+    CalendarModule,
     InputTextModule,
     DropdownModule,
     CommonModule,
@@ -92,6 +94,8 @@ export class CreateComponent implements OnInit {
     { key: 'scrip_code', label: 'Scrip Code' },
     { key: 'mode', label: 'Mode' },
     { key: 'order_type', label: 'Order Type' },
+    { key: 'order_date', label: 'Order Date' },
+    { key: 'sett_no', label: 'Settelement no' },
     { key: 'scrip_name', label: 'Scrip Name' },
     { key: 'isin', label: 'ISIN' },
     { key: 'order_number', label: 'Order Number' },
@@ -134,6 +138,8 @@ export class CreateComponent implements OnInit {
       scrip_code: ['', Validators.required],
       mode: ['', Validators.required],
       order_type: ['', Validators.required],
+      order_date: ['', Validators.required],
+      sett_no: ['', Validators.required],
       scrip_name: ['', Validators.required],
       isin: ['', Validators.required],
       order_number: ['', Validators.required],
