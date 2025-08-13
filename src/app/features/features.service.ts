@@ -42,11 +42,15 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
   }
 
-  getAllActionTable(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllAction`);
+  getAllActionTableOfMutualFund(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
   }
   
   getAllUnderlyingMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
   }
+
+  getMutualFundDetailsById(id: string) {
+  return this.http.get<any[]>(`${this.apiUrl}/getMutualFundDetailsById${id}`);
+}
 }

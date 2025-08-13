@@ -16,5 +16,9 @@ export const equityRoutes: Routes = [
         path: 'mutual-funds',
         loadComponent: () => import('./mutual-funds/mutual-funds.component').then(c => c.MutualFundsComponent)
     },
+        {
+        path: 'sub-mutual-funds/:id',
+        loadComponent: () => import('./sub-mutual-fund/sub-mutual-fund.component').then(c => c.SubMutualFundComponent)
+    },
    
 ];
