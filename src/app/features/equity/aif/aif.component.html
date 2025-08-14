@@ -1,0 +1,50 @@
+
+
+<!-- Carousel -->
+<p-carousel  [numVisible]="3" [numScroll]="3" [circular]="false">
+
+  <ng-template let-mf pTemplate="item">
+    <p-card styleClass="mf-card"  [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color"></div>
+      </ng-template>
+      <div class="card-title">AIF Name</div>
+      <div class="card-value">AIF value</div>
+      <div class="status">entityid</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<div class="card-main">
+    <div class="card-container">
+  <p-card  styleClass="mf-card">
+    <ng-template pTemplate="header">
+      <div class="card-color"></div>
+    </ng-template>
+    <div class="card-title">AIF Name</div>
+    <div class="card-value">AIF Value</div>
+    <div class="status">Entity ID</div>
+  </p-card>
+</div>
+<div class="card-container">
+  <p-card  styleClass="mf-card">
+    <ng-template pTemplate="header">
+      <div class="card-color"></div>
+    </ng-template>
+    <div class="card-title">AIF Name</div>
+    <div class="card-value">AIF Value</div>
+    <div class="status">Entity ID</div>
+  </p-card>
+</div>
+<div class="card-container">
+  <p-card  styleClass="mf-card">
+    <ng-template pTemplate="header">
+      <div class="card-color"></div>
+    </ng-template>
+    <div class="card-title">AIF Name</div>
+    <div class="card-value">AIF Value</div>
+    <div class="status">Entity ID</div>
+  </p-card>
+</div>
+</div>

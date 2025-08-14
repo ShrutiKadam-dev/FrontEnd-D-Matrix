@@ -71,9 +71,9 @@ export class AppComponent implements OnInit {
             styleClass: 'submenu-item-custom'
           },
           { 
-            label: 'PE AIF', 
+            label: 'AIF', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/pe-aif'],
+            routerLink: ['/features/equity/aif'],
             styleClass: 'submenu-item-custom'
           }
         ]
