@@ -275,7 +275,8 @@ export class CreateComponent implements OnInit {
       nickname: entity.nickname,
       benchmark: entity.benchmark,
       category: entity.category,
-      subcategory: entity.subcategory
+      subcategory: entity.subcategory,
+      isin : entity.isin
     });
 
     this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];

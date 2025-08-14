@@ -50,16 +50,23 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
   }
 
-  getMutualFundDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getMutualFundDetailsById/${id}`);
-  }
+getMutualFundDetailsById(id: string) {
+  return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
+    params: { entityid: id }
+  });
+}
   
-  getMFDetailActionTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getActionByentId/${mfId}`);
-  }
+getMFDetailActionTable(mfId: string) {
+  return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
+    params: { entityid: mfId }
+  });
+}
 
-  getMFDetailUnderlyingTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById/${mfId}`);
-  }
+getMFDetailUnderlyingTable(mfId: string) {
+  return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+    params: { entityid: mfId }
+  });
+}
+
 
 }

@@ -71,7 +71,7 @@ export class MutualFundsComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.getMutualFunds();
+    this.getAllMutualFunds();
     this.getAllActionTable();
   }
 
@@ -79,7 +79,7 @@ export class MutualFundsComponent implements OnInit {
     this.router.navigate(['/features/equity/sub-mutual-funds', mf.entityid]);
   }
   
-  getMutualFunds() {
+  getAllMutualFunds() {
     this.featuresService.getAllMutualFund().subscribe({
       next: (res: any) => {
         this.allMfs = res?.data || [];

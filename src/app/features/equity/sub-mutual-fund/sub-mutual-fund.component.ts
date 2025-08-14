@@ -39,7 +39,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './sub-mutual-fund.component.html',
   styleUrl: './sub-mutual-fund.component.scss'
 })
-export class SubMutualFundComponent implements OnInit{
+export class SubMutualFundComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
   actionTableList: any[] = [];
@@ -49,17 +49,29 @@ export class SubMutualFundComponent implements OnInit{
   @ViewChild('actionTable') actionTable!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
 
-   private route = inject(ActivatedRoute);
-   private featuresService = inject(FeaturesService);
+  private route = inject(ActivatedRoute);
+  private featuresService = inject(FeaturesService);
 
-ngOnInit() {
-  this.mfId = this.route.snapshot.paramMap.get('id');
-  if (this.mfId) {
-    this.loadMfDetails(this.mfId);
-    this.getMFDetailActionTable(this.mfId);
-    this.getMFDetailUnderlyingTable(this.mfId);
+  ngOnInit() {
+    this.mfId = this.route.snapshot.paramMap.get('id');
+    if (this.mfId) {
+      this.loadMfDetails(this.mfId);
+      this.getMFDetailActionTable(this.mfId);
+      this.getMFDetailUnderlyingTable(this.mfId);
+    }
   }
-}
+
+
+  onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
+    const input = event.target as HTMLInputElement | null;
+    if (input) {
+      if (tableType === 'action') {
+        this.actionTable.filterGlobal(input.value, 'contains');
+      } else {
+        this.underlyingTable.filterGlobal(input.value, 'contains');
+      }
+    }
+  }
 
   loadMfDetails(id: string) {
     this.featuresService.getMutualFundDetailsById(id).subscribe({
@@ -72,45 +84,36 @@ ngOnInit() {
     });
   }
 
-  onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
-    const input = event.target as HTMLInputElement | null;
-    if (input) {
-      if (tableType === 'action') {
-        this.actionTable.filterGlobal(input.value, 'contains');
-      } else {
-        this.underlyingTable.filterGlobal(input.value, 'contains');
-      }
-    }
-  }
-getMFDetailActionTable(mfId: string) {
-  this.featuresService.getMFDetailActionTable(mfId).subscribe({
-    next: (data) => {
-      this.actionTableList = Array.isArray(data.data) ? data.data : [];
-    },
-    error: (err) => {
-      this.messages = [{
-        severity: 'error',
-        summary: 'Error',
-        detail: err.error?.message || 'Failed to load actions'
-      }];
-    }
-  });
-}
 
-getMFDetailUnderlyingTable(mfId: string) {
-  this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
-    next: (data) => {
-      this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
-    },
-    error: (err) => {
-      this.messages = [{
-        severity: 'error',
-        summary: 'Error',
-        detail: err.error?.message || 'Failed to load underlying'
-      }];
-    }
-  });
-}
+  getMFDetailActionTable(mfId: string) {
+    this.featuresService.getMFDetailActionTable(mfId).subscribe({
+      next: (data) => {
+        this.actionTableList = Array.isArray(data.data) ? data.data : [];
+      },
+      error: (err) => {
+        this.messages = [{
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to load actions'
+        }];
+      }
+    });
+  }
+
+  getMFDetailUnderlyingTable(mfId: string) {
+    this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
+      next: (data) => {
+        this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
+      },
+      error: (err) => {
+        this.messages = [{
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to load underlying'
+        }];
+      }
+    });
+  }
 
 
 }
