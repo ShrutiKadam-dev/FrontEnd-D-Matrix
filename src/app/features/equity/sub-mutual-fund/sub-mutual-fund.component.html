@@ -1,11 +1,77 @@
-<h2>Mutual Fund Details</h2>
+<h2> Mutual Fund Details </h2>
 
-<div *ngIf="mfDetails; else loading">
-  <p><strong>Name:</strong> {{ mfDetails.nickname }}</p>
-  <p><strong>Subcategory:</strong> {{ mfDetails.subcategory }}</p>
-  <p><strong>Entity ID:</strong> {{ mfDetails.entityid }}</p>
-</div>
+<!-- <div *ngIf="mfDetails; else loading"> -->
 
-<ng-template #loading>
+  <h3>Summary Of Actions</h3>
+  <!-- Search for Action Table -->
+  <div class="search-container half-width">
+    <span class="p-input-icon-left search-bar">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
+    </span>
+  </div>
+
+  <!-- Action Table -->
+  <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="5"
+    [rowsPerPageOptions]="[5,10,25,50]"
+    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Scrip Name</th>
+      <th>Units</th>
+      <th>Order Date</th>
+      <th>Action</th>
+      <th>Amount</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.unit }}</td>
+      <td>{{ entity.order_date }}</td>
+      <td>{{ entity.order_type }}</td>
+      <td>{{ entity.purchase_amount }}</td>
+    </tr>
+  </ng-template>
+  </p-table>
+
+
+  <h3>Summary Of Underlying</h3>
+  <!-- Search for Underlying Table -->
+  <div class="search-container half-width">
+    <span class="p-input-icon-left search-bar">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search..." />
+    </span>
+  </div>
+
+  <!-- Underlying Table -->
+  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="5"
+    [rowsPerPageOptions]="[5,10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','scrip_name']"
+    scrollHeight="700px">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Scrip Name</th>
+      <th>Scrip Code</th>
+      <th>Weightage</th>
+      <th>ISIN</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.scripcode }}</td>
+      <td>{{ entity.weightage }}</td>
+      <td>{{ entity.isin_code }}</td>
+    </tr>
+  </ng-template>
+  </p-table>
+
+<!-- </div> -->
+
+<!-- <ng-template #loading>
   <p>Loading Mutual Fund details...</p>
-</ng-template>
+</ng-template> -->

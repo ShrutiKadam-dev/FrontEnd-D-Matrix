@@ -40,7 +40,7 @@
 
 
 
-<h3>Summery Of Action Table For The Mutual Fund</h3>
+<h3>Summary Of Actions</h3>
 <!-- Search Box -->
 <div class="search-container half-width">
   <span class="p-input-icon-left search-bar">
@@ -51,9 +51,10 @@
 
 <!-- Entity Table -->
 <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,25,50]"
-  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount']" scrollHeight="700px">
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
+      <th>Scrip Name</th>
       <th>Units</th>
       <th>Order Date</th>
       <th>Action</th>
@@ -63,6 +64,7 @@
 
   <ng-template pTemplate="body" let-entity>
     <tr>
+      <td>{{ entity.scrip_name }}</td>
       <td>{{ entity.unit }}</td>
       <td>{{ entity.order_date }}</td>
       <td>{{ entity.order_type }}</td>

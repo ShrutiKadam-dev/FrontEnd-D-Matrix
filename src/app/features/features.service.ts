@@ -45,12 +45,21 @@ export class FeaturesService {
   getAllActionTableOfMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
   }
-  
+
   getAllUnderlyingMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
   }
 
   getMutualFundDetailsById(id: string) {
-  return this.http.get<any[]>(`${this.apiUrl}/getMutualFundDetailsById${id}`);
-}
+    return this.http.get<any>(`${this.apiUrl}/getMutualFundDetailsById/${id}`);
+  }
+  
+  getMFDetailActionTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getActionByentId/${mfId}`);
+  }
+
+  getMFDetailUnderlyingTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById/${mfId}`);
+  }
+
 }
