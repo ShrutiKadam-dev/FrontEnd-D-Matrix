@@ -173,19 +173,23 @@ label {
   margin-right: 6px; /* space between Edit and Update */
 }
 
-::ng-deep .custom-btn {
-  background-color: #7c9bc5 !important; /* your desired color */
-  border: none !important;
-  color: white !important;
-  font-weight: 500;
-  border-radius: 6px !important;
-  padding: 0.5rem 1.2rem !important;
-  margin: 4px;
+::ng-deep .custom-btn-edit,
+::ng-deep .custom-btn-update,
+::ng-deep .custom-btn-delete {
+border: none !important; color: white !important; font-weight: 500; border-radius: 6px !important; padding: 0.5rem 1.2rem !important; margin: 4px
 }
 
-::ng-deep .custom-btn:hover {
-  background-color: #4e77c7 !important; /* hover color */
-}
+/* Edit = blue */
+::ng-deep .custom-btn-edit { background: #6d8fbe !important; }
+::ng-deep .custom-btn-edit:hover { background: #4e77c7 !important; }
+
+/* Update = green */
+::ng-deep .custom-btn-update { background: #28a745 !important; }
+::ng-deep .custom-btn-update:hover { background: #218838 !important; }
+
+/* Delete = red */
+::ng-deep .custom-btn-delete { background: #dc3545 !important; }
+::ng-deep .custom-btn-delete:hover { background: #c82333 !important; }
 
 /* ===== Underlying Data Modal Styling ===== */
 
@@ -279,4 +283,36 @@ label {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+/* Prevent wrapping & show ellipsis if text is too long */
+:host ::ng-deep .p-datatable td {
+  white-space: nowrap !important;   /* text in one line */
+  overflow: hidden !important;      /* cut off overflow */
+  text-overflow: ellipsis !important; /* add ... at end */
+}
+.form-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 10px;
+  height: 36px; /* same as text inputs */
+  box-sizing: border-box;
+}
+
+
+.weightage-cell {
+  position: relative;
+}
+
+.weightage-cell input {
+  padding-right: 20px; /* space for % sign */
+}
+
+.weightage-cell::after {
+  content: "%";
+  position: absolute;
+  right: 15px;
+  top: 45%;
+  transform: translateY(-50%);
+  color: #555;
 }

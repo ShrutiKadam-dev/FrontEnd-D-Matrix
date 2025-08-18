@@ -1,7 +1,5 @@
 <h2> Mutual Fund Details </h2>
 
-<!-- <div *ngIf="mfDetails; else loading"> -->
-
   <h3>Summary Of Actions</h3>
   <!-- Search for Action Table -->
   <div class="search-container half-width">
@@ -12,8 +10,8 @@
   </div>
 
   <!-- Action Table -->
-  <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5,10,25,50]"
+  <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
@@ -47,8 +45,8 @@
   </div>
 
   <!-- Underlying Table -->
-  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5,10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','scrip_name']"
+  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','scrip_name']"
     scrollHeight="700px">
 
   <ng-template pTemplate="header">
@@ -69,9 +67,3 @@
     </tr>
   </ng-template>
   </p-table>
-
-<!-- </div> -->
-
-<!-- <ng-template #loading>
-  <p>Loading Mutual Fund details...</p>
-</ng-template> -->

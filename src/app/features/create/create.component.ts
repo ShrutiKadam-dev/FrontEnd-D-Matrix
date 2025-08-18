@@ -14,11 +14,15 @@ import { Table, TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { FormArray } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-create',
   standalone: true,
   imports: [
+    ConfirmDialogModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
@@ -29,10 +33,12 @@ import { CalendarModule } from 'primeng/calendar';
     MessagesModule,
     MessageModule,
     TableModule,
-    InputTextModule
+    InputTextModule,
+    InputNumberModule,
   ],
+   providers: [ConfirmationService],
   templateUrl: './create.component.html',
-  styleUrl: './create.component.scss'
+  styleUrl: './create.component.scss',
 })
 export class CreateComponent implements OnInit {
   displayModal = false;
@@ -49,6 +55,7 @@ export class CreateComponent implements OnInit {
   actionTableForm: FormGroup;
   selectedEntityId: string | null = null;
 
+  private confirmationService = inject (ConfirmationService)
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
@@ -276,7 +283,7 @@ export class CreateComponent implements OnInit {
       benchmark: entity.benchmark,
       category: entity.category,
       subcategory: entity.subcategory,
-      isin : entity.isin
+      isin: entity.isin
     });
 
     this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
@@ -399,6 +406,40 @@ export class CreateComponent implements OnInit {
       }
     });
   }
+
+confirmDelete(entity: any) {
+  this.confirmationService.confirm({
+    message: `Are you sure you want to delete "${entity.scripname}"?`,
+    header: 'Confirm Delete',
+    icon: 'pi pi-exclamation-triangle',
+    accept: () => {
+      this.featuresService.deleteEntity(entity.id).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Deleted',
+            detail: 'Entity deleted successfully'
+          });
+          this.getEntities();
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Failed',
+            detail: error.error?.message || 'Delete failed'
+          });
+        }
+      });
+    },
+    reject: () => {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Cancelled',
+        detail: 'Delete cancelled'
+      });
+    }
+  });
+}
 }
 
 

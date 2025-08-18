@@ -1,3 +1,4 @@
+/* ===== Form Field ===== */
 .field {
   display: flex;
   flex-direction: column;
@@ -11,17 +12,13 @@ label {
   color: #333;
 }
 
-/* Search Container */
+/* ===== Search Box ===== */
 .search-container {
   margin: 1.5rem 0 1rem 0;
 }
 
 .search-container.half-width {
   width: 50%;
-}
-
-.search-bar {
-  width: 100%;
 }
 
 .search-bar input {
@@ -31,54 +28,72 @@ label {
   font-size: 0.95rem;
 }
 
-.edit-choice-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 1rem;
-
-  .p-button {
-    min-width: 150px;
-  }
-}
-
-/* Force fixed table layout so width doesn't shrink */
+/* ===== Data Table General ===== */
 :host ::ng-deep .p-datatable table {
   table-layout: fixed;
   width: 100%;
 }
 
-/* Set specific widths for each column */
-:host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) {
-  width: 40%; /* Scrip Name */
-  word-wrap: break-word;
-}
-
-:host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) {
-  width: 20%; /* Scrip Code */
-}
-
-:host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) {
-  width: 20%; /* Benchmark */
-}
-
-:host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) {
-  width: 20%; /* Action */
-}
-
-/* Reduce row height */
-:host ::ng-deep .p-datatable-tbody > tr > td {
-  padding: 6px 8px;  /* less vertical padding */
-  height: 36px;      /* compact row height */
-  font-size: 0.9rem; /* slightly smaller text */
-}
-
-/* Also adjust header height */
-:host ::ng-deep .p-datatable-thead > tr > th {
+:host ::ng-deep .p-datatable th,
+:host ::ng-deep .p-datatable td {
   padding: 6px 8px;
   height: 36px;
   font-size: 0.9rem;
+  word-wrap: break-word;
+  white-space: normal; /* allow wrapping, no horizontal scroll */
+}
+
+/* ===== Action Table Columns ===== */
+:host ::ng-deep #actionTable .p-datatable th:nth-child(1),
+:host ::ng-deep #actionTable .p-datatable td:nth-child(1) {
+  width: 30%; /* Scrip Name */
+}
+
+:host ::ng-deep #actionTable .p-datatable th:nth-child(2),
+:host ::ng-deep #actionTable .p-datatable td:nth-child(2) {
+  width: 15%; /* Units */
+}
+
+:host ::ng-deep #actionTable .p-datatable th:nth-child(3),
+:host ::ng-deep #actionTable .p-datatable td:nth-child(3) {
+  width: 20%; /* Order Date */
+}
+
+:host ::ng-deep #actionTable .p-datatable th:nth-child(4),
+:host ::ng-deep #actionTable .p-datatable td:nth-child(4) {
+  width: 15%; /* Action */
+}
+
+:host ::ng-deep #actionTable .p-datatable th:nth-child(5),
+:host ::ng-deep #actionTable .p-datatable td:nth-child(5) {
+  width: 20%; /* Amount */
+  text-align: right; /* better for numbers */
+}
+
+/* ===== Underlying Table Columns ===== */
+:host ::ng-deep #underlyingTable .p-datatable th:nth-child(1),
+:host ::ng-deep #underlyingTable .p-datatable td:nth-child(1) {
+  width: 40%; /* Scrip Name */
+}
+
+:host ::ng-deep #underlyingTable .p-datatable th:nth-child(2),
+:host ::ng-deep #underlyingTable .p-datatable td:nth-child(2) {
+  width: 20%; /* Scrip Code */
+}
+
+:host ::ng-deep #underlyingTable .p-datatable th:nth-child(3),
+:host ::ng-deep #underlyingTable .p-datatable td:nth-child(3) {
+  width: 20%; /* Weightage */
+  text-align: right;
+}
+
+:host ::ng-deep #underlyingTable .p-datatable th:nth-child(4),
+:host ::ng-deep #underlyingTable .p-datatable td:nth-child(4) {
+  width: 20%; /* ISIN */
+}
+/* Prevent wrapping & show ellipsis if text is too long */
+:host ::ng-deep .p-datatable td {
+  white-space: nowrap !important;   /* text in one line */
+  overflow: hidden !important;      /* cut off overflow */
+  text-overflow: ellipsis !important; /* add ... at end */
 }

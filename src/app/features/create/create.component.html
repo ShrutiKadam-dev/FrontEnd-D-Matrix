@@ -61,7 +61,7 @@
 </p-dialog>
 
 <!-- Entity Table -->
-<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,25,50]"
+<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
   [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
   scrollHeight="700px">
   <ng-template pTemplate="header">
@@ -79,10 +79,12 @@
       <td>{{ entity.scripcode }}</td>
       <td>{{ entity.benchmark }}</td>
       <td>
-        <p-button label="Edit" icon="pi pi-pencil" styleClass="custom-btn" (click)="editEntity(entity)"></p-button>
+        <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
 
-        <p-button label="Update" icon="pi pi-file-edit" styleClass="custom-btn"
-          (click)="updateEntity(entity)"></p-button>
+        <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
+
+        <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
+
 
       </td>
     </tr>
@@ -123,8 +125,10 @@
           <td><input type="text" formControlName="company_name" placeholder="Enter name" /></td>
           <td><input type="text" formControlName="scripcode" placeholder="Enter code" /></td>
           <td><input type="text" formControlName="sector" placeholder="Enter sector" /></td>
-          <td><input type="text" formControlName="weightage" placeholder="Enter weightage" /></td>
-          <td><input type="text" formControlName="isin_code" placeholder="Enter ISIN" /></td>
+          <td class="weightage-cell">
+            <input type="number" formControlName="weightage" placeholder="Enter weightage" />
+          </td>
+          <td><input type="number" formControlName="isin_code" placeholder="Enter ISIN" /></td>
           <td>
             <button type="button" class="remove-row-btn" *ngIf="rows.length > 1" (click)="removeRow(i)">
               Remove
@@ -137,8 +141,8 @@
     <button type="button" class="add-row-btn" (click)="addRow()">+ Add Row</button>
 
     <div class="modal-actions">
-      <p-button label="Cancel" class="p-button-secondary" (click)="displayUnderlyingModal = false"></p-button>
-      <p-button label="Save" class="p-button-primary" (click)="submitUnderlyingData()"></p-button>
+      <p-button label="Cancel" styleClass="add-entity-btn" (click)="displayUnderlyingModal = false"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" (click)="submitUnderlyingData()"></p-button>
     </div>
   </form>
 </p-dialog>
@@ -185,3 +189,5 @@
     </div>
   </form>
 </p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
