@@ -6,11 +6,13 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule ],
+  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })

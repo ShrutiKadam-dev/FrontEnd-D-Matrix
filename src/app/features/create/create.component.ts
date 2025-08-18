@@ -8,10 +8,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../features.service';
 import { MessageModule } from 'primeng/message';
-import { Message } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+import { Table ,TableModule} from 'primeng/table';
 import { FormArray } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -33,10 +32,10 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     CommonModule,
     MessagesModule,
     MessageModule,
-    TableModule,
     InputTextModule,
     InputNumberModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    TableModule
   ],
   providers: [ConfirmationService],
   templateUrl: './create.component.html',
@@ -50,7 +49,6 @@ export class CreateComponent implements OnInit {
   isEditMode = false;
   displayUpdateChoiceModal = false;
   selectedEntity: any = null;
-  messages: Message[] = [];
   displayUnderlyingModal = false;
   underlyingForm!: FormGroup;
   displayActionTableModal = false;
@@ -245,12 +243,12 @@ export class CreateComponent implements OnInit {
       next: (data: any) => {
         this.entityList = Array.isArray(data.data) ? data.data : [];
       },
-      error: (err) => {
-        this.messages = [{
+      error: (error) => {
+        this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to load entities'
-        }];
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
       }
     });
   }
@@ -266,11 +264,11 @@ export class CreateComponent implements OnInit {
         this.getEntities();
       },
       error: (error) => {
-        this.messages = [{
+        this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: error.error?.message || 'Something went wrong'
-        }];
+          detail: error.error?.message || 'Update failed'
+        });
       }
     });
   }
@@ -306,11 +304,11 @@ export class CreateComponent implements OnInit {
         this.getEntities();
       },
       error: (error) => {
-        this.messages = [{
+        this.messageService.add({
           severity: 'error',
           summary: 'Failed',
           detail: error.error?.message || 'Update failed'
-        }];
+        });
       }
     });
   }
