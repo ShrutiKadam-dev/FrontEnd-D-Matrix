@@ -17,6 +17,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-create',
@@ -35,8 +36,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TableModule,
     InputTextModule,
     InputNumberModule,
+    AutoCompleteModule
   ],
-   providers: [ConfirmationService],
+  providers: [ConfirmationService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss',
 })
@@ -54,8 +56,9 @@ export class CreateComponent implements OnInit {
   displayActionTableModal = false;
   actionTableForm: FormGroup;
   selectedEntityId: string | null = null;
+  companySuggestions: any[] = [];
 
-  private confirmationService = inject (ConfirmationService)
+  private confirmationService = inject(ConfirmationService)
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
@@ -407,39 +410,70 @@ export class CreateComponent implements OnInit {
     });
   }
 
-confirmDelete(entity: any) {
-  this.confirmationService.confirm({
-    message: `Are you sure you want to delete "${entity.scripname}"?`,
-    header: 'Confirm Delete',
-    icon: 'pi pi-exclamation-triangle',
-    accept: () => {
-      this.featuresService.deleteEntity(entity.id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Deleted',
-            detail: 'Entity deleted successfully'
-          });
-          this.getEntities();
+  confirmDelete(entity: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete "${entity.scripname}"?`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.featuresService.deleteEntity(entity.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Entity deleted successfully'
+            });
+            this.getEntities();
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Failed',
+              detail: error.error?.message || 'Delete failed'
+            });
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'Delete cancelled'
+        });
+      }
+    });
+  }
+
+  searchCompany(event: any, rowIndex: number) {
+    const query = event.query;
+
+    if (query && query.length > 1) {  // call API only if length > 2
+      this.featuresService.getCompanyByName(query).subscribe({
+        next: (res: any) => {
+          if (res?.data) {
+            this.companySuggestions = res.data; // API returns array
+          } else {
+            this.companySuggestions = [];
+          }
         },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Failed',
-            detail: error.error?.message || 'Delete failed'
-          });
+        error: (err) => {
+          console.error('Error fetching company list', err);
+          this.companySuggestions = [];
         }
       });
-    },
-    reject: () => {
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Cancelled',
-        detail: 'Delete cancelled'
-      });
     }
-  });
-}
+  }
+
+  onCompanySelect(event: any, rowIndex: number) {
+    const selectedCompany = event.value; // actual object from your API
+
+    this.rows.at(rowIndex).patchValue({
+      company_name: selectedCompany.name_of_company,
+      isin_code: selectedCompany.isin_number
+    });
+  }
+
+
 }
 
 

@@ -122,13 +122,30 @@
       </thead>
       <tbody formArrayName="rows">
         <tr *ngFor="let row of rows.controls; let i = index" [formGroupName]="i">
-          <td><input type="text" formControlName="company_name" placeholder="Enter name" /></td>
-          <td><input type="text" formControlName="scripcode" placeholder="Enter code" /></td>
-          <td><input type="text" formControlName="sector" placeholder="Enter sector" /></td>
-          <td class="weightage-cell">
-            <input type="number" formControlName="weightage" placeholder="Enter weightage" />
+          <td>
+            <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
+              (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
+              [field]="'name_of_company'" [forceSelection]="true" placeholder="Enter company name">
+            </p-autoComplete>
           </td>
-          <td><input type="text" formControlName="isin_code" placeholder="Enter ISIN" /></td>
+          <td>
+            <input pInputText type="text" formControlName="scripcode" placeholder="Enter code" />
+          </td>
+
+          <td>
+            <input pInputText type="text" formControlName="sector" placeholder="Enter sector" />
+          </td>
+          <td class="weightage-cell">
+            <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100"
+              placeholder="Enter weightage">
+            </p-inputNumber>
+          </td>
+
+
+          <td>
+            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN" readonly />
+          </td>
+
           <td>
             <button type="button" class="remove-row-btn" *ngIf="rows.length > 1" (click)="removeRow(i)">
               Remove
