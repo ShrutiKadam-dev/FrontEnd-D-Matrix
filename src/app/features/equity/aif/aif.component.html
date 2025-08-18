@@ -21,7 +21,7 @@
   styleClass="custom-carousel">
 
   <ng-template let-item pTemplate="item" >
-    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" >
+    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(item)" >
       <ng-template pTemplate="header" style="background-color: aqua">
         <div class="card-color"></div>
       </ng-template>
