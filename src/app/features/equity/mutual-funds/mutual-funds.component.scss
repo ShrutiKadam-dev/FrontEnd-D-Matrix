@@ -1,3 +1,4 @@
+/* ===== Form Field ===== */
 .field {
   display: flex;
   flex-direction: column;
@@ -11,44 +12,21 @@ label {
   color: #333;
 }
 
-/* Custom scrollbar for dropdowns */
-:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar {
-  width: 6px;
-}
-:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
-  border-radius: 3px;
-}
-:host ::ng-deep .p-dropdown-panel::-webkit-scrollbar-thumb:hover {
-  background-color: #999;
-}
-
-/* Dialog Content – Equal Padding Left & Right */
-:host ::ng-deep .p-dialog-content {
-  max-height: 80vh;
-  overflow-y: auto;
-  padding-left: 1.5rem;  
-  padding-right: 1.5rem; 
-}
-
-/* Ensure header/footer also align with form fields */
+/* ===== Dialog Content Alignment ===== */
+:host ::ng-deep .p-dialog-content,
 :host ::ng-deep .p-dialog .p-dialog-header,
 :host ::ng-deep .p-dialog .p-dialog-footer {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
 
-/* Search Container */
+/* ===== Search Box ===== */
 .search-container {
   margin: 1.5rem 0 1rem 0;
 }
 
 .search-container.half-width {
   width: 50%;
-}
-
-.search-bar {
-  width: 100%;
 }
 
 .search-bar input {
@@ -58,67 +36,51 @@ label {
   font-size: 0.95rem;
 }
 
-.edit-choice-buttons {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 1rem;
-
-  .p-button {
-    min-width: 150px;
-  }
-}
-
-/* Force fixed table layout so width doesn't shrink */
+/* ===== Data Table ===== */
 :host ::ng-deep .p-datatable table {
   table-layout: fixed;
   width: 100%;
 }
 
-/* Set specific widths for each column */
+:host ::ng-deep .p-datatable th,
+:host ::ng-deep .p-datatable td {
+  padding: 6px 8px;
+  height: 36px;
+  font-size: 0.9rem;
+  word-wrap: break-word;
+  white-space: normal; /* allow wrapping */
+}
+
 :host ::ng-deep .p-datatable th:nth-child(1),
 :host ::ng-deep .p-datatable td:nth-child(1) {
-  width: 40%; /* Scrip Name */
-  word-wrap: break-word;
+  width: 30%; /* Scrip Name */
 }
 
 :host ::ng-deep .p-datatable th:nth-child(2),
 :host ::ng-deep .p-datatable td:nth-child(2) {
-  width: 20%; /* Scrip Code */
+  width: 15%; /* Units */
 }
 
 :host ::ng-deep .p-datatable th:nth-child(3),
 :host ::ng-deep .p-datatable td:nth-child(3) {
-  width: 20%; /* Benchmark */
+  width: 20%; /* Order Date */
 }
 
 :host ::ng-deep .p-datatable th:nth-child(4),
 :host ::ng-deep .p-datatable td:nth-child(4) {
-  width: 20%; /* Action */
+  width: 15%; /* Action */
 }
 
-/* Reduce row height */
-:host ::ng-deep .p-datatable-tbody > tr > td {
-  padding: 6px 8px;  /* less vertical padding */
-  height: 36px;      /* compact row height */
-  font-size: 0.9rem; /* slightly smaller text */
+:host ::ng-deep .p-datatable th:nth-child(5),
+:host ::ng-deep .p-datatable td:nth-child(5) {
+  width: 20%; /* Amount – fits without scroll */
 }
 
-/* Also adjust header height */
-:host ::ng-deep .p-datatable-thead > tr > th {
-  padding: 6px 8px;
-  height: 36px;
-  font-size: 0.9rem;
-}
-
-/* Space between action buttons */
-:host ::ng-deep .action-btn {
-  margin-right: 6px; /* space between Edit and Update */
-}
-
+/* ===== Buttons ===== */
 ::ng-deep .custom-btn {
-  background-color: #7c9bc5 !important; /* your desired color */
+  background-color: #7c9bc5 !important;
   border: none !important;
-  color: white !important;
+  color: #fff !important;
   font-weight: 500;
   border-radius: 6px !important;
   padding: 0.5rem 1.2rem !important;
@@ -126,97 +88,22 @@ label {
 }
 
 ::ng-deep .custom-btn:hover {
-  background-color: #4e77c7 !important; /* hover color */
+  background-color: #4e77c7 !important;
 }
 
-/* ===== Underlying Data Modal Styling ===== */
-
-.underlying-modal {
-  padding: 1rem;
-  background: #fff;
-}
-
-.underlying-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-}
-
-.underlying-table th,
-.underlying-table td {
-  padding: 0.5rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.underlying-table th {
-  background: #f4f6f8;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.underlying-table input {
-  width: 100%;
-  padding: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.85rem;
-}
-
-.underlying-table input:focus {
-  border-color: #2196f3;
-  outline: none;
-}
-
-.add-row-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-row-btn:hover {
-  background: #43a047;
-}
-
-.remove-row-btn {
-  background: #f44336;
-  color: white;
-  border: none;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.85rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.remove-row-btn:hover {
-  background: #d32f2f;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.6rem;
-}
-
-.p-button {
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-}
-
-/* Carousel container spacing */
+/* ===== Carousel ===== */
 :host ::ng-deep .p-carousel {
   padding: 1rem 0;
 }
 
-/* Card styling for MF items */
+:host ::ng-deep .p-carousel-item {
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
 .mf-card {
   border-radius: 12px;
-  overflow: hidden;
-  background-color: #fff;
+  background: #fff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-align: left;
@@ -228,13 +115,11 @@ label {
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
-/* Header color strip */
 .card-color {
   height: 6px;
   width: 100%;
 }
 
-/* Card text styles */
 .card-title {
   font-size: 1rem;
   font-weight: 600;
@@ -254,54 +139,9 @@ label {
   color: #2196f3;
   margin: 0 1rem 1rem 1rem;
 }
-
-/* Carousel navigation arrows */
-:host ::ng-deep .p-carousel-prev,
-:host ::ng-deep .p-carousel-next {
-  background-color: #fff;
-  border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-:host ::ng-deep .p-carousel-prev:hover,
-:host ::ng-deep .p-carousel-next:hover {
-  background-color: #f0f0f0;
-}
-
-/* Dots styling */
-:host ::ng-deep .p-carousel-indicators li {
-  margin: 0 3px;
-}
-
-:host ::ng-deep .p-carousel-indicators button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  transition: all 0.3s;
-}
-
-:host ::ng-deep .p-carousel-indicators .p-highlight button {
-  width: 14px;
-  height: 10px;
-  border-radius: 8px;
-  background-color: #2196f3;
-}
-/* Add spacing between carousel items */
-:host ::ng-deep .p-carousel-item {
-  padding: 0 0.5rem; /* half-rem gap on each side */
-  box-sizing: border-box;
-}
-
-/* Ensure cards fill the padded space */
-.mf-card {
-  width: 100%;
-}
-:host ::ng-deep .p-carousel-content {
-  background-color: transparent;
+/* Prevent wrapping & show ellipsis if text is too long */
+:host ::ng-deep .p-datatable td {
+  white-space: nowrap !important;   /* text in one line */
+  overflow: hidden !important;      /* cut off overflow */
+  text-overflow: ellipsis !important; /* add ... at end */
 }

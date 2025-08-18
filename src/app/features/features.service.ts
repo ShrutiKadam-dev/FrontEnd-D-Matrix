@@ -30,6 +30,12 @@ export class FeaturesService {
     return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
   }
 
+  deleteEntity(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/DeleteEntityByid`, {
+      params: { id : id }
+    });
+  }
+
   addUnderlyingTable(data: any) {
     return this.http.post<any>(`${this.apiUrl}/underlying_table`, data);
   }
@@ -50,23 +56,23 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
   }
 
-getMutualFundDetailsById(id: string) {
-  return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
-    params: { entityid: id }
-  });
-}
-  
-getMFDetailActionTable(mfId: string) {
-  return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
-    params: { entityid: mfId }
-  });
-}
+  getMutualFundDetailsById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
+      params: { entityid: id }
+    });
+  }
 
-getMFDetailUnderlyingTable(mfId: string) {
-  return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
-    params: { entityid: mfId }
-  });
-}
+  getMFDetailActionTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
+      params: { entityid: mfId }
+    });
+  }
+
+  getMFDetailUnderlyingTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+      params: { entityid: mfId }
+    });
+  }
 
 
 }
