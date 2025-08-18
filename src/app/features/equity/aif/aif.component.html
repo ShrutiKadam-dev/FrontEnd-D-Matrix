@@ -20,9 +20,9 @@
   [responsiveOptions]="responsiveOptions"
   styleClass="custom-carousel">
 
-  <ng-template let-item pTemplate="item">
-    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer' }">
-      <ng-template pTemplate="header">
+  <ng-template let-item pTemplate="item" >
+    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" >
+      <ng-template pTemplate="header" style="background-color: aqua">
         <div class="card-color"></div>
       </ng-template>
       <div class="card-title">{{ item.name }}</div>

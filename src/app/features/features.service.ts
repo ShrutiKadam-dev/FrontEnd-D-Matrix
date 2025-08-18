@@ -67,6 +67,19 @@ getMFDetailUnderlyingTable(mfId: string) {
     params: { entityid: mfId }
   });
 }
+getAllAifEntities(mfId: string) {
+  return this.http.get<any[]>(`${this.apiUrl}/getAllAifEntities`) 
+}
+
+getAllAifContractNotes(mfId: string) {
+  return this.http.get<any[]>(`${this.apiUrl}/getAllAifContractNotes`) 
+}
+
+getAllAifUnderlyingProperties(mfId: string) {
+  return this.http.get<any[]>(`${this.apiUrl}/getAllAifUnderlyingProperties`) 
+}
+
+
 
 
 }
