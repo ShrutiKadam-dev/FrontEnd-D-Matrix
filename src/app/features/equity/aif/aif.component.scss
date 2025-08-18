@@ -305,3 +305,46 @@ label {
 :host ::ng-deep .p-carousel-content {
   background-color: transparent;
 }
+
+// new css
+
+.custom-carousel ::ng-deep .p-carousel-item {
+  display: flex;
+  justify-content: center;
+}
+
+.mf-card {
+  width: 220px;
+  min-height: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.mf-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-color {
+  height: 2px;
+  background-color: #007ad9;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.card-value {
+  font-size: 1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+.status {
+  font-size: 0.9rem;
+  color: #888;
+}
