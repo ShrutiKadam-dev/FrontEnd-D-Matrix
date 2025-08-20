@@ -10,7 +10,7 @@ import { FeaturesService } from '../features.service';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
-import { Table ,TableModule} from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { FormArray } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -35,7 +35,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     InputTextModule,
     InputNumberModule,
     AutoCompleteModule,
-    TableModule
+    TableModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './create.component.html',
@@ -55,6 +55,7 @@ export class CreateComponent implements OnInit {
   actionTableForm: FormGroup;
   selectedEntityId: string | null = null;
   companySuggestions: any[] = [];
+  date: Date | undefined = new Date();
 
   private confirmationService = inject(ConfirmationService)
   private featuresService = inject(FeaturesService);
@@ -146,7 +147,7 @@ export class CreateComponent implements OnInit {
       scrip_code: ['', Validators.required],
       mode: ['', Validators.required],
       order_type: ['', Validators.required],
-      order_date: ['', Validators.required],
+      order_date: [new Date(), Validators.required],
       sett_no: ['', Validators.required],
       scrip_name: ['', Validators.required],
       isin: ['', Validators.required],
@@ -388,6 +389,16 @@ export class CreateComponent implements OnInit {
     if (this.actionTableForm.invalid) return;
 
     const payload = this.actionTableForm.getRawValue();
+
+
+    if (payload.order_date instanceof Date) {
+      const d = payload.order_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.order_date = `${yyyy}-${mm}-${dd}`;  // <-- send only date
+    }
+
 
     this.featuresService.insertActionTable(payload).subscribe({
       next: () => {

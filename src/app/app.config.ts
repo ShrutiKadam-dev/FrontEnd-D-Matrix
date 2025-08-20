@@ -5,8 +5,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 
-// Correct import (from @primeng/themes, not @primeuix)
-import Lara from '@primeng/themes/lara';
+// Pick a theme preset
+import Lara from '@primeuix/themes/lara';
+// You can also try: Aura, Nora, or Material presets from @primeuix/themes
 
 import { routes } from './app.routes';
 
@@ -15,13 +16,13 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideAnimations(),
+    provideAnimations(), // Required for PrimeNG
     MessageService,
     providePrimeNG({
       theme: {
-        preset: Lara,
+        preset: Lara, 
         options: {
-          cssLayer: { name: 'primeng', order: 'app-styles, primeng' }
+          cssLayer: { name: 'primeng', order: 'app-styles, primeng' } // optional but recommended if you use Tailwind or global CSS
         }
       }
     })

@@ -92,13 +92,14 @@
 
 <!-- Update Choice Dialog -->
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
-  [style]="{ width: '25vw' }">
+  [style]="{ width: '30vw' }">
   <div class="p-fluid">
     <p>Which table would you like to update?</p>
     <div class="edit-choice-buttons">
       <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
         (click)="updateActionTable(selectedEntity)"></p-button>
-      <p-button label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
+      <p-button *ngIf="!(selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity')"
+        label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
         (click)="updateUnderlyingTable(selectedEntity)"></p-button>
     </div>
   </div>
@@ -181,12 +182,9 @@
       </p-dropdown>
 
       <!-- Calendar: Order Date -->
-      <div *ngIf="field.key === 'order_date'" class="calendar-wrapper">
-        <p-calendar formControlName="order_date" view="month" dateFormat="dd/mm/yy" [monthNavigator]="true"
-          [yearNavigator]="true" yearRange="2000:2030">
+        <p-calendar [style]="{'width':'100%'}" *ngIf="field.key === 'order_date'" formControlName="order_date" [showIcon]="true" placeholder="Select Date" dateFormat="dd/mm/yy" appendTo="body">
         </p-calendar>
-      </div>
-
+  
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
 

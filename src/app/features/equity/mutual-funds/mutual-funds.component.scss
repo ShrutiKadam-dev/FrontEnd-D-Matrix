@@ -48,33 +48,23 @@ label {
   height: 36px;
   font-size: 0.9rem;
   word-wrap: break-word;
-  white-space: normal; /* allow wrapping */
+  white-space: normal;
 }
 
 :host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) {
-  width: 30%; /* Scrip Name */
-}
+:host ::ng-deep .p-datatable td:nth-child(1) { width: 30%; }
 
 :host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) {
-  width: 15%; /* Units */
-}
+:host ::ng-deep .p-datatable td:nth-child(2) { width: 15%; }
 
 :host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) {
-  width: 20%; /* Order Date */
-}
+:host ::ng-deep .p-datatable td:nth-child(3) { width: 20%; }
 
 :host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) {
-  width: 15%; /* Action */
-}
+:host ::ng-deep .p-datatable td:nth-child(4) { width: 15%; }
 
 :host ::ng-deep .p-datatable th:nth-child(5),
-:host ::ng-deep .p-datatable td:nth-child(5) {
-  width: 20%; /* Amount – fits without scroll */
-}
+:host ::ng-deep .p-datatable td:nth-child(5) { width: 20%; }
 
 /* ===== Buttons ===== */
 ::ng-deep .custom-btn {
@@ -87,27 +77,38 @@ label {
   margin: 4px;
 }
 
-::ng-deep .custom-btn:hover {
-  background-color: #4e77c7 !important;
-}
+::ng-deep .custom-btn:hover { background-color: #4e77c7 !important; }
 
 /* ===== Carousel ===== */
-:host ::ng-deep .p-carousel {
-  padding: 1rem 0;
-}
+:host ::ng-deep .p-carousel { padding: 1rem 0; }
 
 :host ::ng-deep .p-carousel-item {
   padding: 0 0.5rem;
   box-sizing: border-box;
 }
 
+/* Optionally enforce 3 equal items (keeps PrimeNG math intact) */
+:host ::ng-deep .p-carousel .p-carousel-item {
+  flex: 0 0 calc(100% / 3) !important;
+  max-width: calc(100% / 3) !important;
+}
+
+/* ===== Carousel Card ===== */
 .mf-card {
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-align: left;
-  min-height: 160px;
+
+  /* Let PrimeNG control width; just make them equal height */
+  width: 100%;
+  min-height: 180px;         /* equal height */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .mf-card:hover {
@@ -115,33 +116,43 @@ label {
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
-.card-color {
-  height: 6px;
-  width: 100%;
-}
+.card-color { height: 6px; width: 100%; }
 
+/* Nickname → single-line ellipsis */
 .card-title {
   font-size: 1rem;
   font-weight: 600;
   color: #333;
   margin: 0.8rem 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Subcategory → single-line ellipsis */
 .card-value {
   font-size: 0.9rem;
   color: #666;
   margin: 0 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Status → single-line ellipsis */
 .status {
   font-size: 0.85rem;
   font-weight: 500;
   color: #2196f3;
   margin: 0 1rem 1rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-/* Prevent wrapping & show ellipsis if text is too long */
+
+/* Prevent wrapping & show ellipsis in datatable too */
 :host ::ng-deep .p-datatable td {
-  white-space: nowrap !important;   /* text in one line */
-  overflow: hidden !important;      /* cut off overflow */
-  text-overflow: ellipsis !important; /* add ... at end */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }

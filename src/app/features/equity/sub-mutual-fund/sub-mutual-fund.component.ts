@@ -7,13 +7,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
 import { FeaturesService } from '../../features.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
@@ -22,7 +22,6 @@ import { MessageService } from 'primeng/api';
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
-    CalendarModule,
     InputTextModule,
     DropdownModule,
     CommonModule,
@@ -32,7 +31,7 @@ import { MessageService } from 'primeng/api';
     AutoCompleteModule,
     CarouselModule,
     CardModule,
-    FormsModule
+    FormsModule,DatePickerModule
   ],
   templateUrl: './sub-mutual-fund.component.html',
   styleUrl: './sub-mutual-fund.component.scss'

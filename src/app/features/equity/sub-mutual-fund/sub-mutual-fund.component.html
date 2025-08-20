@@ -1,26 +1,37 @@
 <h2> Mutual Fund Details </h2>
 
-  <h3>Summary Of Actions</h3>
-  <!-- Search for Action Table -->
-  <div class="search-container half-width">
-    <span class="p-input-icon-left search-bar">
-      <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
-    </span>
-  </div>
+<h3>Summary Of Actions</h3>
+<!-- Search for Action Table -->
+<div class="search-container half-width">
+  <span class="p-input-icon-left search-bar">
+    <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
+  </span>
+</div>
 
-  <!-- Action Table -->
-  <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]"
-    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
+<!-- Action Table -->
+<p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10,25,50]"
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px"  >
   <ng-template pTemplate="header">
     <tr>
-      <th>Scrip Name</th>
-      <th>Units</th>
-      <th>Order Date</th>
-      <th>Action</th>
-      <th>Amount</th>
+      <th pSortableColumn="scrip_name">
+        Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="unit">
+        Units <p-sortIcon field="unit"></p-sortIcon>
+      </th>
+      <th pSortableColumn="order_date">
+        Order Date <p-sortIcon field="order_date"></p-sortIcon>
+      </th>
+      <th pSortableColumn="order_type">
+        Action <p-sortIcon field="order_type"></p-sortIcon>
+      </th>
+      <th pSortableColumn="purchase_amount">
+        Amount <p-sortIcon field="purchase_amount"></p-sortIcon>
+      </th>
     </tr>
   </ng-template>
+
 
   <ng-template pTemplate="body" let-entity>
     <tr>
@@ -31,37 +42,50 @@
       <td>{{ entity.purchase_amount }}</td>
     </tr>
   </ng-template>
-  </p-table>
+</p-table>
 
 
-  <h3>Summary Of Underlying</h3>
-  <!-- Search for Underlying Table -->
-  <div class="search-container half-width">
-    <span class="p-input-icon-left search-bar">
-      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search..." />
-    </span>
-  </div>
+<h3>Summary Of Underlying</h3>
+<!-- Search for Underlying Table -->
+<div class="search-container half-width">
+  <span class="p-input-icon-left search-bar">
+    <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search..." />
+  </span>
+</div>
 
-  <!-- Underlying Table -->
-  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','scrip_name']"
-    scrollHeight="700px">
+<!-- Underlying Table -->
+<p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','scrip_name']"
+  scrollHeight="700px">
 
   <ng-template pTemplate="header">
     <tr>
-      <th>Scrip Name</th>
-      <th>Scrip Code</th>
-      <th>Weightage</th>
-      <th>ISIN</th>
+      <th pSortableColumn="scripname">
+        Scrip Name <p-sortIcon field="scripname"></p-sortIcon>
+      </th>
+      <th pSortableColumn="company_name">
+        Company Name <p-sortIcon field="company_name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="scripcode">
+        Scrip Code <p-sortIcon field="scripcode"></p-sortIcon>
+      </th>
+      <th pSortableColumn="weightage">
+        Weightage <p-sortIcon field="weightage"></p-sortIcon>
+      </th>
+      <th pSortableColumn="isin_code">
+        ISIN <p-sortIcon field="isin_code"></p-sortIcon>
+      </th>
     </tr>
   </ng-template>
 
+
   <ng-template pTemplate="body" let-entity>
     <tr>
-      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.scripname }}</td>
+      <td>{{ entity.company_name }}</td>
       <td>{{ entity.scripcode }}</td>
-      <td>{{ entity.weightage }}</td>
+      <td>{{ entity.weightage }} %</td>
       <td>{{ entity.isin_code }}</td>
     </tr>
   </ng-template>
-  </p-table>
+</p-table>

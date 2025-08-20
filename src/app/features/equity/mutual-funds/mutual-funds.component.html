@@ -19,7 +19,8 @@
       <ng-template pTemplate="header">
         <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
       </ng-template>
-      <div class="card-title">{{ mf.nickname || 'No Name' }}</div>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
       <div class="card-value">{{ mf.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ mf.entityid }}</div>
     </p-card>
@@ -32,12 +33,12 @@
     <ng-template pTemplate="header">
       <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
     </ng-template>
-    <div class="card-title">{{ mf.nickname || 'No Name' }}</div>
+    <!-- Truncate with ellipsis & tooltip -->
+    <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
     <div class="card-value">{{ mf.subcategory || 'No Subcategory' }}</div>
     <div class="status">{{ mf.entityid }}</div>
   </p-card>
 </div>
-
 
 
 <h3>Summary Of Actions</h3>
