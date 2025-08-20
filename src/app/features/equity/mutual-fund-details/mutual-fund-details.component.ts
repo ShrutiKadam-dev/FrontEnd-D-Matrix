@@ -17,7 +17,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
-  selector: 'app-sub-mutual-fund',
+  selector: 'app-mutual-fund-details',
   imports: [
     ReactiveFormsModule,
     DialogModule,
@@ -33,10 +33,10 @@ import { DatePickerModule } from 'primeng/datepicker';
     CardModule,
     FormsModule,DatePickerModule
   ],
-  templateUrl: './sub-mutual-fund.component.html',
-  styleUrl: './sub-mutual-fund.component.scss'
+  templateUrl: './mutual-fund-details.component.html',
+  styleUrl: './mutual-fund-details.component.scss'
 })
-export class SubMutualFundComponent implements OnInit {
+export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
   actionTableList: any[] = [];

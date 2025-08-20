@@ -77,7 +77,7 @@ export class MutualFundsComponent implements OnInit {
   }
 
   goToMfDetails(mf: any) {
-    this.router.navigate(['/features/equity/sub-mutual-funds', mf.entityid]);
+    this.router.navigate(['/features/equity/mutual-fund-details', mf.entityid]);
   }
 
   getAllMutualFunds() {

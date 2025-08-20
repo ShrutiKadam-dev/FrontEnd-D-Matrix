@@ -399,7 +399,6 @@ export class CreateComponent implements OnInit {
       payload.order_date = `${yyyy}-${mm}-${dd}`;  // <-- send only date
     }
 
-
     this.featuresService.insertActionTable(payload).subscribe({
       next: () => {
         this.messageService.add({

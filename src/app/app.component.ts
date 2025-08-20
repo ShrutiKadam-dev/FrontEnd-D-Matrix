@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
           { 
             label: 'Direct Equity', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/direct']
+            routerLink: ['/features/equity/direct-equity']
           },
           { 
             label: 'Mutual Funds', 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubMutualFundComponent } from './sub-mutual-fund.component';
+import { MutualFundDetailsComponent } from './mutual-fund-details.component';
 
 describe('SubMutualFundComponent', () => {
-  let component: SubMutualFundComponent;
-  let fixture: ComponentFixture<SubMutualFundComponent>;
+  let component: MutualFundDetailsComponent;
+  let fixture: ComponentFixture<MutualFundDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubMutualFundComponent]
+      imports: [MutualFundDetailsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SubMutualFundComponent);
+    fixture = TestBed.createComponent(MutualFundDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
