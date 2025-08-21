@@ -186,9 +186,10 @@
         placeholder="Select Mode"></p-dropdown>
 
       <!-- Calendar: Order Date -->
-      <p-calendar *ngIf="field.key === 'order_date'" formControlName="order_date" [showIcon]="true"
-        placeholder="Select Date" dateFormat="dd/mm/yy" appendTo="body" [style]="{ width: '100%' }">
-      </p-calendar>
+      <p-datepicker *ngIf="field.key === 'order_date'" formControlName="order_date" placeholder="Select Date"
+        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body"   [style]="{ width: '100%' }">
+      </p-datepicker>
+
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
@@ -201,7 +202,8 @@
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
+        (click)="displayActionTableModal = false"></p-button>
       <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="actionTableForm.invalid"
         (click)="saveActionTableData()"></p-button>
     </div>
@@ -213,18 +215,26 @@
 
     <div class="field" *ngFor="let field of directEquityActionTableFields">
       <label [for]="field.key">{{ field.label }}</label>
-      <input *ngIf="field.key !== 'order_type'" [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
-    
+
       <!-- Dropdown: Order Type -->
       <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
         placeholder="Select Order Type"></p-dropdown>
 
+      <p-datepicker *ngIf="field.key === 'trade_date'" formControlName="trade_date" placeholder="Select Date"
+        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body"   [style]="{ width: '100%' }">
+      </p-datepicker>
+
+
+      <input *ngIf="field.key !== 'order_type' && field.key !== 'trade_date'" [id]="field.key" pInputText
+        [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
+
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayActionTableModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="directEquityActionTableForm.invalid"
-        (click)="saveDirectEquityActionTableData()"></p-button>
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
+        (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check"
+        [disabled]="directEquityActionTableForm.invalid" (click)="saveDirectEquityActionTableData()"></p-button>
     </div>
   </form>
 

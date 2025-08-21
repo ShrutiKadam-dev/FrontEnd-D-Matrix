@@ -5,9 +5,8 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 
-// Pick a theme preset
-import Lara from '@primeuix/themes/lara';
-// You can also try: Aura, Nora, or Material presets from @primeuix/themes
+// ✅ Use @primeng/themes for PrimeNG 19
+import Lara from '@primeng/themes/lara';
 
 import { routes } from './app.routes';
 
@@ -20,9 +19,9 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     providePrimeNG({
       theme: {
-        preset: Lara, 
+        preset: Lara,
         options: {
-          cssLayer: { name: 'primeng', order: 'app-styles, primeng' } // optional but recommended if you use Tailwind or global CSS
+          cssLayer: { name: 'primeng', order: 'app-styles, primeng' }
         }
       }
     })
