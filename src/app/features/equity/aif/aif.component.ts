@@ -24,15 +24,18 @@ export class AifComponent {
 
   constructor(private router: Router) {}
 
+ 
 
   
   selectedAifName: any = null;
   filteredAifNames: any[] = [];
   allAifs: any[] = [];
   displayAifs: any[] = [];
+  allAifContractNotes: any[] = [];
 
   ngOnInit() {
     this.getAllAifEntities();
+    this.getAllAifContractNotes()
   }
   
   private featuresService = inject(FeaturesService);
@@ -124,6 +127,19 @@ export class AifComponent {
       error: () => console.error('Failed to load Mutual Funds')
     }); 
     
+  }
+
+  getAllAifContractNotes(){
+
+    this.featuresService.getAllAifContractNotes().subscribe({
+      next:(res:any ) => {
+        this.allAifContractNotes = res?.data || [];
+        console.log(this.allAifContractNotes);
+        
+         
+      },
+       error: () => console.error('Failed to load Mutual Funds')
+    })
   }
 
 

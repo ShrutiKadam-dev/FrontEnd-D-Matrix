@@ -72,32 +72,32 @@
 <!-- Action Table -->
 <p-table
   #dt
-  [value]="actionTableList"
+  [value]="allAifContractNotes"
   dataKey="id"
   [paginator]="true"
   [rows]="5"
   [rowsPerPageOptions]="[5, 10, 25, 50]"
-  [globalFilterFields]="['scrip_name', 'unit', 'order_date', 'order_type', 'purchase_amount']"
+  [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'amount_invested']"
   scrollHeight="400px"
   [responsiveLayout]="'scroll'"
 >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="scrip_name">Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon></th>
-      <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
-      <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
-      <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
-      <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
+      <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon></th>
+      <th pSortableColumn="num_units">Units <p-sortIcon field="unit"></p-sortIcon></th>
+      <th pSortableColumn="trans_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
+      <th pSortableColumn="trans_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
+      <th pSortableColumn="amount_invested">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-entity>
     <tr>
-      <td>{{ entity.scrip_name }}</td>
-      <td>{{ entity.unit }}</td>
-      <td>{{ entity.order_date }}</td>
-      <td>{{ entity.order_type }}</td>
-      <td>{{ entity.purchase_amount }}</td>
+      <td>{{ entity.amc_name }}</td>
+      <td>{{ entity.num_units }}</td>
+      <td>{{ entity.trans_date }}</td>
+      <td>{{ entity.trans_type }}</td>
+      <td>{{ entity.amount_invested }}</td>
     </tr>
   </ng-template>
 </p-table>

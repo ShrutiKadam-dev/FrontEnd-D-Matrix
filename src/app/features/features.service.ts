@@ -90,8 +90,8 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllentity`)
   }
 
-  getAllAifContractNotes(mfId: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllAifContractNotes`)
+  getAllAifContractNotes() {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAif`)
   }
 
   getAllAifUnderlyingProperties(mfId: string) {
