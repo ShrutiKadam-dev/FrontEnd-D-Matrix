@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { FeaturesService } from '../../features.service';
+
 
 @Component({
   selector: 'app-sub-aif',
@@ -15,13 +17,36 @@ import { TableModule } from 'primeng/table';
 export class SubAifComponent {
 
   aifId!: string;
+  contractNote :any[]= [];
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id')!; 
+    this.getAllAifContractNotes()
     console.log('Param ID:', this.aifId);
+
   }
+
+
+  private featuresService = inject(FeaturesService);  
+
+  getAllAifContractNotes(){
+    this.featuresService.getAllAifContractNotes().subscribe({
+      next:(res:any ) => {
+        const allNotes = res?.data || [];
+        this.contractNote = allNotes.filter(
+        (note: any) => note.entityid === this.aifId
+      );
+
+        console.log(this.contractNote);
+        
+         
+      },
+       error: () => console.error('Failed to load Mutual Funds')
+    })
+  }
+
 
 underlyingTableList = [
     { id: 1, scripCode:'abc121', mCap:"mcap", weightage:12, scrip_name: 'ABC Ltd', unit: 100, purchase_amount: 5000 },

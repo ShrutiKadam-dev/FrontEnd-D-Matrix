@@ -75,10 +75,7 @@ export class AifComponent {
   ];  
 
    goToAif(item: any) {
-    // Navigate to /aif/:id
-    console.log(item);
-    
-    this.router.navigate(['/features/equity/sub-aif', item.id]);
+    this.router.navigate(['/features/equity/sub-aif', item.entityid]);
   }
 
   searchAifs(event: any) {
@@ -131,15 +128,15 @@ export class AifComponent {
 
   getAllAifContractNotes(){
 
-    this.featuresService.getAllAifContractNotes().subscribe({
-      next:(res:any ) => {
-        this.allAifContractNotes = res?.data || [];
-        console.log(this.allAifContractNotes);
-        
-         
-      },
-       error: () => console.error('Failed to load Mutual Funds')
-    })
+      this.featuresService.getAllAifContractNotes().subscribe({
+        next:(res:any ) => {
+          this.allAifContractNotes = res?.data || [];
+          console.log(this.allAifContractNotes);
+          
+          
+        },
+        error: () => console.error('Failed to load Mutual Funds')
+      })
   }
 
 
