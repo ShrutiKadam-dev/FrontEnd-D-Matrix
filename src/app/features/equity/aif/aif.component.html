@@ -3,8 +3,8 @@
 
 <!-- Search Section -->
 <div class="search-section">
-  <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredMfNames" (completeMethod)="searchMfs($event)"
-    (onSelect)="scrollToMf($event)" field="nickname" placeholder="Search MF..." [minLength]="1">
+  <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredAifNames" (completeMethod)="searchAifs($event)"
+    (onSelect)="scrollToAif($event)" field="nickname" placeholder="Search AIF..." [minLength]="1">
   </p-autoComplete>
 
   <button *ngIf="selectedAifName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
@@ -14,7 +14,7 @@
 
 <!-- Carousel -->
 <p-carousel 
-  [value]="displayMfs" 
+  [value]="displayAifs" 
   [numVisible]="3" 
   [numScroll]="3" 
   [circular]="false" 
@@ -35,21 +35,9 @@
 </p-carousel>
 
 <!-- Search Result Card -->
-<!-- <div *ngIf="selectedAifName" class="card-container"   styleClass="custom-carousel">
-  <p-card *ngFor="let aif of displayMfs" styleClass="mf-card">
-    <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}"></div>
-    </ng-template>
-    <div class="card-title" [title]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
-    <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
-    <div class="status">{{ aif.entityid }}</div>
-  </p-card>
-</div> -->
-
-
 <p-carousel 
   *ngIf="selectedAifName"
-  [value]="filteredMfNames" 
+  [value]="filteredAifNames" 
   [numVisible]="3" 
   [numScroll]="3" 
   [circular]="false" 
@@ -118,3 +106,4 @@
 <!-- mcap allocation -->
 
 
+  

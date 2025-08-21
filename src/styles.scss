@@ -1,6 +1,7 @@
 @import "primeicons/primeicons.css";
 
 
+
 * {
   box-sizing: border-box;
 }
@@ -15,6 +16,8 @@ body {
 .p-component {
   font-family: inherit;
 }
+
+
 
 .layout-container {
   display: flex;
@@ -33,3 +36,5 @@ app-home {
   overflow-y: auto;
   background: #f5f5f5; /* or your preferred background */
 }
+
+
