@@ -32,7 +32,7 @@ export class FeaturesService {
 
   deleteEntity(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/DeleteEntityByid`, {
-      params: { id : id }
+      params: { id: id }
     });
   }
 
@@ -62,30 +62,37 @@ export class FeaturesService {
     });
   }
 
-getMFDetailUnderlyingTable(mfId: string) {
-  return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
-    params: { entityid: mfId }
-  });
-}
-getAllAifEntities(mfId: string) {
-  return this.http.get<any[]>(`${this.apiUrl}/getAllAifEntities`) 
-}
+  getMFDetailUnderlyingTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+      params: { entityid: mfId }
+    });
+  }
 
-getAllAifContractNotes(mfId: string) {
-  return this.http.get<any[]>(`${this.apiUrl}/getAllAifContractNotes`) 
-}
-
-getAllAifUnderlyingProperties(mfId: string) {
-  return this.http.get<any[]>(`${this.apiUrl}/getAllAifUnderlyingProperties`) 
-}
-
-
-getMFDetailActionTable(mfId: string) {
+  getMFDetailActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
       params: { entityid: mfId }
     });
   }
 
+  getCompanyByName(query: string) {
+    return this.http.get<any>(`${this.apiUrl}/getCamByid`, {
+      params: { company: query }
+    });
+  }
+
+
+  //roshan
+  getAllAifEntities(mfId: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAifEntities`)
+  }
+
+  getAllAifContractNotes(mfId: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAifContractNotes`)
+  }
+
+  getAllAifUnderlyingProperties(mfId: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAifUnderlyingProperties`)
+  }
 
 
 

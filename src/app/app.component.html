@@ -1,6 +1,13 @@
-<div class="layout-container">
-  <div *ngIf="showSidebar" class="sidebar-container">
-    <div class="logo">D MATRIX</div>
+<div class="layout-container" [class.collapsed]="isCollapsed">
+  <!-- Sidebar -->
+  <div *ngIf="showSidebar" class="sidebar-container" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+      <div class="logo">D MATRIX</div>
+      <button class="collapse-btn" (click)="isCollapsed = !isCollapsed">
+        <i [ngClass]="isCollapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"></i>
+      </button>
+    </div>
+
     <p-panelMenu 
       [model]="menuItems"
       [style.width]="'100%'"
@@ -8,9 +15,9 @@
     </p-panelMenu>
   </div>
 
+  <!-- Main Content -->
   <div class="content-container">
     <p-toast></p-toast>
-
     <router-outlet></router-outlet>
   </div>
- </div>
+</div>

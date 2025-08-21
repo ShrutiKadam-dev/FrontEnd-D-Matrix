@@ -17,14 +17,21 @@ export const equityRoutes: Routes = [
         loadComponent: () => import('./mutual-funds/mutual-funds.component').then(c => c.MutualFundsComponent)
     },
     {
+        path: 'mutual-fund-details/:id',
+        loadComponent: () => import('./mutual-fund-details/mutual-fund-details.component').then(c => c.MutualFundDetailsComponent)
+    },
+    {
+        path: 'direct-equity',
+        loadComponent: () => import('./direct-equity/direct-equity.component').then(c => c.DirectEquityComponent)
+    },
+    {
+        path: 'direct-equity-details/:id',
+        loadComponent: () => import('./direct-equity-details/direct-equity-details.component').then(c => c.DirectEquityDetailsComponent)
+    },
+    {
         path: 'aif',
         loadComponent: () => import('./aif/aif.component').then(c => c.AifComponent)
     },
-    {
-        path: 'sub-mutual-funds/:id',
-        loadComponent: () => import('./sub-mutual-fund/sub-mutual-fund.component').then(c => c.SubMutualFundComponent)
-    },
-
     {
         path: 'sub-aif/:id',
         loadComponent: () => import('./sub-aif/sub-aif.component').then(c => c.SubAifComponent)

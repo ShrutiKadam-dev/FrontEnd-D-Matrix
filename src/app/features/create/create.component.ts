@@ -8,15 +8,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../features.service';
 import { MessageModule } from 'primeng/message';
-import { Message } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
-import { MessageService } from 'primeng/api';
 import { FormArray } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-create',
@@ -32,11 +32,12 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CommonModule,
     MessagesModule,
     MessageModule,
-    TableModule,
     InputTextModule,
     InputNumberModule,
+    AutoCompleteModule,
+    TableModule,
   ],
-   providers: [ConfirmationService],
+  providers: [ConfirmationService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss',
 })
@@ -48,14 +49,15 @@ export class CreateComponent implements OnInit {
   isEditMode = false;
   displayUpdateChoiceModal = false;
   selectedEntity: any = null;
-  messages: Message[] = [];
   displayUnderlyingModal = false;
   underlyingForm!: FormGroup;
   displayActionTableModal = false;
   actionTableForm: FormGroup;
   selectedEntityId: string | null = null;
+  companySuggestions: any[] = [];
+  date: Date | undefined = new Date();
 
-  private confirmationService = inject (ConfirmationService)
+  private confirmationService = inject(ConfirmationService)
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
@@ -145,7 +147,7 @@ export class CreateComponent implements OnInit {
       scrip_code: ['', Validators.required],
       mode: ['', Validators.required],
       order_type: ['', Validators.required],
-      order_date: ['', Validators.required],
+      order_date: [new Date(), Validators.required],
       sett_no: ['', Validators.required],
       scrip_name: ['', Validators.required],
       isin: ['', Validators.required],
@@ -242,12 +244,12 @@ export class CreateComponent implements OnInit {
       next: (data: any) => {
         this.entityList = Array.isArray(data.data) ? data.data : [];
       },
-      error: (err) => {
-        this.messages = [{
+      error: (error) => {
+        this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to load entities'
-        }];
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
       }
     });
   }
@@ -263,11 +265,11 @@ export class CreateComponent implements OnInit {
         this.getEntities();
       },
       error: (error) => {
-        this.messages = [{
+        this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: error.error?.message || 'Something went wrong'
-        }];
+          detail: error.error?.message || 'Update failed'
+        });
       }
     });
   }
@@ -303,11 +305,11 @@ export class CreateComponent implements OnInit {
         this.getEntities();
       },
       error: (error) => {
-        this.messages = [{
+        this.messageService.add({
           severity: 'error',
           summary: 'Failed',
           detail: error.error?.message || 'Update failed'
-        }];
+        });
       }
     });
   }
@@ -388,6 +390,15 @@ export class CreateComponent implements OnInit {
 
     const payload = this.actionTableForm.getRawValue();
 
+
+    if (payload.order_date instanceof Date) {
+      const d = payload.order_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.order_date = `${yyyy}-${mm}-${dd}`;  // <-- send only date
+    }
+
     this.featuresService.insertActionTable(payload).subscribe({
       next: () => {
         this.messageService.add({
@@ -407,39 +418,70 @@ export class CreateComponent implements OnInit {
     });
   }
 
-confirmDelete(entity: any) {
-  this.confirmationService.confirm({
-    message: `Are you sure you want to delete "${entity.scripname}"?`,
-    header: 'Confirm Delete',
-    icon: 'pi pi-exclamation-triangle',
-    accept: () => {
-      this.featuresService.deleteEntity(entity.id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Deleted',
-            detail: 'Entity deleted successfully'
-          });
-          this.getEntities();
+  confirmDelete(entity: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete "${entity.scripname}"?`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.featuresService.deleteEntity(entity.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Entity deleted successfully'
+            });
+            this.getEntities();
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Failed',
+              detail: error.error?.message || 'Delete failed'
+            });
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'Delete cancelled'
+        });
+      }
+    });
+  }
+
+  searchCompany(event: any, rowIndex: number) {
+    const query = event.query;
+
+    if (query && query.length > 1) {  // call API only if length > 2
+      this.featuresService.getCompanyByName(query).subscribe({
+        next: (res: any) => {
+          if (res?.data) {
+            this.companySuggestions = res.data; // API returns array
+          } else {
+            this.companySuggestions = [];
+          }
         },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Failed',
-            detail: error.error?.message || 'Delete failed'
-          });
+        error: (err) => {
+          console.error('Error fetching company list', err);
+          this.companySuggestions = [];
         }
       });
-    },
-    reject: () => {
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Cancelled',
-        detail: 'Delete cancelled'
-      });
     }
-  });
-}
+  }
+
+  onCompanySelect(event: any, rowIndex: number) {
+    const selectedCompany = event.value; // actual object from your API
+
+    this.rows.at(rowIndex).patchValue({
+      company_name: selectedCompany.name_of_company,
+      isin_code: selectedCompany.isin_number
+    });
+  }
+
+
 }
 
 

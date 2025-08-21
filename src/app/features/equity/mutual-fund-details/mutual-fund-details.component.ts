@@ -5,52 +5,49 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
-import { MessageModule } from 'primeng/message';
-import { Message } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
 import { FeaturesService } from '../../features.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { DatePickerModule } from 'primeng/datepicker';
 
 
 @Component({
-  selector: 'app-sub-mutual-fund',
+  selector: 'app-mutual-fund-details',
   imports: [
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
-    CalendarModule,
     InputTextModule,
     DropdownModule,
     CommonModule,
     MessagesModule,
-    MessageModule,
     TableModule,
     InputTextModule,
     AutoCompleteModule,
     CarouselModule,
     CardModule,
-    FormsModule
+    FormsModule,DatePickerModule
   ],
-  templateUrl: './sub-mutual-fund.component.html',
-  styleUrl: './sub-mutual-fund.component.scss'
+  templateUrl: './mutual-fund-details.component.html',
+  styleUrl: './mutual-fund-details.component.scss'
 })
-export class SubMutualFundComponent implements OnInit {
+export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
   actionTableList: any[] = [];
   underlyingTableList: any[] = [];
-  messages: Message[] = [];
 
   @ViewChild('actionTable') actionTable!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
 
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
@@ -90,12 +87,12 @@ export class SubMutualFundComponent implements OnInit {
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },
-      error: (err) => {
-        this.messages = [{
+      error: (error) => {
+        this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to load actions'
-        }];
+          summary: 'Failed',
+          detail: error.error?.message || 'Failed to load actions'
+        });
       }
     });
   }
@@ -105,12 +102,12 @@ export class SubMutualFundComponent implements OnInit {
       next: (data) => {
         this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
       },
-      error: (err) => {
-        this.messages = [{
+      error: (error) => {
+        this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to load underlying'
-        }];
+          summary: 'Failed',
+          detail: error.error?.message || 'Failed to load underlying'
+        });
       }
     });
   }

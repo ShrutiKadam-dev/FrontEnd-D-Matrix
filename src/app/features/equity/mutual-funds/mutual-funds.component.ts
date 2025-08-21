@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
-import { Message } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
@@ -45,12 +45,13 @@ export class MutualFundsComponent implements OnInit {
   allMfs: any[] = [];
   displayMfs: any[] = [];
   actionTableList: any[] = [];
-  messages: Message[] = [];
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router) { }
 
   private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
+
   // Carousel responsive breakpoints
   responsiveOptions = [
     {
@@ -76,9 +77,9 @@ export class MutualFundsComponent implements OnInit {
   }
 
   goToMfDetails(mf: any) {
-    this.router.navigate(['/features/equity/sub-mutual-funds', mf.entityid]);
+    this.router.navigate(['/features/equity/mutual-fund-details', mf.entityid]);
   }
-  
+
   getAllMutualFunds() {
     this.featuresService.getAllMutualFund().subscribe({
       next: (res: any) => {
@@ -94,12 +95,12 @@ export class MutualFundsComponent implements OnInit {
       next: (data: any) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },
-      error: (err) => {
-        this.messages = [{
+      error: (error) => {
+        this.messageService.add({
           severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message || 'Failed to load entities'
-        }];
+          summary: 'Failed',
+          detail: error.error?.message || 'Failed to load entities'
+        });
       }
     });
   }

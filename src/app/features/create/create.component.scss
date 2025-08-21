@@ -269,21 +269,7 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   padding: 0.5rem 1rem;
 }
 
-.calendar-wrapper {
-  position: relative;
-}
 
-.calendar-wrapper::after {
-  content: "\e909"; /* PrimeIcons calendar icon code */
-  font-family: 'primeicons';
-  font-size: 1.2rem;
-  color: #6c757d;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
 /* Prevent wrapping & show ellipsis if text is too long */
 :host ::ng-deep .p-datatable td {
   white-space: nowrap !important;   /* text in one line */
@@ -316,3 +302,4 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   transform: translateY(-50%);
   color: #555;
 }
+

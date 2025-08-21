@@ -1,21 +1,18 @@
-/* app.component.scss */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f8fafc;
-}
-
+/* Layout */
 .layout-container {
   display: flex;
   min-height: 100vh;
+  transition: all 0.3s ease;
+
+  &.collapsed {
+    .content-container {
+      margin-left: 70px;
+      width: calc(100% - 70px);
+    }
+  }
 }
 
-/* Sidebar styles */
+/* Sidebar */
 .sidebar-container {
   width: 250px;
   height: 100vh;
@@ -24,321 +21,75 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  padding: 1.5rem 1rem;
+  padding: 1rem;
   border-radius: 0 50px 50px 0;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   z-index: 1000;
+  transition: width 0.3s ease;
 
-  /* Smooth scrollbar */
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
+  &.collapsed {
+    width: 70px;
+    padding: 1rem 0.5rem;
 
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
+    .logo {
+      display: none;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
+    ::ng-deep .p-panelmenu .p-menuitem-text {
+      display: none !important;
+    }
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.5);
+    ::ng-deep .p-panelmenu .p-submenu-icon {
+      display: none !important;
+    }
+
+    ::ng-deep .p-panelmenu .p-panelmenu-content {
+      margin-left: 0 !important;
     }
   }
 }
 
-/* Content container next to sidebar */
+/* Sidebar header (logo + button) */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .collapse-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+  }
+}
+
+/* Content */
 .content-container {
   margin-left: 250px;
   padding: 2rem;
   width: calc(100% - 250px);
   min-height: 100vh;
   background: #f8fafc;
-}
-
-/* Logo styling */
-.logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 2.5rem;
-  color: white;
-  text-align: center;
-  letter-spacing: 2px;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Content area styling */
-.content-header {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
-  margin-bottom: 2rem;
-  border-left: 4px solid #7299cd;
-
-  h1 {
-    color: #2d3748;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-
-  p {
-    color: #718096;
-    font-size: 1.1rem;
-  }
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-/* PrimeNG PanelMenu style overrides */
-::ng-deep .p-panelmenu {
-  background: transparent !important;
-  border: none !important;
-
-  .p-panelmenu-header {
-    .p-panelmenu-header-content {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      border-radius: 12px !important;
-      margin-bottom: 0.5rem !important;
-      transition: all 0.3s ease !important;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
-        transform: translateX(5px);
-      }
-
-      &:focus {
-        box-shadow: none !important;
-      }
-
-      .p-panelmenu-header-action {
-        color: white !important;
-        font-weight: 500 !important;
-        padding: 12px 16px !important;
-
-        .p-menuitem-icon {
-          margin-right: 12px !important;
-          font-size: 1.1rem !important;
-          width: 20px !important;
-        }
-
-        .p-submenu-icon {
-          margin-left: auto !important;
-          transition: transform 0.3s ease !important;
-        }
-      }
-    }
-
-    &.p-highlight .p-panelmenu-header-content {
-      background: rgba(255, 255, 255, 0.2) !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-
-      .p-submenu-icon {
-        transform: rotate(90deg) !important;
-      }
-    }
-  }
-
-  .p-panelmenu-content {
-    background: transparent !important;
-    border: none !important;
-    color: white !important;
-    margin-left: 1rem !important;
-
-    .p-menuitem {
-      .p-menuitem-link {
-        background: transparent !important;
-        color: rgba(255, 255, 255, 0.9) !important;
-        padding: 8px 16px !important;
-        margin: 4px 0 !important;
-        border-radius: 8px !important;
-        transition: all 0.3s ease !important;
-        font-size: 0.9rem !important;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.1) !important;
-          padding-left: 20px !important;
-        }
-
-        &:focus {
-          box-shadow: none !important;
-        }
-
-        .p-menuitem-icon {
-          margin-right: 8px !important;
-          font-size: 0.8rem !important;
-        }
-      }
-    }
-  }
-
-  /* Divider styling */
-  .menu-divider {
-    .p-panelmenu-header-content {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0.5rem 1rem !important;
-      margin: 1.5rem 0 !important;
-      cursor: default !important;
-      pointer-events: none !important;
-      user-select: none !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-
-      &:hover {
-        background: transparent !important;
-        transform: none !important;
-      }
-
-      .p-panelmenu-header-action {
-        font-weight: 600 !important;
-        font-size: 0.8rem !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        text-align: center !important;
-        letter-spacing: 1px !important;
-        justify-content: center !important;
-      }
-    }
-  }
-}
-
-/* PrimeNG Card styling */
-::ng-deep .dashboard-card {
-  .p-card {
-    background: white;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
-    transition: all 0.3s ease !important;
-    border: 1px solid #e2e8f0 !important;
-    cursor: pointer !important;
-    height: 100%;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .p-card-header {
-      padding: 2rem 2rem 0 2rem !important;
-      border: none !important;
-    }
-
-    .p-card-body {
-      padding: 0 2rem 2rem 2rem !important;
-
-      .p-card-content {
-        padding: 0 !important;
-      }
-    }
-  }
-}
-
-.card-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: white;
-  margin-bottom: 1.5rem;
-
-  &.equity { 
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-  }
-
-  &.fixed-income { 
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
-  }
-
-  &.commodities { 
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
-  }
-
-  &.create { 
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
-  }
-}
-
-.card-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
-.card-description {
-  color: #718096;
-  line-height: 1.6;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .sidebar-container {
-    width: 70px;
-    padding: 1rem 0.5rem;
-    border-radius: 0 25px 25px 0;
-
-    .logo {
-      font-size: 1rem;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-  }
-
-  .content-container {
-    margin-left: 70px;
-    width: calc(100% - 70px);
-    padding: 1rem;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .content-header {
-    padding: 1.5rem;
-
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
-  }
-
-  /* Hide menu text on mobile */
-  ::ng-deep .p-panelmenu {
-    .p-panelmenu-header-content .p-panelmenu-header-action {
-      .p-menuitem-text {
-        display: none !important;
-      }
-
-      .p-submenu-icon {
-        display: none !important;
-      }
-    }
-
-    .p-panelmenu-content {
-      display: none !important;
-    }
-  }
+  transition: all 0.3s ease;
 }

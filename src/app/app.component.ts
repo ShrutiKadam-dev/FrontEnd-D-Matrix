@@ -1,4 +1,3 @@
-// app.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -8,28 +7,36 @@ import { CardModule } from 'primeng/card';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';  // ⬅ Needed for toggle button
+import { TooltipModule } from 'primeng/tooltip'; // ⬅ Needed for tooltips
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, PanelMenuModule, CardModule,ToastModule],
+  standalone: true,
+  imports: [
+    RouterOutlet, 
+    CommonModule, 
+    PanelMenuModule, 
+    CardModule,
+    ToastModule, 
+    ButtonModule,
+    TooltipModule
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title(title: any) {
-    throw new Error('Method not implemented.');
-  }
-
   menuItems: MenuItem[] = [];
   showSidebar = true;
+  isCollapsed = false;   // ⬅ NEW: collapse state
 
- constructor(private router: Router) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        const currentUrl = event.urlAfterRedirects.split('?')[0]; // remove query params
+        const currentUrl = event.urlAfterRedirects.split('?')[0];
         this.showSidebar = !currentUrl.startsWith('/auth');
       });
 
@@ -38,97 +45,73 @@ export class AppComponent implements OnInit {
         label: 'Home',
         icon: 'pi pi-home',
         routerLink: ['/features/home'],
-        styleClass: 'menu-item-custom'
+        tooltipOptions: { tooltipLabel: 'Home', tooltipPosition: 'right' }
       },
       {
         label: 'Equity',
         icon: 'pi pi-chart-line',
         routerLink: ['/features/equity'],
-        styleClass: 'menu-item-custom',
+        tooltipOptions: { tooltipLabel: 'Equity', tooltipPosition: 'right' },
         items: [
           { 
             label: 'Direct Equity', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/direct'],
-            styleClass: 'submenu-item-custom'
+            routerLink: ['/features/equity/direct-equity']
           },
           { 
             label: 'Mutual Funds', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/equity/mutual-funds'],
-            styleClass: 'submenu-item-custom'
-          },
-          { 
-            label: 'Alternative Investment Funds', 
-            icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/aif'],
-            styleClass: 'submenu-item-custom'
-          },
-          { 
-            label: 'Direct PE', 
-            icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/direct-pe'],
-            styleClass: 'submenu-item-custom'
+            routerLink: ['/features/equity/mutual-funds']
           },
           { 
             label: 'AIF', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/equity/aif'],
-            styleClass: 'submenu-item-custom'
+            routerLink: ['/features/equity/aif']
           }
         ]
       },
       {
         label: 'Fixed Income',
         icon: 'pi pi-dollar',
-        styleClass: 'menu-item-custom',
         routerLink: ['/fixed-income'],
+        tooltipOptions: { tooltipLabel: 'Fixed Income', tooltipPosition: 'right' },
         items: [
           { 
-            label: 'Government Bonds', 
+            label: 'Direct Equity', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/fixed-income/government'],
-            styleClass: 'submenu-item-custom'
+            routerLink: ['/equity/direct']
           },
           { 
-            label: 'Corporate Bonds', 
+            label: 'Mutual Funds', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/fixed-income/corporate'],
-            styleClass: 'submenu-item-custom'
-          },
-          { 
-            label: 'Fixed Deposits', 
-            icon: 'pi pi-arrow-right',
-            routerLink: ['/fixed-income/fd'],
-            styleClass: 'submenu-item-custom'
-          },
+            routerLink: ['/features/equity/mutual-funds']
+          }
         ]
       },
       {
         label: 'Commodities',
         icon: 'pi pi-globe',
         routerLink: ['/features/commodities'],
-        styleClass: 'menu-item-custom',
-                items: [
+        tooltipOptions: { tooltipLabel: 'Commodities', tooltipPosition: 'right' },
+        items: [
           { 
             label: 'Direct Equity', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/equity/direct'],
-            styleClass: 'submenu-item-custom'
-          },]
-      },
-      {
-        label: 'ACTIONS',
-        disabled: true,
-        styleClass: 'menu-divider'
+            routerLink: ['/equity/direct']
+          },
+          { 
+            label: 'Mutual Funds', 
+            icon: 'pi pi-arrow-right',
+            routerLink: ['/features/equity/mutual-funds']
+          }
+        ]
       },
       {
         label: 'Create',
         icon: 'pi pi-plus-circle',
         routerLink: ['/features/create'],
-        styleClass: 'menu-item-custom'
+        tooltipOptions: { tooltipLabel: 'Create', tooltipPosition: 'right' }
       }
     ];
   }
-
 }
