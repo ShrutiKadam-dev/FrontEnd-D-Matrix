@@ -19,7 +19,7 @@ label {
   font-size: 0.95rem;
 }
 
-/* Dropdown Panel – Unified Rules */
+/* Dropdown Panel */
 :host ::ng-deep .p-dropdown-panel {
   max-height: 250px !important;
   overflow-y: auto !important;
@@ -30,7 +30,7 @@ label {
   width: auto !important;
 }
 
-/* Custom scrollbar for dropdowns */
+/* Dropdown scrollbar */
 :host ::ng-deep .p-dropdown-panel::-webkit-scrollbar {
   width: 6px;
 }
@@ -42,15 +42,13 @@ label {
   background-color: #999;
 }
 
-/* Dialog Content – Equal Padding Left & Right */
+/* Dialog Content */
 :host ::ng-deep .p-dialog-content {
   max-height: 80vh;
   overflow-y: auto;
   padding-left: 1.5rem;  
   padding-right: 1.5rem; 
 }
-
-/* Ensure header/footer also align with form fields */
 :host ::ng-deep .p-dialog .p-dialog-header,
 :host ::ng-deep .p-dialog .p-dialog-footer {
   padding-left: 1.5rem;
@@ -65,12 +63,11 @@ label {
   margin-top: 1rem;
 }
 :host ::ng-deep .dialog-actions .p-button {
-  width: auto !important;
   min-width: 110px;
   border-radius: 6px;
 }
 
-/* Subcategory dropdown panel fix */
+/* Subcategory dropdown */
 :host ::ng-deep .subcategory-panel.p-dropdown-panel {
   transform: translateY(-100%) !important;
   top: auto !important;
@@ -86,13 +83,10 @@ label {
   font-weight: 600 !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
-
 :host ::ng-deep .add-entity-btn.p-button:hover {
   background: linear-gradient(145deg, #7ea7dd, #6a8fbe) !important; 
 }
-
 :host ::ng-deep .add-entity-btn.p-button:focus {
-  outline: none !important;
   box-shadow: 0 0 0 3px rgba(114, 153, 205, 0.4) !important;
 }
 
@@ -100,15 +94,9 @@ label {
 .search-container {
   margin: 1.5rem 0 1rem 0;
 }
-
 .search-container.half-width {
   width: 50%;
 }
-
-.search-bar {
-  width: 100%;
-}
-
 .search-bar input {
   width: 100%;
   border-radius: 6px;
@@ -120,103 +108,121 @@ label {
   display: flex;
   justify-content: space-around;
   margin-top: 1rem;
-
-  .p-button {
-    min-width: 150px;
-  }
+}
+.edit-choice-buttons .p-button {
+  min-width: 150px;
 }
 
-/* Force fixed table layout so width doesn't shrink */
+/* ===== Table Styling ===== */
 :host ::ng-deep .p-datatable table {
   table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
 }
 
-/* Set specific widths for each column */
-:host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) {
-  width: 40%; /* Scrip Name */
-  word-wrap: break-word;
-}
-
-:host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) {
-  width: 20%; /* Scrip Code */
-}
-
-:host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) {
-  width: 20%; /* Benchmark */
-}
-
-:host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) {
-  width: 20%; /* Action */
-}
-
-/* Reduce row height */
-:host ::ng-deep .p-datatable-tbody > tr > td {
-  padding: 6px 8px;  /* less vertical padding */
-  height: 36px;      /* compact row height */
-  font-size: 0.9rem; /* slightly smaller text */
-}
-
-/* Also adjust header height */
-:host ::ng-deep .p-datatable-thead > tr > th {
-  padding: 6px 8px;
-  height: 36px;
+/* Table Header */
+:host ::ng-deep .p-datatable thead th {
+  font-weight: 600;
+  color: #131517;
+  background: #f8f9fb;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.9rem;
 }
 
-/* Space between action buttons */
-:host ::ng-deep .action-btn {
-  margin-right: 6px; /* space between Edit and Update */
+/* Table Body */
+:host ::ng-deep .p-datatable tbody td {
+  font-weight: 400;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8rem;
 }
 
+/* Row hover effect */
+:host ::ng-deep .p-datatable tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Column widths */
+:host ::ng-deep .p-datatable th:nth-child(1),
+:host ::ng-deep .p-datatable td:nth-child(1) { width: 25%; }
+:host ::ng-deep .p-datatable th:nth-child(2),
+:host ::ng-deep .p-datatable td:nth-child(2) { width: 20%; }
+:host ::ng-deep .p-datatable th:nth-child(3),
+:host ::ng-deep .p-datatable td:nth-child(3) { width: 25%; }
+:host ::ng-deep .p-datatable th:nth-child(4),
+:host ::ng-deep .p-datatable td:nth-child(4) { width: 15%; }
+
+/* Action column */
+:host ::ng-deep .p-datatable th:last-child,
+:host ::ng-deep .p-datatable td:last-child {
+  width: 180px !important;
+  min-width: 180px !important;
+  text-align: center !important;
+  overflow: visible !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* Row height */
+:host ::ng-deep .p-datatable-tbody > tr > td,
+:host ::ng-deep .p-datatable-thead > tr > th {
+  height: 40px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+/* ===== Action Buttons ===== */
 ::ng-deep .custom-btn-edit,
 ::ng-deep .custom-btn-update,
 ::ng-deep .custom-btn-delete {
-border: none !important; color: white !important; font-weight: 500; border-radius: 6px !important; padding: 0.5rem 1.2rem !important; margin: 4px
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: white !important;
+  font-size: 14px !important;
+  cursor: pointer;
 }
 
-/* Edit = blue */
+/* Button colors */
 ::ng-deep .custom-btn-edit { background: #6d8fbe !important; }
 ::ng-deep .custom-btn-edit:hover { background: #4e77c7 !important; }
-
-/* Update = green */
 ::ng-deep .custom-btn-update { background: #28a745 !important; }
 ::ng-deep .custom-btn-update:hover { background: #218838 !important; }
-
-/* Delete = red */
 ::ng-deep .custom-btn-delete { background: #dc3545 !important; }
 ::ng-deep .custom-btn-delete:hover { background: #c82333 !important; }
 
-/* ===== Underlying Data Modal Styling ===== */
-
-.underlying-modal {
-  padding: 1rem;
-  background: #fff;
-}
-
+/* ===== Underlying Data Modal ===== */
+.underlying-modal { padding: 1rem; background: #fff; }
 .underlying-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
 }
-
 .underlying-table th,
 .underlying-table td {
   padding: 0.5rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
 }
-
 .underlying-table th {
   background: #f4f6f8;
   font-weight: 600;
   font-size: 0.9rem;
 }
-
 .underlying-table input {
   width: 100%;
   padding: 0.4rem;
@@ -224,12 +230,10 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   border-radius: 4px;
   font-size: 0.85rem;
 }
-
 .underlying-table input:focus {
   border-color: #2196f3;
   outline: none;
 }
-
 .add-row-btn {
   background: #4caf50;
   color: white;
@@ -239,11 +243,7 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   border-radius: 4px;
   cursor: pointer;
 }
-
-.add-row-btn:hover {
-  background: #43a047;
-}
-
+.add-row-btn:hover { background: #43a047; }
 .remove-row-btn {
   background: #f44336;
   color: white;
@@ -253,10 +253,7 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   border-radius: 4px;
   cursor: pointer;
 }
-
-.remove-row-btn:hover {
-  background: #d32f2f;
-}
+.remove-row-btn:hover { background: #d32f2f; }
 
 .modal-actions {
   display: flex;
@@ -269,31 +266,19 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   padding: 0.5rem 1rem;
 }
 
-
-/* Prevent wrapping & show ellipsis if text is too long */
-:host ::ng-deep .p-datatable td {
-  white-space: nowrap !important;   /* text in one line */
-  overflow: hidden !important;      /* cut off overflow */
-  text-overflow: ellipsis !important; /* add ... at end */
-}
+/* Form Input */
 .form-input {
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 6px 10px;
-  height: 36px; /* same as text inputs */
+  height: 36px;
   box-sizing: border-box;
 }
 
-
-.weightage-cell {
-  position: relative;
-}
-
-.weightage-cell input {
-  padding-right: 20px; /* space for % sign */
-}
-
+/* Weightage Input with % */
+.weightage-cell { position: relative; }
+.weightage-cell input { padding-right: 20px; }
 .weightage-cell::after {
   content: "%";
   position: absolute;
@@ -302,4 +287,3 @@ border: none !important; color: white !important; font-weight: 500; border-radiu
   transform: translateY(-50%);
   color: #555;
 }
-

@@ -68,6 +68,7 @@
       <th>Scrip Name</th>
       <th>Scrip Code</th>
       <th>Benchmark</th>
+      <th>Subcategory</th>
       <th>Action</th>
     </tr>
   </ng-template>
@@ -77,6 +78,7 @@
       <td>{{ entity.scripname }}</td>
       <td>{{ entity.scripcode }}</td>
       <td>{{ entity.benchmark }}</td>
+      <td>{{ entity.subcategory }}</td>
       <td>
         <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
 
@@ -168,23 +170,26 @@
 <p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"
   [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
 
-  <form [formGroup]="actionTableForm" class="p-fluid">
+  <!-- Normal Action Table -->
+  <form *ngIf="!(selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity')"
+    [formGroup]="actionTableForm" class="p-fluid">
+
     <div class="field" *ngFor="let field of actionTableFields">
       <label [for]="field.key">{{ field.label }}</label>
 
       <!-- Dropdown: Order Type -->
       <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
-        placeholder="Select Order Type">
-      </p-dropdown>
+        placeholder="Select Order Type"></p-dropdown>
 
       <!-- Dropdown: Mode -->
-      <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode" placeholder="Select Mode">
-      </p-dropdown>
+      <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"
+        placeholder="Select Mode"></p-dropdown>
 
       <!-- Calendar: Order Date -->
-        <p-calendar [style]="{'width':'100%'}" *ngIf="field.key === 'order_date'" formControlName="order_date" [showIcon]="true" placeholder="Select Date" dateFormat="dd/mm/yy" appendTo="body">
-        </p-calendar>
-  
+      <p-calendar *ngIf="field.key === 'order_date'" formControlName="order_date" [showIcon]="true"
+        placeholder="Select Date" dateFormat="dd/mm/yy" appendTo="body" [style]="{ width: '100%' }">
+      </p-calendar>
+
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
 
@@ -196,12 +201,35 @@
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn"
-        (click)="displayActionTableModal = false"></p-button>
-      <p-button label="Save" icon="pi pi-check" [disabled]="actionTableForm.invalid" styleClass="add-entity-btn"
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="actionTableForm.invalid"
         (click)="saveActionTableData()"></p-button>
     </div>
   </form>
+
+  <!-- Direct Equity Action Table -->
+  <form *ngIf="selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity'"
+    [formGroup]="directEquityActionTableForm" class="p-fluid">
+
+    <div class="field" *ngFor="let field of directEquityActionTableFields">
+      <label [for]="field.key">{{ field.label }}</label>
+      <input *ngIf="field.key !== 'order_type'" [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
+    
+      <!-- Dropdown: Order Type -->
+      <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
+        placeholder="Select Order Type"></p-dropdown>
+
+    </div>
+
+    <div class="dialog-actions flex justify-content-end gap-2 mt-3">
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayActionTableModal = false"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="directEquityActionTableForm.invalid"
+        (click)="saveDirectEquityActionTableData()"></p-button>
+    </div>
+  </form>
+
+
 </p-dialog>
+
 
 <p-confirmDialog></p-confirmDialog>

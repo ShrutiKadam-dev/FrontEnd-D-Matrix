@@ -44,6 +44,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 export class CreateComponent implements OnInit {
   displayModal = false;
   entityForm: FormGroup;
+  directEquityActionTableForm: FormGroup;
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
   isEditMode = false;
@@ -124,6 +125,31 @@ export class CreateComponent implements OnInit {
     { key: 'net_amount', label: 'Net Amount' },
   ];
 
+  directEquityActionTableFields = [
+    { key: 'contract_note_number', label: 'Contract Note Number' },
+    { key: 'trade_date', label: 'Trade Date' },
+    { key: 'client_code', label: 'Client Code' },
+    { key: 'client_name', label: 'Client Name' },
+    { key: 'order_number', label: 'Order Number' },
+    { key: 'order_time', label: 'Order Time' },
+    { key: 'trade_number', label: 'Trade Number' },
+    { key: 'description', label: 'Description' },
+    { key: 'order_type', label: 'Order Type' },
+    { key: 'qty', label: 'Quantity' },
+    { key: 'trade_price', label: 'Trade Price' },
+    { key: 'brokerage_per_unit', label: 'Brokerage / Unit' },
+    { key: 'net_rate_per_unit', label: 'Net Rate / Unit' },
+    { key: 'gst', label: 'GST' },
+    { key: 'stt', label: 'STT' },
+    { key: 'security_transaction_tax', label: 'Security Transaction Tax' },
+    { key: 'exchange_transaction_charges', label: 'Exchange Transaction Charges' },
+    { key: 'sebi_turnover_fees', label: 'SEBI Turnover Fees' },
+    { key: 'stamp_duty', label: 'Stamp Duty' },
+    { key: 'ipft', label: 'IPFT' },
+    { key: 'net_total', label: 'Net Total' },
+    { key: 'net_amount_receivable', label: 'Net Amount Receivable' }
+  ];
+
   private calculatePurchaseValue(): void {
     const unit = Number(this.actionTableForm.get('unit')?.value) || 0;
     const nav = Number(this.actionTableForm.get('nav')?.value) || 0;
@@ -168,6 +194,32 @@ export class CreateComponent implements OnInit {
       net_amount: ['', Validators.required],
       entityid: ['', Validators.required] // Hidden field for entity ID
 
+    });
+
+    this.directEquityActionTableForm = this.fb.group({
+      contract_note_number: ['', Validators.required],
+      trade_date: ['', Validators.required],
+      client_code: ['', Validators.required],
+      client_name: ['', Validators.required],
+      order_number: ['', Validators.required],
+      order_time: ['', Validators.required],
+      trade_number: ['', Validators.required],
+      description: [''],
+      order_type: ['', Validators.required],
+      qty: ['', Validators.required],
+      trade_price: ['', Validators.required],
+      brokerage_per_unit: ['', Validators.required],
+      net_rate_per_unit: ['', Validators.required],
+      gst: [''],
+      stt: [''],
+      security_transaction_tax: [''],
+      exchange_transaction_charges: [''],
+      sebi_turnover_fees: [''],
+      stamp_duty: [''],
+      ipft: [''],
+      net_total: ['', Validators.required],
+      net_amount_receivable: ['', Validators.required],
+      entityid: ['', Validators.required] // link back to entity
     });
 
     // Auto-calculate purchase_value when unit or nav changes
@@ -361,6 +413,7 @@ export class CreateComponent implements OnInit {
       this.underlyingForm.markAllAsTouched();
     }
   }
+
   onUpdate(entity: any) {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = true;
@@ -414,6 +467,30 @@ export class CreateComponent implements OnInit {
           summary: 'Error',
           detail: err.error?.message || 'Failed to add action table data'
         });
+      }
+    });
+  }
+
+  saveDirectEquityActionTableData() {
+    if (this.directEquityActionTableForm.invalid) return;
+
+    const payload = this.directEquityActionTableForm.getRawValue();
+
+    if (payload.trade_date instanceof Date) {
+      const d = payload.trade_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.trade_date = `${yyyy}-${mm}-${dd}`;
+    }
+
+    this.featuresService.insertDirectEquityActionTable(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Direct Equity data saved successfully' });
+        this.displayActionTableModal = false;
+      },
+      error: (err: { error: { message: any; }; }) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save Direct Equity data' });
       }
     });
   }

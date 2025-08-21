@@ -41,9 +41,13 @@ export class FeaturesService {
   }
 
   insertActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/action_table`, data); // replace URL with actual insert API
+    return this.http.post(`${this.apiUrl}/action_table`, data); 
   }
 
+  insertDirectEquityActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/insertDirectData`, data); 
+  }
+  
   getAllMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
   }
