@@ -17,6 +17,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-create',
@@ -36,6 +37,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     InputNumberModule,
     AutoCompleteModule,
     TableModule,
+    DatePicker
   ],
   providers: [ConfirmationService],
   templateUrl: './create.component.html',

@@ -8,11 +8,6 @@ import { definePreset } from '@primeuix/themes';
 
 // Pick a theme preset
 import Lara from '@primeuix/themes/lara';
-import Aura from '@primeuix/themes/aura';
-import Material from '@primeuix/themes/material';
-import Nora from '@primeuix/themes/nora';
-import Tokens from '@primeuix/themes/tokens';
-import Types from '@primeuix/themes/types';
 // You can also try: Aura, Nora, or Material presets from @primeuix/themes
 
 import { routes } from './app.routes';
@@ -43,9 +38,9 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     providePrimeNG({
       theme: {
-        preset: MyPreset, 
+        preset: Lara, 
         options: {
-          cssLayer: { name: 'primeng', order: 'app-styles, primeng' } // optional but recommended if you use Tailwind or global CSS
+          cssLayer: { name: 'primeng', order: 'app-styles, primeng' }
         }
       }
     })
