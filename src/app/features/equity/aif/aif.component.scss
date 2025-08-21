@@ -120,25 +120,39 @@ label {
   width: 100%;
 }
 
+
+/* Nickname → single-line ellipsis */
 .card-title {
   font-size: 1rem;
   font-weight: 600;
   color: #333;
   margin: 0.8rem 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Subcategory → single-line ellipsis */
 .card-value {
   font-size: 0.9rem;
   color: #666;
   margin: 0 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Status → single-line ellipsis */
 .status {
   font-size: 0.85rem;
   font-weight: 500;
   color: #2196f3;
   margin: 0 1rem 1rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 /* Prevent wrapping & show ellipsis if text is too long */
 :host ::ng-deep .p-datatable td {
   white-space: nowrap !important;   /* text in one line */

@@ -3,31 +3,67 @@
 
 <!-- Search Section -->
 <div class="search-section">
-  <p-autoComplete 
-    field="nickname" placeholder="Search MF..." [minLength]="1">
+  <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredMfNames" (completeMethod)="searchMfs($event)"
+    (onSelect)="scrollToMf($event)" field="nickname" placeholder="Search MF..." [minLength]="1">
   </p-autoComplete>
 
-  
+  <button *ngIf="selectedAifName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
 </div>
 
 
 <!-- Carousel -->
 <p-carousel 
-  [value]="aifList" 
+  [value]="displayMfs" 
+  [numVisible]="3" 
+  [numScroll]="3" 
+  [circular]="false" 
+  [responsiveOptions]="responsiveOptions"
+  styleClass="custom-carousel"
+  *ngIf="!selectedAifName">
+
+  <ng-template let-aif pTemplate="item" >
+    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+      <ng-template pTemplate="header" >
+        <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}" ></div>
+      </ng-template>
+      <div class="card-title" [title]="aif.nickname" >{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ aif.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<!-- <div *ngIf="selectedAifName" class="card-container"   styleClass="custom-carousel">
+  <p-card *ngFor="let aif of displayMfs" styleClass="mf-card">
+    <ng-template pTemplate="header">
+      <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}"></div>
+    </ng-template>
+    <div class="card-title" [title]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
+    <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
+    <div class="status">{{ aif.entityid }}</div>
+  </p-card>
+</div> -->
+
+
+<p-carousel 
+  *ngIf="selectedAifName"
+  [value]="filteredMfNames" 
   [numVisible]="3" 
   [numScroll]="3" 
   [circular]="false" 
   [responsiveOptions]="responsiveOptions"
   styleClass="custom-carousel">
 
-  <ng-template let-item pTemplate="item" >
-    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(item)" >
-      <ng-template pTemplate="header" style="background-color: aqua">
-        <div class="card-color"></div>
+  <ng-template let-aif pTemplate="item" >
+    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+      <ng-template pTemplate="header" >
+        <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}" ></div>
       </ng-template>
-      <div class="card-title">{{ item.name }}</div>
-      <div class="card-value">{{ item.value }}</div>
-      <div class="status">{{ item.entityId }}</div>
+      <div class="card-title" [title]="aif.nickname" >{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ aif.entityid }}</div>
     </p-card>
   </ng-template>
 </p-carousel>
