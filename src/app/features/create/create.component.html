@@ -224,8 +224,11 @@
         showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body"   [style]="{ width: '100%' }">
       </p-datepicker>
 
+      <!-- Order Time Field -->
 
-      <input *ngIf="field.key !== 'order_type' && field.key !== 'trade_date'" [id]="field.key" pInputText
+      <p-inputMask *ngIf="field.key === 'order_time'" mask="99:99:99" formControlName="order_time" placeholder="HH:mm:ss" [style]="{ width: '100%' }" ></p-inputMask>
+
+      <input *ngIf="field.key !== 'order_type' && field.key !== 'trade_date' && field.key !== 'order_time'"  [id]="field.key" pInputText
         [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
 
     </div>
