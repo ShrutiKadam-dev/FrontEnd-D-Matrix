@@ -18,6 +18,7 @@ import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DatePicker } from 'primeng/datepicker';
+import { InputMask } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-create',
@@ -37,7 +38,8 @@ import { DatePicker } from 'primeng/datepicker';
     InputNumberModule,
     AutoCompleteModule,
     TableModule,
-    DatePicker
+    DatePicker,
+    InputMask
   ],
   providers: [ConfirmationService],
   templateUrl: './create.component.html',
@@ -204,7 +206,7 @@ export class CreateComponent implements OnInit {
       client_code: ['', Validators.required],
       client_name: ['', Validators.required],
       order_number: ['', Validators.required],
-      order_time: ['', Validators.required],
+      order_time: ['', [ Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)] ],
       trade_number: ['', Validators.required],
       description: [''],
       order_type: ['', Validators.required],
