@@ -24,15 +24,18 @@ export class AifComponent {
 
   constructor(private router: Router) {}
 
+ 
 
   
   selectedAifName: any = null;
   filteredAifNames: any[] = [];
-  allMfs: any[] = [];
+  allAifs: any[] = [];
   displayAifs: any[] = [];
+  allAifContractNotes: any[] = [];
 
   ngOnInit() {
-    this.getAllMutualFunds();
+    this.getAllAifEntities();
+    this.getAllAifContractNotes()
   }
   
   private featuresService = inject(FeaturesService);
@@ -72,15 +75,12 @@ export class AifComponent {
   ];  
 
    goToAif(item: any) {
-    // Navigate to /aif/:id
-    console.log(item);
-    
-    this.router.navigate(['/features/equity/sub-aif', item.id]);
+    this.router.navigate(['/features/equity/sub-aif', item.entityid]);
   }
 
   searchAifs(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredAifNames = this.allMfs.filter(mf =>
+    this.filteredAifNames = this.allAifs.filter(mf =>
       mf.nickname?.toLowerCase().includes(query)
     );
   }
@@ -93,7 +93,7 @@ export class AifComponent {
 
   clearSearch() {
     this.selectedAifName = null;
-    this.displayAifs = [...this.allMfs]; // restore carousel items
+    this.displayAifs = [...this.allAifs]; // restore carousel items
   }
  
    getColor(nickname?: string) {
@@ -112,17 +112,31 @@ export class AifComponent {
     return `hsl(${hue}, 70%, 85%)`;
   }
 
-  getAllMutualFunds() {
-    this.featuresService.getAllMutualFund().subscribe({
+  getAllAifEntities() {
+    this.featuresService.getAllAifEntities().subscribe({
       next: (res: any) => {
-        this.allMfs = res?.data || [];
-        this.displayAifs = [...this.allMfs]; // for carousel
+        this.allAifs = res?.data || [];
+        this.displayAifs = this.allAifs.filter((aif: any) => aif.subcategory === 'AIF'
+      );
         console.log(this.displayAifs)
       },
       
       error: () => console.error('Failed to load Mutual Funds')
     }); 
     
+  }
+
+  getAllAifContractNotes(){
+
+      this.featuresService.getAllAifContractNotes().subscribe({
+        next:(res:any ) => {
+          this.allAifContractNotes = res?.data || [];
+          console.log(this.allAifContractNotes);
+          
+          
+        },
+        error: () => console.error('Failed to load Mutual Funds')
+      })
   }
 
 
