@@ -27,9 +27,9 @@ export class AifComponent {
 
   
   selectedAifName: any = null;
-  filteredMfNames: any[] = [];
+  filteredAifNames: any[] = [];
   allMfs: any[] = [];
-  displayMfs: any[] = [];
+  displayAifs: any[] = [];
 
   ngOnInit() {
     this.getAllMutualFunds();
@@ -78,22 +78,22 @@ export class AifComponent {
     this.router.navigate(['/features/equity/sub-aif', item.id]);
   }
 
-  searchMfs(event: any) {
+  searchAifs(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredMfNames = this.allMfs.filter(mf =>
+    this.filteredAifNames = this.allMfs.filter(mf =>
       mf.nickname?.toLowerCase().includes(query)
     );
   }
 
-    scrollToMf(mf: any) {
+    scrollToAif(mf: any) {
     if (mf) {
-      this.displayMfs = [mf]; // show only selected MF card in search mode
+      this.displayAifs = [mf]; // show only selected MF card in search mode
     }
   }
 
   clearSearch() {
     this.selectedAifName = null;
-    this.displayMfs = [...this.allMfs]; // restore carousel items
+    this.displayAifs = [...this.allMfs]; // restore carousel items
   }
  
    getColor(nickname?: string) {
@@ -116,8 +116,8 @@ export class AifComponent {
     this.featuresService.getAllMutualFund().subscribe({
       next: (res: any) => {
         this.allMfs = res?.data || [];
-        this.displayMfs = [...this.allMfs]; // for carousel
-        console.log(this.displayMfs)
+        this.displayAifs = [...this.allMfs]; // for carousel
+        console.log(this.displayAifs)
       },
       
       error: () => console.error('Failed to load Mutual Funds')

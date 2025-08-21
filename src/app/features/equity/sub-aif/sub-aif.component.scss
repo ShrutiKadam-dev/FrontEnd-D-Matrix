@@ -41,14 +41,19 @@ label {
 /* Search Container */
 .search-container {
   margin: 1.5rem 0 1rem 0;
+  
 }
 
 .search-container.half-width {
   width: 50%;
+  
 }
 
 .search-bar {
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .search-bar input {
