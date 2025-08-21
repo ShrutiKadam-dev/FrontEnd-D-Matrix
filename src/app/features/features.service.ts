@@ -86,8 +86,8 @@ export class FeaturesService {
 
 
   //AIF
-  getAllAifEntities(mfId: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllAifEntities`)
+  getAllAifEntities() {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllentity`)
   }
 
   getAllAifContractNotes(mfId: string) {
