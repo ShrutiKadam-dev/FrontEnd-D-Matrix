@@ -45,15 +45,23 @@ export class FeaturesService {
   }
 
   insertDirectEquityActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/insertDirectData`, data); 
+    return this.http.post(`${this.apiUrl}/InsertdirectData`, data); 
   }
   
   getAllMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
   }
 
+  getAllDirectEquity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquity`);
+  }
+
   getAllActionTableOfMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
+  }
+
+  getAllActionTableOfDirectEquity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfDirectEquity`);
   }
 
   getAllUnderlyingMutualFund(): Observable<any[]> {

@@ -1,1 +1,74 @@
-<p>direct-equity works!</p>
+<h3>Master Direct equity</h3>
+
+<!-- Search Section -->
+<div class="search-section">
+  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames" (completeMethod)="searchDEs($event)"
+    (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search DE..." [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedDirectEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Carousel -->
+<p-carousel [value]="displayDEs" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedDirectEquityName">
+
+  <ng-template let-de pTemplate="item">
+    <p-card styleClass="de-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+      </ng-template>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ de.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<div *ngIf="selectedDirectEquityName" class="card-container">
+  <p-card *ngFor="let de of displayDEs" styleClass="de-card">
+    <ng-template pTemplate="header">
+      <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+    </ng-template>
+    <!-- Truncate with ellipsis & tooltip -->
+    <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+    <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
+    <div class="status">{{ de.entityid }}</div>
+  </p-card>
+</div>
+
+ 
+<h3>Summary Of Actions</h3>
+<!-- Search Box -->
+<div class="search-container half-width">
+  <span class="p-input-icon-left search-bar">
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+  </span>
+</div>
+
+<!-- Entity Table -->
+<p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Scrip Name</th>
+      <th>Units</th>
+      <th>Order Date</th>
+      <th>Action</th>
+      <th>Amount</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.unit }}</td>
+      <td>{{ entity.order_date }}</td>
+      <td>{{ entity.order_type }}</td>
+      <td>{{ entity.purchase_amount }}</td>
+    </tr>
+  </ng-template>
+</p-table> 

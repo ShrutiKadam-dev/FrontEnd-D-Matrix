@@ -206,7 +206,7 @@ export class CreateComponent implements OnInit {
       client_code: ['', Validators.required],
       client_name: ['', Validators.required],
       order_number: ['', Validators.required],
-      order_time: ['', [ Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)] ],
+      order_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
       trade_number: ['', Validators.required],
       description: [''],
       order_type: ['', Validators.required],
@@ -426,6 +426,11 @@ export class CreateComponent implements OnInit {
   updateActionTable(entity: any) {
     this.selectedEntity = entity;
     this.actionTableForm.reset();
+    this.directEquityActionTableForm.reset();
+
+    this.directEquityActionTableForm.patchValue({
+      entityid: entity?.entityid || ''
+    });
 
     this.actionTableForm.patchValue({
       entityid: entity.entityid,
@@ -476,6 +481,9 @@ export class CreateComponent implements OnInit {
   }
 
   saveDirectEquityActionTableData() {
+    
+    console.log(this.directEquityActionTableForm.errors, this.directEquityActionTableForm.status);
+console.log(this.directEquityActionTableForm.value);
     if (this.directEquityActionTableForm.invalid) return;
 
     const payload = this.directEquityActionTableForm.getRawValue();
