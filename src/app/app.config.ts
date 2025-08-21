@@ -38,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     providePrimeNG({
       theme: {
-        preset: Lara, 
+        preset: MyPreset, 
         options: {
           cssLayer: { name: 'primeng', order: 'app-styles, primeng' }
         }
