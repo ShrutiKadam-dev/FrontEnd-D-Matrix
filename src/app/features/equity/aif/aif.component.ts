@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
+import { FeaturesService } from '../../features.service';
 
 @Component({
   selector: 'app-aif',
@@ -22,6 +23,19 @@ import { CommonModule } from '@angular/common';
 export class AifComponent {
 
   constructor(private router: Router) {}
+
+
+  
+  selectedAifName: any = null;
+  filteredMfNames: any[] = [];
+  allMfs: any[] = [];
+  displayMfs: any[] = [];
+
+  ngOnInit() {
+    this.getAllMutualFunds();
+  }
+  
+  private featuresService = inject(FeaturesService);
 
    actionTableList = [
     { id: 1, scrip_name: 'ABC Ltd', unit: 100, order_date: '2025-08-10', order_type: 'Buy', purchase_amount: 5000 },
@@ -62,6 +76,53 @@ export class AifComponent {
     console.log(item);
     
     this.router.navigate(['/features/equity/sub-aif', item.id]);
+  }
+
+  searchMfs(event: any) {
+    const query = event.query?.toLowerCase() || '';
+    this.filteredMfNames = this.allMfs.filter(mf =>
+      mf.nickname?.toLowerCase().includes(query)
+    );
+  }
+
+    scrollToMf(mf: any) {
+    if (mf) {
+      this.displayMfs = [mf]; // show only selected MF card in search mode
+    }
+  }
+
+  clearSearch() {
+    this.selectedAifName = null;
+    this.displayMfs = [...this.allMfs]; // restore carousel items
+  }
+ 
+   getColor(nickname?: string) {
+    const predefinedColors: { [key: string]: string } = {
+      'MF1': '#FFD580',
+      'MF2': '#FFB3B3',
+      'MF3': '#B3E5FF'
+    };
+
+    if (nickname && predefinedColors[nickname]) {
+      return predefinedColors[nickname];
+    }
+
+    // Generate random pastel color
+    const hue = Math.floor(Math.random() * 360);
+    return `hsl(${hue}, 70%, 85%)`;
+  }
+
+  getAllMutualFunds() {
+    this.featuresService.getAllMutualFund().subscribe({
+      next: (res: any) => {
+        this.allMfs = res?.data || [];
+        this.displayMfs = [...this.allMfs]; // for carousel
+        console.log(this.displayMfs)
+      },
+      
+      error: () => console.error('Failed to load Mutual Funds')
+    }); 
+    
   }
 
 
