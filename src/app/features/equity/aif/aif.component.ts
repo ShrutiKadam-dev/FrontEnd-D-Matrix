@@ -116,8 +116,7 @@ export class AifComponent {
     this.featuresService.getAllAifEntities().subscribe({
       next: (res: any) => {
         this.allAifs = res?.data || [];
-        this.displayAifs = this.allAifs.filter((aif: any) => aif.subcategory === 'AIF'
-      );
+        this.displayAifs = this.allAifs
         console.log(this.displayAifs)
       },
       
