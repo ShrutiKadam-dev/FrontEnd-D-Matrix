@@ -60,17 +60,18 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="scripname">
-        Scrip Name <p-sortIcon field="scripname"></p-sortIcon>
-      </th>
       <th pSortableColumn="company_name">
         Company Name <p-sortIcon field="company_name"></p-sortIcon>
       </th>
       <th pSortableColumn="scripcode">
         Scrip Code <p-sortIcon field="scripcode"></p-sortIcon>
       </th>
+
       <th pSortableColumn="weightage">
         Weightage <p-sortIcon field="weightage"></p-sortIcon>
+      </th>
+            <th pSortableColumn="scripname">
+         Sector <p-sortIcon field="scripname"></p-sortIcon>
       </th>
       <th pSortableColumn="isin_code">
         ISIN <p-sortIcon field="isin_code"></p-sortIcon>
@@ -81,10 +82,10 @@
 
   <ng-template pTemplate="body" let-entity>
     <tr>
-      <td>{{ entity.scripname }}</td>
       <td>{{ entity.company_name }}</td>
       <td>{{ entity.scripcode }}</td>
       <td>{{ entity.weightage }} %</td>
+       <td>{{ entity.sector }}</td>
       <td>{{ entity.isin_code }}</td>
     </tr>
   </ng-template>

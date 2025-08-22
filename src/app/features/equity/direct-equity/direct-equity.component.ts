@@ -17,7 +17,8 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-direct-equity',
-  imports: [    ReactiveFormsModule,
+  imports: [    
+    ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     CalendarModule,
@@ -31,7 +32,8 @@ import { Router } from '@angular/router';
     AutoCompleteModule,
     CarouselModule,
     CardModule,
-    FormsModule],
+    FormsModule
+  ],
   templateUrl: './direct-equity.component.html',
   styleUrl: './direct-equity.component.scss'
 })
