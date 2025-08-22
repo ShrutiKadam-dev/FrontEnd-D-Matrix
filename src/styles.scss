@@ -1,7 +1,5 @@
 @import "primeicons/primeicons.css";
 
-
-
 * {
   box-sizing: border-box;
 }
@@ -16,8 +14,6 @@ body {
 .p-component {
   font-family: inherit;
 }
-
-
 
 .layout-container {
   display: flex;
@@ -37,4 +33,75 @@ app-home {
   background: #f5f5f5; /* or your preferred background */
 }
 
+/* ===== Carousel Card ===== */
+.P-card {
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
 
+  /* Let PrimeNG control width; just make them equal height */
+  width: 100%;
+  min-height: 180px;         /* equal height */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.P-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.card-color { height: 6px; width: 100%; }
+
+/* Nickname → single-line ellipsis */
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0.8rem 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subcategory → single-line ellipsis */
+.card-value {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 1rem 0.3rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status → single-line ellipsis */
+.status {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2196f3;
+  margin: 0 1rem 1rem 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Search Box ===== */
+.search-container {
+  margin: 1.5rem 0 1rem 0;
+}
+
+.search-container.half-width {
+  width: 50%;
+}
+
+.search-bar input {
+  width: 100%;
+  border-radius: 6px;
+  height: 38px;
+  font-size: 0.95rem;
+}
