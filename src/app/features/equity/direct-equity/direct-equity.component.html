@@ -15,7 +15,7 @@
   [responsiveOptions]="responsiveOptions" *ngIf="!selectedDirectEquityName">
 
   <ng-template let-de pTemplate="item">
-    <p-card styleClass="de-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+    <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
         <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
       </ng-template>
@@ -29,7 +29,7 @@
 
 <!-- Search Result Card -->
 <div *ngIf="selectedDirectEquityName" class="card-container">
-  <p-card *ngFor="let de of displayDEs" styleClass="de-card">
+  <p-card *ngFor="let de of displayDEs" styleClass="P-card">
     <ng-template pTemplate="header">
       <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
     </ng-template>
@@ -51,7 +51,7 @@
 
 <!-- Action Table summary -->
 <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit']" scrollHeight="700px">
+  [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]" scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
       <th>Client Name</th>

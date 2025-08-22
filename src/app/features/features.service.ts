@@ -74,6 +74,12 @@ export class FeaturesService {
     });
   }
 
+  getDirectEquityDetailsById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getDirectEquityDetailsById`, {
+      params: { entityid: id }
+    });
+  }
+
   getMFDetailUnderlyingTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
       params: { entityid: mfId }
@@ -86,6 +92,12 @@ export class FeaturesService {
     });
   }
 
+  getDEDetailActionTable(deId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getDEDetailActionTable`, {
+      params: { entityid: deId }
+    });
+  }
+  
   getCompanyByName(query: string) {
     return this.http.get<any>(`${this.apiUrl}/getCamByid`, {
       params: { company: query }

@@ -91,7 +91,7 @@ export class MutualFundsComponent implements OnInit {
   }
 
   getAllActionTable() {
-    this.featuresService.getAllActionTableOfDirectEquity().subscribe({
+    this.featuresService.getAllActionTableOfMutualFund().subscribe({
       next: (data: any) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },

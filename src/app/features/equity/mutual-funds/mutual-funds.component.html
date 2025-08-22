@@ -15,7 +15,7 @@
   [responsiveOptions]="responsiveOptions" *ngIf="!selectedMfName">
 
   <ng-template let-mf pTemplate="item">
-    <p-card styleClass="mf-card" (click)="goToMfDetails(mf)" [ngStyle]="{ cursor: 'pointer' }">
+    <p-card styleClass="P-card" (click)="goToMfDetails(mf)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
         <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
       </ng-template>
@@ -29,7 +29,7 @@
 
 <!-- Search Result Card -->
 <div *ngIf="selectedMfName" class="card-container">
-  <p-card *ngFor="let mf of displayMfs" styleClass="mf-card">
+  <p-card *ngFor="let mf of displayMfs" styleClass="P-card">
     <ng-template pTemplate="header">
       <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
     </ng-template>
