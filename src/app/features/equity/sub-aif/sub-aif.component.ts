@@ -18,12 +18,14 @@ export class SubAifComponent {
 
   aifId!: string;
   contractNote :any[]= [];
+  underlyingList :any[]= [];
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id')!; 
     this.getAifActionTableById(this.aifId)
+    this.getUnderlyingTable(this.aifId)
     console.log('Param ID:', this.aifId);
 
   }
@@ -41,6 +43,18 @@ export class SubAifComponent {
       },
        error: () => console.error('Failed to fetch AIF Action Table')
     })
+  }
+
+  getUnderlyingTable(aifId:string){
+
+    this.featuresService.getUnderlyingTable(aifId).subscribe({
+      next:(res:any ) => {
+        this.underlyingList = res?.data || [];
+        console.log(this.underlyingList);  
+      },
+       error: () => console.error('Failed to fetch AIF Action Table')
+    })
+
   }
 
 
