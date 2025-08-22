@@ -23,7 +23,7 @@
   *ngIf="!selectedAifName">
 
   <ng-template let-aif pTemplate="item" >
-    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
       <ng-template pTemplate="header" >
         <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}" ></div>
       </ng-template>
@@ -45,7 +45,7 @@
   styleClass="custom-carousel">
 
   <ng-template let-aif pTemplate="item" >
-    <p-card styleClass="mf-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
       <ng-template pTemplate="header" >
         <div class="card-color" [ngStyle]="{'background-color': getColor(aif.nickname)}" ></div>
       </ng-template>
