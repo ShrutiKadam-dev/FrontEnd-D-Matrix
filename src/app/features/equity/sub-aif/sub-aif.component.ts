@@ -23,7 +23,7 @@ export class SubAifComponent {
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id')!; 
-    this.getAllAifContractNotes()
+    this.getAifActionTableById(this.aifId)
     console.log('Param ID:', this.aifId);
 
   }
@@ -31,19 +31,15 @@ export class SubAifComponent {
 
   private featuresService = inject(FeaturesService);  
 
-  getAllAifContractNotes(){
-    this.featuresService.getAllAifContractNotes().subscribe({
+  getAifActionTableById(aifId:string){
+    console.log(aifId);
+    
+    this.featuresService.getAifActionTableById(aifId).subscribe({
       next:(res:any ) => {
-        const allNotes = res?.data || [];
-        this.contractNote = allNotes.filter(
-        (note: any) => note.entityid === this.aifId
-      );
-
-        console.log(this.contractNote);
-        
-         
+        this.contractNote = res?.data || [];
+        console.log(this.contractNote);  
       },
-       error: () => console.error('Failed to load Mutual Funds')
+       error: () => console.error('Failed to fetch AIF Action Table')
     })
   }
 
