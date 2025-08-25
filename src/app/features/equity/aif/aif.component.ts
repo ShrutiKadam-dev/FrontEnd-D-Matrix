@@ -1,10 +1,10 @@
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
@@ -32,6 +32,8 @@ export class AifComponent {
   allAifs: any[] = [];
   displayAifs: any[] = [];
   allAifContractNotes: any[] = [];
+
+  @ViewChild('dt') dt!: Table;
 
   ngOnInit() {
     this.getAllAifEntities();
@@ -136,6 +138,13 @@ export class AifComponent {
         },
         error: () => console.error('Failed to load Mutual Funds')
       })
+  }
+
+  onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) {
+      this.dt.filter(input.value, 'global', 'contains');
+    }
   }
 
 

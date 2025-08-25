@@ -7,33 +7,28 @@
 <!-- Search Box -->
 <div class="search-container half-width">
   <span class="p-input-icon-left search-bar">
-    <!-- <i class="pi pi-search"></i> -->
-    <input
-      pInputText
-      type="text"
-      placeholder="Search..."
-    />
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
   </span>
 </div>
 
 <!-- Underlying Table -->
 <p-table
   #dt
-  [value]="underlyingTableList"
+  [value]="underlyingList"
   dataKey="id"
   [paginator]="true"
   [rows]="5"
   [rowsPerPageOptions]="[5, 10, 25, 50]"
-  [globalFilterFields]="['scrip_name','scripCode', 'weightage', 'mCap']"
+  [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
   scrollHeight="400px"
   [responsiveLayout]="'scroll'"
 >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="scrip_name">Company Name <p-sortIcon field="scrip_name"></p-sortIcon></th>
-      <th pSortableColumn="scripCode">Scrip Code  <p-sortIcon field="scripCode"></p-sortIcon></th>
+      <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
+      <th pSortableColumn="scripcode">Scrip Code  <p-sortIcon field="scripcode"></p-sortIcon></th>
       <th pSortableColumn="weightage">Weightage  <p-sortIcon field="weightage"></p-sortIcon></th>
-      <th pSortableColumn="mCap">Market Cap <p-sortIcon field="mCap"></p-sortIcon></th>
+      <th pSortableColumn="sector ">sector  <p-sortIcon field="sector "></p-sortIcon></th>
     </tr>
   </ng-template>
 

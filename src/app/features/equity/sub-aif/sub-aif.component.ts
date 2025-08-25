@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { FeaturesService } from '../../features.service';
 
 
@@ -18,12 +18,16 @@ export class SubAifComponent {
 
   aifId!: string;
   contractNote :any[]= [];
+  underlyingList :any[]= [];
+
+  @ViewChild('dt') dt!: Table;
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id')!; 
-    this.getAllAifContractNotes()
+    this.getAifActionTableById(this.aifId)
+    this.getUnderlyingTable(this.aifId)
     console.log('Param ID:', this.aifId);
 
   }
@@ -31,20 +35,35 @@ export class SubAifComponent {
 
   private featuresService = inject(FeaturesService);  
 
-  getAllAifContractNotes(){
-    this.featuresService.getAllAifContractNotes().subscribe({
+  getAifActionTableById(aifId:string){
+    console.log(aifId);
+    
+    this.featuresService.getAifActionTableById(aifId).subscribe({
       next:(res:any ) => {
-        const allNotes = res?.data || [];
-        this.contractNote = allNotes.filter(
-        (note: any) => note.entityid === this.aifId
-      );
-
-        console.log(this.contractNote);
-        
-         
+        this.contractNote = res?.data || [];
+        console.log(this.contractNote);  
       },
-       error: () => console.error('Failed to load Mutual Funds')
+       error: () => console.error('Failed to fetch AIF Action Table')
     })
+  }
+
+  getUnderlyingTable(aifId:string){
+
+    this.featuresService.getUnderlyingTable(aifId).subscribe({
+      next:(res:any ) => {
+        this.underlyingList = res?.data || [];
+        console.log(this.underlyingList);  
+      },
+       error: () => console.error('Failed to fetch AIF Action Table')
+    })
+
+  }
+
+  onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) {
+      this.dt.filter(input.value, 'global', 'contains');
+    }
   }
 
 

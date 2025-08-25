@@ -89,7 +89,7 @@ export class CreateComponent implements OnInit {
       { label: 'Mutual Fund', value: 'Mutual Fund' },
       { label: 'Alternative Investment Funds', value: 'Alternative Investment Funds' },
       { label: 'Direct PE', value: 'Direct PE' },
-      { label: 'PE AIF', value: 'PE AIF' }
+      { label: 'AIF', value: 'AIF' }
     ],
     Fixed_Income: [
       { label: 'Direct Debt', value: 'Direct Debt' },
