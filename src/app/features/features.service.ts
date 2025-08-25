@@ -68,6 +68,20 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllUnderlyingMutualFund`);
   }
 
+  getAllEntityHome(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllEntity`);
+  }
+
+  
+  getAllHomeData(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllHomeData`);
+  }
+
+  getEquityActionTable(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getEquityActionTable`);
+  }
+
+
   getMutualFundDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
       params: { entityid: id }

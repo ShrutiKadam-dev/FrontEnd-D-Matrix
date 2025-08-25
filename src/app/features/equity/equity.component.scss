@@ -1,7 +1,88 @@
 /* ===== Carousel ===== */
-:host ::ng-deep .p-carousel { padding: 1rem 0; }
+:host ::ng-deep .p-carousel {
+  padding: 1rem 0;
+}
 
 :host ::ng-deep .p-carousel-item {
   padding: 0 0.5rem;
   box-sizing: border-box;
+}
+
+.counts-card .card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.counts-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: #344054;
+  margin-bottom: 10%;
+}
+
+.count-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.count-item .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.label {
+  flex: 1;
+  margin-left: 6px;
+}
+
+.percent {
+  font-weight: 600;
+  color: #111827;
+   margin-right: 70%;
+}
+
+/* Chart side */
+.chart-section {
+  flex: 0 0 220px;
+  height: 220px;
+}
+
+.chart-section p-chart {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Match colors with chart dataset */
+.dot.mf {
+  background-color: #42A5F5;
+  /* blue */
+}
+
+.dot.aif {
+  background-color: #66BB6A;
+  /* green */
+}
+
+.dot.equity {
+  background-color: #FFA726;
+  /* orange */
+}
+
+.counts-card .p-card {
+  min-height: 300px;
+}
+
+.chart-section {
+  flex: 0 0 250px;
+  height: 320px;
 }

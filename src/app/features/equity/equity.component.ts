@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
@@ -15,34 +14,38 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { ChartModule } from 'primeng/chart';
+
+
 @Component({
   selector: 'app-equity',
   imports: [
-   ReactiveFormsModule,
-    DialogModule,
     ButtonModule,
     CalendarModule,
-    InputTextModule,
-    DropdownModule,
+    ChartModule,
     CommonModule,
     MessagesModule,
+    AutoCompleteModule,
     MessageModule,
     TableModule,
     InputTextModule,
-    AutoCompleteModule,
     CarouselModule,
     CardModule,
+    ReactiveFormsModule,
     FormsModule
   ],
   templateUrl: './equity.component.html',
   styleUrl: './equity.component.scss'
 })
-export class EquityComponent {
+export class EquityComponent implements OnInit {
   selectedDirectEquityName: any = null;
   filteredDENames: any[] = [];
   allDEs: any[] = [];
   displayDEs: any[] = [];
   actionTableList: any[] = [];
+  chartData: any;
+  chartOptions: any;
+  actionCounts: any = null;
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router) { }
@@ -70,36 +73,85 @@ export class EquityComponent {
   ];
 
   ngOnInit() {
-    this.getAllDirectEquity();
-    this.getAllActionTable();
+    this.getAllEntityHome();
+    this.loadEquityChart();
+  }
+
+  loadEquityChart() {
+    this.featuresService.getEquityActionTable().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) return;
+
+        this.actionCounts = res.data[0];  // store counts + percents
+
+        const labels = ['Mutual Fund', 'AIF', 'Direct Equity'];
+        const values = [
+          Number(this.actionCounts.action_percent),
+          Number(this.actionCounts.aif_percent),
+          Number(this.actionCounts.equity_percent)
+        ];
+
+        this.chartData = {
+          labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
+              hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+            }
+          ]
+        };
+
+        this.chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true , // HIDE default legend
+              position: 'bottom',
+            },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw}%`
+              }
+            }
+          }
+        };
+
+      },
+      error: (err) => console.error('Chart API error:', err)
+    });
   }
 
   goToDirectEquityDetails(de: any) {
-    this.router.navigate(['/features/equity/direct-equity-details', de.entityid]);
+    if (!de) return;
+
+    switch (de.subcategory?.toLowerCase()) {
+      case 'mutual fund':
+        this.router.navigate(['/features/equity/mutual-funds']);
+        break;
+
+      case 'direct equity':
+        this.router.navigate(['/features/equity/direct-equity']);
+        break;
+
+      case 'aif':
+        this.router.navigate(['/features/equity/aif']);
+        break;
+
+      default:
+        console.warn('Unknown subcategory, staying on page', de.subcategory);
+        break;
+    }
   }
 
-  getAllDirectEquity() {
-    this.featuresService.getAllDirectEquity().subscribe({
+  getAllEntityHome() {
+    this.featuresService.getAllEntityHome().subscribe({
       next: (res: any) => {
         this.allDEs = res?.data || [];
         this.displayDEs = [...this.allDEs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
-    });
-  }
-
-  getAllActionTable() {
-    this.featuresService.getAllActionTableOfDirectEquity().subscribe({
-      next: (data: any) => {
-        this.actionTableList = Array.isArray(data.data) ? data.data : [];
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: error.error?.message || 'Failed to load entities'
-        });
-      }
     });
   }
 
@@ -122,15 +174,15 @@ export class EquityComponent {
     this.displayDEs = [...this.allDEs]; // restore carousel items
   }
 
-  getColor(nickname?: string) {
+  getColor(subcategory?: string) {
     const predefinedColors: { [key: string]: string } = {
       'DE1': '#FFD580',
       'DE2': '#FFB3B3',
       'DE3': '#B3E5FF'
     };
 
-    if (nickname && predefinedColors[nickname]) {
-      return predefinedColors[nickname];
+    if (subcategory && predefinedColors[subcategory]) {
+      return predefinedColors[subcategory];
     }
 
     // Generate random pastel color
@@ -144,4 +196,5 @@ export class EquityComponent {
       this.dt.filter(input.value, 'global', 'contains');
     }
   }
+
 }

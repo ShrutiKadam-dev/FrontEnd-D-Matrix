@@ -1,0 +1,32 @@
+/* ===== Carousel ===== */
+:host ::ng-deep .p-carousel { padding: 1rem 0; }
+
+:host ::ng-deep .p-carousel-item {
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+.counts-card {
+  width: 100%; /* card takes full width */
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem; /* space between left and right */
+}
+
+.counts-section {
+  flex: 1;
+  margin-bottom: 200px;
+
+}
+
+.chart-section {
+  width: 18rem;
+  height: 18rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

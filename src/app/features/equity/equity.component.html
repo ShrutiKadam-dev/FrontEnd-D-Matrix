@@ -17,12 +17,12 @@
   <ng-template let-de pTemplate="item">
     <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': getColor(de.subcategory)}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
-      <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
-      <div class="status">{{ de.entityid }}</div>
+      <div class="card-title" [title]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="card-value">{{ de.category || 'No Category' }}</div>
+      <div class="status">Total Entity Count : {{ de.total }}</div>
     </p-card>
   </ng-template>
 </p-carousel>
@@ -31,13 +31,44 @@
 <div *ngIf="selectedDirectEquityName" class="card-container">
   <p-card *ngFor="let de of displayDEs" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': getColor(de.subcategory)}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+    <div class="card-title" [title]="de.subcategory">{{ de.nickname || 'No Name' }}</div>
     <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
     <div class="status">{{ de.entityid }}</div>
   </p-card>
 </div>
 
- 
+
+<div class="counts-card">
+  <p-card header="Summary Of All The Action" styleClass="P-card">
+    <div class="card-content">
+      
+      <!-- LEFT: Custom Legend -->
+      <div class="counts-section">
+        <div class="count-item">
+          <span class="dot mf"></span>
+          <span class="label">Mutual Fund</span>
+          <span class="percent">{{ actionCounts?.action_percent || 0 }}%</span>
+        </div>
+        <div class="count-item">
+          <span class="dot aif"></span>
+          <span class="label">AIF</span>
+          <span class="percent">{{ actionCounts?.aif_percent || 0 }}%</span>
+        </div>
+        <div class="count-item">
+          <span class="dot equity"></span>
+          <span class="label">Direct Equity</span>
+          <span class="percent">{{ actionCounts?.equity_percent || 0 }}%</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Chart -->
+      <div class="chart-section">
+        <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
+

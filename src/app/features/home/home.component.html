@@ -1,1 +1,39 @@
-<h1>Welcome to the Home Page</h1>
+<!-- Search Section -->
+<div class="search-section">
+  <p-autoComplete [(ngModel)]="selectedInstrumentName" [suggestions]="filteredInstrumentNames" (completeMethod)="searchDEs($event)"
+    (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..." [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedInstrumentName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Carousel -->
+<p-carousel [value]="displayInstruments" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedInstrumentName">
+
+  <ng-template let-de pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToInstrumentDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': getColor(de.instrument)}"></div>
+      </ng-template>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
+      <div class="card-value">{{ de.instrument_total_count || 'No Instrument Total Count' }}</div>
+      <div class="status">Total Instrument Count : {{ de.instrument_total_count }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<div *ngIf="selectedInstrumentName" class="card-container">
+  <p-card *ngFor="let de of displayInstruments" styleClass="P-card">
+    <ng-template pTemplate="header">
+      <div class="card-color" [ngStyle]="{'background-color': getColor(de.instrument)}"></div>
+    </ng-template>
+    <!-- Truncate with ellipsis & tooltip -->
+    <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
+    <div class="card-value">{{ de.instrument_total_count || 'No Instrument Count' }}</div>
+    <div class="status">{{ de.entityid }}</div>
+  </p-card>
+</div>
