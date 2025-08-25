@@ -61,11 +61,7 @@
 <!-- Search Box -->
 <div class="search-container half-width">
   <span class="p-input-icon-left search-bar">
-    <input
-      pInputText
-      type="text"
-      placeholder="Search..."
-    />
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
   </span>
 </div>
 

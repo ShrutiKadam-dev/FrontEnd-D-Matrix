@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { FeaturesService } from '../../features.service';
 
 
@@ -19,6 +19,8 @@ export class SubAifComponent {
   aifId!: string;
   contractNote :any[]= [];
   underlyingList :any[]= [];
+
+  @ViewChild('dt') dt!: Table;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -55,6 +57,13 @@ export class SubAifComponent {
        error: () => console.error('Failed to fetch AIF Action Table')
     })
 
+  }
+
+  onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) {
+      this.dt.filter(input.value, 'global', 'contains');
+    }
   }
 
 
