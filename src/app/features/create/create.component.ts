@@ -49,6 +49,7 @@ export class CreateComponent implements OnInit {
   displayModal = false;
   entityForm: FormGroup;
   directEquityActionTableForm: FormGroup;
+  aifActionTableForm: FormGroup;
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
   isEditMode = false;
@@ -60,6 +61,8 @@ export class CreateComponent implements OnInit {
   actionTableForm: FormGroup;
   selectedEntityId: string | null = null;
   companySuggestions: any[] = [];
+  displayNavModal = false;
+  navForm: FormGroup;
   date: Date | undefined = new Date();
 
   private confirmationService = inject(ConfirmationService)
@@ -89,12 +92,13 @@ export class CreateComponent implements OnInit {
       { label: 'Mutual Fund', value: 'Mutual Fund' },
       { label: 'Alternative Investment Funds', value: 'Alternative Investment Funds' },
       { label: 'Direct PE', value: 'Direct PE' },
-      { label: 'AIF', value: 'AIF' }
     ],
     Fixed_Income: [
       { label: 'Direct Debt', value: 'Direct Debt' },
       { label: 'REIT', value: 'REIT' },
       { label: 'INVIT', value: 'INVIT' },
+      { label: 'Mutual Fund', value: 'Mutual Fund' },
+      { label: 'Alternative Investment Funds', value: 'Alternative Investment Funds' },
       { label: 'Debentures', value: 'Debentures' }
     ],
     Commodities: [
@@ -154,6 +158,20 @@ export class CreateComponent implements OnInit {
     { key: 'net_amount_receivable', label: 'Net Amount Receivable' }
   ];
 
+  aifActionTableFields = [
+    { key: 'trans_date', label: 'Transaction Date' },
+    { key: 'trans_type', label: 'Transaction Type' },
+    { key: 'contribution_amount', label: 'Contribution Amount' },
+    { key: 'setup_expense', label: 'Setup Expense' },
+    { key: 'stamp_duty', label: 'Stamp Duty' },
+    { key: 'amount_invested', label: 'Amount Invested' },
+    { key: 'post_tax_nav', label: 'Post-Tax Allotment/ Redemption NAV' },
+    { key: 'num_units', label: 'Number of Units' },
+    { key: 'balance_units', label: 'Balance Units' },
+    { key: 'strategy_name', label: 'Strategy Name' },
+    { key: 'amc_name', label: 'AMC Name' },
+  ];
+
   private calculatePurchaseValue(): void {
     const unit = Number(this.actionTableForm.get('unit')?.value) || 0;
     const nav = Number(this.actionTableForm.get('nav')?.value) || 0;
@@ -172,6 +190,27 @@ export class CreateComponent implements OnInit {
       isin: ['', Validators.required],
     });
 
+    this.navForm = this.fb.group({
+      pre_tax_nav: ['', Validators.required],
+      post_tax_nav: ['', Validators.required],
+      nav_date: ['', Validators.required],
+      entityid: ['', Validators.required]
+    });
+
+    this.aifActionTableForm = this.fb.group({
+      trans_date: ['', Validators.required],
+      trans_type: ['', Validators.required],
+      contribution_amount: ['', Validators.required],
+      setup_expense: [''],
+      stamp_duty: [''],
+      amount_invested: ['', Validators.required],
+      post_tax_nav: [''],
+      num_units: ['', Validators.required],
+      balance_units: [''],
+      strategy_name: [''],
+      amc_name: [''],
+      entityid: ['', Validators.required],
+    });
 
     this.actionTableForm = this.fb.group({
       scrip_code: ['', Validators.required],
@@ -383,11 +422,47 @@ export class CreateComponent implements OnInit {
   }
 
   updateUnderlyingTable(entity: any) {
-    this.selectedEntityId = entity.entityid; // or entity.entityid depending on your API
+    this.selectedEntityId = entity.entityid;
+
+    // Reset form & rows
     this.underlyingForm.reset();
     this.rows.clear();
-    this.addRow(); // start with one row
-    this.displayUnderlyingModal = true;
+
+    if (!this.selectedEntityId) {
+      console.error("Entity ID is missing");
+      return;
+    }
+    // Fetch existing underlying data for this entity
+    this.featuresService.getUnderlyingByEntityId(this.selectedEntityId!).subscribe({
+      next: (res: any) => {
+        if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
+          res.data.forEach((row: any) => {
+            this.rows.push(
+              this.fb.group({
+                company_name: [row.company_name || '', Validators.required],
+                scripcode: [row.scripcode || '', Validators.required],
+                sector: [row.sector || '', Validators.required],
+                weightage: [row.weightage || '', Validators.required],
+                isin_code: [row.isin_code || '', Validators.required]
+              })
+            );
+          });
+        } else {
+          // If no existing rows → add one empty row
+          this.addRow();
+        }
+
+        this.displayUnderlyingModal = true; // open modal after patching
+      },
+      error: (err) => {
+        console.error('Error fetching underlying data', err);
+        // fallback → show dialog with one empty row
+        this.addRow();
+        this.displayUnderlyingModal = true;
+        this.displayUpdateChoiceModal = false;
+
+      }
+    });
   }
 
 
@@ -402,15 +477,30 @@ export class CreateComponent implements OnInit {
         rows: this.underlyingForm.value.rows
       };
 
-      this.featuresService.addUnderlyingTable(payload).subscribe({
-        next: (res: any) => {
-          console.log('Data saved successfully', res);
-          this.displayUnderlyingModal = false;
-          this.underlyingForm.reset();
-          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+      // First clear existing underlying rows for this entity
+      this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+        next: () => {
+          // Then insert the fresh rows
+          this.featuresService.addUnderlyingTable(payload).subscribe({
+            next: (res: any) => {
+              // Close modal + reset form
+              this.displayUnderlyingModal = false;
+              this.displayUpdateChoiceModal = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Underlying data added successfully'
+              });
+              this.underlyingForm.reset();
+              this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+            },
+            error: (err: any) => {
+              console.error('Error saving new data', err);
+            }
+          });
         },
         error: (err: any) => {
-          console.error('Error saving data', err);
+          console.error('Error clearing old data', err);
         }
       });
     } else {
@@ -418,30 +508,49 @@ export class CreateComponent implements OnInit {
     }
   }
 
+
   onUpdate(entity: any) {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = true;
   }
 
-  updateActionTable(entity: any) {
-    this.selectedEntity = entity;
-    this.actionTableForm.reset();
-    this.directEquityActionTableForm.reset();
+updateActionTable(entity: any) {
+  this.displayUpdateChoiceModal = false;
+  this.selectedEntity = entity;
 
-    this.directEquityActionTableForm.patchValue({
-      entityid: entity?.entityid || ''
-    });
+  // Reset all action forms
+  this.actionTableForm.reset();
+  this.directEquityActionTableForm.reset();
+  this.aifActionTableForm.reset();
 
+  // Patch readonly defaults for normal table
+  if (!(entity.category === 'Equity' && entity.subcategory === 'Direct Equity') &&
+      !(entity.category === 'Equity' && entity.subcategory === 'Alternative Investment Funds')) {
     this.actionTableForm.patchValue({
       entityid: entity.entityid,
       scrip_code: entity.scripcode,
       scrip_name: entity.scripname,
       isin: entity.isin
     });
-
-    this.displayUpdateChoiceModal = false;
-    this.displayActionTableModal = true;
   }
+
+  // Patch for Direct Equity
+  if (entity.category === 'Equity' && entity.subcategory === 'Direct Equity') {
+    this.directEquityActionTableForm.patchValue({
+      entityid: entity.entityid
+    });
+  }
+
+  // Patch for AIF
+  if (entity.category === 'Equity' && entity.subcategory === 'Alternative Investment Funds') {
+    this.aifActionTableForm.patchValue({
+      entityid: entity.entityid
+    });
+  }
+
+  this.displayActionTableModal = true;
+}
+
 
   isReadOnlyField(key: string): boolean {
     return ['scrip_code', 'scrip_name', 'isin'].includes(key);
@@ -481,9 +590,6 @@ export class CreateComponent implements OnInit {
   }
 
   saveDirectEquityActionTableData() {
-    
-    console.log(this.directEquityActionTableForm.errors, this.directEquityActionTableForm.status);
-console.log(this.directEquityActionTableForm.value);
     if (this.directEquityActionTableForm.invalid) return;
 
     const payload = this.directEquityActionTableForm.getRawValue();
@@ -570,7 +676,131 @@ console.log(this.directEquityActionTableForm.value);
     });
   }
 
+  get currentActionTableFields() {
+    if (this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Direct Equity') {
+      return this.directEquityActionTableFields;
+    }
+    if (this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Alternative Investment Funds') {
+      return this.aifActionTableFields;
+    }
+    return this.actionTableFields;
+  }
 
+get currentActionTableForm() {
+  const form =
+    this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Direct Equity'
+      ? this.directEquityActionTableForm
+      : this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Alternative Investment Funds'
+      ? this.aifActionTableForm
+      : this.actionTableForm;
+
+  if (this.selectedEntity?.entityid) {
+    form.get('entityid')?.setValue(this.selectedEntity.entityid, { emitEvent: false });
+  }
+
+  return form;
 }
+
+  saveCurrentActionTableData() {
+    if (this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Direct Equity') {
+      this.saveDirectEquityActionTableData();
+    } else if (this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Alternative Investment Funds') {
+      this.saveAifActionTableData();
+    } else {
+      this.saveActionTableData();
+    }
+  }
+
+
+  saveAifActionTableData() {
+    if (this.aifActionTableForm.invalid) return;
+
+    const payload = this.aifActionTableForm.getRawValue();
+
+    if (payload.trans_date instanceof Date) {
+      const d = payload.trans_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.trans_date = `${yyyy}-${mm}-${dd}`;
+    }
+
+    this.featuresService.insertAifActionTable(payload).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'AIF action table data saved successfully'
+        });
+        this.displayActionTableModal = false;
+      },
+      error: (err: { error: { message: any; }; }) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to save AIF data'
+        });
+      }
+    });
+  }
+
+openActionTableDialog(entity: any) {
+  this.selectedEntity = entity;
+  this.displayActionTableModal = true;
+
+  // Pick the correct form
+  const form = this.currentActionTableForm;
+
+  // Patch entityid (and any defaults)
+  form.patchValue({
+    entityid: this.selectedEntity?.entityid || ''
+  });
+}
+
+ openNavModal(entity: any) {
+    this.selectedEntity = entity;
+    this.displayNavModal = true;
+
+    this.navForm.reset();
+    this.navForm.patchValue({
+      entityid: entity.entityid
+    });
+  }
+
+  saveNavData() {
+    if (this.navForm.invalid) return;
+
+    const payload = this.navForm.getRawValue();
+
+    // Format date
+    if (payload.nav_date instanceof Date) {
+      const d = payload.nav_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.nav_date = `${yyyy}-${mm}-${dd}`;
+    }
+
+    this.featuresService.insertNavData(payload).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'NAV data saved successfully'
+        });
+        this.displayNavModal = false;
+        this.displayUpdateChoiceModal = false;
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to save NAV data'
+        });
+      }
+    });
+  }
+}
+
 
 

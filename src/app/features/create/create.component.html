@@ -94,15 +94,20 @@
 
 <!-- Update Choice Dialog -->
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
-  [style]="{ width: '30vw' }">
+  [style]="{ width: '36vw'}">
   <div class="p-fluid">
-    <p>Which table would you like to update?</p>
+    <p >Which table would you like to update?</p>
     <div class="edit-choice-buttons">
       <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
         (click)="updateActionTable(selectedEntity)"></p-button>
+
       <p-button *ngIf="!(selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity')"
         label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
         (click)="updateUnderlyingTable(selectedEntity)"></p-button>
+
+      <p-button *ngIf="selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Alternative Investment Funds'"
+        label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
+        (click)="openNavModal(selectedEntity)"></p-button>
     </div>
   </div>
 </p-dialog>
@@ -170,11 +175,9 @@
 <p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"
   [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
 
-  <!-- Normal Action Table -->
-  <form *ngIf="!(selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity')"
-    [formGroup]="actionTableForm" class="p-fluid">
+  <form [formGroup]="currentActionTableForm" class="p-fluid">
 
-    <div class="field" *ngFor="let field of actionTableFields">
+    <div class="field" *ngFor="let field of currentActionTableFields">
       <label [for]="field.key">{{ field.label }}</label>
 
       <!-- Dropdown: Order Type -->
@@ -185,63 +188,67 @@
       <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"
         placeholder="Select Mode"></p-dropdown>
 
-      <!-- Calendar: Order Date -->
-      <p-datepicker *ngIf="field.key === 'order_date'" formControlName="order_date" placeholder="Select Date"
-        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body"   [style]="{ width: '100%' }">
+      <!-- Calendar: order_date / trade_date / trans_date -->
+      <p-datepicker *ngIf="field.key === 'order_date' || field.key === 'trade_date' || field.key === 'trans_date'"
+        [formControlName]="field.key" placeholder="Select Date" showIcon="true" dateFormat="dd/mm/yy"
+        appendTo="viewport" appendTo="body" [style]="{ width: '100%' }">
       </p-datepicker>
 
+      <!-- InputMask: order_time -->
+      <p-inputMask *ngIf="field.key === 'order_time'" mask="99:99:99" formControlName="order_time"
+        placeholder="HH:mm:ss" [style]="{ width: '100%' }">
+      </p-inputMask>
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
 
+      <input *ngIf="field.key === 'entityid'" type="hidden" formControlName="entityid" />
+
       <!-- Default Input -->
-      <input
-        *ngIf="field.key !== 'order_type' && field.key !== 'mode' && field.key !== 'purchase_value' && field.key !== 'order_date'"
-        [id]="field.key" pInputText [formControlName]="field.key" [placeholder]="'Enter ' + field.label"
-        [readonly]="isReadOnlyField(field.key)" [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
+      <input *ngIf="field.key !== 'order_type' && field.key !== 'mode'
+                     && field.key !== 'purchase_value'
+                     && field.key !== 'order_date'
+                     && field.key !== 'trade_date'
+                     && field.key !== 'trans_date'
+                     && field.key !== 'order_time'" [id]="field.key" pInputText [formControlName]="field.key"
+        [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"
+        [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
       <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
         (click)="displayActionTableModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="actionTableForm.invalid"
-        (click)="saveActionTableData()"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="currentActionTableForm.invalid"
+        (click)="saveCurrentActionTableData()"></p-button>
     </div>
   </form>
+</p-dialog>
 
-  <!-- Direct Equity Action Table -->
-  <form *ngIf="selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity'"
-    [formGroup]="directEquityActionTableForm" class="p-fluid">
+<!-- NAV Modal -->
+<p-dialog header="Update NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true"
+  [style]="{ width: '30vw' }">
+  <form [formGroup]="navForm" class="p-fluid">
+    <div class="field">
+      <label for="pre_tax_nav">Pre-Tax NAV</label>
+      <input id="pre_tax_nav" pInputText formControlName="pre_tax_nav" placeholder="Enter Pre-Tax NAV" />
+    </div>
 
-    <div class="field" *ngFor="let field of directEquityActionTableFields">
-      <label [for]="field.key">{{ field.label }}</label>
+    <div class="field">
+      <label for="post_tax_nav">Post-Tax NAV</label>
+      <input id="post_tax_nav" pInputText formControlName="post_tax_nav" placeholder="Enter Post-Tax NAV" />
+    </div>
 
-      <!-- Dropdown: Order Type -->
-      <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
-        placeholder="Select Order Type"></p-dropdown>
-
-      <p-datepicker *ngIf="field.key === 'trade_date'" formControlName="trade_date" placeholder="Select Date"
-        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body"   [style]="{ width: '100%' }">
-      </p-datepicker>
-
-      <!-- Order Time Field -->
-
-      <p-inputMask *ngIf="field.key === 'order_time'" mask="99:99:99" formControlName="order_time" placeholder="HH:mm:ss" [style]="{ width: '100%' }" ></p-inputMask>
-
-      <input *ngIf="field.key !== 'order_type' && field.key !== 'trade_date' && field.key !== 'order_time'"  [id]="field.key" pInputText
-        [formControlName]="field.key" [placeholder]="'Enter ' + field.label" />
-
+    <div class="field">
+      <label for="nav_date">Date</label>
+      <p-datepicker [style]="{ width: '100%' }" id="nav_date" formControlName="nav_date" dateFormat="dd/mm/yy" showIcon="true"></p-datepicker>
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
-        (click)="displayActionTableModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check"
-        [disabled]="directEquityActionTableForm.invalid" (click)="saveDirectEquityActionTableData()"></p-button>
+      <p-button label="Cancel"  styleClass="add-entity-btn" icon="pi pi-times" (click)="displayNavModal = false"></p-button>
+      <p-button label="Save"  styleClass="add-entity-btn" icon="pi pi-check" [disabled]="navForm.invalid"
+        (click)="saveNavData()"></p-button>
     </div>
   </form>
-
-
 </p-dialog>
 
 

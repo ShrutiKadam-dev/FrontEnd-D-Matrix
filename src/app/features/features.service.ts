@@ -44,6 +44,14 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/action_table`, data); 
   }
 
+  insertAifActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/InsertAifData`, data); 
+  }
+
+  insertNavData(data: any) {
+    return this.http.post(`${this.apiUrl}/insertNavData`, data); 
+  }
+
   insertDirectEquityActionTable(data: any) {
     return this.http.post(`${this.apiUrl}/InsertdirectData`, data); 
   }
@@ -118,8 +126,19 @@ export class FeaturesService {
     });
   }
 
+  getUnderlyingByEntityId(entityId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+      params: { entityid: entityId }
+    });
+  }
 
-  //AIF
+  clearUnderlyingByEntityId(entityId: string) {
+    return this.http.delete(`${this.apiUrl}/clearUnderlyingByEntityId`, {
+      params: { entityid: entityId }
+    });
+  }
+
+  //AIF services
   getAllAifEntities() {
     return this.http.get<any[]>(`${this.apiUrl}/getAifEntity`)
   }
