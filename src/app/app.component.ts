@@ -107,10 +107,10 @@ export class AppComponent implements OnInit {
         ]
       },
       {
-        label: 'Create',
+        label: 'Entity',
         icon: 'pi pi-plus-circle',
         routerLink: ['/features/create'],
-        tooltipOptions: { tooltipLabel: 'Create', tooltipPosition: 'right' }
+        tooltipOptions: { tooltipLabel: 'Entity', tooltipPosition: 'right' }
       }
     ];
   }

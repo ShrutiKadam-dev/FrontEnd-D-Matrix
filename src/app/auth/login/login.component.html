@@ -25,7 +25,7 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
             <!-- Username Field -->
             <div class="field">
-              <label for="email" class="field-label">Email</label>
+              <label for="email" class="field-label">Email ID</label>
               <input id="email" type="email" pInputText formControlName="email" class="w-full"
                 [class.ng-invalid]="email?.invalid && email?.touched" placeholder="Enter your email" />
               <small *ngIf="email?.invalid && email?.touched" class="p-error">

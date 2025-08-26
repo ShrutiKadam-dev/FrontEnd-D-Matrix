@@ -135,7 +135,7 @@ export class EquityComponent implements OnInit {
         this.router.navigate(['/features/equity/direct-equity']);
         break;
 
-      case 'aif':
+      case 'alternative investment funds':
         this.router.navigate(['/features/equity/aif']);
         break;
 
