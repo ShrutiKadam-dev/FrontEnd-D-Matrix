@@ -132,6 +132,7 @@
           <th>Scrip Code</th>
           <th>Sector</th>
           <th>Weightage</th>
+          <th>MCAP</th>
           <th>ISIN</th>
           <th style="width: 90px;">Action</th>
         </tr>
@@ -145,15 +146,18 @@
             </p-autoComplete>
           </td>
           <td>
-            <input pInputText type="text" formControlName="scripcode" placeholder="Enter code" />
+            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code" />
           </td>
           <td>
-            <input pInputText type="text" formControlName="sector" placeholder="Enter sector" />
+            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector" />
           </td>
           <td class="weightage-cell">
             <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100"
               placeholder="Enter weightage">
             </p-inputNumber>
+          </td>
+          <td>
+            <input pInputText type="text" formControlName="MCAP" placeholder="Enter MCAP" />
           </td>
           <td>
             <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN" readonly />

@@ -350,6 +350,7 @@ export class CreateComponent implements OnInit {
       scripcode: ['', Validators.required],
       sector: ['', Validators.required],
       weightage: ['', Validators.required],
+      MCAP: ['', Validators.required],
       isin_code: ['', Validators.required]
     });
   }

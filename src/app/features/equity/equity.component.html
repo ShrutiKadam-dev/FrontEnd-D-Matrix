@@ -74,34 +74,58 @@
 </div>
 
 
-<h3>Summary Of Actions</h3>
+<h3 style="margin-top: 45px;">Summary Of Actions</h3>
 <!-- Search Box -->
-<div class="search-container half-width">
+<!-- <div class="search-container half-width">
   <span class="p-input-icon-left search-bar">
     <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
   </span>
-</div>
+</div> -->
 
-<!-- Entity Table -->
-<p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
+<h4>Mutual Fund Action Table</h4>
+<p-table [value]="actionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
   <ng-template pTemplate="header">
     <tr>
       <th>Scrip Name</th>
-      <th>Units</th>
-      <th>Order Date</th>
-      <th>Action</th>
-      <th>Amount</th>
+      <th>Order Type</th>
     </tr>
   </ng-template>
-
   <ng-template pTemplate="body" let-entity>
     <tr>
       <td>{{ entity.scrip_name }}</td>
-      <td>{{ entity.unit }}</td>
-      <td>{{ entity.order_date }}</td>
       <td>{{ entity.order_type }}</td>
-      <td>{{ entity.purchase_amount }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<h4>AIF Action Table</h4>
+<p-table [value]="aifTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>AMC Name</th>
+      <th>Contribution Amount</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.amc_name }}</td>
+      <td>{{ entity.contribution_amount }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<h4>Direct Equity Action Table</h4>
+<p-table [value]="equityTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Order Type</th>
+      <th>Trade Price</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.order_type }}</td>
+      <td>{{ entity.trade_price }}</td>
     </tr>
   </ng-template>
 </p-table>
