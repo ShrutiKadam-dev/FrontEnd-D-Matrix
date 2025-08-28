@@ -18,6 +18,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DatePicker } from 'primeng/datepicker';
 import { InputMask } from 'primeng/inputmask';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-create',
@@ -38,7 +39,8 @@ import { InputMask } from 'primeng/inputmask';
     AutoCompleteModule,
     TableModule,
     DatePicker,
-    InputMask
+    InputMask,
+    ToastModule
   ],
   providers: [ConfirmationService, MessageService], // ✅ ensure MessageService is provided
   templateUrl: './create.component.html',
