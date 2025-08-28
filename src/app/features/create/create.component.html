@@ -96,21 +96,30 @@
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
   [style]="{ width: '36vw'}">
   <div class="p-fluid">
-    <p >Which table would you like to update?</p>
+    <p>Which table would you like to update?</p>
     <div class="edit-choice-buttons">
+
+      <!-- Contract Note (always available) -->
       <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
         (click)="updateActionTable(selectedEntity)"></p-button>
 
-      <p-button *ngIf="!(selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Direct Equity')"
+      <!-- Underlying (hide for Direct Equity & ETF) -->
+      <p-button 
+        *ngIf="!(selectedEntity?.category === 'Equity' 
+                && selectedEntity?.subcategory === 'Direct Equity')"
         label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
         (click)="updateUnderlyingTable(selectedEntity)"></p-button>
 
-      <p-button *ngIf="selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Alternative Investment Funds'"
+      <!-- NAV Update (only for AIF) -->
+      <p-button
+        *ngIf="selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Alternative Investment Funds'"
         label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
         (click)="openNavModal(selectedEntity)"></p-button>
+
     </div>
   </div>
 </p-dialog>
+
 
 <!-- Add Underlying Table Dialog -->
 <p-dialog header="Add Underlying Data" [(visible)]="displayUnderlyingModal" [modal]="true" [style]="{ width: '70vw' }"
@@ -191,10 +200,13 @@
         appendTo="viewport" appendTo="body" [style]="{ width: '100%' }">
       </p-datepicker>
 
-      <!-- InputMask: order_time -->
-      <p-inputMask *ngIf="field.key === 'order_time'" mask="99:99:99" formControlName="order_time"
-        placeholder="HH:mm:ss" [style]="{ width: '100%' }">
-      </p-inputMask>
+<!-- InputMask: order_time -->
+<p-inputMask *ngIf="field.key === 'order_time' || field.key === 'trade_time'"
+             mask="99:99:99"
+             [formControlName]="field.key"
+             placeholder="HH:mm:ss"
+             [style]="{ width: '100%' }">
+</p-inputMask>
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
@@ -203,13 +215,15 @@
 
       <!-- Default Input -->
       <input *ngIf="field.key !== 'order_type' && field.key !== 'mode'
-                     && field.key !== 'purchase_value'
-                     && field.key !== 'order_date'
-                     && field.key !== 'trade_date'
-                     && field.key !== 'trans_date'
-                     && field.key !== 'order_time'" [id]="field.key" pInputText [formControlName]="field.key"
+               && field.key !== 'purchase_value'
+               && field.key !== 'order_date'
+               && field.key !== 'trade_date'
+               && field.key !== 'trans_date'
+               && field.key !== 'order_time'
+               && field.key !== 'trade_time'" [id]="field.key" pInputText [formControlName]="field.key"
         [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"
         [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
+
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
@@ -237,16 +251,17 @@
 
     <div class="field">
       <label for="nav_date">Date</label>
-      <p-datepicker [style]="{ width: '100%' }" id="nav_date" formControlName="nav_date" dateFormat="dd/mm/yy" showIcon="true"></p-datepicker>
+      <p-datepicker [style]="{ width: '100%' }" id="nav_date" formControlName="nav_date" dateFormat="dd/mm/yy"
+        showIcon="true"></p-datepicker>
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel"  styleClass="add-entity-btn" icon="pi pi-times" (click)="displayNavModal = false"></p-button>
-      <p-button label="Save"  styleClass="add-entity-btn" icon="pi pi-check" [disabled]="navForm.invalid"
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
+        (click)="displayNavModal = false"></p-button>
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="navForm.invalid"
         (click)="saveNavData()"></p-button>
     </div>
   </form>
 </p-dialog>
-
 
 <p-confirmDialog></p-confirmDialog>

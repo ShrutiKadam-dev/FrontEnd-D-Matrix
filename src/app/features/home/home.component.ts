@@ -97,12 +97,15 @@ export class HomeComponent implements OnInit{
     this.featuresService.getAllHomeData().subscribe({
       next: (res: any) => {
         this.allInstruments = res?.data || [];
+        this.allInstruments.forEach(IS => {
+      IS.color = this.getColor(IS.subcategory);
+      });
+   
         this.displayInstruments = [...this.allInstruments]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
     });
   }
-
 
   scrollToDE(de: any) {
     if (de) {

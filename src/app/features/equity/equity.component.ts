@@ -145,15 +145,20 @@ export class EquityComponent implements OnInit {
     }
   }
 
-  getAllEntityHome() {
-    this.featuresService.getAllEntityHome().subscribe({
-      next: (res: any) => {
-        this.allDEs = res?.data || [];
-        this.displayDEs = [...this.allDEs]; // for carousel
-      },
-      error: () => console.error('Failed to load Mutual Funds')
-    });
-  }
+getAllEntityHome() {
+  this.featuresService.getAllEntityHome().subscribe({
+    next: (res: any) => {
+      this.allDEs = res?.data || [];
+      // Assign colors once
+      this.allDEs.forEach(de => {
+        de.color = this.getColor(de.subcategory);
+      });
+      this.displayDEs = [...this.allDEs]; // for carousel
+    },
+    error: () => console.error('Failed to load Mutual Funds')
+  });
+}
+
 
     onGlobalFilter(event: Event) {
     const input = event.target as HTMLInputElement | null;

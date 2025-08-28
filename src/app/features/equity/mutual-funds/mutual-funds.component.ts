@@ -84,6 +84,10 @@ export class MutualFundsComponent implements OnInit {
     this.featuresService.getAllMutualFund().subscribe({
       next: (res: any) => {
         this.allMfs = res?.data || [];
+        this.allMfs.forEach(mf => {
+        mf.color = this.getColor(mf.subcategory);
+      });
+   
         this.displayMfs = [...this.allMfs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')

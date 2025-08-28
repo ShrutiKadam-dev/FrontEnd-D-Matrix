@@ -48,6 +48,10 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/InsertAifData`, data); 
   }
 
+  insertETFActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/insertETFActionTable`, data); 
+  }
+
   insertNavData(data: any) {
     return this.http.post(`${this.apiUrl}/insertNavData`, data); 
   }

@@ -82,6 +82,10 @@ export class DirectEquityComponent implements OnInit {
     this.featuresService.getAllDirectEquity().subscribe({
       next: (res: any) => {
         this.allDEs = res?.data || [];
+        this.allDEs.forEach(de => {
+        de.color = this.getColor(de.subcategory);
+      });
+   
         this.displayDEs = [...this.allDEs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')

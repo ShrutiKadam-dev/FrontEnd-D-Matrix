@@ -17,7 +17,7 @@
   <ng-template let-mf pTemplate="item">
     <p-card styleClass="P-card" (click)="goToMfDetails(mf)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': mf.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
       <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
@@ -31,7 +31,7 @@
 <div *ngIf="selectedMfName" class="card-container">
   <p-card *ngFor="let mf of displayMfs" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(mf.nickname)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': mf.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
     <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>

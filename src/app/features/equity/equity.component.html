@@ -2,8 +2,9 @@
 
 <!-- Search Section -->
 <div class="search-section">
-  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames" (completeMethod)="searchDEs($event)"
-    (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..." [minLength]="1">
+  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames"
+    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..."
+    [minLength]="1">
   </p-autoComplete>
 
   <button *ngIf="selectedDirectEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
@@ -17,7 +18,7 @@
   <ng-template let-de pTemplate="item">
     <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': getColor(de.subcategory)}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
       <div class="card-title" [title]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
@@ -31,7 +32,7 @@
 <div *ngIf="selectedDirectEquityName" class="card-container">
   <p-card *ngFor="let de of displayDEs" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(de.subcategory)}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
     <div class="card-title" [title]="de.subcategory">{{ de.nickname || 'No Name' }}</div>
@@ -44,7 +45,7 @@
 <div class="counts-card">
   <p-card header="Summary Of Allocation" styleClass="P-card">
     <div class="card-content">
-      
+
       <!-- LEFT: Custom Legend -->
       <div class="counts-section">
         <div class="count-item">

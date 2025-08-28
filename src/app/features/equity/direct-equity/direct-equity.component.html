@@ -17,7 +17,7 @@
   <ng-template let-de pTemplate="item">
     <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
       <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
@@ -31,7 +31,7 @@
 <div *ngIf="selectedDirectEquityName" class="card-container">
   <p-card *ngFor="let de of displayDEs" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(de.nickname)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
     <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>

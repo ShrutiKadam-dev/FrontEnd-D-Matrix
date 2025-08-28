@@ -16,7 +16,7 @@
   <ng-template let-de pTemplate="item">
     <p-card styleClass="P-card" (click)="goToInstrumentDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': getColor(de.instrument)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
       <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
@@ -30,7 +30,7 @@
 <div *ngIf="selectedInstrumentName" class="card-container">
   <p-card *ngFor="let de of displayInstruments" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': getColor(de.instrument)}"></div>
+<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
     <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
