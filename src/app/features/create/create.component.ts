@@ -298,9 +298,28 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  addRow() {
-    this.rows.push(this.createRow());
+addRow() {
+  const rows = this.underlyingForm.value.rows;
+
+  // Collect all company names
+  const names = rows.map((row: any) => row.company_name?.trim().toLowerCase());
+
+  // Check for duplicates
+const hasDuplicate = names.some((name: string, idx: number) => 
+  names.indexOf(name) !== idx
+);
+
+  if (hasDuplicate) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Duplicate',
+      detail: 'Duplicate company name is not allowed'
+    });
+    return;
   }
+
+  this.rows.push(this.createRow());
+}
 
   removeRow(index: number): void {
     this.rows.removeAt(index);
@@ -470,43 +489,53 @@ export class CreateComponent implements OnInit {
     this.displayUpdateChoiceModal = false;
   }
 
-  submitUnderlyingData(): void {
-    if (this.underlyingForm.valid && this.selectedEntityId) {
-      const payload = {
-        entityid: this.selectedEntityId,
-        rows: this.underlyingForm.value.rows
-      };
+submitUnderlyingData(): void {
+  if (this.underlyingForm.valid && this.selectedEntityId) {
+    const companyNames = this.rows.value.map((row: any) =>
+      row.company_name?.trim().toLowerCase()
+    );
 
-      // First clear existing underlying rows for this entity
-      this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
-        next: () => {
-          // Then insert the fresh rows
-          this.featuresService.addUnderlyingTable(payload).subscribe({
-            next: (res: any) => {
-              // Close modal + reset form
-              this.displayUnderlyingModal = false;
-              this.displayUpdateChoiceModal = false;
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Underlying data added successfully'
-              });
-              this.underlyingForm.reset();
-              this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
-            },
-            error: (err: any) => {
-              console.error('Error saving new data', err);
-            }
-          });
-        },
-        error: (err: any) => {
-          console.error('Error clearing old data', err);
-        }
+    const hasDuplicate = companyNames.some(
+      (name: string, idx: number) => companyNames.indexOf(name) !== idx
+    );
+
+    if (hasDuplicate) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Duplicate Found',
+        detail: 'Company names must be unique.'
       });
-    } else {
-      this.underlyingForm.markAllAsTouched();
+      return; 
     }
+
+    const payload = {
+      entityid: this.selectedEntityId,
+      rows: this.underlyingForm.value.rows
+    };
+
+    // Your existing API call...
+    this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+      next: () => {
+        this.featuresService.addUnderlyingTable(payload).subscribe({
+          next: () => {
+            this.displayUnderlyingModal = false;
+            this.displayUpdateChoiceModal = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Underlying data added successfully'
+            });
+            this.underlyingForm.reset();
+            this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+          }
+        });
+      }
+    });
+  } else {
+    this.underlyingForm.markAllAsTouched();
   }
+}
+
 
 
   onUpdate(entity: any) {
@@ -650,7 +679,7 @@ updateActionTable(entity: any) {
   searchCompany(event: any, rowIndex: number) {
     const query = event.query;
 
-    if (query && query.length > 1) {  // call API only if length > 2
+    if (query && query.length > 1) {  // call API only if length > 1
       this.featuresService.getCompanyByName(query).subscribe({
         next: (res: any) => {
           if (res?.data) {
@@ -667,14 +696,30 @@ updateActionTable(entity: any) {
     }
   }
 
-  onCompanySelect(event: any, rowIndex: number) {
-    const selectedCompany = event.value; // actual object from your API
+onCompanySelect(event: any, rowIndex: number) {
+  const selectedCompany = event.value;
+  const selectedName = selectedCompany.name_of_company?.trim().toLowerCase();
 
-    this.rows.at(rowIndex).patchValue({
-      company_name: selectedCompany.name_of_company,
-      isin_code: selectedCompany.isin_number
+  const existing = this.rows.value.some(
+    (row: any, idx: number) => idx !== rowIndex && row.company_name?.trim().toLowerCase() === selectedName
+  );
+
+  if (existing) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Duplicate',
+      detail: 'This company is already added.'
     });
+    this.rows.at(rowIndex).patchValue({ company_name: '', isin_code: '' });
+    return;
   }
+
+  this.rows.at(rowIndex).patchValue({
+    company_name: selectedCompany.name_of_company,
+    isin_code: selectedCompany.isin_number
+  });
+}
+
 
   get currentActionTableFields() {
     if (this.selectedEntity?.category === 'Equity' && this.selectedEntity?.subcategory === 'Direct Equity') {

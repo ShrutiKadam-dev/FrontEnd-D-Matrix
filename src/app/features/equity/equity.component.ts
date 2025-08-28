@@ -155,6 +155,12 @@ export class EquityComponent implements OnInit {
     });
   }
 
+    onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) {
+      this.dt.filter(input.value, 'global', 'contains');
+    }
+  }
 
   scrollToDE(de: any) {
     if (de) {
@@ -188,13 +194,6 @@ export class EquityComponent implements OnInit {
     // Generate random pastel color
     const hue = Math.floor(Math.random() * 360);
     return `hsl(${hue}, 70%, 85%)`;
-  }
-
-  onGlobalFilter(event: Event) {
-    const input = event.target as HTMLInputElement | null;
-    if (input && this.dt) {
-      this.dt.filter(input.value, 'global', 'contains');
-    }
   }
 
 }
