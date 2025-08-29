@@ -820,27 +820,28 @@ submitUnderlyingData(): void {
     }
   }
 
-  onCompanySelect(event: any, rowIndex: number) {
-    const selectedCompany = event.value;
-    const selectedName = selectedCompany.name_of_company?.trim().toLowerCase();
+onCompanySelect(event: any, rowIndex: number) {
+  const selectedCompany = event.value;
+  const selectedName = selectedCompany.company_name?.trim().toLowerCase();
 
-    const existing = this.rows.value.some(
-      (row: any, idx: number) => idx !== rowIndex && row.company_name?.trim().toLowerCase() === selectedName
-    );
+  const existing = this.rows.value.some(
+    (row: any, idx: number) => idx !== rowIndex && row.company_name?.trim().toLowerCase() === selectedName
+  );
 
-    if (existing) {
-      this.messageService.add({ severity: 'warn', summary: 'Duplicate', detail: 'This company is already added.' });
-      this.rows.at(rowIndex).patchValue({ company_name: '', isin_code: '' });
-      return;
-    }
-
-    this.rows.at(rowIndex).patchValue({
-      company_name: selectedCompany.name_of_company,
-      isin_code: selectedCompany.isin,
-      MCAP : selectedCompany.tag,
-      sector : selectedCompany.sector_name
-    });
+  if (existing) {
+    this.messageService.add({ severity: 'warn', summary: 'Duplicate', detail: 'This company is already added.' });
+    this.rows.at(rowIndex).patchValue({ company_name: '', isin_code: '' });
+    return;
   }
+
+  this.rows.at(rowIndex).patchValue({
+    company_name: selectedCompany.company_name,
+    isin_code: selectedCompany.isin,
+    MCAP : selectedCompany.tag,
+    sector : selectedCompany.sector_name
+  });
+}
+
 
   isReadOnlyField(key: string): boolean {
     return ['scrip_code', 'scrip_name', 'isin'].includes(key);
