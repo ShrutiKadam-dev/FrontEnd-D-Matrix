@@ -500,7 +500,7 @@ export class CreateComponent implements OnInit {
                 scripcode: [row.scripcode || '', Validators.required],
                 sector: [row.sector || '', Validators.required],
                 weightage: [row.weightage || '', Validators.required],
-                MCAP: [row.MCAP || '', Validators.required],
+                MCAP: [row.tag || '', Validators.required],
                 isin_code: [row.isin_code || '', Validators.required]
               })
             );
@@ -520,35 +520,65 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  submitUnderlyingData(): void {
-    if (this.underlyingForm.valid && this.selectedEntityId) {
-      const companyNames = this.rows.value.map((row: any) => row.company_name?.trim().toLowerCase());
-      const hasDuplicate = companyNames.some((name: string, idx: number) => companyNames.indexOf(name) !== idx);
+submitUnderlyingData(): void {
+  if (!this.selectedEntityId) {
+    return;
+  }
 
-      if (hasDuplicate) {
-        this.messageService.add({ severity: 'error', summary: 'Duplicate Found', detail: 'Company names must be unique.' });
+  const rowsValue = this.underlyingForm.value.rows || [];
+
+  // check duplicates only if there are rows
+  if (rowsValue.length > 0) {
+    const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
+    const hasDuplicate = companyNames.some(
+      (name: string, idx: number) => companyNames.indexOf(name) !== idx
+    );
+
+    if (hasDuplicate) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Duplicate Found',
+        detail: 'Company names must be unique.'
+      });
+      return;
+    }
+  }
+
+  const payload = { entityid: this.selectedEntityId, rows: rowsValue };
+
+  // always clear first
+  this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+    next: () => {
+      if (rowsValue.length === 0) {
+        // ✅ user deleted all rows → just close modal after clear
+        this.displayUnderlyingModal = false;
+        this.displayUpdateChoiceModal = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Underlying data cleared successfully'
+        });
         return;
       }
 
-      const payload = { entityid: this.selectedEntityId, rows: this.underlyingForm.value.rows };
-
-      this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+      // otherwise add fresh rows
+      this.featuresService.addUnderlyingTable(payload).subscribe({
         next: () => {
-          this.featuresService.addUnderlyingTable(payload).subscribe({
-            next: () => {
-              this.displayUnderlyingModal = false;
-              this.displayUpdateChoiceModal = false;
-              this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Underlying data added successfully' });
-              this.underlyingForm.reset();
-              this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
-            }
+          this.displayUnderlyingModal = false;
+          this.displayUpdateChoiceModal = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Underlying data added successfully'
           });
+          this.underlyingForm.reset();
+          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
         }
       });
-    } else {
-      this.underlyingForm.markAllAsTouched();
     }
-  }
+  });
+}
+
 
   onUpdate(entity: any) {
     this.selectedEntity = entity;
@@ -807,7 +837,9 @@ export class CreateComponent implements OnInit {
 
     this.rows.at(rowIndex).patchValue({
       company_name: selectedCompany.name_of_company,
-      isin_code: selectedCompany.isin_number
+      isin_code: selectedCompany.isin,
+      MCAP : selectedCompany.tag,
+      sector : selectedCompany.sector_name
     });
   }
 
