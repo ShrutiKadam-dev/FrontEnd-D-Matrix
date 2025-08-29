@@ -550,7 +550,6 @@ submitUnderlyingData(): void {
   this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
     next: () => {
       if (rowsValue.length === 0) {
-        // ✅ user deleted all rows → just close modal after clear
         this.displayUnderlyingModal = false;
         this.displayUpdateChoiceModal = false;
         this.messageService.add({
