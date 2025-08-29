@@ -44,6 +44,56 @@
   </ng-template>
 </p-table>
 
+<h4>Transations</h4>
+
+
+<!--Transation Table -->
+<p-table #actionTable 
+  [value]="actionTableList" 
+  dataKey="id"
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']"
+  scrollHeight="700px" 
+  styleClass="custom-table">
+
+  <ng-template pTemplate="header" >
+    <tr>
+      <th pSortableColumn="scrip_name">
+        Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="unit">
+        Units <p-sortIcon field="unit"></p-sortIcon>
+      </th>
+      <th pSortableColumn="order_date">
+        Order Date <p-sortIcon field="order_date"></p-sortIcon>
+      </th>
+      <th pSortableColumn="order_type">
+        Action <p-sortIcon field="order_type"></p-sortIcon>
+      </th>
+      <th pSortableColumn="purchase_amount">
+        Amount <p-sortIcon field="purchase_amount"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.unit }}</td>
+      <td>{{ entity.order_date }}</td>
+      <td>{{ entity.order_type }}</td>
+      <td>
+        {{ entity.order_type === 'Purchase' ? '-' + entity.purchase_amount : '+' + entity.purchase_amount }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- IRR summary card -->
+<div class="irr-card">
+  <h3>Internal Rate of Return (IRR)</h3>
+  <p>{{ irr | number:'1.2-2' }} %</p>
+</div>
+
 
 <h4>Summary Of Underlying</h4>
 <!-- Search for Underlying Table -->
