@@ -43,6 +43,8 @@ export class EquityComponent implements OnInit {
   allDEs: any[] = [];
   displayDEs: any[] = [];
   actionTableList: any[] = [];
+  equityTableList:any[] = [];
+  aifTableList:any[] = [];
   chartData: any;
   chartOptions: any;
   actionCounts: any = null;
@@ -75,6 +77,7 @@ export class EquityComponent implements OnInit {
   ngOnInit() {
     this.getAllEntityHome();
     this.loadEquityChart();
+    this.getAllActionTableEquity() 
   }
 
   loadEquityChart() {
@@ -107,7 +110,7 @@ export class EquityComponent implements OnInit {
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: true , // HIDE default legend
+              display: true, // HIDE default legend
               position: 'bottom',
             },
             tooltip: {
@@ -149,13 +152,64 @@ export class EquityComponent implements OnInit {
     this.featuresService.getAllEntityHome().subscribe({
       next: (res: any) => {
         this.allDEs = res?.data || [];
+        // Assign colors once
+        this.allDEs.forEach(de => {
+          de.color = this.getColor(de.subcategory);
+        });
         this.displayDEs = [...this.allDEs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
     });
   }
 
-    onGlobalFilter(event: Event) {
+getAllActionTableEquity() {
+  this.featuresService.getAllActionTableEquity().subscribe({
+    next: (res: any) => {
+      if (res && res.data) {
+        const actionData = (res.data.action_data || []).map((item: any) => ({
+          scrip_name: item.scrip_name,
+          order_type: item.order_type,
+          unit: item.unit || '-',
+          order_date: item.order_date || '-',
+          purchase_amount: item.purchase_amount || '-',
+          source: 'Action'
+        }));
+
+        const aifData = (res.data.aif_data || []).map((item: any) => ({
+          scrip_name: item.amc_name,
+          order_type: 'AIF Contribution',
+          unit: '-',
+          order_date: '-',
+          purchase_amount: item.contribution_amount,
+          source: 'AIF'
+        }));
+
+        const equityData = (res.data.direct_equity_data || []).map((item: any) => ({
+          scrip_name: 'Direct Equity',
+          order_type: item.order_type,
+          unit: '-',
+          order_date: '-',
+          purchase_amount: item.trade_price,
+          source: 'Equity'
+        }));
+
+this.actionTableList = res.data.action_data;
+this.aifTableList = res.data.aif_data;
+this.equityTableList = res.data.direct_equity_data;
+      }
+    },
+    error: (error) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: error.error?.message || 'Update failed'
+      });
+    }
+  });
+}
+
+
+  onGlobalFilter(event: Event) {
     const input = event.target as HTMLInputElement | null;
     if (input && this.dt) {
       this.dt.filter(input.value, 'global', 'contains');

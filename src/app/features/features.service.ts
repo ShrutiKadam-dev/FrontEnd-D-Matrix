@@ -26,6 +26,11 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllentity`);
   }
 
+  getAllActionTableEquity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
+  }
+
+
   updateEntity(entityData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
   }
@@ -46,6 +51,10 @@ export class FeaturesService {
 
   insertAifActionTable(data: any) {
     return this.http.post(`${this.apiUrl}/InsertAifData`, data); 
+  }
+
+  insertETFActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/insertETFActionTable`, data); 
   }
 
   insertNavData(data: any) {

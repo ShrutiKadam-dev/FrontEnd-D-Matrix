@@ -118,6 +118,10 @@ export class AifComponent {
     this.featuresService.getAllAifEntities().subscribe({
       next: (res: any) => {
         this.allAifs = res?.data || [];
+        this.allAifs.forEach(de => {
+        de.color = this.getColor(de.subcategory);
+      });
+   
         this.displayAifs = this.allAifs
         console.log(this.displayAifs)
       },
