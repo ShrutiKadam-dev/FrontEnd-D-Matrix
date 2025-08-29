@@ -93,3 +93,84 @@
   background: #f8fafc;
   transition: all 0.3s ease;
 }
+
+
+
+
+// roshan
+
+::ng-deep .custom-menu{
+  background: transparent;
+}
+::ng-deep .p-panelmenu .p-component{
+  background: transparent;
+}
+::ng-deep .p-panelmenu-panel{
+  background: transparent;
+  border: none;
+
+}
+::ng-deep .p-panelmenu-header-label{
+ font-weight: 600;
+  color: #f8fafc  !important;
+
+}
+::ng-deep .p-panelmenu-item-label {
+
+  color: #f8fafc  !important;
+
+}
+::ng-deep .p-panelmenu-submenu-icon {
+
+  color: #f8fafc  !important;
+
+}
+
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .p-icon,
+::ng-deep .custom-menu .p-panelmenu-item-link:hover .p-panelmenu-item-label,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .pi-chart-line,
+::ng-deep .custom-menu .p-panelmenu-item-link:hover .pi-arrow-right,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .pi-plus-circle,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .pi-home,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .pi-dollar,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .pi-globe,
+::ng-deep .custom-menu .p-panelmenu-header-link:hover .p-panelmenu-header-label {
+  color: #272727b1 !important;  /* black text/icons */
+}
+
+::ng-deep .p-panelmenu-header {
+  position: relative !important;
+}
+
+::ng-deep .p-panelmenu-header .p-iconwrapper {
+  position: absolute !important;
+  right: 1rem !important;   /* adjust spacing */
+  top: 50% !important;
+  transform: translateY(-50%) !important; /* vertically center */
+}
+
+
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active {
+  background-color: #ffffff !important; /* White background */
+  color: #272727b1 !important;  
+  border-radius: 10px;         /* Black text for contrast */
+}
+
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .p-panelmenu-icon,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .pi-plus-circle,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .p-panelmenu-item-label,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .p-panelmenu-header-label,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .pi-globe,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .pi-home,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .pi-chart-line,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .p-icon,
+::ng-deep .p-panelmenu .p-panelmenu-item-link-active .p-panelmenu-submenu-icon {
+  color: #272727b1 !important; /* Icons black on white background */
+}
+
+::ng-deep .p-panelmenu .p-panelmenu-submenu {
+  margin-top: 10px;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;   /* adjust as needed */
+}
