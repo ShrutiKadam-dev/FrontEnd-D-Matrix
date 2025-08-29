@@ -350,7 +350,7 @@ export class CreateComponent implements OnInit {
       scripcode: ['', Validators.required],
       sector: ['', Validators.required],
       weightage: ['', Validators.required],
-      MCAP: ['', Validators.required],
+      tag: ['', Validators.required],
       isin_code: ['', Validators.required]
     });
   }
@@ -500,7 +500,7 @@ export class CreateComponent implements OnInit {
                 scripcode: [row.scripcode || '', Validators.required],
                 sector: [row.sector || '', Validators.required],
                 weightage: [row.weightage || '', Validators.required],
-                MCAP: [row.tag || '', Validators.required],
+                tag : [row.tag || '', Validators.required],
                 isin_code: [row.isin_code || '', Validators.required]
               })
             );
@@ -837,7 +837,7 @@ onCompanySelect(event: any, rowIndex: number) {
   this.rows.at(rowIndex).patchValue({
     company_name: selectedCompany.company_name,
     isin_code: selectedCompany.isin,
-    MCAP : selectedCompany.tag,
+    tag : selectedCompany.tag,
     sector : selectedCompany.sector_name
   });
 }
