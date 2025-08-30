@@ -62,7 +62,7 @@
 <!-- Entity Table -->
 <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
   [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-  scrollHeight="700px" >
+  scrollHeight="700px">
   <ng-template pTemplate="header">
     <tr>
       <th>Scrip Name</th>
@@ -104,11 +104,9 @@
         (click)="updateActionTable(selectedEntity)"></p-button>
 
       <!-- Underlying (hide for Direct Equity & ETF) -->
-      <p-button 
-        *ngIf="!(selectedEntity?.category === 'Equity' 
-                && selectedEntity?.subcategory === 'Direct Equity')"
-        label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
-        (click)="updateUnderlyingTable(selectedEntity)"></p-button>
+      <p-button *ngIf="!(selectedEntity?.category === 'Equity' 
+                && selectedEntity?.subcategory === 'Direct Equity')" label="Underlying" icon="pi pi-list"
+        styleClass="add-entity-btn" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
 
       <!-- NAV Update (only for AIF) -->
       <p-button
@@ -142,7 +140,8 @@
           <td>
             <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
               (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
-              [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name">
+              [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name" appendTo="viewport"
+              appendTo="body">
             </p-autoComplete>
           </td>
           <td>
@@ -152,9 +151,10 @@
             <input pInputText type="text" formControlName="sector" placeholder="Enter Sector" />
           </td>
           <td class="weightage-cell">
-            <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100"
-              placeholder="Enter weightage">
+            <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
+              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage">
             </p-inputNumber>
+
           </td>
           <td>
             <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP" />
@@ -204,13 +204,10 @@
         appendTo="viewport" appendTo="body" [style]="{ width: '100%' }">
       </p-datepicker>
 
-<!-- InputMask: order_time -->
-<p-inputMask *ngIf="field.key === 'order_time' || field.key === 'trade_time'"
-             mask="99:99:99"
-             [formControlName]="field.key"
-             placeholder="HH:mm:ss"
-             [style]="{ width: '100%' }">
-</p-inputMask>
+      <!-- InputMask: order_time -->
+      <p-inputMask *ngIf="field.key === 'order_time' || field.key === 'trade_time'" mask="99:99:99"
+        [formControlName]="field.key" placeholder="HH:mm:ss" [style]="{ width: '100%' }">
+      </p-inputMask>
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />

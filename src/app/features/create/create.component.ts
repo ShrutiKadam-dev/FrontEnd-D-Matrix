@@ -345,7 +345,7 @@ export class CreateComponent implements OnInit {
   }
 
   createRow(): FormGroup {
-    return this.fb.group({
+    const row = this.fb.group({
       company_name: ['', Validators.required],
       scripcode: ['', Validators.required],
       sector: ['', Validators.required],
@@ -353,7 +353,38 @@ export class CreateComponent implements OnInit {
       tag: ['', Validators.required],
       isin_code: ['', Validators.required]
     });
+
+    row.get('weightage')?.valueChanges.subscribe(value => {
+      this.onWeightageChange(row, value);
+    });
+
+    return row;
   }
+
+  onWeightageChange(currentRow: FormGroup, enteredValue: string | number | null) {
+    // normalize everything to a number
+    const safeValue = enteredValue === null || enteredValue === '' ? 0 : Number(enteredValue);
+
+    const totalExcludingCurrent = this.rows.controls.reduce((sum, group) => {
+      if (group !== currentRow) {
+        return sum + (Number(group.get('weightage')?.value) || 0);
+      }
+      return sum;
+    }, 0);
+
+    const newTotal = totalExcludingCurrent + safeValue;
+
+    if (newTotal > 100) {
+      currentRow.get('weightage')?.setValue(0, { emitEvent: false });
+
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Invalid Weightage',
+        detail: 'Total weightage cannot exceed 100%'
+      });
+    }
+  }
+
 
   addRow() {
     const rows = this.underlyingForm.value.rows || [];
@@ -500,7 +531,7 @@ export class CreateComponent implements OnInit {
                 scripcode: [row.scripcode || '', Validators.required],
                 sector: [row.sector || '', Validators.required],
                 weightage: [row.weightage || '', Validators.required],
-                tag : [row.tag || '', Validators.required],
+                tag: [row.tag || '', Validators.required],
                 isin_code: [row.isin_code || '', Validators.required]
               })
             );
@@ -520,63 +551,73 @@ export class CreateComponent implements OnInit {
     });
   }
 
-submitUnderlyingData(): void {
-  if (!this.selectedEntityId) {
-    return;
-  }
+  submitUnderlyingData(): void {
+    if (!this.selectedEntityId) {
+      return;
+    }
 
-  const rowsValue = this.underlyingForm.value.rows || [];
-
-  // check duplicates only if there are rows
-  if (rowsValue.length > 0) {
-    const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
-    const hasDuplicate = companyNames.some(
-      (name: string, idx: number) => companyNames.indexOf(name) !== idx
-    );
-
-    if (hasDuplicate) {
+    if (this.underlyingForm.invalid) {
+      this.underlyingForm.markAllAsTouched();
       this.messageService.add({
         severity: 'error',
-        summary: 'Duplicate Found',
-        detail: 'Company names must be unique.'
+        summary: 'Validation Error',
+        detail: 'Please fill all required fields before saving.'
       });
       return;
     }
-  }
 
-  const payload = { entityid: this.selectedEntityId, rows: rowsValue };
+    const rowsValue = this.underlyingForm.value.rows || [];
 
-  // always clear first
-  this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
-    next: () => {
-      if (rowsValue.length === 0) {
-        this.displayUnderlyingModal = false;
-        this.displayUpdateChoiceModal = false;
+    // check duplicates only if there are rows
+    if (rowsValue.length > 0) {
+      const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
+      const hasDuplicate = companyNames.some(
+        (name: string, idx: number) => companyNames.indexOf(name) !== idx
+      );
+
+      if (hasDuplicate) {
         this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Underlying data cleared successfully'
+          severity: 'error',
+          summary: 'Duplicate Found',
+          detail: 'Company names must be unique.'
         });
         return;
       }
+    }
 
-      // otherwise add fresh rows
-      this.featuresService.addUnderlyingTable(payload).subscribe({
-        next: () => {
+    const payload = { entityid: this.selectedEntityId, rows: rowsValue };
+
+    // always clear first
+    this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+      next: () => {
+        if (rowsValue.length === 0) {
           this.displayUnderlyingModal = false;
           this.displayUpdateChoiceModal = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Underlying data added successfully'
+            detail: 'Underlying data cleared successfully'
           });
-          this.underlyingForm.reset();
-          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+          return;
         }
-      });
-    }
-  });
-}
+
+        // otherwise add fresh rows
+        this.featuresService.addUnderlyingTable(payload).subscribe({
+          next: () => {
+            this.displayUnderlyingModal = false;
+            this.displayUpdateChoiceModal = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Underlying data added successfully'
+            });
+            this.underlyingForm.reset();
+            this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+          }
+        });
+      }
+    });
+  }
 
 
   onUpdate(entity: any) {
@@ -820,27 +861,27 @@ submitUnderlyingData(): void {
     }
   }
 
-onCompanySelect(event: any, rowIndex: number) {
-  const selectedCompany = event.value;
-  const selectedName = selectedCompany.company_name?.trim().toLowerCase();
+  onCompanySelect(event: any, rowIndex: number) {
+    const selectedCompany = event.value;
+    const selectedName = selectedCompany.company_name?.trim().toLowerCase();
 
-  const existing = this.rows.value.some(
-    (row: any, idx: number) => idx !== rowIndex && row.company_name?.trim().toLowerCase() === selectedName
-  );
+    const existing = this.rows.value.some(
+      (row: any, idx: number) => idx !== rowIndex && row.company_name?.trim().toLowerCase() === selectedName
+    );
 
-  if (existing) {
-    this.messageService.add({ severity: 'warn', summary: 'Duplicate', detail: 'This company is already added.' });
-    this.rows.at(rowIndex).patchValue({ company_name: '', isin_code: '' });
-    return;
+    if (existing) {
+      this.messageService.add({ severity: 'warn', summary: 'Duplicate', detail: 'This company is already added.' });
+      this.rows.at(rowIndex).patchValue({ company_name: '', isin_code: '' });
+      return;
+    }
+
+    this.rows.at(rowIndex).patchValue({
+      company_name: selectedCompany.company_name,
+      isin_code: selectedCompany.isin,
+      tag: selectedCompany.tag,
+      sector: selectedCompany.sector_name
+    });
   }
-
-  this.rows.at(rowIndex).patchValue({
-    company_name: selectedCompany.company_name,
-    isin_code: selectedCompany.isin,
-    tag : selectedCompany.tag,
-    sector : selectedCompany.sector_name
-  });
-}
 
 
   isReadOnlyField(key: string): boolean {
