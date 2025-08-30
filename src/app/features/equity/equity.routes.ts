@@ -28,14 +28,6 @@ export const equityRoutes: Routes = [
         path: 'direct-equity-details/:id',
         loadComponent: () => import('./direct-equity-details/direct-equity-details.component').then(c => c.DirectEquityDetailsComponent)
     },
-        {
-        path: 'etf',
-        loadComponent: () => import('./etf/etf.component').then(c => c.EtfComponent)
-    },
-    {
-        path: 'etf/:id',
-        loadComponent: () => import('./etf-details/etf-details.component').then(c => c.EtfDetailsComponent)
-    },
     {
         path: 'aif',
         loadComponent: () => import('./aif/aif.component').then(c => c.AifComponent)

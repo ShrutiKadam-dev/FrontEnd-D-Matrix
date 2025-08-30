@@ -16,7 +16,7 @@ export const featuresRoutes: Routes = [
     },
     {
         path: 'commodities',
-        loadComponent: () => import('./commodities/commodities.component').then(c => c.CommoditiesComponent)
+        loadChildren: () => import('./commodities/commodities.routes').then(c => c.commoditiesRoutes)
     },
     {
         path: 'create',
