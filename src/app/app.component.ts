@@ -64,6 +64,11 @@ export class AppComponent implements OnInit {
             routerLink: ['/features/equity/mutual-funds']
           },
           { 
+            label: 'ETF', 
+            icon: 'pi pi-arrow-right',
+            routerLink: ['/features/equity/etf']
+          },
+          { 
             label: 'AIF', 
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/aif']
