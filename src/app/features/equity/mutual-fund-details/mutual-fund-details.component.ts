@@ -38,6 +38,8 @@ import { ChartModule } from 'primeng/chart';
   templateUrl: './mutual-fund-details.component.html',
   styleUrl: './mutual-fund-details.component.scss'
 })
+
+
 export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
@@ -47,6 +49,12 @@ export class MutualFundDetailsComponent implements OnInit {
   underlyingTableList: any[] = [];
   irr: number = 0;
   actionCounts: any = {};
+  totalPurchaseUnits = 0;
+  totalPurchaseAmount = 0;
+  totalSalesUnits = 0;
+  totalSalesAmount = 0;
+
+  
 
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
@@ -62,8 +70,34 @@ export class MutualFundDetailsComponent implements OnInit {
       this.loadMfDetails(this.mfId);
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
+      
     }
   }
+
+  
+  
+
+  calculateTotals(actionTableList:any) {
+
+      if (!actionTableList || actionTableList.length === 0) return;
+    console.log(actionTableList)
+    
+  this.totalPurchaseUnits = actionTableList
+    .filter((x:any) => x.order_type === 'Purchase')
+    .reduce((sum:number, x:any) => sum + Number(x.unit), 0);
+
+  this.totalPurchaseAmount = actionTableList
+    .filter((x:any )=> x.order_type === 'Purchase')
+    .reduce((sum:number, x:any) => sum + Number(x.purchase_amount), 0);
+
+  this.totalSalesUnits = actionTableList
+    .filter((x:any) => x.order_type === 'Sale')
+    .reduce((sum:number, x:any) => sum + Number(x.unit), 0);
+
+  this.totalSalesAmount =actionTableList
+    .filter((x:any) => x.order_type === 'Sale')
+    .reduce((sum:number, x:any) => sum + Number(x.purchase_amount), 0);
+}
 
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
@@ -87,6 +121,7 @@ export class MutualFundDetailsComponent implements OnInit {
     this.featuresService.getMFDetailActionTable(mfId).subscribe({
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
+        this.calculateTotals(this.actionTableList);
         const cashflows = this.actionTableList.map((e: any) => ({
           date: e.order_date,
           amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
@@ -122,19 +157,21 @@ export class MutualFundDetailsComponent implements OnInit {
           scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
         };
 
+        console.log(this.underlyingTableList);
+
         // Prepare chart
         this.chartData = {
           labels: Object.keys(grouped),
           datasets: [{
             data: Object.values(grouped),
-            backgroundColor: ['#42A5F5','#66BB6A','#FFA726','#AB47BC','#FF7043','#26C6DA','#FFCA28']
+            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
           }]
         };
 
         this.chartOptions = {
           responsive: true,
           plugins: {
-            legend: { position: 'right' },
+            legend: { position: 'bottom' },
             tooltip: {
               callbacks: {
                 label: (context: any) => {
@@ -171,24 +208,24 @@ export class MutualFundDetailsComponent implements OnInit {
     };
     const firstDate = parseDate(cashflows[0].date);
     const lastDate = parseDate(cashflows[cashflows.length - 1].date);
-    const years = (lastDate.getTime() - firstDate.getTime()) / (1000*60*60*24*365);
+    const years = (lastDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
 
-    const invested = Math.abs(cashflows.filter(f => f.amount < 0).reduce((sum,f)=>sum+f.amount,0));
-    const redeemed = cashflows.filter(f=>f.amount>0).reduce((sum,f)=>sum+f.amount,0);
+    const invested = Math.abs(cashflows.filter(f => f.amount < 0).reduce((sum, f) => sum + f.amount, 0));
+    const redeemed = cashflows.filter(f => f.amount > 0).reduce((sum, f) => sum + f.amount, 0);
 
-    if (years < 1) return ((redeemed-invested)/invested)*100;
+    if (years < 1) return ((redeemed - invested) / invested) * 100;
 
-    let rate = 0.1, maxIterations=1000, tolerance=1e-7;
-    for(let i=0;i<maxIterations;i++){
-      let npv=0, derivative=0;
-      for(let flow of cashflows){
-        const t=(parseDate(flow.date).getTime()-firstDate.getTime())/(1000*60*60*24*365);
-        npv+=flow.amount/Math.pow(1+rate,t);
-        derivative+=(-t*flow.amount)/Math.pow(1+rate,t+1);
+    let rate = 0.1, maxIterations = 1000, tolerance = 1e-7;
+    for (let i = 0; i < maxIterations; i++) {
+      let npv = 0, derivative = 0;
+      for (let flow of cashflows) {
+        const t = (parseDate(flow.date).getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+        npv += flow.amount / Math.pow(1 + rate, t);
+        derivative += (-t * flow.amount) / Math.pow(1 + rate, t + 1);
       }
-      const newRate=rate-npv/derivative;
-      if(Math.abs(newRate-rate)<tolerance) return newRate*100;
-      rate=newRate;
+      const newRate = rate - npv / derivative;
+      if (Math.abs(newRate - rate) < tolerance) return newRate * 100;
+      rate = newRate;
     }
     return NaN;
   }

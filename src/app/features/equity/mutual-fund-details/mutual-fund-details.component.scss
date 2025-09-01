@@ -176,7 +176,7 @@ label {
 .counts-card .card-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   gap: 2.5rem;
   height: 100%;
 }
@@ -216,4 +216,323 @@ label {
 
 .counts-card {
   margin-top:2rem; /* or any value you prefer */
+}
+
+
+//roshan
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  padding: 8px 12px;
+}
+
+.totals-left {
+  text-align: left;
+}
+
+.totals-right {
+  text-align: right;
+}
+
+
+// header
+.summary-header {
+  display: flex;
+  justify-content: space-between; /* Header left, search right */
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.summary-header h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #252525;
+  margin: 0;
+}
+
+.search-container {
+  flex: 1 1 250px; /* responsive width */
+  max-width: 300px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #d1d5db; /* light gray border */
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-bar input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  color: #333;
+  border-radius: 8px;
+}
+
+.search-bar i {
+  color: #9ca3af; /* gray icon */
+  margin-right: 6px;
+}
+
+.search-bar:hover {
+  border-color: #3b82f6; /* highlight border on hover */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+
+// underlying table heading
+
+/* Container flex */
+.summary-header {
+  display: flex;
+  justify-content: space-between; /* left title, right search */
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  gap: 10px;
+}
+
+/* Title block */
+.title-block h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #252525;
+  margin: 0;
+}
+
+.underlying-date {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: rgba(37, 37, 37, 0.681);
+  margin-top: 4px;
+}
+
+.underlying-date .date-value {
+  color: rgba(18, 18, 18, 0.904);
+  font-weight: 600;
+}
+
+/* Search bar styling */
+.search-container {
+  flex: 1 1 250px; /* responsive width */
+  max-width: 300px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-bar input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  color: #333;
+  border-radius: 8px;
+}
+
+.search-bar i {
+  color: #9ca3af; /* gray icon */
+  margin-right: 6px;
+}
+
+.search-bar:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+
+// underlying table border 
+.underlying-card {
+  border: 1px solid #d1d5db; /* light gray border */
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+/* Optional: style the header and search like Summary of Actions */
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.title-block h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #252525;
+}
+
+.underlying-date {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: rgba(37, 37, 37, 0.681);
+  margin-top: 4px;
+}
+
+.underlying-date .date-value {
+  color: rgba(18, 18, 18, 0.904);
+  font-weight: 600;
+}
+
+.search-container {
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-bar input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  color: #333;
+  border-radius: 8px;
+}
+
+.search-bar i {
+  color: #9ca3af;
+  margin-right: 6px;
+}
+
+.search-bar:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+
+
+// action table border 
+
+/* Card container */
+.action-card {
+  border: 1px solid #d1d5db; /* light gray border */
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+/* Header + search bar layout */
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.summary-header h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #252525;
+}
+
+/* Search bar styling */
+.search-container {
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-bar input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  color: #333;
+  border-radius: 8px;
+}
+
+.search-bar i {
+  color: #9ca3af;
+  margin-right: 6px;
+}
+
+.search-bar:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Totals row */
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 10px 12px;
+  background-color: #f9fafb;
+  border-top: 2px solid #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.totals-left { text-align: left; }
+.totals-right { text-align: right; }
+
+
+
+// input disable focus 
+
+input[pInputText]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+
+//mcap allocation border 
+.counts-card {
+  border: 1px solid #d1d5db;  /* Light gray border */
+  border-radius: 12px;         /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);  /* Optional subtle shadow */
 }
