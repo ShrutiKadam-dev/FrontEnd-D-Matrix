@@ -49,3 +49,87 @@
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+
+//header for summary of action
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.summary-header h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #252525;
+}
+
+/* Search bar styling */
+.search-container {
+  flex: 1 1 250px;
+  max-width: 300px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.search-bar input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  color: #333;
+  border-radius: 8px;
+}
+
+.search-bar i {
+  color: #9ca3af;
+  margin-right: 6px;
+}
+
+.search-bar:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+// input disable focus 
+
+input[pInputText]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+
+
+// border for action table 
+.summary-card {
+  border: 1px solid #e5e7eb;   /* light grey border */
+  border-radius: 8px;          /* smooth corners */
+  padding: 16px;
+  margin: 20px 0;
+  background: #ffffff;         /* white background */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* subtle shadow */
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+
+
+
+

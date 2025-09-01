@@ -41,34 +41,49 @@
 </div>
 
 
-<h3>Summary Of Actions</h3>
-<!-- Search Box -->
-<div class="search-container half-width">
-  <span class="p-input-icon-left search-bar">
-    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
-  </span>
+<div class="summary-card">
+  <!-- Header -->
+  <div class="summary-header">
+    <h4>Summary Of Actions</h4>
+    <div class="search-container">
+      <span class="p-input-icon-left search-bar">
+        <i class="pi pi-search"></i>
+        <input 
+          pInputText 
+          type="text" 
+          (input)="onGlobalFilter($event)" 
+          placeholder="Search actions..." />
+      </span>
+    </div>
+  </div>
+
+  <!-- Entity Table -->
+  <p-table #dt 
+           [value]="actionTableList" 
+           dataKey="id" 
+           [paginator]="true" 
+           [rows]="10" 
+           [rowsPerPageOptions]="[10,25,50]"
+           [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" 
+           scrollHeight="700px">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Scrip Name</th>
+        <th>Units</th>
+        <th>Order Date</th>
+        <th>Action</th>
+        <th>Amount</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.scrip_name }}</td>
+        <td>{{ entity.unit }}</td>
+        <td>{{ entity.order_date }}</td>
+        <td>{{ entity.order_type }}</td>
+        <td>{{ entity.purchase_amount }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
-
-<!-- Entity Table -->
-<p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Scrip Name</th>
-      <th>Units</th>
-      <th>Order Date</th>
-      <th>Action</th>
-      <th>Amount</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-entity>
-    <tr>
-      <td>{{ entity.scrip_name }}</td>
-      <td>{{ entity.unit }}</td>
-      <td>{{ entity.order_date }}</td>
-      <td>{{ entity.order_type }}</td>
-      <td>{{ entity.purchase_amount }}</td>
-    </tr>
-  </ng-template>
-</p-table>
