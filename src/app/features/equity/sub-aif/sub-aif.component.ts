@@ -6,11 +6,13 @@ import { CarouselModule } from 'primeng/carousel';
 import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { FeaturesService } from '../../features.service';
+import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
 
 
 @Component({
   selector: 'app-sub-aif',
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule],
+  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule, CardModule, ChartModule],
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
 })
@@ -19,6 +21,10 @@ export class SubAifComponent {
   aifId!: string;
   contractNote :any[]= [];
   underlyingList :any[]= [];
+  actionCounts = 0
+  chartData: any;
+  chartOptions: any;
+
 
   @ViewChild('dt') dt!: Table;
 
@@ -53,6 +59,7 @@ export class SubAifComponent {
       next:(res:any ) => {
         this.underlyingList = res?.data || [];
         console.log(this.underlyingList);  
+        
       },
        error: () => console.error('Failed to fetch AIF Action Table')
     })
