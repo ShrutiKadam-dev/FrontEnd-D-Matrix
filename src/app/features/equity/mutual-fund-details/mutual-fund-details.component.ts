@@ -53,6 +53,8 @@ export class MutualFundDetailsComponent implements OnInit {
   totalPurchaseAmount = 0;
   totalSalesUnits = 0;
   totalSalesAmount = 0;
+  availableUnits = 0;
+  availableAmount = 0;
 
   
 
@@ -76,28 +78,57 @@ export class MutualFundDetailsComponent implements OnInit {
 
   
   
+calculateTotals(actionTableList: any[]) {
+  if (!actionTableList || actionTableList.length === 0) {
+    this.totalPurchaseUnits = 0;
+    this.totalPurchaseAmount = 0;
+    this.totalSalesUnits = 0;
+    this.totalSalesAmount = 0;
+    this.availableUnits = 0;
+    this.availableAmount = 0;
+    return;
+  }
 
-  calculateTotals(actionTableList:any) {
+  // Reset totals
+  this.totalPurchaseUnits = 0;
+  this.totalPurchaseAmount = 0;
+  this.totalSalesUnits = 0;
+  this.totalSalesAmount = 0;
+  this.availableUnits = 0;
+  this.availableAmount = 0;
 
-      if (!actionTableList || actionTableList.length === 0) return;
-    console.log(actionTableList)
-    
-  this.totalPurchaseUnits = actionTableList
-    .filter((x:any) => x.order_type === 'Purchase')
-    .reduce((sum:number, x:any) => sum + Number(x.unit), 0);
+  // Single pass calculation
+  actionTableList.forEach(action => {
+    const units = isNaN(Number(action.unit)) ? 0 : Number(action.unit);
+    const amount = isNaN(Number(action.purchase_amount)) ? 0 : Number(action.purchase_amount);
 
-  this.totalPurchaseAmount = actionTableList
-    .filter((x:any )=> x.order_type === 'Purchase')
-    .reduce((sum:number, x:any) => sum + Number(x.purchase_amount), 0);
+    if (action.order_type === 'Purchase') {
+      this.totalPurchaseUnits += units;
+      this.totalPurchaseAmount += amount;
+    } 
+    else if (action.order_type === 'Sale') {
+      this.totalSalesUnits += units;
+      this.totalSalesAmount += amount;
+    }
+  });
 
-  this.totalSalesUnits = actionTableList
-    .filter((x:any) => x.order_type === 'Sale')
-    .reduce((sum:number, x:any) => sum + Number(x.unit), 0);
+  // Available = Purchases - Sales
+  this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
+  this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
 
-  this.totalSalesAmount =actionTableList
-    .filter((x:any) => x.order_type === 'Sale')
-    .reduce((sum:number, x:any) => sum + Number(x.purchase_amount), 0);
+  console.log(this.availableUnits,this.availableAmount);
+  
+
+  // Safety: if any totals are NaN, reset to 0
+  this.totalPurchaseUnits ||= 0;
+  this.totalPurchaseAmount ||= 0;
+  this.totalSalesUnits ||= 0;
+  this.totalSalesAmount ||= 0;
+  this.availableUnits ||= 0;
+  this.availableAmount ||= 0;
 }
+
+
 
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;

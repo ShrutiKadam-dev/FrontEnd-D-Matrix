@@ -1,4 +1,4 @@
-<h3>Welcome To The Mutual Fund Details</h3>
+<h3>Welcome To The {{actionTableList[0].scrip_name}}</h3>
 
 <div class="action-card">
   <div class="summary-header">
@@ -42,21 +42,37 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-      <tr>
-        <td colspan="5">
-          <div class="totals-row">
-            <div class="totals-left">
-              Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-              Amount: {{ totalPurchaseAmount | currency:'INR' }}
-            </div>
-            <div class="totals-right">
-              Sales → Units: {{ totalSalesUnits | number:'1.2-2' }} |
-              Amount: {{ totalSalesAmount | number:'1.2-2' | currency:'INR' }}
-            </div>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
+  <tr>
+    <td colspan="5" >
+      <div class="totals-row">
+        
+        <!-- Purchases -->
+        <div class="totals-item">
+          <strong>Purchases →</strong> 
+          Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
+          Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
+        </div>
+
+        <!-- Available -->
+        <div class="totals-item available">
+          <strong>Available →</strong> 
+          Units: {{ availableUnits | number:'1.2-2' }} |
+          Amount: {{ availableAmount || 0 | currency:'INR' }}
+        </div>
+
+        <!-- Sales -->
+        <div class="totals-item">
+          <strong>Sales →</strong> 
+          Units: {{ totalSalesUnits | number:'1.2-2' }} |
+          Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
+        </div>
+
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+
   </p-table>
 </div>
 
