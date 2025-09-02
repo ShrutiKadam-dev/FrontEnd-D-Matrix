@@ -39,6 +39,9 @@ export class DirectEquityDetailsComponent implements OnInit{
   deId!: string | null;
   deDetails: any;
   actionTableList: any[] = [];
+  irrResult: number | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
 
   @ViewChild('actionTable') actionTable!: Table;
 
@@ -51,6 +54,7 @@ export class DirectEquityDetailsComponent implements OnInit{
     if (this.deId) {
       this.loadMfDetails(this.deId);
       this.getDEDetailActionTable(this.deId);
+      this.fetchIrr(this.deId)
     }
   }
 
@@ -62,6 +66,31 @@ export class DirectEquityDetailsComponent implements OnInit{
         this.actionTable.filterGlobal(input.value, 'contains');
       }
     }
+  }
+
+
+    // Function to fetch IRR
+  fetchIrr(entityid: string): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.featuresService.getIrrById(entityid).subscribe({
+      next: (response) => {
+        // Assuming API returns { irr: 0.1234 }
+        this.irrResult = response?.annualized_irr_percent?? null;
+        console.log(this.irrResult);
+        
+        
+        console.log(entityid, this.irrResult);
+        
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching IRR:', err);
+        this.errorMessage = 'Failed to fetch IRR';
+        this.isLoading = false;
+      }
+    });
   }
 
   loadMfDetails(id: string) {

@@ -199,7 +199,17 @@
   </form>
 </p-dialog>
 
-
+<!-- Simple Loading Modal -->
+<p-dialog header="Please Wait"
+          [(visible)]="isSubmitting"
+          [modal]="true"
+          [closable]="false"
+          [style]="{ width: '350px' }">
+  <div style="text-align:center; padding:20px;">
+    <p-progressSpinner styleClass="w-4 h-4"></p-progressSpinner>
+    <p style="margin-top: 15px;">Uploading underlying properties...</p>
+  </div>
+</p-dialog>
 
 <!-- Add Action Table Dialog -->
 <p-dialog header="Add Action Table Data" [(visible)]="displayActionTableModal" [modal]="true" [closable]="true"

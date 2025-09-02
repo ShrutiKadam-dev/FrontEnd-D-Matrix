@@ -19,6 +19,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DatePicker } from 'primeng/datepicker';
 import { InputMask } from 'primeng/inputmask';
 import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-create',
@@ -40,7 +41,9 @@ import { ToastModule } from 'primeng/toast';
     TableModule,
     DatePicker,
     InputMask,
-    ToastModule
+    ToastModule,
+    ProgressSpinnerModule
+    
   ],
   providers: [ConfirmationService, MessageService], // ✅ ensure MessageService is provided
   templateUrl: './create.component.html',
@@ -66,6 +69,8 @@ export class CreateComponent implements OnInit {
   displayUnderlyingModal = false;
   underlyingForm!: FormGroup;
   selectedEntityId: string | null = null;
+  isSubmitting: boolean = false;
+
 
   // Contract note modal
   displayActionTableModal = false;
@@ -551,73 +556,73 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  submitUnderlyingData(): void {
-    if (!this.selectedEntityId) {
-      return;
-    }
+ submitUnderlyingData(): void {
+  if (!this.selectedEntityId) return;
 
-    if (this.underlyingForm.invalid) {
-      this.underlyingForm.markAllAsTouched();
+  if (this.underlyingForm.invalid) {
+    this.underlyingForm.markAllAsTouched();
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Validation Error',
+      detail: 'Please fill all required fields before saving.'
+    });
+    return;
+  }
+
+  const rowsValue = this.underlyingForm.value.rows || [];
+
+  // check duplicates
+  if (rowsValue.length > 0) {
+    const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
+    const hasDuplicate = companyNames.some(
+      (name: string, idx: number) => companyNames.indexOf(name) !== idx
+    );
+
+    if (hasDuplicate) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Validation Error',
-        detail: 'Please fill all required fields before saving.'
+        summary: 'Duplicate Found',
+        detail: 'Company names must be unique.'
       });
       return;
     }
+  }
 
-    const rowsValue = this.underlyingForm.value.rows || [];
+  const payload = { entityid: this.selectedEntityId, rows: rowsValue };
 
-    // check duplicates only if there are rows
-    if (rowsValue.length > 0) {
-      const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
-      const hasDuplicate = companyNames.some(
-        (name: string, idx: number) => companyNames.indexOf(name) !== idx
-      );
+  this.isSubmitting = true; // 🚀 block multiple clicks + show modal
 
-      if (hasDuplicate) {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Duplicate Found',
-          detail: 'Company names must be unique.'
-        });
+  this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+    next: () => {
+      if (rowsValue.length === 0) {
+        this.finishSubmission('Underlying data cleared successfully');
         return;
       }
-    }
 
-    const payload = { entityid: this.selectedEntityId, rows: rowsValue };
+      this.featuresService.addUnderlyingTable(payload).subscribe({
+        next: () => {
+          this.finishSubmission('Underlying data added successfully');
+          this.underlyingForm.reset();
+          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+        },
+        error: () => this.isSubmitting = false
+      });
+    },
+    error: () => this.isSubmitting = false
+  });
+}
 
-    // always clear first
-    this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
-      next: () => {
-        if (rowsValue.length === 0) {
-          this.displayUnderlyingModal = false;
-          this.displayUpdateChoiceModal = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Underlying data cleared successfully'
-          });
-          return;
-        }
+private finishSubmission(successMessage: string) {
+  this.displayUnderlyingModal = false;
+  this.displayUpdateChoiceModal = false;
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Success',
+    detail: successMessage
+  });
+  this.isSubmitting = false; // ✅ re-enable Save
+}
 
-        // otherwise add fresh rows
-        this.featuresService.addUnderlyingTable(payload).subscribe({
-          next: () => {
-            this.displayUnderlyingModal = false;
-            this.displayUpdateChoiceModal = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Underlying data added successfully'
-            });
-            this.underlyingForm.reset();
-            this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
-          }
-        });
-      }
-    });
-  }
 
 
   onUpdate(entity: any) {
