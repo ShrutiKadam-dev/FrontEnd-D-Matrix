@@ -42,6 +42,12 @@ export class DirectEquityDetailsComponent implements OnInit{
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+  totalPurchaseUnits = 0;
+  totalPurchaseAmount = 0;
+  totalSalesUnits = 0;
+  totalSalesAmount = 0;
+  availableUnits = 0;
+  availableAmount = 0;
 
   @ViewChild('actionTable') actionTable!: Table;
 
@@ -68,13 +74,64 @@ export class DirectEquityDetailsComponent implements OnInit{
     }
   }
 
+  calculateTotals(actionTableList: any[]) {
+  if (!actionTableList || actionTableList.length === 0) {
+    this.totalPurchaseUnits = 0;
+    this.totalPurchaseAmount = 0;
+    this.totalSalesUnits = 0;
+    this.totalSalesAmount = 0;
+    this.availableUnits = 0;
+    this.availableAmount = 0;
+    return;
+  }
+
+  console.log(actionTableList);
+  
+  // Reset totals
+  this.totalPurchaseUnits = 0;
+  this.totalPurchaseAmount = 0;
+  this.totalSalesUnits = 0;
+  this.totalSalesAmount = 0;
+  this.availableUnits = 0;
+  this.availableAmount = 0;
+
+  // Single pass calculation
+  actionTableList.forEach(action => {
+    const units = isNaN(Number(action.qty)) ? 0 : Number(action.qty);
+    const amount = isNaN(Number(action.net_total)) ? 0 : Number(action.net_total);
+
+    if (action.order_type === 'Purchase') {
+      this.totalPurchaseUnits += units;
+      this.totalPurchaseAmount += amount;
+    } 
+    else if (action.order_type === 'Sell') {
+      this.totalSalesUnits += units;
+      this.totalSalesAmount += amount;
+    }
+  });
+
+  // Available = Purchases - Sales
+  this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
+  this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
+
+  
+
+  // Safety: if any totals are NaN, reset to 0
+  this.totalPurchaseUnits ||= 0;
+  this.totalPurchaseAmount ||= 0;
+  this.totalSalesUnits ||= 0;
+  this.totalSalesAmount ||= 0;
+  this.availableUnits ||= 0;
+  this.availableAmount ||= 0;
+}
+
 
     // Function to fetch IRR
   fetchIrr(entityid: string): void {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.featuresService.getIrrById(entityid).subscribe({
+    this.featuresService.getDirectEquityIrrById(entityid).subscribe({
       next: (response) => {
         // Assuming API returns { irr: 0.1234 }
         this.irrResult = response?.annualized_irr_percent?? null;
@@ -109,6 +166,7 @@ export class DirectEquityDetailsComponent implements OnInit{
     this.featuresService.getDEDetailActionTable(deId).subscribe({
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
+        this.calculateTotals(this.actionTableList)
       },
       error: (error) => {
         this.messageService.add({

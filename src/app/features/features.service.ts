@@ -168,9 +168,15 @@ export class FeaturesService {
     });
   }
 
-  //Get IRR service
+  //Get IRR service for mutual fund 
   getIrrById(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getActionIRR`, {
+      params: { entityid }
+    });
+  }
+  //Get IRR service for Direct Equity 
+  getDirectEquityIrrById(entityid: string) {
+    return this.http.get<any>(`${this.apiUrl}/getDirectEquityIRR`, {
       params: { entityid }
     });
   }

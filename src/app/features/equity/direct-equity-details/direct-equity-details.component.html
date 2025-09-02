@@ -1,46 +1,79 @@
 <h3>Welcome To The Direct Equity Details </h3>
 
-<h4>Summary Of Actions</h4>
-<!-- Search for Action Table -->
-<div class="search-container half-width">
-  <span class="p-input-icon-left search-bar">
-    <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
-  </span>
+<div class="action-card">
+  <div class="summary-actions-header">
+    <h4>Summary Of Actions <button pButton type="button" label="IRR = {{irrResult || 0}}%"  class="p-button-sm" style="transform: translateY(-15px); height: 25px; " ></button></h4>
+
+    <!-- Search for Action Table -->
+    <div class="search-container">
+      <span class="p-input-icon-left search-bar">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
+      </span>
+    </div>
+  </div>
+
+  <!-- Action Table -->
+  <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number', 'order_type','trade_price']"
+    scrollHeight="700px">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="contract_note_number">
+          Contract Note Number <p-sortIcon field="contract_note_number"></p-sortIcon>
+        </th>
+        <th pSortableColumn="client_name">
+          Client Name <p-sortIcon field="client_name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="order_number">
+          Order Number <p-sortIcon field="order_number"></p-sortIcon>
+        </th>
+        <th pSortableColumn="order_type">
+          Order Type <p-sortIcon field="order_type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="trade_price">
+          Trade Price <p-sortIcon field="trade_price"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.contract_note_number }}</td>
+        <td>{{ entity.client_name }}</td>
+        <td>{{ entity.order_number }}</td>
+        <td>{{ entity.order_type }}</td>
+        <td>{{ entity.trade_price }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="5">
+          <div class="totals-row">
+            <!-- Purchases -->
+            <div class="totals-item">
+              <strong>Purchases →</strong> 
+              Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
+              Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
+            </div>
+
+            <!-- Available -->
+            <div class="totals-item available">
+              <strong>Available →</strong> 
+              Units: {{ availableUnits | number:'1.2-2' }} |
+              Amount: {{ availableAmount || 0 | currency:'INR' }}
+            </div>
+
+            <!-- Sales -->
+            <div class="totals-item" style="margin-right: 20px;">
+              <strong>Sales →</strong> 
+              Units: {{ totalSalesUnits | number:'1.2-2' }} |
+              Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>
-
-<!-- Action Table -->
-<p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-  [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number', 'order_type','trade_price']"
-  scrollHeight="700px">
-  <ng-template pTemplate="header">
-    <tr>
-      <th pSortableColumn="contract_note_number">
-        Contract Note Number <p-sortIcon field="contract_note_number"></p-sortIcon>
-      </th>
-
-      <th pSortableColumn="client_name">
-        Client Name <p-sortIcon field="client_name"></p-sortIcon>
-      </th>
-      <th pSortableColumn="order_number">
-        Order Number <p-sortIcon field="order_number"></p-sortIcon>
-      </th>
-      <th pSortableColumn="order_type">
-        Order Type <p-sortIcon field="order_type"></p-sortIcon>
-      </th>
-      <th pSortableColumn="trade_price">
-        Trade Price <p-sortIcon field="trade_price"></p-sortIcon>
-      </th>
-    </tr>
-  </ng-template>
-
-
-  <ng-template pTemplate="body" let-entity>
-    <tr>
-      <td>{{ entity.contract_note_number }}</td>
-      <td>{{ entity.client_name }}</td>
-      <td>{{ entity.order_number }}</td>
-      <td>{{ entity.order_type }}</td>
-      <td>{{ entity.trade_price }}</td>
-    </tr>
-  </ng-template>
-</p-table>
