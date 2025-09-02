@@ -388,3 +388,11 @@ input[pInputText]:focus {
 }
 
 
+//for model dark bg
+
+
+:host ::ng-deep .p-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.7) !important; /* darker backdrop */
+}
+
+

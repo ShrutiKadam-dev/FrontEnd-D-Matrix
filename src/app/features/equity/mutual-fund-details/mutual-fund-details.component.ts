@@ -54,7 +54,10 @@ export class MutualFundDetailsComponent implements OnInit {
   totalSalesUnits = 0;
   totalSalesAmount = 0;
   availableUnits = 0;
-  availableAmount = 0;
+  availableAmount = 0; 
+  irrResult: number | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
 
   
 
@@ -72,6 +75,7 @@ export class MutualFundDetailsComponent implements OnInit {
       this.loadMfDetails(this.mfId);
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
+      this.fetchIrr(this.mfId)
       
     }
   }
@@ -116,7 +120,6 @@ calculateTotals(actionTableList: any[]) {
   this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
   this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
 
-  console.log(this.availableUnits,this.availableAmount);
   
 
   // Safety: if any totals are NaN, reset to 0
@@ -147,6 +150,8 @@ calculateTotals(actionTableList: any[]) {
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });
   }
+
+  
 
   getMFDetailActionTable(mfId: string) {
     this.featuresService.getMFDetailActionTable(mfId).subscribe({
@@ -188,7 +193,6 @@ calculateTotals(actionTableList: any[]) {
           scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
         };
 
-        console.log(this.underlyingTableList);
 
         // Prepare chart
         this.chartData = {
@@ -225,6 +229,29 @@ calculateTotals(actionTableList: any[]) {
       }
     });
   }
+
+  // Function to fetch IRR
+  fetchIrr(entityid: string): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.featuresService.getIrrById(entityid).subscribe({
+      next: (response) => {
+        // Assuming API returns { irr: 0.1234 }
+        this.irrResult = response?.annualized_irr_percent?? null;
+        
+        console.log(entityid, this.irrResult);
+        
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching IRR:', err);
+        this.errorMessage = 'Failed to fetch IRR';
+        this.isLoading = false;
+      }
+    });
+  }
+
 
   private calculateIRR(cashflows: { date: string, amount: number }[]): number {
     if (!cashflows || cashflows.length < 2) return NaN;

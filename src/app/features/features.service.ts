@@ -168,6 +168,13 @@ export class FeaturesService {
     });
   }
 
+  //Get IRR service
+  getIrrById(entityid: string) {
+    return this.http.get<any>(`${this.apiUrl}/getActionIRR`, {
+      params: { entityid }
+    });
+  }
+
 
 
 }
