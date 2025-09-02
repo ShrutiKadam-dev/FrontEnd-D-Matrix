@@ -110,7 +110,7 @@ calculateTotals(actionTableList: any[]) {
       this.totalPurchaseUnits += units;
       this.totalPurchaseAmount += amount;
     } 
-    else if (action.order_type === 'Sale') {
+    else if (action.order_type === 'Sell') {
       this.totalSalesUnits += units;
       this.totalSalesAmount += amount;
     }
