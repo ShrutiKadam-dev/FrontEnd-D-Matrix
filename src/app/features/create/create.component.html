@@ -1,11 +1,61 @@
-<!-- Add Entity Button -->
-<p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn"></p-button>
+<div class="card">
+  <!-- Header Section -->
+<div class="entity-header">
+  <!-- Add Entity Button -->
+  <p-button 
+    label="Create Entity" 
+    icon="pi pi-plus" 
+    (click)="showModal()" 
+    styleClass="add-entity-btn">
+  </p-button>
 
-<!-- Search Box -->
-<div class="search-container half-width">
-  <span class="p-input-icon-left search-bar">
-    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
-  </span>
+  <!-- Search Box -->
+  <div class="search-container">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input 
+        pInputText 
+        type="text" 
+        (input)="onGlobalFilter($event)" 
+        placeholder="Search entities..." />
+    </span>
+  </div>
+</div>
+
+
+<!-- Entity Table -->
+<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
+  scrollHeight="700px" >
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Scrip Name</th>
+      <th>Scrip Code</th>
+      <th>Benchmark</th>
+      <th>Subcategory</th>
+      <th>Action</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scripname }}</td>
+      <td>{{ entity.scripcode }}</td>
+      <td>{{ entity.benchmark }}</td>
+      <td>{{ entity.subcategory }}</td>
+      <td>
+        <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
+
+        <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
+
+        <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
+
+
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
 </div>
 
 <!-- Add/Update Entity Dialog -->
@@ -59,38 +109,6 @@
   </form>
 </p-dialog>
 
-<!-- Entity Table -->
-<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-  scrollHeight="700px">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Scrip Name</th>
-      <th>Scrip Code</th>
-      <th>Benchmark</th>
-      <th>Subcategory</th>
-      <th>Action</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-entity>
-    <tr>
-      <td>{{ entity.scripname }}</td>
-      <td>{{ entity.scripcode }}</td>
-      <td>{{ entity.benchmark }}</td>
-      <td>{{ entity.subcategory }}</td>
-      <td>
-        <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
-
-        <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
-
-        <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
-
-
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
 
 <!-- Update Choice Dialog -->
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
