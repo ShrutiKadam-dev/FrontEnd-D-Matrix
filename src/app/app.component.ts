@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -15,7 +15,8 @@ import { TooltipModule } from 'primeng/tooltip'; // ⬅ Needed for tooltips
   standalone: true,
   imports: [
     RouterOutlet, 
-    CommonModule, 
+    CommonModule,
+    RouterModule, 
     PanelMenuModule, 
     CardModule,
     ToastModule, 

@@ -174,3 +174,42 @@
   flex-direction: column !important;
   gap: 8px !important;   /* adjust as needed */
 }
+
+
+.layout-container {
+  display: flex;
+}
+
+.sidebar-container {
+  width: 220px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 60px;
+
+    .logo {
+      display: none;
+    }
+
+    .p-menuitem-text {
+      display: none !important;
+    }
+    
+       // hide submenu arrow icon
+    ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-icon,
+    ::ng-deep .p-panelmenu .p-panelmenu-content .p-panelmenu-icon {
+      display: none !important;
+    }
+    ::ng-deep .p-panelmenu-submenu-icon path{
+      display: none !important;
+    }
+
+
+  }
+}
+
+.content-container {
+  flex: 1;
+  padding: 1rem;
+}
