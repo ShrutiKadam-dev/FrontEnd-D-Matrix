@@ -91,18 +91,26 @@ label {
 }
 
 /* Search Container */
+.entity-header {
+  margin-bottom: 1rem;
+  display: flex;           /* Ensure flex layout */
+  align-items: center;     /* Vertically center */
+  justify-content: space-between; /* Push button left, search right */
+}
+
 .search-container {
-  margin: 1.5rem 0 1rem 0;
+  width: 350px;            /* Fixed width for input */
+  flex-shrink: 0;          /* Prevent shrinking */
 }
-.search-container.half-width {
-  width: 50%;
-}
-.search-bar input {
+
+.search-container input {
   width: 100%;
   border-radius: 6px;
   height: 38px;
   font-size: 0.95rem;
+  box-sizing: border-box;
 }
+
 
 .edit-choice-buttons {
   display: flex;

@@ -1,6 +1,6 @@
-<div class="table-card ">
+<div class="table-card">
   <!-- Header Section -->
-<div class="entity-header">
+<div class="entity-header p-d-flex p-ai-center p-jc-between">
   <!-- Add Entity Button -->
   <p-button 
     label="Create Entity" 
@@ -11,47 +11,42 @@
 
   <!-- Search Box -->
   <div class="search-container">
-      <input 
-        pInputText 
-        type="text" 
-        (input)="onGlobalFilter($event)" 
-        placeholder="Search entities..." />
+    <input 
+      pInputText 
+      type="text" 
+      (input)="onGlobalFilter($event)" 
+      placeholder="Search entities..." />
   </div>
 </div>
 
-<!-- Entity Table -->
-<p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-  scrollHeight="700px" >
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Scrip Name</th>
-      <th>Scrip Code</th>
-      <th>Benchmark</th>
-      <th>Subcategory</th>
-      <th>Action</th>
-    </tr>
-  </ng-template>
+  <!-- Entity Table -->
+  <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+    [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
+    scrollHeight="700px">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Scrip Name</th>
+        <th>Scrip Code</th>
+        <th>Benchmark</th>
+        <th>Subcategory</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-entity>
-    <tr>
-      <td>{{ entity.scripname }}</td>
-      <td>{{ entity.scripcode }}</td>
-      <td>{{ entity.benchmark }}</td>
-      <td>{{ entity.subcategory }}</td>
-      <td>
-        <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
-
-        <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
-
-        <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
-
-
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
-
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.scripname }}</td>
+        <td>{{ entity.scripcode }}</td>
+        <td>{{ entity.benchmark }}</td>
+        <td>{{ entity.subcategory }}</td>
+        <td>
+          <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
+          <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
+          <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 
 <!-- Add/Update Entity Dialog -->
