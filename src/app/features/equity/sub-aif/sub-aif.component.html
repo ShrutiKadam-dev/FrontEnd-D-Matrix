@@ -1,5 +1,3 @@
-
-
 <h3>Alternative Investment Fund</h3>
 
 
@@ -7,32 +5,17 @@
 
 <div class="table-card">
   <!-- Header -->
-  <div class="table-main">
-    <h4 class="table-title">Summary Of Actions  <button pButton type="button" label="IRR = {{irrResult || 0}}%"  class="p-button-sm" style="transform: translateY(-15px); height: 25px; " ></button></h4>
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h4>Summary Of Actions <button pButton type="button" label="IRR = {{irrResult || 0}}%" class="p-button-sm"
+        style="transform: translateY(-15px); height: 25px; "></button></h4>
     <div class="search-container">
-      <span class="p-input-icon-left search-bar">
-        <i class="pi pi-search"></i>
-        <input 
-          pInputText 
-          type="text" 
-          (input)="onGlobalFilter($event)" 
-          placeholder="Search actions..." />
-      </span>
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search actions..." />
     </div>
   </div>
-
   <!-- Action Table -->
-  <p-table
-    #dt
-    [value]="contractNote"
-    dataKey="id"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
+  <p-table #dt [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 50]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
-    scrollHeight="400px"
-    [responsiveLayout]="'scroll'"
-  >
+    scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
@@ -54,29 +37,24 @@
     </ng-template>
     <ng-template pTemplate="footer">
       <tr>
-        <td colspan="5">
-          <div class="totals-row">
-            <!-- Purchases -->
-            <div class="totals-item">
-              <strong>Purchases →</strong> 
-              Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-              Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
-            </div>
-
-            <!-- Available -->
-            <div class="totals-item available">
-              <strong>Available →</strong> 
-              Units: {{ availableUnits | number:'1.2-2' }} |
-              Amount: {{ availableAmount || 0 | currency:'INR' }}
-            </div>
-
-            <!-- Sales -->
-            <div class="totals-item" style="margin-right: 20px;">
-              <strong>Sales →</strong> 
-              Units: {{ totalSalesUnits | number:'1.2-2' }} |
-              Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
-            </div>
-          </div>
+        <td colspan="2" class="text-right font-bold p-3 pb-0">Purchases</td>
+        <td colspan="3" class="font-bold p-3 pb-0">
+          Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
+          Amount: {{ totalPurchaseAmount | currency:'INR' }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-right font-bold p-3 pb-0">Available</td>
+        <td colspan="3" class="font-bold p-3 pb-0">
+          Units: {{ availableUnits | number:'1.2-2' }} |
+          Amount: {{ availableAmount | currency:'INR' }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="text-right font-bold p-3 pb-0">Sales</td>
+        <td colspan="3" class="font-bold p-3 pb-0">
+          Units: {{ totalSalesUnits | number:'1.2-2' }} |
+          Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>
     </ng-template>
@@ -91,8 +69,8 @@
   <div class="table-main">
     <div class="table-header">
       <h4 class="table-title">Underlying Properties</h4>
-    <h6  class="underlying-date">
-        The underlying table is as of 
+      <h6 class="underlying-date">
+        The underlying table is as of
         <span class="date-value">DATE</span>
       </h6>
     </div>
@@ -100,33 +78,21 @@
     <div class="search-container">
       <span class="p-input-icon-left search-bar">
         <i class="pi pi-search"></i>
-        <input 
-          pInputText 
-          type="text" 
-          (input)="onGlobalFilter($event)" 
-          placeholder="Search underlying..." />
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
       </span>
     </div>
   </div>
 
   <!-- Underlying Table -->
-  <p-table
-    #dt
-    [value]="underlyingList"
-    dataKey="id"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
-    [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
-    scrollHeight="400px"
-    [responsiveLayout]="'scroll'"
-  >
+  <p-table #dt [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
+    scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
-        <th pSortableColumn="scripcode">Scrip Code  <p-sortIcon field="scripcode"></p-sortIcon></th>
-        <th pSortableColumn="weightage">Weightage  <p-sortIcon field="weightage"></p-sortIcon></th>
-        <th pSortableColumn="sector">Sector  <p-sortIcon field="sector"></p-sortIcon></th>
+        <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
+        <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
+        <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
       </tr>
     </ng-template>
 
@@ -143,10 +109,10 @@
 
 
 <!-- Pie Chart Card -->
-<div class="counts-card"  style="margin-top: 2rem;">
+<div class="counts-card" style="margin-top: 2rem;">
   <p-card header="MCAP Tag Allocation" styleClass="P-card">
     <div class="card-content">
-      
+
       <div class="counts-section">
         <div>
           <h4>Total Companies : 100</h4>
@@ -174,4 +140,3 @@
     </div>
   </p-card>
 </div>
-

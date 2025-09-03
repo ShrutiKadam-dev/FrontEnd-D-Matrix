@@ -213,6 +213,12 @@ export class CreateComponent implements OnInit {
     const total = unit * nav;
     this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
   }
+  private calculateNetTotalValue(): void {
+    const qty = Number(this.directEquityActionTableForm.get('qty')?.value) || 0;
+    const trade_price = Number(this.directEquityActionTableForm.get('trade_price')?.value) || 0;
+    const total = qty * trade_price;
+    this.directEquityActionTableForm.get('net_total')?.setValue(total.toFixed(2), { emitEvent: false });
+  }
 
   constructor(private fb: FormBuilder) {
     // ---------- Entity form ----------
@@ -299,7 +305,7 @@ export class CreateComponent implements OnInit {
       sebi_turnover_fees: [''],
       stamp_duty: [''],
       ipft: [''],
-      net_total: ['', Validators.required],
+      net_total: [{ value: '', disabled: true }, Validators.required],
       net_amount_receivable: ['', Validators.required],
       entityid: ['', Validators.required]
     });
@@ -328,6 +334,9 @@ export class CreateComponent implements OnInit {
     // Auto-calc MF purchase_value
     this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
     this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+
+    this.directEquityActionTableForm.get('qty')?.valueChanges.subscribe(() => this.calculateNetTotalValue());
+    this.directEquityActionTableForm.get('trade_price')?.valueChanges.subscribe(() => this.calculateNetTotalValue());
 
     // Subcategory list by category
     this.entityForm.get('category')?.valueChanges.subscribe(selectedCategory => {

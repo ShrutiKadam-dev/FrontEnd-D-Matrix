@@ -232,6 +232,8 @@
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
+      
+      <input *ngIf="field.key === 'net_total'" pInputText formControlName="net_total" readonly />
 
       <input *ngIf="field.key === 'entityid'" type="hidden" formControlName="entityid" />
 
@@ -241,6 +243,7 @@
                && field.key !== 'order_date'
                && field.key !== 'trade_date'
                && field.key !== 'trans_date'
+              && field.key !== 'net_total'
                && field.key !== 'order_time'
                && field.key !== 'trade_time'" [id]="field.key" pInputText [formControlName]="field.key"
         [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"

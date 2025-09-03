@@ -1,0 +1,5 @@
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td,
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  padding: 6px 10px; /* adjust to match first table */
+  line-height: 1.4;  /* tighter line height */
+}

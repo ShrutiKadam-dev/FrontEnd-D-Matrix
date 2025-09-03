@@ -17,8 +17,7 @@
   <!-- Action Table -->
   <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number','order_type','trade_price']"
-    scrollHeight="700px"  [resizableColumns]="true"
-  columnResizeMode="expand">
+    scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand"  responsiveLayout="scroll" [resizableColumns]="true">
 
     <ng-template pTemplate="header">
       <tr>
@@ -43,10 +42,10 @@
         <th pSortableColumn="qty_sold">
           Quantity Sold <p-sortIcon field="qty_sold"></p-sortIcon>
         </th>
-                <th pSortableColumn="buy_price">
+        <th pSortableColumn="buy_price">
           Buy Price <p-sortIcon field="buy_price"></p-sortIcon>
         </th>
-                <th pSortableColumn="remaining_in_buy">
+        <th pSortableColumn="remaining_in_buy">
           Remaining in Buy <p-sortIcon field="remaining_in_buy"></p-sortIcon>
         </th>
       </tr>
