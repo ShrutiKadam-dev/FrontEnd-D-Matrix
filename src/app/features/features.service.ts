@@ -180,6 +180,12 @@ export class FeaturesService {
       params: { entityid }
     });
   }
+  //Get IRR service for AIF 
+  getAifIrrById(entityid: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAifIRR`, {
+      params: { entityid }
+    });
+  }
 
 
 
