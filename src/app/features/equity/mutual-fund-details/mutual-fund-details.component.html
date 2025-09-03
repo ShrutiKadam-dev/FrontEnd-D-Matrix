@@ -6,62 +6,57 @@
   <div class="search-container">
     <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search actions..." />
   </div>
+  
+<p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
+  [rowsPerPageOptions]="[10,25,50]"
+  [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']"
+  scrollHeight="700px" responsiveLayout="scroll">
 
-  <!-- Action Table: Summary -->
-  <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]"
-    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px"
-    responsiveLayout="scroll">
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="scrip_name">Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon></th>
+      <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
+      <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
+      <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
+      <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="scrip_name">Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon></th>
-        <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
-        <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
-        <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
-        <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
-      </tr>
-    </ng-template>
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.scrip_name }}</td>
+      <td>{{ entity.unit | number:'1.2-2' }}</td>
+      <td>{{ entity.order_date }}</td>
+      <td>{{ entity.order_type }}</td>
+      <td>{{ entity.purchase_amount | number:'1.2-2' }}</td>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="body" let-entity>
-      <tr>
-        <td>{{ entity.scrip_name }}</td>
-        <td>{{ entity.unit | number:'1.2-2' }}</td>
-        <td>{{ entity.order_date }}</td>
-        <td>{{ entity.order_type }}</td>
-        <td>{{ entity.purchase_amount | number:'1.2-2' }}</td>
-      </tr>
-    </ng-template>
+  <ng-template pTemplate="footer">
+    <tr>
+      <td colspan="2" class="text-right font-bold p-3 pb-0">Purchases</td>
+      <td colspan="3" class="font-bold p-3 pb-0">
+        Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
+        Amount: {{ totalPurchaseAmount | currency:'INR' }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="text-right font-bold p-3 pb-0">Available</td>
+      <td colspan="3" class="font-bold p-3 pb-0">
+        Units: {{ availableUnits | number:'1.2-2' }} |
+        Amount: {{ availableAmount | currency:'INR' }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="text-right font-bold p-3 pb-0">Sales</td>
+      <td colspan="3" class="font-bold p-3 pb-0">
+        Units: {{ totalSalesUnits | number:'1.2-2' }} |
+        Amount: {{ totalSalesAmount | currency:'INR' }}
+      </td>
+    </tr>
+  </ng-template>
 
-    <ng-template pTemplate="footer">
-      <tr>
-        <td colspan="5">
-          <div class="totals-row">
-            <!-- Purchases -->
-            <div class="totals-item">
-              <strong>Purchases →</strong>
-              Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-              Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
-            </div>
-
-            <!-- Available -->
-            <div class="totals-item available">
-              <strong>Available →</strong>
-              Units: {{ availableUnits | number:'1.2-2' }} |
-              Amount: {{ availableAmount || 0 | currency:'INR' }}
-            </div>
-
-            <!-- Sales -->
-            <div class="totals-item" style="margin-right: 20px;">
-              <strong>Sales →</strong>
-              Units: {{ totalSalesUnits | number:'1.2-2' }} |
-              Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
-            </div>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+</p-table>
 
 </div>
 

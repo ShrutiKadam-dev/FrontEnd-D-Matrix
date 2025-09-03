@@ -8,8 +8,7 @@ import { definePreset } from '@primeuix/themes';
 
 // Pick a theme preset
 import Lara from '@primeuix/themes/lara';
-import Aura from '@primeuix/themes/aura';
-import Nora from '@primeuix/themes/nora';
+
 // You can also try: Aura, Nora, or Material presets from @primeuix/themes
 
 import { routes } from './app.routes';

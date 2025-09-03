@@ -47,7 +47,6 @@ export class MutualFundDetailsComponent implements OnInit {
   chartOptions: any;
   actionTableList: any[] = [];
   underlyingTableList: any[] = [];
-  irr: number = 0;
   actionCounts: any = {};
   totalPurchaseUnits = 0;
   totalPurchaseAmount = 0;
@@ -60,7 +59,6 @@ export class MutualFundDetailsComponent implements OnInit {
   errorMessage: string | null = null;
 
   
-
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
@@ -80,8 +78,7 @@ export class MutualFundDetailsComponent implements OnInit {
     }
   }
 
-  
-  
+
 calculateTotals(actionTableList: any[]) {
   if (!actionTableList || actionTableList.length === 0) {
     this.totalPurchaseUnits = 0;
@@ -162,7 +159,6 @@ calculateTotals(actionTableList: any[]) {
           date: e.order_date,
           amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
         }));
-        this.irr = this.calculateIRR(cashflows);
       },
       error: (error) => {
         this.messageService.add({
@@ -253,38 +249,4 @@ calculateTotals(actionTableList: any[]) {
   }
 
 
-  private calculateIRR(cashflows: { date: string, amount: number }[]): number {
-    if (!cashflows || cashflows.length < 2) return NaN;
-    const parseDate = (dateStr: string): Date => {
-      if (dateStr.includes("-")) {
-        const parts = dateStr.split("-");
-        if (parts[0].length === 4) return new Date(dateStr);
-        const [day, month, year] = parts;
-        return new Date(`${year}-${month}-${day}`);
-      }
-      return new Date(dateStr);
-    };
-    const firstDate = parseDate(cashflows[0].date);
-    const lastDate = parseDate(cashflows[cashflows.length - 1].date);
-    const years = (lastDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-
-    const invested = Math.abs(cashflows.filter(f => f.amount < 0).reduce((sum, f) => sum + f.amount, 0));
-    const redeemed = cashflows.filter(f => f.amount > 0).reduce((sum, f) => sum + f.amount, 0);
-
-    if (years < 1) return ((redeemed - invested) / invested) * 100;
-
-    let rate = 0.1, maxIterations = 1000, tolerance = 1e-7;
-    for (let i = 0; i < maxIterations; i++) {
-      let npv = 0, derivative = 0;
-      for (let flow of cashflows) {
-        const t = (parseDate(flow.date).getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-        npv += flow.amount / Math.pow(1 + rate, t);
-        derivative += (-t * flow.amount) / Math.pow(1 + rate, t + 1);
-      }
-      const newRate = rate - npv / derivative;
-      if (Math.abs(newRate - rate) < tolerance) return newRate * 100;
-      rate = newRate;
-    }
-    return NaN;
-  }
 }
