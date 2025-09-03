@@ -41,20 +41,15 @@
 </div>
 
 
-<div class="summary-card">
+<div class="table-card">
   <!-- Header -->
-  <div class="summary-header">
     <h4>Summary Of Actions</h4>
-    <div class="search-container">
-      <span class="p-input-icon-left search-bar">
-        <i class="pi pi-search"></i>
-        <input 
-          pInputText 
-          type="text" 
-          (input)="onGlobalFilter($event)" 
-          placeholder="Search actions..." />
-      </span>
-    </div>
+      <div class="search-container">
+      <input 
+        pInputText 
+        type="text" 
+        (input)="onGlobalFilter($event)" 
+        placeholder="Search entities..." />
   </div>
 
   <!-- Entity Table -->
