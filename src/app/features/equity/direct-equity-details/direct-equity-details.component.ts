@@ -112,7 +112,6 @@ export class DirectEquityDetailsComponent implements OnInit{
   this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
   this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
 
-  
 
   // Safety: if any totals are NaN, reset to 0
   this.totalPurchaseUnits ||= 0;
@@ -135,7 +134,6 @@ export class DirectEquityDetailsComponent implements OnInit{
         this.irrResult = response?.annualized_irr_percent?? null;
         console.log(this.irrResult);
         
-        
         console.log(entityid, this.irrResult);
         
         this.isLoading = false;
@@ -154,7 +152,7 @@ export class DirectEquityDetailsComponent implements OnInit{
         this.deDetails = res?.data || {};
       },
       error: (err: any) => {
-        console.error('Failed to load Mutual Fund details', err);
+        console.error('Failed to load direct equity details', err);
       }
     });
   }

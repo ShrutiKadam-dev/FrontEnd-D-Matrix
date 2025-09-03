@@ -16,57 +16,74 @@
   </div>
   <!-- Action Table -->
   <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['contract_note_number', 'client_name', 'order_number','order_type','trade_price']"
-    scrollHeight="700px">
+    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number','order_type','trade_price']"
+    scrollHeight="700px"  [resizableColumns]="true"
+  columnResizeMode="expand">
 
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="contract_note_number">
-          Contract Note Number <p-sortIcon field="contract_note_number"></p-sortIcon>
-        </th>
         <th pSortableColumn="client_name">
           Client Name <p-sortIcon field="client_name"></p-sortIcon>
         </th>
         <th pSortableColumn="order_number">
           Order Number <p-sortIcon field="order_number"></p-sortIcon>
         </th>
+        <th pSortableColumn="trade_date">
+          Trade Date<p-sortIcon field="trade_date"></p-sortIcon>
+        </th>
         <th pSortableColumn="order_type">
           Order Type <p-sortIcon field="order_type"></p-sortIcon>
         </th>
-        <th pSortableColumn="trade_price">
-          Trade Price <p-sortIcon field="trade_price"></p-sortIcon>
+        <th pSortableColumn="qty">
+          Quantity <p-sortIcon field="qty"></p-sortIcon>
+        </th>
+        <th pSortableColumn="running_qty">
+          Running Quantity <p-sortIcon field="running_qty"></p-sortIcon>
+        </th>
+        <th pSortableColumn="qty_sold">
+          Quantity Sold <p-sortIcon field="qty_sold"></p-sortIcon>
+        </th>
+                <th pSortableColumn="buy_price">
+          Buy Price <p-sortIcon field="buy_price"></p-sortIcon>
+        </th>
+                <th pSortableColumn="remaining_in_buy">
+          Remaining in Buy <p-sortIcon field="remaining_in_buy"></p-sortIcon>
         </th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.contract_note_number }}</td>
         <td>{{ entity.client_name }}</td>
         <td>{{ entity.order_number }}</td>
+        <td>{{ entity.trade_date }}</td>
         <td>{{ entity.order_type }}</td>
-        <td>{{ entity.trade_price }}</td>
+        <td>{{ entity.qty }}</td>
+        <td>{{ entity.running_qty }}</td>
+        <td>{{ entity.qty_sold }}</td>
+        <td>{{ entity.buy_price }}</td>
+        <td>{{ entity.remaining_in_buy }}</td>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="footer">
       <tr>
-        <td colspan="2" class="text-right font-bold p-3 pb-0">Purchases</td>
-        <td colspan="3" class="font-bold p-3 pb-0">
+        <td colspan="4" class="text-right font-bold p-3 pb-0">Purchases</td>
+        <td colspan="9" class="font-bold p-3 pb-0">
           Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
           Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
         </td>
       </tr>
       <tr>
-        <td colspan="2" class="text-right font-bold p-3 pb-0">Available</td>
-        <td colspan="3" class="font-bold p-3 pb-0">
+        <td colspan="4" class="text-right font-bold p-3 pb-0">Available</td>
+        <td colspan="9" class="font-bold p-3 pb-0">
           Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount || 0 | currency:'INR' }}
         </td>
       </tr>
       <tr>
-        <td colspan="2" class="text-right font-bold p-3 pb-0">Sales</td>
-        <td colspan="3" class="font-bold p-3 pb-0">
+        <td colspan="4" class="text-right font-bold p-3 pb-0">Sales</td>
+        <td colspan="9" class="font-bold p-3 pb-0">
           Units: {{ totalSalesUnits | number:'1.2-2' }} |
           Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
         </td>

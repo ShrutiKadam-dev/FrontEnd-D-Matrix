@@ -55,7 +55,8 @@
   <!-- Action Table summary -->
   <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]"
-    scrollHeight="700px">
+    scrollHeight="700px" [resizableColumns]="true"
+  columnResizeMode="expand">
     <ng-template pTemplate="header">
       <tr>
         <th>Client Name</th>
