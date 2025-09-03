@@ -72,12 +72,9 @@
     The underlying table is as of
     <span class="date-value">{{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}</span>
   </h6>
-
   <div class="search-container">
     <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
-
   </div>
-
 
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','company_name']"
@@ -108,7 +105,6 @@
 <div class="counts-card" style="margin-bottom: 2rem;">
   <p-card header="MCAP Tag Allocation" styleClass="P-card">
     <div class="card-content">
-
       <div class="counts-section">
         <div>
           <h4>Total Companies : {{underlyingTableList.length}}</h4>
