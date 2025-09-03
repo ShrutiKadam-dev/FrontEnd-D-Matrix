@@ -11,7 +11,8 @@
   <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px"
-    responsiveLayout="scroll">
+    responsiveLayout="scroll" [resizableColumns]="true"
+  columnResizeMode="expand">
 
     <ng-template pTemplate="header">
       <tr>
@@ -62,8 +63,8 @@
 </div>
 
 <div class="table-card">
+  <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
-    <h4>Summary Of Underlying</h4>
     <h6 *ngIf="underlyingTableList?.length" class="underlying-date">
       The underlying table is as of
       <span class="date-value">{{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}</span>
@@ -74,7 +75,8 @@
   </div>
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode', 'weightage', 'isin_code','company_name']"
-    scrollHeight="700px" responsiveLayout="scroll">
+    scrollHeight="700px" responsiveLayout="scroll" [resizableColumns]="true"
+  columnResizeMode="expand">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
