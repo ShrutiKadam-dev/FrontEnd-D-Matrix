@@ -2,8 +2,9 @@
 
 <!-- Search Section -->
 <div class="search-section">
-  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames" (completeMethod)="searchDEs($event)"
-    (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search DE..." [minLength]="1">
+  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames"
+    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search DE..."
+    [minLength]="1">
   </p-autoComplete>
 
   <button *ngIf="selectedDirectEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
@@ -17,7 +18,7 @@
   <ng-template let-de pTemplate="item">
     <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
       <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
@@ -31,7 +32,7 @@
 <div *ngIf="selectedDirectEquityName" class="card-container">
   <p-card *ngFor="let de of displayDEs" styleClass="P-card">
     <ng-template pTemplate="header">
-<div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
     <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
@@ -40,35 +41,39 @@
   </p-card>
 </div>
 
- 
-<h3>Summary Of Actions</h3>
-<!-- Search Box -->
-<div class="search-container half-width">
-  <span class="p-input-icon-left search-bar">
-    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
-  </span>
+<div class="table-card">
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h3>Summary Of Actions</h3>
+    <!-- Search Box -->
+    <div class="search-container half-width">
+      <span class="p-input-icon-left search-bar">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+      </span>
+    </div>
+  </div>
+
+  <!-- Action Table summary -->
+  <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+    [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]"
+    scrollHeight="700px">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Client Name</th>
+        <th>Order Number</th>
+        <th>Trade Number</th>
+        <th>Trade Price</th>
+        <th>Brokerage Per Unit</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.client_name }}</td>
+        <td>{{ entity.order_number }}</td>
+        <td>{{ entity.trade_number }}</td>
+        <td>{{ entity.trade_price }}</td>
+        <td>{{ entity.brokerage_per_unit }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
-
-<!-- Action Table summary -->
-<p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-  [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]" scrollHeight="700px">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Client Name</th>
-      <th>Order Number</th>
-      <th>Trade Number</th>
-      <th>Trade Price</th>
-      <th>Brokerage Per Unit</th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-entity>
-    <tr>
-      <td>{{ entity.client_name }}</td>
-      <td>{{ entity.order_number }}</td>
-      <td>{{ entity.trade_number }}</td>
-      <td>{{ entity.trade_price }}</td>
-      <td>{{ entity.brokerage_per_unit }}</td>
-    </tr>
-  </ng-template>
-</p-table> 

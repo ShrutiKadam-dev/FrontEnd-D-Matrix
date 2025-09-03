@@ -65,12 +65,10 @@ export class DirectEquityDetailsComponent implements OnInit{
   }
 
 
-  onGlobalFilter(event: Event, tableType: 'action') {
+  onGlobalFilter(event: Event) {
     const input = event.target as HTMLInputElement | null;
-    if (input) {
-      if (tableType === 'action') {
-        this.actionTable.filterGlobal(input.value, 'contains');
-      }
+    if (input && this.actionTable) {
+      this.actionTable.filter(input.value, 'global', 'contains');
     }
   }
 

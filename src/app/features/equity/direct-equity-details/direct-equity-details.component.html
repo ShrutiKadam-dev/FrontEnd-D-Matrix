@@ -1,21 +1,22 @@
 <h3>Welcome To The Direct Equity Details</h3>
 
 <div class="table-card">
-  <h4>
-    Summary Of Actions
-    <button pButton type="button" label="IRR = {{ irrResult || 0 }}%" class="p-button-sm"
-      style="transform: translateY(-15px); height: 25px;">
-    </button>
-  </h4>
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h4>
+      Summary Of Actions
+      <button pButton type="button" label="IRR = {{ irrResult || 0 }}%" class="p-button-sm"
+        style="transform: translateY(-15px); height: 25px;">
+      </button>
+    </h4>
 
-  <!-- Search for Action Table -->
-  <div class="search-container">
-    <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search..." />
+    <!-- Search for Action Table -->
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+    </div>
   </div>
-
   <!-- Action Table -->
   <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number', 'order_type','trade_price']"
+    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['contract_note_number', 'client_name', 'order_number','order_type','trade_price']"
     scrollHeight="700px">
 
     <ng-template pTemplate="header">
