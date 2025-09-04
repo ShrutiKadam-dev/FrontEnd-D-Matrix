@@ -122,3 +122,23 @@ app-home {
 .p-button-text{
   margin-left: 10px;
 }
+
+//underlying date 
+.underlying-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.date-badge {
+  background: #d3d9d9;
+  color: #111827;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  display: inline-block;
+}

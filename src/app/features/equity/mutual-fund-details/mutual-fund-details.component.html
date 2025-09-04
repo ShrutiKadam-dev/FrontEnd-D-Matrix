@@ -70,15 +70,26 @@
 </div>
 
 <div class="table-card">
-  <h4>Summary Of Underlying</h4>
+   <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
-    The underlying table is as of
-    <span class="date-value">{{ underlyingTableList[0]?.created_at }}</span>
+
+    <div class="underlying-date">
+      Last Updated At
+      <span class="date-badge">
+        {{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}
+      </span>
+    </div>
+
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
+      <input
+        pInputText
+        type="text"
+        (input)="onGlobalFilter($event, 'underlying')"
+        placeholder="Search underlying..."
+      />
     </div>
   </div>
-
+  
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
     scrollHeight="600px" responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand"
