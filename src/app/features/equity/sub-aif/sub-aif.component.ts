@@ -23,7 +23,7 @@ export class SubAifComponent {
   aifId!: string;
   contractNote :any[]= [];
   underlyingList :any[]= [];
-  actionCounts = 0
+  actionCounts: any = {};
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
@@ -35,6 +35,7 @@ export class SubAifComponent {
   availableAmount = 0; 
   chartData: any;
   chartOptions: any;
+  
 
   @ViewChild('dt') dt!: Table;
 
@@ -69,7 +70,47 @@ export class SubAifComponent {
     this.featuresService.getUnderlyingTable(aifId).subscribe({
       next:(res:any ) => {
         this.underlyingList = res?.data || [];
-        console.log(this.underlyingList);  
+        const grouped: { [key: string]: number } = {};
+        this.underlyingList.forEach((item: any) => {
+          const tag = item.tag || 'Unknown';
+          grouped[tag] = (grouped[tag] || 0) + 1;
+        });
+
+        const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
+
+        this.actionCounts = {
+          lcap_percent: grouped['lcap'] ? (grouped['lcap'] / total) * 100 : 0,
+          mcap_percent: grouped['mcap'] ? (grouped['mcap'] / total) * 100 : 0,
+          scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
+        };
+
+
+        // Prepare chart
+        this.chartData = {
+          labels: Object.keys(grouped),
+          datasets: [{
+            data: Object.values(grouped),
+            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
+          }]
+        };
+
+        this.chartOptions = {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => {
+                  const label = context.label || '';
+                  const value = context.raw || 0;
+                  const percentage = (value / total) * 100;
+                  return `${label}: ${value} (${percentage.toFixed(1)}%)`;
+                }
+              }
+            }
+          }
+        };
+        
         
       },
        error: () => console.error('Failed to fetch AIF Action Table')
