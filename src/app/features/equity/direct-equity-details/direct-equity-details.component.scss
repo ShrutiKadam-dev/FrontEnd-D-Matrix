@@ -1,5 +1,65 @@
-:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td,
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  padding: 6px 10px; /* adjust to match first table */
-  line-height: 1.4;  /* tighter line height */
+/* Table layout */
+:host ::ng-deep .p-datatable table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+:host ::ng-deep .p-datatable thead th {
+  font-weight: 600;
+  color: #131517;
+  background: #f8f9fb;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Body */
+:host ::ng-deep .p-datatable tbody td {
+  font-weight: 400;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Hover */
+:host ::ng-deep .p-datatable tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Row height */
+:host ::ng-deep .p-datatable-tbody > tr > td,
+:host ::ng-deep .p-datatable-thead > tr > th {
+  height: 42px;
+  vertical-align: middle;
+}
+
+/* Footer (summary row) */
+:host ::ng-deep .summary-row td {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  border-top: 2px solid #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.summary.green { color: #16a34a; }
+.summary.blue { color: #2563eb; }
+.summary.red { color: #dc2626; }
+
+/* Optional Sticky Footer */
+:host ::ng-deep .p-datatable tfoot {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 10;
 }

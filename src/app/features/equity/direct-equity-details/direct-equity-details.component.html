@@ -4,9 +4,8 @@
   <div class="search-header p-d-flex p-ai-center p-jc-between">
     <h4>
       Summary Of Actions
-      <button pButton type="button" label="IRR = {{ irrResult || 0 }}%" class="p-button-sm"
-        style="transform: translateY(-15px); height: 25px;">
-      </button>
+      <button pButton type="button" label="IRR = {{ irrResult || 0 }}%" class="p-button-sm ml-2"
+        style="height: 28px;"></button>
     </h4>
 
     <!-- Search for Action Table -->
@@ -14,10 +13,12 @@
       <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
     </div>
   </div>
+
   <!-- Action Table -->
   <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number','order_type','trade_price']"
-    scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand"  responsiveLayout="scroll" [resizableColumns]="true">
+    scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll"
+    [resizableColumns]="true">
 
     <ng-template pTemplate="header">
       <tr>
@@ -68,28 +69,22 @@
     </ng-template>
 
     <ng-template pTemplate="footer">
-      <tr>
-        <td colspan="4" class="text-right font-bold p-3 pb-0">Purchases</td>
-        <td colspan="9" class="font-bold  p-3 pb-0" >
-          Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
+      <tr class="summary-row">
+        <td colspan="3" class="summary green">
+          Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
           Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
         </td>
-      </tr>
-      <tr>
-        <td colspan="4" class="text-right font-bold p-3 pb-0">Available</td>
-        <td colspan="9" class="font-bold p-3 pb-0">
-          Units: {{ availableUnits | number:'1.2-2' }} |
+        <td colspan="3" class="summary blue">
+          Available → Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount || 0 | currency:'INR' }}
         </td>
-      </tr>
-      <tr>
-        <td colspan="4" class="text-right font-bold p-3 pb-0">Sales</td>
-        <td colspan="9" class="font-bold p-3 pb-0">
-          Units: {{ totalSalesUnits | number:'1.2-2' }} |
+        <td colspan="3" class="summary red">
+          Sales → Units: {{ totalSalesUnits | number:'1.2-2' }} |
           Amount: {{ totalSalesAmount || 0 | currency:'INR' }}
         </td>
       </tr>
     </ng-template>
+
 
   </p-table>
 </div>

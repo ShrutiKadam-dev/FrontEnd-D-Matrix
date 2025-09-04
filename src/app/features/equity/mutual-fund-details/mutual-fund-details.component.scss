@@ -1,139 +1,67 @@
-/* ===== Form Field ===== */
-.field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-label {
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  font-size: 0.95rem;
-  color: #333;
-}
-
-/* ===== Search Box ===== */
-.search-container {
-  margin: 1.5rem 0 1rem 0;
-}
-
-.search-container.half-width {
-  width: 50%;
-}
-
-.search-bar input {
-  width: 100%;
-  border-radius: 6px;
-  height: 38px;
-  font-size: 0.95rem;
-}
-
-/* ===== Data Table General ===== */
+/* Table layout */
 :host ::ng-deep .p-datatable table {
   table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
 }
 
-:host ::ng-deep .p-datatable th,
-:host ::ng-deep .p-datatable td {
-  padding: 6px 8px;
-  height: 36px;
+/* Header */
+:host ::ng-deep .p-datatable thead th {
+  font-weight: 600;
+  color: #131517;
+  background: #f8f9fb;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.9rem;
-  word-wrap: break-word;
-  white-space: normal; /* allow wrapping, no horizontal scroll */
+  border-bottom: 1px solid #e5e7eb;
 }
 
-/* ===== Action Table Columns ===== */
-:host ::ng-deep #actionTable .p-datatable th:nth-child(1),
-:host ::ng-deep #actionTable .p-datatable td:nth-child(1) {
-  width: 30%; /* Scrip Name */
+/* Body */
+:host ::ng-deep .p-datatable tbody td {
+  font-weight: 400;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-:host ::ng-deep #actionTable .p-datatable th:nth-child(2),
-:host ::ng-deep #actionTable .p-datatable td:nth-child(2) {
-  width: 15%; /* Units */
+/* Hover */
+:host ::ng-deep .p-datatable tbody tr:hover {
+  background-color: #f1f5f9;
 }
 
-:host ::ng-deep #actionTable .p-datatable th:nth-child(3),
-:host ::ng-deep #actionTable .p-datatable td:nth-child(3) {
-  width: 20%; /* Order Date */
+/* Row height */
+:host ::ng-deep .p-datatable-tbody > tr > td,
+:host ::ng-deep .p-datatable-thead > tr > th {
+  height: 42px;
+  vertical-align: middle;
 }
 
-:host ::ng-deep #actionTable .p-datatable th:nth-child(4),
-:host ::ng-deep #actionTable .p-datatable td:nth-child(4) {
-  width: 15%; /* Action */
+/* Footer (summary row) */
+:host ::ng-deep .summary-row td {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  border-top: 2px solid #e5e7eb;
+  font-size: 0.9rem;
 }
 
-:host ::ng-deep #actionTable .p-datatable th:nth-child(5),
-:host ::ng-deep #actionTable .p-datatable td:nth-child(5) {
-  width: 20%; /* Amount */
-  text-align: right; /* better for numbers */
-}
+.summary.green { color: #16a34a; }
+.summary.blue { color: #2563eb; }
+.summary.red { color: #dc2626; }
 
-/* ===== Underlying Table Columns ===== */
-:host ::ng-deep #underlyingTable .p-datatable th:nth-child(1),
-:host ::ng-deep #underlyingTable .p-datatable td:nth-child(1) {
-  width: 40%; /* Scrip Name */
-}
-
-:host ::ng-deep #underlyingTable .p-datatable th:nth-child(2),
-:host ::ng-deep #underlyingTable .p-datatable td:nth-child(2) {
-  width: 20%; /* Scrip Code */
-}
-
-:host ::ng-deep #underlyingTable .p-datatable th:nth-child(3),
-:host ::ng-deep #underlyingTable .p-datatable td:nth-child(3) {
-  width: 20%; /* Weightage */
-  text-align: right;
-}
-
-:host ::ng-deep #underlyingTable .p-datatable th:nth-child(4),
-:host ::ng-deep #underlyingTable .p-datatable td:nth-child(4) {
-  width: 20%; /* ISIN */
-}
-/* Prevent wrapping & show ellipsis if text is too long */
-:host ::ng-deep .p-datatable td {
-  white-space: nowrap !important;   /* text in one line */
-  overflow: hidden !important;      /* cut off overflow */
-  text-overflow: ellipsis !important; /* add ... at end */
-}
-
-
-
-//roshan
-
-/* Table styling */
-::ng-deep .custom-table {
-  background-color: #f5f5dc !important;  /* beige */
-  border-radius: 10px;
-}
-
-::ng-deep .custom-table .p-datatable-thead  tr > th {
-  color: white !important;
-  font-weight: bold;
-}
-
-::ng-deep .custom-table .p-datatable-tbody > tr:nth-child(even) {
-  background-color: #f2f2f2 !important; /* zebra stripes */
-}
-
-::ng-deep .custom-table .p-datatable-tbody > tr:hover {
-  background-color: #e0f7fa !important; /* hover effect */
-}
-
-/* Apply rounded corners only to header */
-::ng-deep .custom-table .p-datatable-thead > tr > th:first-child {
-  border-top-left-radius: 12px;
-}
-
-::ng-deep .custom-table .p-datatable-thead > tr > th:last-child {
-  border-top-right-radius: 12px;
-}
-
-/* Optional: add background color consistency */
-::ng-deep .custom-table .p-datatable-thead > tr > th {
-  background-color: #5a7fb8 !important;  /* green header */
-  color: white !important;
+/* Optional Sticky Footer */
+:host ::ng-deep .p-datatable tfoot {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 10;
 }
 
 /* ===== Card Container ===== */
