@@ -1,33 +1,47 @@
-
-/* ===== Data Table ===== */
+/* Table layout */
 :host ::ng-deep .p-datatable table {
   table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
 }
 
-:host ::ng-deep .p-datatable th,
-:host ::ng-deep .p-datatable td {
-  padding: 6px 8px;
-  height: 36px;
+/* Header */
+:host ::ng-deep .p-datatable thead th {
+  font-weight: 600;
+  color: #131517;
+  background: #f8f9fb;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.9rem;
-  word-wrap: break-word;
-  white-space: normal;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-:host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) { width: 30%; }
+/* Body */
+:host ::ng-deep .p-datatable tbody td {
+  font-weight: 400;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
 
-:host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) { width: 15%; }
+/* Hover */
+:host ::ng-deep .p-datatable tbody tr:hover {
+  background-color: #f1f5f9;
+}
 
-:host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) { width: 20%; }
-
-:host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) { width: 15%; }
-
-:host ::ng-deep .p-datatable th:nth-child(5),
-:host ::ng-deep .p-datatable td:nth-child(5) { width: 20%; }
+/* Row height */
+:host ::ng-deep .p-datatable-tbody > tr > td,
+:host ::ng-deep .p-datatable-thead > tr > th {
+  height: 42px;
+  vertical-align: middle;
+}
 
 /* ===== Carousel ===== */
 :host ::ng-deep .p-carousel { padding: 1rem 0; }
