@@ -1,34 +1,4 @@
 
-/* ===== Data Table ===== */
-:host ::ng-deep .p-datatable table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-:host ::ng-deep .p-datatable th,
-:host ::ng-deep .p-datatable td {
-  padding: 6px 8px;
-  height: 36px;
-  font-size: 0.9rem;
-  word-wrap: break-word;
-  white-space: normal;
-}
-
-:host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) { width: 30%; }
-
-:host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) { width: 15%; }
-
-:host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) { width: 20%; }
-
-:host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) { width: 15%; }
-
-:host ::ng-deep .p-datatable th:nth-child(5),
-:host ::ng-deep .p-datatable td:nth-child(5) { width: 20%; }
-
 /* ===== Carousel ===== */
 :host ::ng-deep .p-carousel { padding: 1rem 0; }
 

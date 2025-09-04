@@ -73,14 +73,8 @@
   </p-card>
 </div>
 
-
-<h3 style="margin-top: 45px;">Summary Of Actions</h3>
-<!-- Search Box -->
-<!-- <div class="search-container half-width">
-  <span class="p-input-icon-left search-bar">
-    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
-  </span>
-</div> -->
+<div class="table-card" style="margin-top: 2rem;">
+<h3>Summary Of Actions</h3>
 
 <h4>Mutual Fund Action Table</h4>
 <p-table [value]="actionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
@@ -129,3 +123,4 @@
     </tr>
   </ng-template>
 </p-table>
+</div>

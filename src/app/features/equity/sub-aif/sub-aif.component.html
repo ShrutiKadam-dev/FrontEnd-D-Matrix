@@ -23,13 +23,11 @@
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
         <th pSortableColumn="trans_date">Order Date <p-sortIcon field="trans_date"></p-sortIcon></th>
         <th pSortableColumn="trans_type">Action <p-sortIcon field="trans_type"></p-sortIcon></th>
-        <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon
-            field="contribution_amount"></p-sortIcon></th>
+        <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon field="contribution_amount"></p-sortIcon></th>
         <th pSortableColumn="stamp_duty">Stamp Duty <p-sortIcon field="stamp_duty"></p-sortIcon></th>
-        <th pSortableColumn="amount_invested">Amount Invested<p-sortIcon field="amount_invested"></p-sortIcon></th>
+        <th pSortableColumn="amount_invested">Amount Invested <p-sortIcon field="amount_invested"></p-sortIcon></th>
         <th pSortableColumn="balance_units">Balance Units <p-sortIcon field="balance_units"></p-sortIcon></th>
         <th pSortableColumn="post_tax_nav">Post Tax Nav <p-sortIcon field="post_tax_nav"></p-sortIcon></th>
-
       </tr>
     </ng-template>
 
@@ -72,12 +70,23 @@
 
 <div class="table-card">
   <!-- Header -->
-  <h4>Summary Of Underlying</h4>
+ <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
-    <h6 *ngIf="underlyingList?.length" class="underlying-date"> The underlying table is as of <span
-        class="date-value">{{ underlyingList[0]?.created_at | date:'dd MMM yyyy' }}</span></h6>
+
+    <div class="underlying-date">
+      Last Updated At
+      <span class="date-badge">
+        {{ underlyingList[0]?.created_at | date:'dd MMM yyyy' }}
+      </span>
+    </div>
+
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
+      <input
+        pInputText
+        type="text"
+        (input)="onGlobalFilter($event)"
+        placeholder="Search underlying..."
+      />
     </div>
   </div>
 
@@ -108,7 +117,8 @@
 
 <!-- Pie Chart Card -->
 <div class="counts-card" style="margin-bottom: 2rem;">
-  <p-card header="MCAP Tag Allocation" styleClass="P-card">
+  <p-card styleClass="P-card">
+    <h4>MCAP Tag Allocation</h4>
     <div class="card-content">
       <div class="counts-section">
         <div>

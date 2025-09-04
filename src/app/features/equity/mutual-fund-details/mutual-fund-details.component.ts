@@ -60,7 +60,8 @@ export class MutualFundDetailsComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
 
-  
+  selectedDate: string = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
+
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;

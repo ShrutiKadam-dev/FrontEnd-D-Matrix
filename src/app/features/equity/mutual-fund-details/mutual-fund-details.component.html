@@ -23,7 +23,7 @@
         <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
         <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
         <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
-        <th pSortableColumn="order_number">Order NO<p-sortIcon field="order_number"></p-sortIcon></th>
+        <th pSortableColumn="order_number">Order No <p-sortIcon field="order_number"></p-sortIcon></th>
         <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
         <th pSortableColumn="nav">NAV <p-sortIcon field="nav"></p-sortIcon></th>
         <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
@@ -70,15 +70,26 @@
 </div>
 
 <div class="table-card">
-  <h4>Summary Of Underlying</h4>
+   <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
-    The underlying table is as of
-    <span class="date-value">{{ underlyingTableList[0]?.created_at }}</span>
+
+    <div class="underlying-date">
+      Last Updated At
+      <span class="date-badge">
+        {{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}
+      </span>
+    </div>
+
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
+      <input
+        pInputText
+        type="text"
+        (input)="onGlobalFilter($event, 'underlying')"
+        placeholder="Search underlying..."
+      />
     </div>
   </div>
-
+  
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
     scrollHeight="600px" responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand"
@@ -109,10 +120,10 @@
   </p-table>
 </div>
 
-
 <!-- Pie Chart Card -->
 <div class="counts-card" style="margin-bottom: 2rem;">
-  <p-card header="MCAP Tag Allocation" styleClass="P-card">
+  <p-card styleClass="P-card">
+    <h4>MCAP Tag Allocation</h4>
     <div class="card-content">
       <div class="counts-section">
         <div>

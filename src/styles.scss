@@ -122,3 +122,70 @@ app-home {
 .p-button-text{
   margin-left: 10px;
 }
+
+//underlying date 
+.underlying-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.date-badge {
+  background: #d3d9d9;
+  color: #111827;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+/* Global DataTable Styles */
+
+/* Table layout */
+.p-datatable table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+.p-datatable thead th {
+  font-weight: 600;
+  color: #131517;
+  background: #f8f9fb;
+  padding: 12px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Body */
+.p-datatable tbody td {
+  font-weight: 400;
+  color: #1a1a1a;
+  padding: 10px 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Hover */
+.p-datatable tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Row height */
+.p-datatable-tbody > tr > td,
+.p-datatable-thead > tr > th {
+  height: 42px;
+  vertical-align: middle;
+}
