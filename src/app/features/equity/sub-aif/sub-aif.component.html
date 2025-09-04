@@ -1,4 +1,4 @@
-<h3>Alternative Investment Fund</h3>
+<h3>Welcome To The {{contractNote[0]?.amc_name || "AIF"}}</h3>
 
 
 <!-- summary of action -->
@@ -68,7 +68,7 @@
   <!-- Header -->
   <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
-      The underlying table is as of
+     <h6 *ngIf="underlyingList?.length" class="underlying-date"> The underlying table is as of <span class="date-value">{{ underlyingList[0]?.created_at | date:'dd MMM yyyy' }}</span></h6>
     <div class="search-container">
       <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
     </div>
