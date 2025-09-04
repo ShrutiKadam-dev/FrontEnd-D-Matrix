@@ -128,8 +128,6 @@ calculateTotals(actionTableList: any[]) {
   this.availableAmount ||= 0;
 }
 
-
-
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
     if (input) {
@@ -147,8 +145,6 @@ calculateTotals(actionTableList: any[]) {
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });
   }
-
-  
 
   getMFDetailActionTable(mfId: string) {
     this.featuresService.getMFDetailActionTable(mfId).subscribe({

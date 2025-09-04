@@ -66,20 +66,11 @@
 
 <div class="table-card">
   <!-- Header -->
-  <div class="table-main">
-    <div class="table-header">
-      <h4 class="table-title">Underlying Properties</h4>
-      <h6 class="underlying-date">
-        The underlying table is as of
-        <span class="date-value">DATE</span>
-      </h6>
-    </div>
-
+  <h4>Summary Of Underlying</h4>
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+      The underlying table is as of
     <div class="search-container">
-      <span class="p-input-icon-left search-bar">
-        <i class="pi pi-search"></i>
-        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
-      </span>
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
     </div>
   </div>
 
@@ -107,36 +98,3 @@
   </p-table>
 </div>
 
-
-<!-- Pie Chart Card -->
-<div class="counts-card" style="margin-top: 2rem;">
-  <p-card header="MCAP Tag Allocation" styleClass="P-card">
-    <div class="card-content">
-
-      <div class="counts-section">
-        <div>
-          <h4>Total Companies : 100</h4>
-        </div>
-        <div class="count-item">
-          <span class="dot lcap"></span>
-          <span class="label">Large Cap</span>
-          <span class="percent">50%</span>
-        </div>
-        <div class="count-item">
-          <span class="dot mcap"></span>
-          <span class="label">Mid Cap</span>
-          <span class="percent">25%</span>
-        </div>
-        <div class="count-item">
-          <span class="dot scap"></span>
-          <span class="label">Small Cap</span>
-          <span class="percent">25%</span>
-        </div>
-      </div>
-
-      <div class="chart-section">
-        <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
-      </div>
-    </div>
-  </p-card>
-</div>
