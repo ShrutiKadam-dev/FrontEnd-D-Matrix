@@ -28,18 +28,20 @@
 </p-carousel>
 
 <!-- Search Result Card -->
-<div *ngIf="selectedMfName" class="card-container">
-  <p-card *ngFor="let mf of displayMfs" styleClass="P-card">
-    <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': mf.color}"></div>
-    </ng-template>
-    <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
-    <div class="card-value">{{ mf.subcategory || 'No Subcategory' }}</div>
-    <div class="status">{{ mf.entityid }}</div>
-  </p-card>
-</div>
+<p-carousel *ngIf="selectedMfName" [value]="filteredMfNames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
 
+  <ng-template let-mf pTemplate="item">
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToMfDetails(mf)">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': mf.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ mf.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ mf.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
 
 <div class="table-card">
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -50,12 +52,10 @@
     </div>
   </div>
 
-
   <!-- Entity Table -->
   <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
-    <ng-template pTemplate="header" [resizableColumns]="true"
-  columnResizeMode="expand">
+    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
       <tr>
         <th>Scrip Name</th>
         <th>Units</th>

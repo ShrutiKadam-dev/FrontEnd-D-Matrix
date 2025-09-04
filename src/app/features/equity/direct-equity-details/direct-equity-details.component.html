@@ -56,7 +56,9 @@
         <td>{{ entity.client_name }}</td>
         <td>{{ entity.order_number }}</td>
         <td>{{ entity.trade_date }}</td>
-        <td>{{ entity.order_type }}</td>
+        <td>
+          <p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" />
+        </td>
         <td>{{ entity.qty }}</td>
         <td>{{ entity.running_qty }}</td>
         <td>{{ entity.qty_sold }}</td>
@@ -68,7 +70,7 @@
     <ng-template pTemplate="footer">
       <tr>
         <td colspan="4" class="text-right font-bold p-3 pb-0">Purchases</td>
-        <td colspan="9" class="font-bold p-3 pb-0">
+        <td colspan="9" class="font-bold  p-3 pb-0" >
           Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
           Amount: {{ totalPurchaseAmount || 0 | currency:'INR' }}
         </td>

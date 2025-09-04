@@ -29,17 +29,20 @@
 </p-carousel>
 
 <!-- Search Result Card -->
-<div *ngIf="selectedDirectEquityName" class="card-container">
-  <p-card *ngFor="let de of displayDEs" styleClass="P-card">
-    <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
-    </ng-template>
-    <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
-    <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
-    <div class="status">{{ de.entityid }}</div>
-  </p-card>
-</div>
+<p-carousel *ngIf="selectedDirectEquityName" [value]="filteredDENames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+
+  <ng-template let-de pTemplate="item">
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToDirectEquityDetails(de)">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ de.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
 
 <div class="table-card">
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -55,8 +58,7 @@
   <!-- Action Table summary -->
   <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]"
-    scrollHeight="700px" [resizableColumns]="true"
-  columnResizeMode="expand">
+    scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand">
     <ng-template pTemplate="header">
       <tr>
         <th>Client Name</th>
