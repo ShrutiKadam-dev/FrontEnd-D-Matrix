@@ -14,11 +14,12 @@ import { CardModule } from 'primeng/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-direct-equity-details',
   imports: [
-        ReactiveFormsModule,
+    ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     InputTextModule,
@@ -30,7 +31,9 @@ import { DatePickerModule } from 'primeng/datepicker';
     AutoCompleteModule,
     CarouselModule,
     CardModule,
-    FormsModule,DatePickerModule
+    FormsModule,
+    DatePickerModule,
+    TagModule
   ],
   templateUrl: './direct-equity-details.component.html',
   styleUrl: './direct-equity-details.component.scss'
@@ -174,5 +177,15 @@ export class DirectEquityDetailsComponent implements OnInit{
     });
   }
 
+getSeverity(orderType: string) {
+  switch (orderType?.trim()?.toUpperCase()) {
+    case 'BUY':
+      return 'success';
+    case 'SELL':
+      return 'danger';
+    default:
+      return 'info';
+  }
+}
 
 }

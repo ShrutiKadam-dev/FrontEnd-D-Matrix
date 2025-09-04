@@ -18,14 +18,9 @@ import { FeaturesService } from '../../features.service';
   styleUrls: ['./aif.component.scss']
 })
 
-
-
 export class AifComponent {
 
   constructor(private router: Router) {}
-
- 
-
   
   selectedAifName: any = null;
   filteredAifNames: any[] = [];

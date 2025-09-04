@@ -15,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -33,7 +34,8 @@ import { ChartModule } from 'primeng/chart';
     CardModule,
     FormsModule,
     DatePickerModule,
-    ChartModule
+    ChartModule,
+    TagModule
   ],
   templateUrl: './mutual-fund-details.component.html',
   styleUrl: './mutual-fund-details.component.scss'
@@ -244,5 +246,14 @@ calculateTotals(actionTableList: any[]) {
     });
   }
 
-
+getSeverity(orderType: string) {
+  switch (orderType?.trim()?.toUpperCase()) {
+    case 'PURCHASE':
+      return 'success';
+    case 'SELL':
+      return 'danger';
+    default:
+      return 'info';
+  }
+}
 }
