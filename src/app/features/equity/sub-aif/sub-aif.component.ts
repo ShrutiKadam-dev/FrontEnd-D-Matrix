@@ -69,6 +69,8 @@ export class SubAifComponent {
 
     this.featuresService.getUnderlyingTable(aifId).subscribe({
       next:(res:any ) => {
+       
+        
         this.underlyingList = res?.data || [];
         const grouped: { [key: string]: number } = {};
         this.underlyingList.forEach((item: any) => {
@@ -79,9 +81,9 @@ export class SubAifComponent {
         const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
 
         this.actionCounts = {
-          lcap_percent: grouped['lcap'] ? (grouped['lcap'] / total) * 100 : 0,
-          mcap_percent: grouped['mcap'] ? (grouped['mcap'] / total) * 100 : 0,
-          scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
+          lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
+          mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
+          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0
         };
 
 
@@ -93,6 +95,8 @@ export class SubAifComponent {
             backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
           }]
         };
+
+        console.log(grouped, this.chartData);
 
         this.chartOptions = {
           responsive: true,
@@ -109,8 +113,10 @@ export class SubAifComponent {
               }
             }
           }
+          
         };
         
+          console.log(this.actionCounts);
         
       },
        error: () => console.error('Failed to fetch AIF Action Table')
