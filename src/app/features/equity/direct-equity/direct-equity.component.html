@@ -1,7 +1,7 @@
 <h3>Welcome To The Master Direct equity</h3>
 
 <!-- Search Section -->
-<div class="search-section">
+<div class="search-section"  style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames"
     (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search DE..."
     [minLength]="1">

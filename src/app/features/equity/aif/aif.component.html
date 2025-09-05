@@ -2,7 +2,7 @@
 <h3>Alternative Investment Fund</h3>
 
 <!-- Search Section -->
-<div class="search-section">
+<div class="search-section"  style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredAifNames" (completeMethod)="searchAifs($event)"
     (onSelect)="scrollToAif($event)" field="nickname" placeholder="Search AIF..." [minLength]="1">
   </p-autoComplete>
