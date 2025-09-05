@@ -42,30 +42,32 @@
 </div>
 
 
-<div class="counts-card">
-  <p-card header="Summary Of Allocation" styleClass="P-card">
+<!-- Pie Chart Card -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>Summary Of Allocation</h4>
     <div class="card-content">
-
-      <!-- LEFT: Custom Legend -->
       <div class="counts-section">
+        <div>
+          <h4>Total Action Table : {{actionTableList.length}}</h4>
+        </div>
         <div class="count-item">
-          <span class="dot mf"></span>
+          <span class="dot lcap"></span>
           <span class="label">Mutual Fund</span>
           <span class="percent">{{ actionCounts?.action_percent || 0 }}%</span>
         </div>
         <div class="count-item">
-          <span class="dot aif"></span>
+          <span class="dot mcap"></span>
           <span class="label">Alternative Investment Funds</span>
           <span class="percent">{{ actionCounts?.aif_percent || 0 }}%</span>
         </div>
         <div class="count-item">
-          <span class="dot equity"></span>
+          <span class="dot scap"></span>
           <span class="label">Direct Equity</span>
           <span class="percent">{{ actionCounts?.equity_percent || 0 }}%</span>
         </div>
       </div>
 
-      <!-- RIGHT: Chart -->
       <div class="chart-section">
         <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
       </div>

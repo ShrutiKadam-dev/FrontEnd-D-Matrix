@@ -17,7 +17,7 @@ export const commoditiesRoutes: Routes = [
         loadComponent: () => import('./etf/etf.component').then(c => c.EtfComponent)
     },
     {
-        path: 'etf/:id',
+        path: 'etf-details/:id',
         loadComponent: () => import('./etf-details/etf-details.component').then(c => c.EtfDetailsComponent)
     },
 ];

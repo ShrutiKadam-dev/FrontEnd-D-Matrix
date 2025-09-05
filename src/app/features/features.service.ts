@@ -68,12 +68,20 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
   }
 
+  getAllETF(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllETF`);
+  }
+
   getAllDirectEquity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquity`);
   }
 
   getAllActionTableOfMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
+  }
+
+  getAllActionTableOfETF(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfETF`);
   }
 
   getAllActionTableOfDirectEquity(): Observable<any[]> {
