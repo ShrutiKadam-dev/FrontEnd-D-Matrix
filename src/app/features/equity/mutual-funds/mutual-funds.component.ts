@@ -15,11 +15,13 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-create',
   standalone: true,
   imports: [
+    TagModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
@@ -150,6 +152,18 @@ export class MutualFundsComponent implements OnInit {
       this.dt.filter(input.value, 'global', 'contains');
     }
   }
+
+  
+getSeverity(orderType: string) {
+  switch (orderType?.trim()?.toUpperCase()) {
+    case 'PURCHASE':
+      return 'success';
+    case 'SELL':
+      return 'danger';
+    default:
+      return 'info';
+  }
+}
 
 }
 

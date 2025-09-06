@@ -70,8 +70,8 @@
         <td>{{ entity.scrip_name }}</td>
         <td>{{ entity.unit }}</td>
         <td>{{ entity.order_date }}</td>
-        <td>{{ entity.order_type }}</td>
-        <td>{{ entity.purchase_amount }}</td>
+        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
+        <td>{{ entity.purchase_amount | number:'1.2-2'}}</td>
       </tr>
     </ng-template>
   </p-table>

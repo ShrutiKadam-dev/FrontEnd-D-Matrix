@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
       {
         label: 'Fixed Income',
         icon: 'pi pi-dollar',
-        routerLink: ['/fixed-income'],
+        routerLink: ['/features/fixed-income'],
         tooltipOptions: { tooltipLabel: 'Fixed Income', tooltipPosition: 'right' },
         items: [
           { 

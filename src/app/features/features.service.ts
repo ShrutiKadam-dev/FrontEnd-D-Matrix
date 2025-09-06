@@ -69,7 +69,7 @@ export class FeaturesService {
   }
 
   getAllETF(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllETF`);
+    return this.http.get<any[]>(`${this.apiUrl}/getETFEntity`);
   }
 
   getAllDirectEquity(): Observable<any[]> {
@@ -112,6 +112,12 @@ export class FeaturesService {
     });
   }
 
+    getETFDetailsById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
+      params: { entityid: id }
+    });
+  }
+
   getDirectEquityDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getDirectEquityDetailsById`, {
       params: { entityid: id }
@@ -124,8 +130,20 @@ export class FeaturesService {
     });
   }
 
+    getETFDetailUnderlyingTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+      params: { entityid: mfId }
+    });
+  }
+
   getMFDetailActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
+      params: { entityid: mfId }
+    });
+  }
+
+  getETFDetailActionTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getETFActionTablebyId`, {
       params: { entityid: mfId }
     });
   }

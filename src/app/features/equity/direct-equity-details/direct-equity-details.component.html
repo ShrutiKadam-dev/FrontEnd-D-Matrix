@@ -63,8 +63,8 @@
         <td>{{ entity.qty }}</td>
         <td>{{ entity.running_qty }}</td>
         <td>{{ entity.qty_sold }}</td>
-        <td>{{ entity.buy_price }}</td>
-        <td>{{ entity.remaining_in_buy }}</td>
+        <td>{{ entity.buy_price | number:'1.2-2' }}</td>
+        <td>{{ entity.remaining_in_buy | number:'1.2-2'}}</td>
       </tr>
     </ng-template>
 

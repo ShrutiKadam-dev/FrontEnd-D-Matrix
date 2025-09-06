@@ -129,6 +129,7 @@ export class CreateComponent implements OnInit {
     { key: 'order_time', label: 'Order Time' },
     { key: 'trade_number', label: 'Trade Number' },
     { key: 'trade_time', label: 'Trade Time' },
+    { key: 'trade_date', label: 'Trade Date' },
     { key: 'security_description', label: 'Security / Contract Description' },
     { key: 'order_type', label: 'Order Type' },
     { key: 'quantity', label: 'Quantity' },
@@ -316,6 +317,7 @@ export class CreateComponent implements OnInit {
       order_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
       trade_number: ['', Validators.required],
       trade_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
+      trade_date: ['', Validators.required],
       security_description: ['', Validators.required],
       order_type: ['', Validators.required],
       quantity: ['', Validators.required],
@@ -599,7 +601,7 @@ export class CreateComponent implements OnInit {
 
   const payload = { entityid: this.selectedEntityId, rows: rowsValue };
 
-  this.isSubmitting = true; // 🚀 block multiple clicks + show modal
+  this.isSubmitting = true; //  block multiple clicks + show modal
 
   this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
     next: () => {
@@ -629,7 +631,7 @@ private finishSubmission(successMessage: string) {
     summary: 'Success',
     detail: successMessage
   });
-  this.isSubmitting = false; // ✅ re-enable Save
+  this.isSubmitting = false; // re-enable Save
 }
 
 
@@ -677,7 +679,7 @@ private finishSubmission(successMessage: string) {
         break;
     }
 
-    // ✅ Open modal ONLY after reset/patch to avoid double-click
+    // Open modal ONLY after reset/patch to avoid double-click
     this.displayActionTableModal = true;
   }
 
@@ -692,7 +694,7 @@ private finishSubmission(successMessage: string) {
     const sub = entity?.subcategory;
     if (cat === 'Equity' && sub === 'Direct Equity') return 'DE';
     if (cat === 'Equity' && sub === 'Alternative Investment Funds') return 'AIF';
-    if (cat === 'Equity' && sub === 'ETF') return 'ETF';
+    if (cat === 'Commodities' && sub === 'ETF') return 'ETF';
     return 'MF';
   }
 
@@ -790,6 +792,14 @@ private finishSubmission(successMessage: string) {
     if (this.etfActionTableForm.invalid) return;
 
     const payload = this.etfActionTableForm.getRawValue();
+
+    if (payload.trade_date instanceof Date) {
+      const d = payload.trade_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.trade_date = `${yyyy}-${mm}-${dd}`;
+    }
 
     this.featuresService.insertETFActionTable(payload).subscribe({
       next: () => {
