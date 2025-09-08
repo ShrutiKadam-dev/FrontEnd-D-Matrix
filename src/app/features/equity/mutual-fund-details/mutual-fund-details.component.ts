@@ -183,9 +183,9 @@ calculateTotals(actionTableList: any[]) {
         const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
 
         this.actionCounts = {
-          lcap_percent: grouped['lcap'] ? (grouped['lcap'] / total) * 100 : 0,
-          mcap_percent: grouped['mcap'] ? (grouped['mcap'] / total) * 100 : 0,
-          scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
+          lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
+          mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
+          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0
         };
 
 
