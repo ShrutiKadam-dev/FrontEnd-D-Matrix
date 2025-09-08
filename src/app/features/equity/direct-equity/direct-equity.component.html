@@ -74,7 +74,7 @@
         <td>{{ entity.client_name }}</td>
         <td>{{ entity.order_number }}</td>
         <td>{{ entity.trade_number }}</td>
-        <td>{{ entity.trade_price }}</td>
+        <td>{{ entity.trade_price | number:'1.2-2'}}</td>
         <td>{{ entity.brokerage_per_unit }}</td>
       </tr>
     </ng-template>

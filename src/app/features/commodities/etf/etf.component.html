@@ -54,24 +54,24 @@
 
   <!-- Entity Table -->
   <p-table #etf [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
-    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
+    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scripname']" scrollHeight="700px">
     <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
       <tr>
         <th>Scrip Name</th>
-        <th>Units</th>
-        <th>Order Date</th>
+        <th>Quantity</th>
+        <th>Trade Date</th>
         <th>Action</th>
-        <th>Amount</th>
+        <th>Net Total</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-etf>
       <tr>
-        <td>{{ etf.scrip_name }}</td>
-        <td>{{ etf.unit }}</td>
-        <td>{{ etf.order_date }}</td>
-        <td>{{ etf.order_type }}</td>
-        <td>{{ etf.purchase_amount }}</td>
+        <td>{{ etf.scripname }}</td>
+        <td>{{ etf.quantity }}</td>
+        <td>{{ etf.trade_date | date:'dd-MM-yyyy' }}</td>
+        <td><p-tag [value]="etf.order_type" [severity]="getSeverity(etf.order_type)" /></td>
+        <td>{{ etf.net_total_before_levies }}</td>
       </tr>
     </ng-template>
   </p-table>

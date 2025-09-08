@@ -15,10 +15,12 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-etf',
   imports: [
+    TagModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,
@@ -94,7 +96,7 @@ export class EtfComponent implements OnInit{
   }
 
   getAllActionTable() {
-    this.featuresService.getAllActionTableOfMutualFund().subscribe({
+    this.featuresService.getAllActionTableOfETF().subscribe({
       next: (data: any) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },
@@ -150,6 +152,16 @@ export class EtfComponent implements OnInit{
     }
   }
 
+    getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
+  }
 }
 
 
