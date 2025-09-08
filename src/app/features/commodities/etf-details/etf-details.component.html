@@ -34,17 +34,17 @@
     </ng-template>
 
     <!-- Body -->
-    <ng-template pTemplate="body" let-entity>
+    <ng-template pTemplate="body" let-etf>
       <tr>
-        <td>{{ entity.order_number }}</td>
-        <td>{{ entity.trade_number }}</td>
-        <td>{{ entity.trade_date }}</td>
-        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
-        <td>{{ entity.security_description }}</td>
-        <td>{{ entity.quantity }}</td>
-        <td>{{ entity.brokerage_per_unit }}</td>
-        <td>{{ entity.closing_rate | number:'1.2-2' }}</td>
-        <td>{{ entity.net_total_before_levies | number:'1.2-2' }}</td>
+        <td>{{ etf.order_number }}</td>
+        <td>{{ etf.trade_number }}</td>
+        <td>{{ etf.trade_date | date:'dd-MM-yyyy'}}</td>
+        <td><p-tag [value]="etf.order_type" [severity]="getSeverity(etf.order_type)" /></td>
+        <td>{{ etf.security_description }}</td>
+        <td>{{ etf.quantity }}</td>
+        <td>{{ etf.brokerage_per_unit }}</td>
+        <td>{{ etf.closing_rate | number:'1.2-2' }}</td>
+        <td>{{ etf.net_total_before_levies | number:'1.2-2' }}</td>
       </tr>
     </ng-template>
 
@@ -107,13 +107,13 @@
     </ng-template>
 
     <!-- Body -->
-    <ng-template pTemplate="body" let-entity>
+    <ng-template pTemplate="body" let-etf>
       <tr>
-        <td>{{ entity.company_name }}</td>
-        <td>{{ entity.scripcode }}</td>
-        <td>{{ entity.weightage }} %</td>
-        <td>{{ entity.sector }}</td>
-        <td>{{ entity.isin_code }}</td>
+        <td>{{ etf.company_name }}</td>
+        <td>{{ etf.scripcode }}</td>
+        <td>{{ etf.weightage }} %</td>
+        <td>{{ etf.sector }}</td>
+        <td>{{ etf.isin_code }}</td>
       </tr>
     </ng-template>
 

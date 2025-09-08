@@ -69,8 +69,8 @@
       <tr>
         <td>{{ etf.scripname }}</td>
         <td>{{ etf.quantity }}</td>
-        <td>{{ etf.trade_date }}</td>
-        <td>{{ etf.order_type }}</td>
+        <td>{{ etf.trade_date | date:'dd-MM-yyyy' }}</td>
+        <td><p-tag [value]="etf.order_type" [severity]="getSeverity(etf.order_type)" /></td>
         <td>{{ etf.net_total_before_levies }}</td>
       </tr>
     </ng-template>

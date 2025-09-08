@@ -30,6 +30,10 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
   }
 
+    getAllActionTableCommodity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
+  }
+  
   updateEntity(entityData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
   }
@@ -96,7 +100,9 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllEntity`);
   }
 
-  
+  getAllCommoditiesHome(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllEntity`);
+  }
   getAllHomeData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllHomeData`);
   }
