@@ -113,8 +113,8 @@
         (click)="updateActionTable(selectedEntity)"></p-button>
 
       <!-- Underlying (hide for Direct Equity & ETF) -->
-      <p-button *ngIf="!(selectedEntity?.category === 'Equity' 
-                && selectedEntity?.subcategory === 'Direct Equity')" label="Underlying" icon="pi pi-list"
+      <p-button *ngIf="!(((selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Commodities') 
+            && (selectedEntity?.subcategory === 'Direct Equity' || selectedEntity?.subcategory === 'ETF')))" label="Underlying" icon="pi pi-list"
         styleClass="add-entity-btn" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
 
       <!-- NAV Update (only for AIF) -->
