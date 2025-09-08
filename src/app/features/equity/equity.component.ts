@@ -48,6 +48,7 @@ export class EquityComponent implements OnInit {
   chartData: any;
   chartOptions: any;
   actionCounts: any = null;
+  totalActionTableCount = 0;
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router) { }
@@ -87,6 +88,8 @@ export class EquityComponent implements OnInit {
 
         this.actionCounts = res.data[0];  // store counts + percents
 
+        this.totalActionTableCount =this.actionCounts.action_count + this.actionCounts.aif_count +this.actionCounts.equity_count;
+        
         const labels = ['Mutual Fund', 'AIF', 'Direct Equity'];
         const values = [
           Number(this.actionCounts.action_percent),
