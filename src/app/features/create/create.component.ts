@@ -71,7 +71,6 @@ export class CreateComponent implements OnInit {
   selectedEntityId: string | null = null;
   isSubmitting: boolean = false;
 
-
   // Contract note modal
   displayActionTableModal = false;
 
@@ -421,6 +420,7 @@ export class CreateComponent implements OnInit {
 
   openUnderlyingModal(): void {
     this.displayUnderlyingModal = true;
+    this.displayUpdateChoiceModal = false;
     if (this.rows.length === 0) this.addRow();
   }
 
@@ -429,6 +429,8 @@ export class CreateComponent implements OnInit {
     this.rows.clear();
     this.addRow();
     this.displayUnderlyingModal = true;
+    this.displayUpdateChoiceModal = false;
+
   }
 
   // ---------- Grid / CRUD ----------
@@ -556,7 +558,9 @@ export class CreateComponent implements OnInit {
           this.addRow();
         }
 
-        this.displayUnderlyingModal = true; // ✅ open after patching
+        this.displayUnderlyingModal = true; // 
+        this.displayUpdateChoiceModal = false;
+
       },
       error: (err) => {
         console.error('Error fetching underlying data', err);
@@ -681,6 +685,7 @@ private finishSubmission(successMessage: string) {
 
     // Open modal ONLY after reset/patch to avoid double-click
     this.displayActionTableModal = true;
+    this.displayUpdateChoiceModal = false;
   }
 
   // In case you still use this elsewhere (kept safe)
@@ -839,6 +844,7 @@ private finishSubmission(successMessage: string) {
   // ---------- NAV ----------
   openNavModal(entity: any) {
     this.selectedEntity = entity;
+    this.displayUpdateChoiceModal = false;
     this.displayNavModal = true;
     this.navForm.reset();
     this.navForm.patchValue({ entityid: entity.entityid });
