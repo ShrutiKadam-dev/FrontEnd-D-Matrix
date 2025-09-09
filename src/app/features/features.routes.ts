@@ -24,6 +24,6 @@ export const featuresRoutes: Routes = [
     },
     {
         path: 'fixed-income',
-        loadComponent: () => import('./fixed-income/fixed-income.component').then(c => c.FixedIncomeComponent)
+        loadChildren: () => import('./fixed-income/fixed-income.routes').then(c => c.fixedIncomeRoutes)
     }
 ];

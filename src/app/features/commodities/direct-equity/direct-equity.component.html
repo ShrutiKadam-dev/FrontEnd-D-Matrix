@@ -1,0 +1,82 @@
+<h3>Welcome To The Master Direct equity</h3>
+
+<!-- Search Section -->
+<div class="search-section"  style="margin-left: 70px;">
+  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames"
+    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search DE..."
+    [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedDirectEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Carousel -->
+<p-carousel [value]="displayDEs" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedDirectEquityName">
+
+  <ng-template let-de pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      </ng-template>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ de.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<p-carousel *ngIf="selectedDirectEquityName" [value]="filteredDENames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+
+  <ng-template let-de pTemplate="item">
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToDirectEquityDetails(de)">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ de.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<div class="table-card">
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h3>Summary Of Actions</h3>
+    <!-- Search Box -->
+    <div class="search-container half-width">
+      <span class="p-input-icon-left search-bar">
+        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search..." />
+      </span>
+    </div>
+  </div>
+
+  <!-- Action Table summary -->
+  <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+    [globalFilterFields]="['client_name', 'order_number', 'trade_number', 'trade_price','brokerage_per_unit',]"
+    scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Client Name</th>
+        <th>Order Number</th>
+        <th>Trade Number</th>
+        <th>Trade Price</th>
+        <th>Brokerage Per Unit</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.client_name }}</td>
+        <td>{{ entity.order_number }}</td>
+        <td>{{ entity.trade_number }}</td>
+        <td>{{ entity.trade_price | number:'1.2-2'}}</td>
+        <td>{{ entity.brokerage_per_unit }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -30,8 +30,8 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
   }
 
-    getAllActionTableCommodity(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
+  getAllActionTableCommodity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableCommodity`);
   }
   
   updateEntity(entityData: any): Observable<any> {
@@ -80,6 +80,10 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquity`);
   }
 
+  getAllDirectEquityCommodities(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquityCommodities`);
+  }
+
   getAllActionTableOfMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
   }
@@ -101,8 +105,9 @@ export class FeaturesService {
   }
 
   getAllCommoditiesHome(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllEntity`);
+    return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllCommodities`);
   }
+
   getAllHomeData(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllHomeData`);
   }
@@ -111,6 +116,9 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getEquityActionTable`);
   }
 
+  getCommodityActionTable(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getCommodityActionTable`);
+  }
 
   getMutualFundDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {

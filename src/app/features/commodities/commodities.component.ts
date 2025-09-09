@@ -79,7 +79,7 @@ export class CommoditiesComponent implements OnInit {
   }
 
   loadCommodityChart() {
-    this.featuresService.getEquityActionTable().subscribe({
+    this.featuresService.getCommodityActionTable().subscribe({
       next: (res: any) => {
         if (!res?.data?.length) return;
 

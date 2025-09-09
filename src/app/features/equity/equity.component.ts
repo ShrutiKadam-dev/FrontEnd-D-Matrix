@@ -137,6 +137,10 @@ export class EquityComponent implements OnInit {
         this.router.navigate(['/features/equity/mutual-funds']);
         break;
 
+      case 'etf':
+        this.router.navigate(['/features/equity/etf']);
+        break;
+        
       case 'direct equity':
         this.router.navigate(['/features/equity/direct-equity']);
         break;

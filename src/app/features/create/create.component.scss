@@ -159,13 +159,20 @@ label {
 
 /* Column widths */
 :host ::ng-deep .p-datatable th:nth-child(1),
-:host ::ng-deep .p-datatable td:nth-child(1) { width: 25%; }
+:host ::ng-deep .p-datatable td:nth-child(1) { width: 37%; }
+
 :host ::ng-deep .p-datatable th:nth-child(2),
-:host ::ng-deep .p-datatable td:nth-child(2) { width: 20%; }
+:host ::ng-deep .p-datatable td:nth-child(2) { width: 15%; }
+
 :host ::ng-deep .p-datatable th:nth-child(3),
-:host ::ng-deep .p-datatable td:nth-child(3) { width: 25%; }
+:host ::ng-deep .p-datatable td:nth-child(3) { width: 15%; }
+
 :host ::ng-deep .p-datatable th:nth-child(4),
-:host ::ng-deep .p-datatable td:nth-child(4) { width: 15%; }
+:host ::ng-deep .p-datatable td:nth-child(4) { width: 10%; }
+
+:host ::ng-deep .p-datatable th:nth-child(5),
+:host ::ng-deep .p-datatable td:nth-child(5) { width: 10%; }
+
 
 /* Action column */
 :host ::ng-deep .p-datatable th:last-child,

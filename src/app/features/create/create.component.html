@@ -1,23 +1,15 @@
 <div class="table-card">
   <!-- Header Section -->
-<div class="entity-header p-d-flex p-ai-center p-jc-between">
-  <!-- Add Entity Button -->
-  <p-button 
-    label="Create Entity" 
-    icon="pi pi-plus" 
-    (click)="showModal()" 
-    styleClass="add-entity-btn">
-  </p-button>
+  <div class="entity-header p-d-flex p-ai-center p-jc-between">
+    <!-- Add Entity Button -->
+    <p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn">
+    </p-button>
 
-  <!-- Search Box -->
-  <div class="search-container">
-    <input 
-      pInputText 
-      type="text" 
-      (input)="onGlobalFilter($event)" 
-      placeholder="Search entities..." />
+    <!-- Search Box -->
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
+    </div>
   </div>
-</div>
 
   <!-- Entity Table -->
   <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
@@ -28,6 +20,7 @@
         <th>Scrip Name</th>
         <th>Scrip Code</th>
         <th>Benchmark</th>
+        <th>Category</th>
         <th>Subcategory</th>
         <th>Action</th>
       </tr>
@@ -38,6 +31,7 @@
         <td>{{ entity.scripname }}</td>
         <td>{{ entity.scripcode }}</td>
         <td>{{ entity.benchmark }}</td>
+        <td>{{ entity.category }}</td>
         <td>{{ entity.subcategory }}</td>
         <td>
           <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
@@ -113,16 +107,27 @@
         (click)="updateActionTable(selectedEntity)"></p-button>
 
       <!-- Underlying (hide for Direct Equity & ETF) -->
-      <p-button *ngIf="!(((selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Commodities') 
-            && (selectedEntity?.subcategory === 'Direct Equity' || selectedEntity?.subcategory === 'ETF')))" label="Underlying" icon="pi pi-list"
+      <p-button *ngIf="!(((selectedEntity?.category === 'Equity' 
+            || selectedEntity?.category === 'Fixed_Income' 
+            || selectedEntity?.category === 'Commodities') 
+          && (selectedEntity?.subcategory === 'Direct Equity' 
+              || selectedEntity?.subcategory === 'ETF')))" label="Underlying" icon="pi pi-list"
         styleClass="add-entity-btn" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
 
       <!-- NAV Update (only for AIF) -->
-      <p-button
-         *ngIf="selectedEntity?.category === 'Equity' && 
-         (selectedEntity?.subcategory === 'Alternative Investment Funds' || 
-          selectedEntity?.subcategory === 'Mutual Fund')"        
-          label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
+      <p-button *ngIf="(
+    (
+      (selectedEntity?.category === 'Equity' 
+       || selectedEntity?.category === 'Fixed_Income' 
+       || selectedEntity?.category === 'Commodities') 
+      && selectedEntity?.subcategory === 'Alternative Investment Funds'
+    )
+    || 
+    (
+      selectedEntity?.category === 'Equity' 
+      && selectedEntity?.subcategory === 'Mutual Fund'
+    )
+  )" label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
         (click)="openNavModal(selectedEntity)"></p-button>
 
     </div>
@@ -192,11 +197,8 @@
   </form>
 </p-dialog>
 <!-- Simple Loading Modal -->
-<p-dialog header="Please Wait"
-          [(visible)]="isSubmitting"
-          [modal]="true"
-          [closable]="false"
-          [style]="{ width: '350px' }">
+<p-dialog header="Please Wait" [(visible)]="isSubmitting" [modal]="true" [closable]="false"
+  [style]="{ width: '350px' }">
   <div style="text-align:center; padding:20px;">
     <p-progressSpinner styleClass="w-4 h-4"></p-progressSpinner>
     <p style="margin-top: 15px;">Uploading underlying properties...</p>
@@ -233,7 +235,7 @@
 
       <!-- Readonly Purchase Value -->
       <input *ngIf="field.key === 'purchase_value'" pInputText formControlName="purchase_value" readonly />
-      
+
       <input *ngIf="field.key === 'net_total'" pInputText formControlName="net_total" readonly />
 
       <input *ngIf="field.key === 'entityid'" type="hidden" formControlName="entityid" />
@@ -277,8 +279,8 @@
 
     <div class="field">
       <label for="nav_date">Date</label>
-      <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy"
-        appendTo="viewport" appendTo="body" [style]="{ width: '100%' }"></p-datepicker>
+      <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport"
+        appendTo="body" [style]="{ width: '100%' }"></p-datepicker>
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">

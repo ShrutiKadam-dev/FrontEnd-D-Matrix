@@ -1,0 +1,78 @@
+<h3>Welcome To The ETF</h3>
+
+<!-- Search Section -->
+<div class="search-section">
+  <p-autoComplete [(ngModel)]="selectedETFName" [suggestions]="filteredETFNames" (completeMethod)="searchETFs($event)"
+    (onSelect)="scrollToETF($event)" field="nickname" placeholder="Search ETF..." [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedETFName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Carousel -->
+<p-carousel [value]="displayETFs" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedETFName">
+
+  <ng-template let-etf pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToETFDetails(etf)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': etf.color}"></div>
+      </ng-template>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [title]="etf.nickname">{{ etf.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ etf.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ etf.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<p-carousel *ngIf="selectedETFName" [value]="filteredETFNames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+
+  <ng-template let-etf pTemplate="item">
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToETFDetails(etf)">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': etf.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="etf.nickname">{{ etf.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ etf.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ etf.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<div class="table-card">
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h3>Summary Of Actions</h3>
+
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
+    </div>
+  </div>
+
+  <!-- Entity Table -->
+  <p-table #etf [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+    [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scripname']" scrollHeight="700px">
+    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+      <tr>
+        <th>Scrip Name</th>
+        <th>Quantity</th>
+        <th>Trade Date</th>
+        <th>Action</th>
+        <th>Net Total</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-etf>
+      <tr>
+        <td>{{ etf.scripname }}</td>
+        <td>{{ etf.quantity }}</td>
+        <td>{{ etf.trade_date | date:'dd-MM-yyyy' }}</td>
+        <td><p-tag [value]="etf.order_type" [severity]="getSeverity(etf.order_type)" /></td>
+        <td>{{ etf.net_total_before_levies }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

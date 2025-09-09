@@ -1,0 +1,108 @@
+
+<h3>Alternative Investment Fund</h3>
+
+<!-- Search Section -->
+<div class="search-section"  style="margin-left: 70px;">
+  <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredAifNames" (completeMethod)="searchAifs($event)"
+    (onSelect)="scrollToAif($event)" field="nickname" placeholder="Search AIF..." [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedAifName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+
+<!-- Carousel -->
+<p-carousel 
+  [value]="displayAifs" 
+  [numVisible]="3" 
+  [numScroll]="3" 
+  [circular]="false" 
+  [responsiveOptions]="responsiveOptions"
+  styleClass="custom-carousel"
+  *ngIf="!selectedAifName">
+
+  <ng-template let-aif pTemplate="item" >
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+      <ng-template pTemplate="header" >
+<div class="card-color" [ngStyle]="{'background-color': aif.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="aif.nickname" >{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ aif.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<p-carousel 
+  *ngIf="selectedAifName"
+  [value]="filteredAifNames" 
+  [numVisible]="3" 
+  [numScroll]="3" 
+  [circular]="false" 
+  [responsiveOptions]="responsiveOptions"
+  styleClass="custom-carousel">
+
+  <ng-template let-aif pTemplate="item" >
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToAif(aif)" >
+      <ng-template pTemplate="header" >
+<div class="card-color" [ngStyle]="{'background-color': aif.color}"></div>
+      </ng-template>
+      <div class="card-title" [title]="aif.nickname" >{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ aif.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- summary of action -->
+
+<div class="table-card">
+  <!-- Header -->
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <h3>Summary Of Actions</h3>
+
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
+    </div>
+  </div>
+
+  <!-- Action Table -->
+  <p-table
+    #dt
+    [value]="allAifContractNotes"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
+    scrollHeight="400px"
+    [responsiveLayout]="'scroll'"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
+        <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
+        <th pSortableColumn="trans_date">Order Date <p-sortIcon field="trans_date"></p-sortIcon></th>
+        <th pSortableColumn="trans_type">Action <p-sortIcon field="trans_type"></p-sortIcon></th>
+        <th pSortableColumn="contribution_amount">Amount <p-sortIcon field="contribution_amount"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.amc_name }}</td>
+        <td>{{ entity.num_units }}</td>
+        <td>{{ entity.trans_date }}</td>
+        <td>{{ entity.trans_type }}</td>
+        <td>{{ entity.amount_invested }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- mcap allocation -->
+
+
+  
