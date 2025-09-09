@@ -7,7 +7,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
-import { FeaturesService } from '../../features.service';
+import { FeaturesService } from '../../../features.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';

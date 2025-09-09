@@ -7,7 +7,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { MessagesModule } from 'primeng/messages';
 import { Table, TableModule } from 'primeng/table';
-import { FeaturesService } from '../../features.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
@@ -16,7 +15,7 @@ import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
-
+import { FeaturesService } from '../../../features.service';
 @Component({
   selector: 'app-mutual-fund-details',
   imports: [

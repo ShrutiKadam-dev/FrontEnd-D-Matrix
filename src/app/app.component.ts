@@ -68,7 +68,12 @@ export class AppComponent implements OnInit {
             label: 'AIF', 
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/aif']
-          }
+          },
+          { 
+            label: 'ETF', 
+            icon: 'pi pi-arrow-right',
+            routerLink: ['/features/commodities/etf']
+          },
         ]
       },
       {
@@ -83,10 +88,10 @@ export class AppComponent implements OnInit {
             routerLink: ['/equity/direct']
           },
           { 
-            label: 'Mutual Funds', 
+            label: 'ETF', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/equity/mutual-funds']
-          }
+            routerLink: ['/features/commodities/etf']
+          },
         ]
       },
       {
@@ -99,6 +104,11 @@ export class AppComponent implements OnInit {
             label: 'ETF', 
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/etf']
+          },
+          { 
+            label: 'Direct Equity', 
+            icon: 'pi pi-arrow-right',
+            routerLink: ['/features/equity/direct-equity']
           },
         ]
       },
