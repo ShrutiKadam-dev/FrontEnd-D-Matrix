@@ -20,6 +20,18 @@ import { DatePicker } from 'primeng/datepicker';
 import { InputMask } from 'primeng/inputmask';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import {
+  MF_ACTION_TABLE_FIELDS,
+  DIRECT_EQUITY_ACTION_TABLE_FIELDS,
+  ETF_ACTION_TABLE_FIELDS,
+  AIF_ACTION_TABLE_FIELDS
+} from '../form-fields.enums';
+import {
+  CATEGORY_OPTIONS,
+  ORDER_TYPE_OPTIONS,
+  MODE_OPTIONS,
+  ALL_SUBCATEGORY_OPTIONS
+} from '../dropdown-options.enums';
 
 @Component({
   selector: 'app-create',
@@ -43,9 +55,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     InputMask,
     ToastModule,
     ProgressSpinnerModule
-    
+
   ],
-  providers: [ConfirmationService, MessageService], 
+  providers: [ConfirmationService, MessageService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss',
 })
@@ -81,138 +93,21 @@ export class CreateComponent implements OnInit {
   companySuggestions: any[] = [];
   date: Date | undefined = new Date();
 
+  mfActionTableFields = MF_ACTION_TABLE_FIELDS;
+  directEquityActionTableFields = DIRECT_EQUITY_ACTION_TABLE_FIELDS;
+  etfActionTableFields = ETF_ACTION_TABLE_FIELDS;
+  aifActionTableFields = AIF_ACTION_TABLE_FIELDS;
+
   private confirmationService = inject(ConfirmationService);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
   @ViewChild('dt') dt!: Table;
 
-  categoryOptions = [
-    { label: 'Equity', value: 'Equity' },
-    { label: 'Fixed Income', value: 'Fixed_Income' },
-    { label: 'Commodities', value: 'Commodities' }
-  ];
-
-  orderTypeOptions = [
-    { label: 'Purchase', value: 'Purchase' },
-    { label: 'Sell', value: 'Sell' }
-  ];
-
-  modeOptions = [{ label: 'Demat', value: 'Demat' }];
-
-  allSubCategoryOptions: Record<string, any[]> = {
-    Equity: [
-      { label: 'Direct Equity', value: 'Direct Equity' },
-      { label: 'Mutual Fund', value: 'Mutual Fund' },
-      { label: 'AIF', value: 'Alternative Investment Funds' },
-      { label: 'ETF', value: 'ETF' },
-      { label: 'Direct PE', value: 'Direct PE' },
-       { label: 'PMS', value: 'PMS' },
-    ],
-    Fixed_Income: [
-      { label: 'Direct Debt', value: 'Direct Debt' },
-      { label: 'PMS', value: 'PMS' },
-      { label: 'Direct Equity', value: 'Direct Equity' },
-      { label: 'REIT', value: 'REIT' },
-      { label: 'INVIT', value: 'INVIT' },
-      { label: 'ETF', value: 'ETF' },
-      { label: 'Mutual Fund', value: 'Mutual Fund' },
-      { label: 'AIF', value: 'Alternative Investment Funds' },
-      { label: 'Debentures', value: 'Debentures' }
-    ],
-    Commodities: [
-      { label: 'ETF', value: 'ETF' },
-      { label: 'Direct Equity', value: 'Direct Equity' },
-      { label: 'Physical', value: 'Physical' },
-      { label: 'AIF', value: 'Alternative Investment Funds' },
-      { label: 'PMS', value: 'PMS' },
-    ]
-  };
-
-  // ---------- Field definitions (render order matters) ----------
-  etfActionTableFields = [
-    { key: 'order_number', label: 'Order Number' },
-    { key: 'order_time', label: 'Order Time' },
-    { key: 'trade_number', label: 'Trade Number' },
-    { key: 'trade_time', label: 'Trade Time' },
-    { key: 'trade_date', label: 'Trade Date' },
-    { key: 'security_description', label: 'Security / Contract Description' },
-    { key: 'order_type', label: 'Order Type' },
-    { key: 'quantity', label: 'Quantity' },
-    { key: 'gross_rate', label: 'Gross Rate / Trade price per unit' },
-    { key: 'trade_price_per_unit', label: 'Trade price per unit' },
-    { key: 'brokerage_per_unit', label: 'Brokerage per unit' },
-    { key: 'net_rate_per_unit', label: 'Net rate per unit' },
-    { key: 'closing_rate', label: 'Closing rate per unit (only for derivatives)' },
-    { key: 'gst', label: 'GST' },
-    { key: 'stt', label: 'STT' },
-    { key: 'net_total_before_levies', label: 'Net Total before levies' },
-    { key: 'remarks', label: 'Remarks' },
-  ];
-
-  mfActionTableFields = [
-    { key: 'scrip_code', label: 'Scrip Code' },
-    { key: 'mode', label: 'Mode' },
-    { key: 'order_type', label: 'Order Type' },
-    { key: 'order_date', label: 'Order Date' },
-    { key: 'sett_no', label: 'Settelement no' },
-    { key: 'scrip_name', label: 'Scrip Name' },
-    { key: 'isin', label: 'ISIN' },
-    { key: 'order_number', label: 'Order Number' },
-    { key: 'folio_number', label: 'Folio Number' },
-    { key: 'nav', label: 'NAV' },
-    { key: 'stt', label: 'STT' },
-    { key: 'unit', label: 'Unit' },
-    { key: 'redeem_amount', label: 'Redeem Amount' },
-    { key: 'purchase_amount', label: 'Purchase Amount' },
-    { key: 'purchase_value', label: 'Purchase Value' },
-    { key: 'cgst', label: 'CGST' },
-    { key: 'sgst', label: 'SGST' },
-    { key: 'ugst', label: 'UGST' },
-    { key: 'igst', label: 'IGST' },
-    { key: 'stamp_duty', label: 'Stamp Duty' },
-    { key: 'cess_value', label: 'Cess Value' },
-    { key: 'net_amount', label: 'Net Amount' },
-  ];
-
-  directEquityActionTableFields = [
-    { key: 'contract_note_number', label: 'Contract Note Number' },
-    { key: 'trade_date', label: 'Trade Date' },
-    { key: 'client_code', label: 'Client Code' },
-    { key: 'client_name', label: 'Client Name' },
-    { key: 'order_number', label: 'Order Number' },
-    { key: 'order_time', label: 'Order Time' },
-    { key: 'trade_number', label: 'Trade Number' },
-    { key: 'description', label: 'Description' },
-    { key: 'order_type', label: 'Order Type' },
-    { key: 'qty', label: 'Quantity' },
-    { key: 'trade_price', label: 'Trade Price' },
-    { key: 'brokerage_per_unit', label: 'Brokerage / Unit' },
-    { key: 'net_rate_per_unit', label: 'Net Rate / Unit' },
-    { key: 'gst', label: 'GST' },
-    { key: 'stt', label: 'STT' },
-    { key: 'security_transaction_tax', label: 'Security Transaction Tax' },
-    { key: 'exchange_transaction_charges', label: 'Exchange Transaction Charges' },
-    { key: 'sebi_turnover_fees', label: 'SEBI Turnover Fees' },
-    { key: 'stamp_duty', label: 'Stamp Duty' },
-    { key: 'ipft', label: 'IPFT' },
-    { key: 'net_total', label: 'Net Total' },
-    { key: 'net_amount_receivable', label: 'Net Amount Receivable' }
-  ];
-
-  aifActionTableFields = [
-    { key: 'trans_date', label: 'Transaction Date' },
-    { key: 'trans_type', label: 'Transaction Type' },
-    { key: 'contribution_amount', label: 'Contribution Amount' },
-    { key: 'setup_expense', label: 'Setup Expense' },
-    { key: 'stamp_duty', label: 'Stamp Duty' },
-    { key: 'amount_invested', label: 'Amount Invested' },
-    { key: 'post_tax_nav', label: 'Post-Tax Allotment/ Redemption NAV' },
-    { key: 'num_units', label: 'Number of Units' },
-    { key: 'balance_units', label: 'Balance Units' },
-    { key: 'strategy_name', label: 'Strategy Name' },
-    { key: 'amc_name', label: 'AMC Name' },
-  ];
+  categoryOptions = CATEGORY_OPTIONS;
+  orderTypeOptions = ORDER_TYPE_OPTIONS;
+  modeOptions = MODE_OPTIONS;
+  allSubCategoryOptions = ALL_SUBCATEGORY_OPTIONS;
 
   private calculatePurchaseValue(): void {
     const unit = Number(this.mfActionTableForm.get('unit')?.value) || 0;
@@ -578,72 +473,72 @@ export class CreateComponent implements OnInit {
     });
   }
 
- submitUnderlyingData(): void {
-  if (!this.selectedEntityId) return;
+  submitUnderlyingData(): void {
+    if (!this.selectedEntityId) return;
 
-  if (this.underlyingForm.invalid) {
-    this.underlyingForm.markAllAsTouched();
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Validation Error',
-      detail: 'Please fill all required fields before saving.'
-    });
-    return;
-  }
-
-  const rowsValue = this.underlyingForm.value.rows || [];
-
-  // check duplicates
-  if (rowsValue.length > 0) {
-    const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
-    const hasDuplicate = companyNames.some(
-      (name: string, idx: number) => companyNames.indexOf(name) !== idx
-    );
-
-    if (hasDuplicate) {
+    if (this.underlyingForm.invalid) {
+      this.underlyingForm.markAllAsTouched();
       this.messageService.add({
         severity: 'error',
-        summary: 'Duplicate Found',
-        detail: 'Company names must be unique.'
+        summary: 'Validation Error',
+        detail: 'Please fill all required fields before saving.'
       });
       return;
     }
-  }
 
-  const payload = { entityid: this.selectedEntityId, rows: rowsValue };
+    const rowsValue = this.underlyingForm.value.rows || [];
 
-  this.isSubmitting = true; //  block multiple clicks + show modal
+    // check duplicates
+    if (rowsValue.length > 0) {
+      const companyNames = rowsValue.map((row: any) => row.company_name?.trim().toLowerCase());
+      const hasDuplicate = companyNames.some(
+        (name: string, idx: number) => companyNames.indexOf(name) !== idx
+      );
 
-  this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
-    next: () => {
-      if (rowsValue.length === 0) {
-        this.finishSubmission('Underlying data cleared successfully');
+      if (hasDuplicate) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Duplicate Found',
+          detail: 'Company names must be unique.'
+        });
         return;
       }
+    }
 
-      this.featuresService.addUnderlyingTable(payload).subscribe({
-        next: () => {
-          this.finishSubmission('Underlying data added successfully');
-          this.underlyingForm.reset();
-          this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
-        },
-        error: () => this.isSubmitting = false
-      });
-    },
-    error: () => this.isSubmitting = false
-  });
-}
+    const payload = { entityid: this.selectedEntityId, rows: rowsValue };
 
-private finishSubmission(successMessage: string) {
-  this.displayUnderlyingModal = false;
-  this.displayUpdateChoiceModal = false;
-  this.messageService.add({
-    severity: 'success',
-    summary: 'Success',
-    detail: successMessage
-  });
-  this.isSubmitting = false; // re-enable Save
-}
+    this.isSubmitting = true; //  block multiple clicks + show modal
+
+    this.featuresService.clearUnderlyingByEntityId(this.selectedEntityId).subscribe({
+      next: () => {
+        if (rowsValue.length === 0) {
+          this.finishSubmission('Underlying data cleared successfully');
+          return;
+        }
+
+        this.featuresService.addUnderlyingTable(payload).subscribe({
+          next: () => {
+            this.finishSubmission('Underlying data added successfully');
+            this.underlyingForm.reset();
+            this.underlyingForm.setControl('rows', this.fb.array([this.createRow()]));
+          },
+          error: () => this.isSubmitting = false
+        });
+      },
+      error: () => this.isSubmitting = false
+    });
+  }
+
+  private finishSubmission(successMessage: string) {
+    this.displayUnderlyingModal = false;
+    this.displayUpdateChoiceModal = false;
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: successMessage
+    });
+    this.isSubmitting = false; // re-enable Save
+  }
 
 
 

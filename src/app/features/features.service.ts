@@ -81,7 +81,7 @@ export class FeaturesService {
   }
 
   getAllDirectEquityCommodities(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquityCommodities`);
+    return this.http.get<any[]>(`${this.apiUrl}/getDirectEquityCommodities`);
   }
 
   getAllActionTableOfMutualFund(): Observable<any[]> {
