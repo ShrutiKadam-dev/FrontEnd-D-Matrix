@@ -307,6 +307,6 @@ label {
 }
 
 
-:host ::ng-deep  .p-fileupload-upload-button {
+:host ::ng-deep .p-fileupload-upload-button,:host ::ng-deep .p-fileupload-cancel-button {
   display: none !important;
 }
