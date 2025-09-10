@@ -507,12 +507,13 @@ export class CreateComponent implements OnInit {
   }
 
   // ---------- Which fields & form to render ----------
-  private getActionContext(entity: any): 'DE' | 'AIF' | 'ETF' | 'MF' {
+  private getActionContext(entity: any): 'DE' | 'AIF' | 'ETF' | 'MF' | 'DECOM' {
     const cat = entity?.category;
     const sub = entity?.subcategory;
     if (cat === 'Equity' && sub === 'Direct Equity') return 'DE';
     if (cat === 'Equity' && sub === 'Alternative Investment Funds') return 'AIF';
     if (cat === 'Commodities' && sub === 'ETF') return 'ETF';
+    if (cat === 'Commodities' && sub === 'Direct Equity') return 'DECOM';
     return 'MF';
   }
 
@@ -520,6 +521,7 @@ export class CreateComponent implements OnInit {
     const ctx = this.getActionContext(this.selectedEntity);
     switch (ctx) {
       case 'DE': return this.directEquityActionTableFields;
+      case 'DECOM': return this.directEquityActionTableFields;
       case 'AIF': return this.aifActionTableFields;
       case 'ETF': return this.etfActionTableFields;
       case 'MF':
@@ -533,6 +535,7 @@ export class CreateComponent implements OnInit {
 
     switch (ctx) {
       case 'DE': form = this.directEquityActionTableForm; break;
+      case 'DECOM': form = this.directEquityActionTableForm; break;
       case 'AIF': form = this.aifActionTableForm; break;
       case 'ETF': form = this.etfActionTableForm; break;
       case 'MF':
@@ -549,6 +552,7 @@ export class CreateComponent implements OnInit {
   saveCurrentActionTableData() {
     const ctx = this.getActionContext(this.selectedEntity);
     if (ctx === 'DE') return this.saveDirectEquityActionTableData();
+    if (ctx === 'DECOM') return this.saveDirectEquityCommodityActionTableData()
     if (ctx === 'AIF') return this.saveAifActionTableData();
     if (ctx === 'ETF') return this.saveEtfActionTableData();
     return this.saveActionTableData(); // MF
@@ -606,8 +610,28 @@ export class CreateComponent implements OnInit {
     });
   }
 
-  showAutoModal(){
-    this.displayAutoModal = true
+  saveDirectEquityCommodityActionTableData() {
+    if (this.directEquityActionTableForm.invalid) return;
+
+    const payload = this.directEquityActionTableForm.getRawValue();
+
+    if (payload.trade_date instanceof Date) {
+      const d = payload.trade_date;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      payload.trade_date = `${yyyy}-${mm}-${dd}`;
+    }
+
+    this.featuresService.insertDirectEquityCommodityActionTable(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Direct Equity data saved successfully' });
+        this.displayActionTableModal = false;
+      },
+      error: (err: { error: { message: any } }) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save Direct Equity data' });
+      }
+    });
   }
 
   saveEtfActionTableData() {
@@ -665,6 +689,11 @@ export class CreateComponent implements OnInit {
     this.displayNavModal = true;
     this.navForm.reset();
     this.navForm.patchValue({ entityid: entity.entityid });
+  }
+
+  
+  showAutoModal(){
+    this.displayAutoModal = true
   }
 
   saveNavData() {

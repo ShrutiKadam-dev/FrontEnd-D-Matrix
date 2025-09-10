@@ -38,7 +38,7 @@ import { TagModule } from 'primeng/tag';
   templateUrl: './direct-equity-details.component.html',
   styleUrl: './direct-equity-details.component.scss'
 })
-export class DirectEquityDetailsComponent implements OnInit{
+export class DirectEquityDetailsComponent implements OnInit {
   deId!: string | null;
   deDetails: any;
   actionTableList: any[] = [];
@@ -76,57 +76,57 @@ export class DirectEquityDetailsComponent implements OnInit{
   }
 
   calculateTotals(actionTableList: any[]) {
-  if (!actionTableList || actionTableList.length === 0) {
+    if (!actionTableList || actionTableList.length === 0) {
+      this.totalPurchaseUnits = 0;
+      this.totalPurchaseAmount = 0;
+      this.totalSalesUnits = 0;
+      this.totalSalesAmount = 0;
+      this.availableUnits = 0;
+      this.availableAmount = 0;
+      return;
+    }
+
+    console.log(actionTableList);
+
+    // Reset totals
     this.totalPurchaseUnits = 0;
     this.totalPurchaseAmount = 0;
     this.totalSalesUnits = 0;
     this.totalSalesAmount = 0;
     this.availableUnits = 0;
     this.availableAmount = 0;
-    return;
+
+    // Single pass calculation
+    actionTableList.forEach(action => {
+      const units = isNaN(Number(action.qty)) ? 0 : Number(action.qty);
+      const amount = isNaN(Number(action.net_total)) ? 0 : Number(action.net_total);
+
+      if (action.order_type === 'Purchase') {
+        this.totalPurchaseUnits += units;
+        this.totalPurchaseAmount += amount;
+      }
+      else if (action.order_type === 'Sell') {
+        this.totalSalesUnits += units;
+        this.totalSalesAmount += amount;
+      }
+    });
+
+    // Available = Purchases - Sales
+    this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
+    this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
+
+
+    // Safety: if any totals are NaN, reset to 0
+    this.totalPurchaseUnits ||= 0;
+    this.totalPurchaseAmount ||= 0;
+    this.totalSalesUnits ||= 0;
+    this.totalSalesAmount ||= 0;
+    this.availableUnits ||= 0;
+    this.availableAmount ||= 0;
   }
 
-  console.log(actionTableList);
-  
-  // Reset totals
-  this.totalPurchaseUnits = 0;
-  this.totalPurchaseAmount = 0;
-  this.totalSalesUnits = 0;
-  this.totalSalesAmount = 0;
-  this.availableUnits = 0;
-  this.availableAmount = 0;
 
-  // Single pass calculation
-  actionTableList.forEach(action => {
-    const units = isNaN(Number(action.qty)) ? 0 : Number(action.qty);
-    const amount = isNaN(Number(action.net_total)) ? 0 : Number(action.net_total);
-
-    if (action.order_type === 'Purchase') {
-      this.totalPurchaseUnits += units;
-      this.totalPurchaseAmount += amount;
-    } 
-    else if (action.order_type === 'Sell') {
-      this.totalSalesUnits += units;
-      this.totalSalesAmount += amount;
-    }
-  });
-
-  // Available = Purchases - Sales
-  this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
-  this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
-
-
-  // Safety: if any totals are NaN, reset to 0
-  this.totalPurchaseUnits ||= 0;
-  this.totalPurchaseAmount ||= 0;
-  this.totalSalesUnits ||= 0;
-  this.totalSalesAmount ||= 0;
-  this.availableUnits ||= 0;
-  this.availableAmount ||= 0;
-}
-
-
-    // Function to fetch IRR
+  // Function to fetch IRR
   fetchIrr(entityid: string): void {
     this.isLoading = true;
     this.errorMessage = null;
@@ -134,11 +134,11 @@ export class DirectEquityDetailsComponent implements OnInit{
     this.featuresService.getDirectEquityIrrById(entityid).subscribe({
       next: (response) => {
         // Assuming API returns { irr: 0.1234 }
-        this.irrResult = response?.annualized_irr_percent?? null;
+        this.irrResult = response?.annualized_irr_percent ?? null;
         console.log(this.irrResult);
-        
+
         console.log(entityid, this.irrResult);
-        
+
         this.isLoading = false;
       },
       error: (err) => {
@@ -150,7 +150,7 @@ export class DirectEquityDetailsComponent implements OnInit{
   }
 
   loadMfDetails(id: string) {
-    this.featuresService.getDirectEquityDetailsById(id).subscribe({
+    this.featuresService.getDirectEquityCommodityDetailsById(id).subscribe({
       next: (res: any) => {
         this.deDetails = res?.data || {};
       },
@@ -162,7 +162,7 @@ export class DirectEquityDetailsComponent implements OnInit{
 
 
   getDEDetailActionTable(deId: string) {
-    this.featuresService.getDEDetailActionTable(deId).subscribe({
+    this.featuresService.getDECommodityDetailActionTable(deId).subscribe({
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
         this.calculateTotals(this.actionTableList)
@@ -177,15 +177,15 @@ export class DirectEquityDetailsComponent implements OnInit{
     });
   }
 
-getSeverity(orderType: string) {
-  switch (orderType?.trim()?.toUpperCase()) {
-    case 'BUY':
-      return 'success';
-    case 'SELL':
-      return 'danger';
-    default:
-      return 'info';
+  getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'BUY':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
-}
 
 }

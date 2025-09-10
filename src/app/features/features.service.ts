@@ -62,6 +62,10 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/InsertdirectData`, data);
   }
 
+  insertDirectEquityCommodityActionTable(data: any) {
+    return this.http.post(`${this.apiUrl}/InsertCommoditiesDirect`, data);
+  }
+
   uploadAutomation(data: any) {
     return this.http.post(`${this.apiUrl}/uploadAutomationData`, data);
   }
@@ -149,6 +153,12 @@ export class FeaturesService {
     });
   }
 
+  getDirectEquityCommodityDetailsById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getDEDetailCommoditiesEntityById`, {
+      params: { entityid: id }
+    });
+  }
+
   getMFDetailUnderlyingTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
       params: { entityid: mfId }
@@ -175,6 +185,12 @@ export class FeaturesService {
 
   getDEDetailActionTable(deId: string) {
     return this.http.get<any>(`${this.apiUrl}/getDEDetailActionTable`, {
+      params: { entityid: deId }
+    });
+  }
+
+  getDECommodityDetailActionTable(deId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getDEDetailCommoditiesActionTable`, {
       params: { entityid: deId }
     });
   }
