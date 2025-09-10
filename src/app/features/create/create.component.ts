@@ -64,6 +64,7 @@ import { FormConfig } from '../form-config';
 })
 export class CreateComponent implements OnInit {
   displayModal = false;
+  displayAutoModal = false;
   entityForm: FormGroup;
 
   // Action table forms
@@ -592,6 +593,10 @@ export class CreateComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save Direct Equity data' });
       }
     });
+  }
+
+  showAutoModal(){
+    this.displayAutoModal = true
   }
 
   saveEtfActionTableData() {
