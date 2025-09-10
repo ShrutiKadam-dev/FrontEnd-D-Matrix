@@ -296,24 +296,27 @@
   </form>
 </p-dialog>
 
-<!-- NAV Modal -->
-<p-dialog header="Auto Add" [(visible)]="displayAutoModal" [modal]="true" [closable]="true"
-  [style]="{ width: '30vw' }">
+<!-- NAV Auto Modal -->
+<p-dialog header="Auto Add" [(visible)]="displayAutoModal" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
   <form [formGroup]="navForm" class="p-fluid">
     <div class="field">
-      <label for="pre_tax_nav">Category</label>
-      <input id="pre_tax_nav" pInputText  placeholder="Enter Pre-Tax NAV" />
+      <label for="category">Category</label>
+      <p-dropdown id="category" [options]="categoryOptions" placeholder="Select Category" appendTo="body"></p-dropdown>
     </div>
 
     <div class="field">
-      <label for="post_tax_nav">Sub Category</label>
-      <input id="post_tax_nav" pInputText placeholder="Enter Post-Tax NAV" />
+      <label for="subcategory">Sub Category</label>
+      <p-dropdown id="subcategory" [options]="subCategoryOptions" placeholder="Select Sub Category" appendTo="body"
+        panelStyleClass="subcategory-panel" dropdownPosition="top"></p-dropdown>
     </div>
 
     <div class="field">
-      <label for="nav_date">Upload</label>
-      <p-datepicker id="nav_date"  showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport"
-        appendTo="body" [style]="{ width: '100%' }"></p-datepicker>
+      <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
+        [multiple]="false" accept=".pdf" maxFileSize="1000000" mode="advanced">
+        <ng-template #empty>
+          <div>Drag and drop files to here to upload.</div>
+        </ng-template>
+      </p-fileupload>
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">

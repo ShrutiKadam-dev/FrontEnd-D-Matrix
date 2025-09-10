@@ -20,6 +20,7 @@ import { DatePicker } from 'primeng/datepicker';
 import { InputMask } from 'primeng/inputmask';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FileUploadModule } from 'primeng/fileupload';
 import {
   MF_ACTION_TABLE_FIELDS,
   DIRECT_EQUITY_ACTION_TABLE_FIELDS,
@@ -54,8 +55,9 @@ import {
     DatePicker,
     InputMask,
     ToastModule,
-    ProgressSpinnerModule
-
+    ProgressSpinnerModule,
+    FileUploadModule
+  
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './create.component.html',
@@ -355,6 +357,10 @@ export class CreateComponent implements OnInit {
         });
       }
     });
+  }
+
+  onUpload(file:any){
+      
   }
 
   showModal() {
