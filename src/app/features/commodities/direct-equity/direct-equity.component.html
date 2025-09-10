@@ -61,9 +61,10 @@
     scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand">
     <ng-template pTemplate="header">
       <tr>
+        <th>Scrip Name</th>
         <th>Client Name</th>
-        <th>Order Number</th>
         <th>Trade Number</th>
+        <th>Action</th>
         <th>Trade Price</th>
         <th>Brokerage Per Unit</th>
       </tr>
@@ -71,8 +72,9 @@
 
     <ng-template pTemplate="body" let-entity>
       <tr>
+        <td>{{ entity.scripname }}</td>
         <td>{{ entity.client_name }}</td>
-        <td>{{ entity.order_number }}</td>
+        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
         <td>{{ entity.trade_number }}</td>
         <td>{{ entity.trade_price | number:'1.2-2'}}</td>
         <td>{{ entity.brokerage_per_unit }}</td>

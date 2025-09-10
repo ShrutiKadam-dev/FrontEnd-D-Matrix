@@ -15,11 +15,14 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { TagModule } from 'primeng/tag';
+
 @Component({
   selector: 'app-direct-equity',
-  imports: [    
+  imports: [
     ReactiveFormsModule,
     DialogModule,
+    TagModule,
     ButtonModule,
     CalendarModule,
     InputTextModule,
@@ -83,9 +86,9 @@ export class DirectEquityComponent implements OnInit {
       next: (res: any) => {
         this.allDEs = res?.data || [];
         this.allDEs.forEach(de => {
-        de.color = this.getColor(de.subcategory);
-      });
-   
+          de.color = this.getColor(de.subcategory);
+        });
+
         this.displayDEs = [...this.allDEs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
@@ -107,6 +110,16 @@ export class DirectEquityComponent implements OnInit {
     });
   }
 
+  getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
+  }
 
   scrollToDE(de: any) {
     if (de) {

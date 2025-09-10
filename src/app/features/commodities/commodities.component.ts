@@ -133,7 +133,7 @@ export class CommoditiesComponent implements OnInit {
         break;
 
       case 'direct equity':
-        this.router.navigate(['/features/equity/direct-equity']);
+        this.router.navigate(['/features/commodities/direct-equity']);
         break;
 
       case 'alternative investment funds':
