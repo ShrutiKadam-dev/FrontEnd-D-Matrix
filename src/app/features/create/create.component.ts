@@ -32,6 +32,7 @@ import {
   MODE_OPTIONS,
   ALL_SUBCATEGORY_OPTIONS
 } from '../dropdown-options.enums';
+import { FormConfig } from '../form-config';
 
 @Component({
   selector: 'app-create',
@@ -115,6 +116,7 @@ export class CreateComponent implements OnInit {
     const total = unit * nav;
     this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
   }
+
   private calculateNetTotalValue(): void {
     const qty = Number(this.directEquityActionTableForm.get('qty')?.value) || 0;
     const trade_price = Number(this.directEquityActionTableForm.get('trade_price')?.value) || 0;
@@ -123,117 +125,14 @@ export class CreateComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder) {
-    // ---------- Entity form ----------
-    this.entityForm = this.fb.group({
-      scripname: ['', Validators.required],
-      scripcode: ['', Validators.required],
-      nickname: [''],
-      benchmark: [''],
-      category: ['', Validators.required],
-      subcategory: ['', Validators.required],
-      isin: ['', Validators.required],
-    });
+  const formConfig = new FormConfig(this.fb);
 
-    // ---------- NAV ----------
-    this.navForm = this.fb.group({
-      pre_tax_nav: ['', Validators.required],
-      post_tax_nav: ['', Validators.required],
-      nav_date: ['', Validators.required],
-      entityid: ['', Validators.required]
-    });
-
-    // ---------- AIF Action ----------
-    this.aifActionTableForm = this.fb.group({
-      trans_date: ['', Validators.required],
-      trans_type: ['', Validators.required],
-      contribution_amount: ['', Validators.required],
-      setup_expense: [''],
-      stamp_duty: [''],
-      amount_invested: ['', Validators.required],
-      post_tax_nav: [''],
-      num_units: ['', Validators.required],
-      balance_units: [''],
-      strategy_name: [''],
-      amc_name: [''],
-      entityid: ['', Validators.required],
-    });
-
-    // ---------- MF Action ----------
-    this.mfActionTableForm = this.fb.group({
-      scrip_code: ['', Validators.required],
-      mode: ['', Validators.required],
-      order_type: ['', Validators.required],
-      order_date: [new Date(), Validators.required],
-      sett_no: ['', Validators.required],
-      scrip_name: ['', Validators.required],
-      isin: ['', Validators.required],
-      order_number: ['', Validators.required],
-      folio_number: ['', Validators.required],
-      nav: ['', Validators.required],
-      stt: ['', Validators.required],
-      unit: ['', Validators.required],
-      redeem_amount: ['', Validators.required],
-      purchase_amount: ['', Validators.required],
-      purchase_value: [{ value: '', disabled: true }, Validators.required],
-      cgst: ['', Validators.required],
-      sgst: ['', Validators.required],
-      ugst: ['', Validators.required],
-      igst: ['', Validators.required],
-      stamp_duty: ['', Validators.required],
-      cess_value: ['', Validators.required],
-      net_amount: ['', Validators.required],
-      entityid: ['', Validators.required]
-    });
-
-    // ---------- Direct Equity Action ----------
-    this.directEquityActionTableForm = this.fb.group({
-      contract_note_number: ['', Validators.required],
-      trade_date: ['', Validators.required],
-      client_code: ['', Validators.required],
-      client_name: ['', Validators.required],
-      order_number: ['', Validators.required],
-      order_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
-      trade_number: ['', Validators.required],
-      description: [''],
-      order_type: ['', Validators.required],
-      qty: ['', Validators.required],
-      trade_price: ['', Validators.required],
-      brokerage_per_unit: ['', Validators.required],
-      net_rate_per_unit: ['', Validators.required],
-      gst: [''],
-      stt: [''],
-      security_transaction_tax: [''],
-      exchange_transaction_charges: [''],
-      sebi_turnover_fees: [''],
-      stamp_duty: [''],
-      ipft: [''],
-      net_total: [{ value: '', disabled: true }, Validators.required],
-      net_amount_receivable: ['', Validators.required],
-      entityid: ['', Validators.required]
-    });
-
-    // ---------- ETF Action ----------
-    this.etfActionTableForm = this.fb.group({
-      order_number: ['', Validators.required],
-      order_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
-      trade_number: ['', Validators.required],
-      trade_time: ['', [Validators.required, Validators.pattern(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)]],
-      trade_date: ['', Validators.required],
-      security_description: ['', Validators.required],
-      order_type: ['', Validators.required],
-      quantity: ['', Validators.required],
-      gross_rate: ['', Validators.required],
-      trade_price_per_unit: ['', Validators.required],
-      brokerage_per_unit: ['', Validators.required],
-      net_rate_per_unit: ['', Validators.required],
-      closing_rate: ['', Validators.required],
-      gst: ['', Validators.required],
-      stt: ['', Validators.required],
-      net_total_before_levies: ['', Validators.required],
-      remarks: ['', Validators.required],
-      entityid: ['', Validators.required]
-    });
-
+  this.entityForm = formConfig.entityForm();
+  this.navForm = formConfig.navForm();
+  this.aifActionTableForm = formConfig.aifActionTableForm();
+  this.mfActionTableForm = formConfig.mfActionTableForm();
+  this.directEquityActionTableForm = formConfig.directEquityActionTableForm();
+  this.etfActionTableForm = formConfig.etfActionTableForm();
     // Auto-calc MF purchase_value
     this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
     this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
