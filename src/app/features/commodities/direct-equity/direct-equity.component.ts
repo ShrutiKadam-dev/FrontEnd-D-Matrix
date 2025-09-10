@@ -79,7 +79,7 @@ export class DirectEquityComponent implements OnInit {
   }
 
   getAllDirectEquity() {
-    this.featuresService.getAllDirectEquity().subscribe({
+    this.featuresService.getAllDirectEquityCommodities().subscribe({
       next: (res: any) => {
         this.allDEs = res?.data || [];
         this.allDEs.forEach(de => {
