@@ -30,7 +30,7 @@ export class FormConfig {
     return this.fb.group({
       category: ['', Validators.required],
       subcategory: ['', Validators.required],
-      file: [null, Validators.required], 
+      file: [null, Validators.required],
     });
   }
 
@@ -141,5 +141,14 @@ export class FormConfig {
       remarks: ['', Validators.required],
       entityid: ['', Validators.required],
     });
+  }
+
+  pmsClientActionTable(): FormGroup {
+    return this.fb.group({
+      trade_date: ['', Validators.required],
+      trade_price: ['', Validators.required],
+      cheque: ['', Validators.required],
+      order_type: ['', Validators.required],
+    })
   }
 }

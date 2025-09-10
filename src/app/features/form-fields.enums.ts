@@ -86,3 +86,18 @@ export const AIF_ACTION_TABLE_FIELDS: ActionTableField[] = [
     { key: 'strategy_name', label: 'Strategy Name' },
     { key: 'amc_name', label: 'AMC Name' },
 ];
+
+export const PMS_CLIENT_ACTION_TABLE_FIELDS: ActionTableField[] = [
+    { key: 'trade_date', label: 'Trade Date' },
+    { key: 'trade_price', label: 'Trade Price' },
+    { key: 'cheque', label: 'Cheque' },
+    { key: 'order_type', label: 'Order Type' },
+]
+
+export const PMS_AMC_ACTION_TABLE_FIELDS: ActionTableField[] = [
+    { key: 'security_description', label: 'Security / Contract Description' },
+    { key: 'order_type', label: 'Order Type' },
+    { key: 'qty', label: 'Quantity' },
+    { key: 'trade_price', label: 'Trade Price' },
+    { key: 'net_total', label: 'Net Total' },
+]

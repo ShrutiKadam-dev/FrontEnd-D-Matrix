@@ -44,5 +44,13 @@ export const equityRoutes: Routes = [
         path: 'etf-details/:id',
         loadComponent: () => import('./etf/etf-details/etf-details.component').then(c => c.EtfDetailsComponent)
     },
+    {
+        path: 'PMS',
+        loadComponent: () => import('./pms/pms.component').then(c => c.PMSComponent)
+    },
+    {
+        path: 'PMS/:id',
+        loadComponent: () => import('./pms/pms-details/pms-details.component').then(c => c.PMSDetailsComponent)
+    },
 
 ];

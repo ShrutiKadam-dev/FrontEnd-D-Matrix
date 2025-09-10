@@ -74,6 +74,11 @@ export class AppComponent implements OnInit {
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/etf']
           },
+          { 
+            label: 'PMS', 
+            icon: 'pi pi-arrow-right',
+            routerLink: ['/features/equity/PMS']
+          },
         ]
       },
       {
