@@ -1,18 +1,21 @@
 <div class="table-card">
   <!-- Header Section -->
-  <div class="entity-header p-d-flex p-ai-center p-jc-between">
-    <!-- Add Entity Button -->
+<div class="entity-header p-d-flex p-ai-center p-jc-between">
+  
+  <!-- Left Section (Buttons) -->
+  <div class="button-group p-d-flex p-ai-center">
     <p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn">
     </p-button>
-    <p-button label="ADD AUTO" icon="pi pi-plus" (click)="showAutoModal()" styleClass="add-entity-btn">
+    <p-button label="Automation" icon="pi pi-file-pdf" (click)="showAutoModal()" styleClass="add-entity-btn ml-4">
     </p-button>
-
-
-    <!-- Search Box -->
-    <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
-    </div>
   </div>
+
+  <!-- Right Section (Search Bar) -->
+  <div class="search-container">
+    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
+  </div>
+
+</div>
 
   <!-- Entity Table -->
   <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
@@ -296,23 +299,44 @@
   </form>
 </p-dialog>
 
-<!-- NAV Auto Modal -->
-<p-dialog header="Auto Add" [(visible)]="displayAutoModal" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
-  <form [formGroup]="navForm" class="p-fluid">
+<!-- PDF Auto Modal -->
+<p-dialog header="Automation" [(visible)]="displayAutoModal" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
+  <form [formGroup]="automationForm" class="p-fluid">
+
     <div class="field">
       <label for="category">Category</label>
-      <p-dropdown id="category" [options]="categoryOptions" placeholder="Select Category" appendTo="body"></p-dropdown>
+      <p-dropdown
+        id="category"
+        formControlName="category"                   
+        [options]="categoryOptions"
+        placeholder="Select Category"
+        appendTo="body">
+      </p-dropdown>
     </div>
 
     <div class="field">
       <label for="subcategory">Sub Category</label>
-      <p-dropdown id="subcategory" [options]="subCategoryOptions" placeholder="Select Sub Category" appendTo="body"
-        panelStyleClass="subcategory-panel" dropdownPosition="top"></p-dropdown>
+      <p-dropdown
+        id="subcategory"
+        formControlName="subcategory"                
+        [options]="automationSubCategoryOptions"
+        placeholder="Select Sub Category"
+        appendTo="body"
+        panelStyleClass="subcategory-panel"
+        dropdownPosition="top">
+      </p-dropdown>
     </div>
 
     <div class="field">
-      <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
-        [multiple]="false" accept=".pdf" maxFileSize="1000000" mode="advanced">
+      <!-- wire file upload to a handler that will update automationForm control -->
+      <p-fileupload
+        name="demo[]"
+        (onSelect)="onFileSelect($event)"
+        (onRemove)="onFileRemove($event)"
+        [multiple]="true"
+        accept=".pdf"
+        maxFileSize="1000000"
+        mode="advanced">
         <ng-template #empty>
           <div>Drag and drop files to here to upload.</div>
         </ng-template>
@@ -320,13 +344,24 @@
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
-        (click)="displayNavModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="navForm.invalid"
-        (click)="saveNavData()"></p-button>
+      <p-button
+        label="Cancel"
+        styleClass="add-entity-btn"
+        icon="pi pi-times"
+        (click)="displayAutoModal = false">            <!-- <-- close correct modal -->
+      </p-button>
+
+      <p-button
+        label="Save"
+        styleClass="add-entity-btn"
+        icon="pi pi-check"
+        [disabled]="automationForm.invalid"
+        (click)="saveAutomationData()">             
+      </p-button>
     </div>
   </form>
 </p-dialog>
 
 <p-confirmDialog></p-confirmDialog>
+
 <p-toast></p-toast>

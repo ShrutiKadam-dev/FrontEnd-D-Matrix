@@ -62,6 +62,11 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/InsertdirectData`, data);
   }
 
+  uploadAutomation(data: any) {
+    return this.http.post(`${this.apiUrl}/uploadAutomationData`, data);
+  }
+
+
   //Mutual Fund
   getAllMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
@@ -73,10 +78,6 @@ export class FeaturesService {
   getAllActionTableCommodity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableCommodity`);
   }
-
-
-
-
 
   getAllETF(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getETFEntity`);
@@ -100,6 +101,10 @@ export class FeaturesService {
 
   getAllActionTableOfDirectEquity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfDirectEquity`);
+  }
+
+  getAllActionOfDirectEquityCommodity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionOfDirectEquityCommodity`);
   }
 
   getAllUnderlyingMutualFund(): Observable<any[]> {

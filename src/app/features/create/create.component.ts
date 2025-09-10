@@ -68,7 +68,9 @@ export class CreateComponent implements OnInit {
   displayModal = false;
   displayAutoModal = false;
   entityForm: FormGroup;
-
+  underlyingForm!: FormGroup;
+  navForm: FormGroup;
+  automationForm:  FormGroup;
   // Action table forms
   mfActionTableForm: FormGroup;
   directEquityActionTableForm: FormGroup;
@@ -77,13 +79,13 @@ export class CreateComponent implements OnInit {
 
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
+  automationSubCategoryOptions: any[] = []; 
   isEditMode = false;
   displayUpdateChoiceModal = false;
   selectedEntity: any = null;
 
   // Underlying
   displayUnderlyingModal = false;
-  underlyingForm!: FormGroup;
   selectedEntityId: string | null = null;
   isSubmitting: boolean = false;
 
@@ -92,7 +94,6 @@ export class CreateComponent implements OnInit {
 
   // NAV
   displayNavModal = false;
-  navForm: FormGroup;
 
   companySuggestions: any[] = [];
   date: Date | undefined = new Date();
@@ -132,10 +133,12 @@ export class CreateComponent implements OnInit {
 
   this.entityForm = formConfig.entityForm();
   this.navForm = formConfig.navForm();
+  this.automationForm = formConfig.automationForm();
   this.aifActionTableForm = formConfig.aifActionTableForm();
   this.mfActionTableForm = formConfig.mfActionTableForm();
   this.directEquityActionTableForm = formConfig.directEquityActionTableForm();
   this.etfActionTableForm = formConfig.etfActionTableForm();
+
     // Auto-calc MF purchase_value
     this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
     this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
@@ -147,6 +150,12 @@ export class CreateComponent implements OnInit {
     this.entityForm.get('category')?.valueChanges.subscribe(selectedCategory => {
       this.subCategoryOptions = this.allSubCategoryOptions[selectedCategory] || [];
       this.entityForm.get('subcategory')?.reset();
+    });
+
+    // Subcategory list by category
+    this.automationForm.get('category')?.valueChanges.subscribe(selectedCategory => {
+      this.automationSubCategoryOptions  = this.allSubCategoryOptions[selectedCategory] || [];
+      this.automationForm.get('subcategory')?.reset();
     });
   }
 
@@ -256,10 +265,6 @@ export class CreateComponent implements OnInit {
         });
       }
     });
-  }
-
-  onUpload(file:any){
-      
   }
 
   showModal() {
@@ -766,5 +771,52 @@ export class CreateComponent implements OnInit {
 
   }
 
+
+  onFileSelect(event: any) {
+  const file = event.files && event.files[0];
+  if (file) {
+    this.automationForm.get('file')?.setValue(file, { emitEvent: false });
+  }
+}
+
+onFileRemove(event: any) {
+  this.automationForm.get('file')?.setValue(null, { emitEvent: false });
+}
+
+onUpload(event: any) {
+  
+}
+
+saveAutomationData() {
+
+  if (this.automationForm.invalid) {
+    this.automationForm.markAllAsTouched();
+    this.messageService.add({ severity: 'error', summary: 'Validation', detail: 'Please complete the form.' });
+    return;
+  }
+
+  const payload = this.automationForm.value;
+
+  // If file is a File object and you use FormData:
+  const formData = new FormData();
+  formData.append('category', payload.category);
+  formData.append('subcategory', payload.subcategory);
+  if (payload.file instanceof File) {
+    formData.append('file', payload.file, payload.file.name);
+  } else if (payload.file) {
+    formData.append('fileId', payload.file);
+  }
+
+  this.featuresService.uploadAutomation(formData).subscribe({
+    next: () => {
+      this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
+      this.displayAutoModal = false;
+      this.automationForm.reset();
+    },
+    error: (err) => {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Save failed' });
+    }
+  });
+}
 
 }

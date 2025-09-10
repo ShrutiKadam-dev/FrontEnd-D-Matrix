@@ -1,7 +1,7 @@
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 export class FormConfig {
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   // ---------- Entity form ----------
   entityForm(): FormGroup {
@@ -23,6 +23,14 @@ export class FormConfig {
       post_tax_nav: ['', Validators.required],
       nav_date: ['', Validators.required],
       entityid: ['', Validators.required],
+    });
+  }
+
+  automationForm(): FormGroup {
+    return this.fb.group({
+      category: ['', Validators.required],
+      subcategory: ['', Validators.required],
+      file: [null, Validators.required], 
     });
   }
 

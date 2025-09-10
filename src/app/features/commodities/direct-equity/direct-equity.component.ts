@@ -93,7 +93,7 @@ export class DirectEquityComponent implements OnInit {
   }
 
   getAllActionTable() {
-    this.featuresService.getAllActionTableOfDirectEquity().subscribe({
+    this.featuresService.getAllActionOfDirectEquityCommodity().subscribe({
       next: (data: any) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },
