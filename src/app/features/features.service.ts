@@ -18,22 +18,16 @@ export class FeaturesService {
   private http = inject(HttpClient);
   private apiUrl = 'https://dmatrix-backend.onrender.com'; // backend URL
 
-  createEntity(data: CreateEntity): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/entity_table`, data);
-  }
+  //Create 
 
   getAllEntities(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllentity`);
   }
 
-  getAllActionTableEquity(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
+  createEntity(data: CreateEntity): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/entity_table`, data);
   }
 
-  getAllActionTableCommodity(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableCommodity`);
-  }
-  
   updateEntity(entityData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/updateentity`, entityData);
   }
@@ -49,28 +43,40 @@ export class FeaturesService {
   }
 
   insertActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/action_table`, data); 
+    return this.http.post(`${this.apiUrl}/action_table`, data);
   }
 
   insertAifActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/InsertAifData`, data); 
+    return this.http.post(`${this.apiUrl}/InsertAifData`, data);
   }
 
   insertETFActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/insertETFActionTable`, data); 
+    return this.http.post(`${this.apiUrl}/insertETFActionTable`, data);
   }
 
   insertNavData(data: any) {
-    return this.http.post(`${this.apiUrl}/insertNavData`, data); 
+    return this.http.post(`${this.apiUrl}/insertNavData`, data);
   }
 
   insertDirectEquityActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/InsertdirectData`, data); 
+    return this.http.post(`${this.apiUrl}/InsertdirectData`, data);
   }
-  
+
+  //Mutual Fund
   getAllMutualFund(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFund`);
   }
+  getAllActionTableEquity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
+  }
+
+  getAllActionTableCommodity(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableCommodity`);
+  }
+
+
+
+
 
   getAllETF(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getETFEntity`);
@@ -81,7 +87,7 @@ export class FeaturesService {
   }
 
   getAllDirectEquityCommodities(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getDirectEquityCommodities`);
+    return this.http.get<any[]>(`${this.apiUrl}/getAllDirectEquityCommodities`);
   }
 
   getAllActionTableOfMutualFund(): Observable<any[]> {
@@ -126,7 +132,7 @@ export class FeaturesService {
     });
   }
 
-    getETFDetailsById(id: string) {
+  getETFDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
       params: { entityid: id }
     });
@@ -144,7 +150,7 @@ export class FeaturesService {
     });
   }
 
-    getETFDetailUnderlyingTable(mfId: string) {
+  getETFDetailUnderlyingTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
       params: { entityid: mfId }
     });
@@ -167,7 +173,7 @@ export class FeaturesService {
       params: { entityid: deId }
     });
   }
-  
+
   getCompanyByName(query: string) {
     return this.http.get<any>(`${this.apiUrl}/getCamByid`, {
       params: { company: query }
@@ -199,7 +205,7 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllAifUnderlyingProperties`)
   }
   getAifActionTableById(entityid: string) {
-    return this.http.post(`${this.apiUrl}/getAifActionTablebyId`, {entityid}); 
+    return this.http.post(`${this.apiUrl}/getAifActionTablebyId`, { entityid });
   }
   getUnderlyingTable(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
