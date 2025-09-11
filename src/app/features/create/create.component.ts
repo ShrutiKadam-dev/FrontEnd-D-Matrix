@@ -25,7 +25,9 @@ import {
   MF_ACTION_TABLE_FIELDS,
   DIRECT_EQUITY_ACTION_TABLE_FIELDS,
   ETF_ACTION_TABLE_FIELDS,
-  AIF_ACTION_TABLE_FIELDS
+  AIF_ACTION_TABLE_FIELDS,
+  PMS_AMC_ACTION_TABLE_FIELDS,
+  PMS_CLIENT_ACTION_TABLE_FIELDS
 } from '../form-fields.enums';
 import {
   CATEGORY_OPTIONS,
@@ -58,7 +60,7 @@ import { FormConfig } from '../form-config';
     ToastModule,
     ProgressSpinnerModule,
     FileUploadModule
-  
+
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './create.component.html',
@@ -68,18 +70,21 @@ export class CreateComponent implements OnInit {
   displayModal = false;
   displayAutoModal = false;
   entityForm: FormGroup;
+  navFormAIF: FormGroup;
+  navFormMF: FormGroup;
   underlyingForm!: FormGroup;
-  navForm: FormGroup;
-  automationForm:  FormGroup;
+  automationForm: FormGroup;
   // Action table forms
   mfActionTableForm: FormGroup;
   directEquityActionTableForm: FormGroup;
   etfActionTableForm: FormGroup;
   aifActionTableForm: FormGroup;
+  pmsClientActionForm: FormGroup;
+  pmsAmcForm: FormGroup;
 
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
-  automationSubCategoryOptions: any[] = []; 
+  automationSubCategoryOptions: any[] = [];
   isEditMode = false;
   displayUpdateChoiceModal = false;
   selectedEntity: any = null;
@@ -95,6 +100,28 @@ export class CreateComponent implements OnInit {
   // NAV
   displayNavModal = false;
 
+  //PMS
+  isPmsMode: 'CLIENT' | 'AMC' | null = null;
+
+  openPmsClientAction(entity: any) {
+    this.selectedEntity = entity;
+    this.isPmsMode = 'CLIENT';
+    this.displayActionTableModal = true;
+    this.displayUpdateChoiceModal = false;
+
+    this.pmsClientActionForm.reset();
+    this.pmsClientActionForm.patchValue({ entityid: entity.entityid });
+  }
+
+  openPmsAmcAction(entity: any) {
+    this.selectedEntity = entity;
+    this.isPmsMode = 'AMC';
+    this.displayActionTableModal = true;
+    this.displayUpdateChoiceModal = false;
+    this.pmsAmcForm.reset();
+    this.pmsAmcForm.patchValue({ entityid: entity.entityid });
+  }
+
   companySuggestions: any[] = [];
   date: Date | undefined = new Date();
 
@@ -102,6 +129,9 @@ export class CreateComponent implements OnInit {
   directEquityActionTableFields = DIRECT_EQUITY_ACTION_TABLE_FIELDS;
   etfActionTableFields = ETF_ACTION_TABLE_FIELDS;
   aifActionTableFields = AIF_ACTION_TABLE_FIELDS;
+  pmsClientActionTableFields = PMS_CLIENT_ACTION_TABLE_FIELDS;
+  pmsAmcActionTableFields = PMS_AMC_ACTION_TABLE_FIELDS;
+
 
   private confirmationService = inject(ConfirmationService);
   private featuresService = inject(FeaturesService);
@@ -129,15 +159,18 @@ export class CreateComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder) {
-  const formConfig = new FormConfig(this.fb);
+    const formConfig = new FormConfig(this.fb);
 
-  this.entityForm = formConfig.entityForm();
-  this.navForm = formConfig.navForm();
-  this.automationForm = formConfig.automationForm();
-  this.aifActionTableForm = formConfig.aifActionTableForm();
-  this.mfActionTableForm = formConfig.mfActionTableForm();
-  this.directEquityActionTableForm = formConfig.directEquityActionTableForm();
-  this.etfActionTableForm = formConfig.etfActionTableForm();
+    this.entityForm = formConfig.entityForm();
+    this.navFormAIF = formConfig.navFormAIF();
+    this.navFormMF = formConfig.navFormMF();
+    this.automationForm = formConfig.automationForm();
+    this.aifActionTableForm = formConfig.aifActionTableForm();
+    this.pmsClientActionForm = formConfig.pmsClientActionForm();
+    this.pmsAmcForm = formConfig.pmsAmcForm();
+    this.mfActionTableForm = formConfig.mfActionTableForm();
+    this.directEquityActionTableForm = formConfig.directEquityActionTableForm();
+    this.etfActionTableForm = formConfig.etfActionTableForm();
 
     // Auto-calc MF purchase_value
     this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
@@ -154,7 +187,7 @@ export class CreateComponent implements OnInit {
 
     // Subcategory list by category
     this.automationForm.get('category')?.valueChanges.subscribe(selectedCategory => {
-      this.automationSubCategoryOptions  = this.allSubCategoryOptions[selectedCategory] || [];
+      this.automationSubCategoryOptions = this.allSubCategoryOptions[selectedCategory] || [];
       this.automationForm.get('subcategory')?.reset();
     });
   }
@@ -507,13 +540,17 @@ export class CreateComponent implements OnInit {
   }
 
   // ---------- Which fields & form to render ----------
-  private getActionContext(entity: any): 'DE' | 'AIF' | 'ETF' | 'MF' | 'DECOM' {
+  getActionContext(entity: any): 'DE' | 'AIF' | 'ETF' | 'MF' | 'DECOM' | 'PMS_CLIENT' | 'PMS_AMC' {
     const cat = entity?.category;
     const sub = entity?.subcategory;
+
     if (cat === 'Equity' && sub === 'Direct Equity') return 'DE';
     if (cat === 'Equity' && sub === 'Alternative Investment Funds') return 'AIF';
     if (cat === 'Commodities' && sub === 'ETF') return 'ETF';
     if (cat === 'Commodities' && sub === 'Direct Equity') return 'DECOM';
+    if (sub === 'PMS' && this.isPmsMode === 'CLIENT') return 'PMS_CLIENT';
+    if (sub === 'PMS' && this.isPmsMode === 'AMC') return 'PMS_AMC';
+
     return 'MF';
   }
 
@@ -524,10 +561,13 @@ export class CreateComponent implements OnInit {
       case 'DECOM': return this.directEquityActionTableFields;
       case 'AIF': return this.aifActionTableFields;
       case 'ETF': return this.etfActionTableFields;
+      case 'PMS_CLIENT': return this.pmsClientActionTableFields;
+      case 'PMS_AMC': return this.pmsAmcActionTableFields;
       case 'MF':
       default: return this.mfActionTableFields;
     }
   }
+
 
   get currentActionTableForm() {
     const ctx = this.getActionContext(this.selectedEntity);
@@ -538,10 +578,11 @@ export class CreateComponent implements OnInit {
       case 'DECOM': form = this.directEquityActionTableForm; break;
       case 'AIF': form = this.aifActionTableForm; break;
       case 'ETF': form = this.etfActionTableForm; break;
+      case 'PMS_CLIENT': form = this.pmsClientActionForm; break;
+      case 'PMS_AMC': form = this.pmsAmcForm; break;
       case 'MF':
       default: form = this.mfActionTableForm; break;
     }
-
     if (this.selectedEntity?.entityid) {
       form.get('entityid')?.setValue(this.selectedEntity.entityid, { emitEvent: false });
     }
@@ -555,21 +596,19 @@ export class CreateComponent implements OnInit {
     if (ctx === 'DECOM') return this.saveDirectEquityCommodityActionTableData()
     if (ctx === 'AIF') return this.saveAifActionTableData();
     if (ctx === 'ETF') return this.saveEtfActionTableData();
+    if (ctx === 'PMS_CLIENT') return this.savePmsClientActionTableData();
+    if (ctx === 'PMS_AMC') return this.savePmsAmcActionTableData();
+
     return this.saveActionTableData(); // MF
   }
 
   saveActionTableData() {
     if (this.mfActionTableForm.invalid) return;
 
+    this.formatDateField(this.mfActionTableForm, 'order_date');
+
     const payload = this.mfActionTableForm.getRawValue();
 
-    if (payload.order_date instanceof Date) {
-      const d = payload.order_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.order_date = `${yyyy}-${mm}-${dd}`;
-    }
 
     this.featuresService.insertActionTable(payload).subscribe({
       next: () => {
@@ -589,15 +628,9 @@ export class CreateComponent implements OnInit {
   saveDirectEquityActionTableData() {
     if (this.directEquityActionTableForm.invalid) return;
 
-    const payload = this.directEquityActionTableForm.getRawValue();
+    this.formatDateField(this.directEquityActionTableForm, 'trade_date');
 
-    if (payload.trade_date instanceof Date) {
-      const d = payload.trade_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.trade_date = `${yyyy}-${mm}-${dd}`;
-    }
+    const payload = this.directEquityActionTableForm.getRawValue();
 
     this.featuresService.insertDirectEquityActionTable(payload).subscribe({
       next: () => {
@@ -612,16 +645,9 @@ export class CreateComponent implements OnInit {
 
   saveDirectEquityCommodityActionTableData() {
     if (this.directEquityActionTableForm.invalid) return;
+    this.formatDateField(this.directEquityActionTableForm, 'trade_date');
 
     const payload = this.directEquityActionTableForm.getRawValue();
-
-    if (payload.trade_date instanceof Date) {
-      const d = payload.trade_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.trade_date = `${yyyy}-${mm}-${dd}`;
-    }
 
     this.featuresService.insertDirectEquityCommodityActionTable(payload).subscribe({
       next: () => {
@@ -636,16 +662,9 @@ export class CreateComponent implements OnInit {
 
   saveEtfActionTableData() {
     if (this.etfActionTableForm.invalid) return;
+    this.formatDateField(this.etfActionTableForm, 'trade_date');
 
     const payload = this.etfActionTableForm.getRawValue();
-
-    if (payload.trade_date instanceof Date) {
-      const d = payload.trade_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.trade_date = `${yyyy}-${mm}-${dd}`;
-    }
 
     this.featuresService.insertETFActionTable(payload).subscribe({
       next: () => {
@@ -658,18 +677,26 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  private formatDateField(form: FormGroup, field: string) {
+    const val = form.get(field)?.value;
+    if (val) {
+      const date = new Date(val);
+      // Remove timezone offset so date stays consistent
+      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+      const yyyy = localDate.getFullYear();
+      const mm = String(localDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(localDate.getDate()).padStart(2, '0');
+
+      form.get(field)?.setValue(`${yyyy}-${mm}-${dd}`, { emitEvent: false });
+    }
+  }
+
   saveAifActionTableData() {
     if (this.aifActionTableForm.invalid) return;
+    this.formatDateField(this.aifActionTableForm, 'trans_date');
 
     const payload = this.aifActionTableForm.getRawValue();
-
-    if (payload.trans_date instanceof Date) {
-      const d = payload.trans_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.trans_date = `${yyyy}-${mm}-${dd}`;
-    }
 
     this.featuresService.insertAifActionTable(payload).subscribe({
       next: () => {
@@ -682,44 +709,127 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  savePmsClientActionTableData() {
+    if (this.currentActionTableForm.invalid) return;
+    this.formatDateField(this.currentActionTableForm, 'trade_date');
+
+    const payload = this.currentActionTableForm.getRawValue();
+    // Format PMS-specific fields if needed
+
+    this.featuresService.insertPmsClientAction(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'PMS Client action saved successfully' });
+        this.displayActionTableModal = false;
+      },
+      error: (err: { error: { message: any; }; }) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save PMS Client action' });
+      }
+    });
+  }
+
+  savePmsAmcActionTableData() {
+    if (this.currentActionTableForm.invalid) return;
+    this.formatDateField(this.currentActionTableForm, 'trans_date');
+
+    const payload = this.currentActionTableForm.getRawValue();
+
+    this.featuresService.insertPmsAmcAction(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'PMS AMC action saved successfully' });
+        this.displayActionTableModal = false;
+      },
+      error: (err: { error: { message: any; }; }) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save PMS AMC action' });
+      }
+    });
+  }
+
   // ---------- NAV ----------
   openNavModal(entity: any) {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = false;
-    this.displayNavModal = true;
-    this.navForm.reset();
-    this.navForm.patchValue({ entityid: entity.entityid });
+
+    if (entity.category === 'Equity' && entity.subcategory === 'Alternative Investment Funds') {
+      this.navFormAIF.reset();
+      this.navFormAIF.patchValue({ entityid: entity.entityid });
+      this.displayNavModal = true;
+    } else if (entity.category === 'Equity' && entity.subcategory === 'Mutual Fund') {
+      this.navFormMF.reset();
+      this.navFormMF.patchValue({ entityid: entity.entityid });
+      this.displayNavModal = true;
+    }
   }
 
-  
-  showAutoModal(){
+  showAutoModal() {
     this.displayAutoModal = true
   }
 
   saveNavData() {
-    if (this.navForm.invalid) return;
+    if (!this.selectedEntity) return;
 
-    const payload = this.navForm.getRawValue();
+    let navForm: FormGroup;      // <-- declare the form variable
+    let serviceCall: any;
 
-    if (payload.nav_date instanceof Date) {
-      const d = payload.nav_date;
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      payload.nav_date = `${yyyy}-${mm}-${dd}`;
+    // Choose the correct form and service based on subcategory
+    if (this.selectedEntity.subcategory === 'Alternative Investment Funds') {
+      this.formatDateField(this.navFormAIF, 'nav_date');
+      navForm = this.navFormAIF;
+
+      serviceCall = this.featuresService.insertaifnavData(navForm.getRawValue());
+    } else if (this.selectedEntity.subcategory === 'Mutual Fund') {
+      this.formatDateField(this.navFormAIF, 'nav_date');
+      navForm = this.navFormMF;
+
+      serviceCall = this.featuresService.insertmfnavData(navForm.getRawValue());
+    } else {
+      // Unknown subcategory
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Unknown NAV type'
+      });
+      return;
     }
 
-    this.featuresService.insertNavData(payload).subscribe({
+    // Validate the form
+    if (navForm.invalid) {
+      navForm.markAllAsTouched();
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Please fill all required fields before saving.'
+      });
+      return;
+    }
+
+    // Format nav_date if present
+    const payload = navForm.getRawValue();
+    if (payload.nav_date instanceof Date) {
+      const d = payload.nav_date;
+      payload.nav_date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    // Call the backend service
+    serviceCall.subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'NAV data saved successfully' });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'NAV data saved successfully'
+        });
         this.displayNavModal = false;
         this.displayUpdateChoiceModal = false;
       },
-      error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save NAV data' });
+      error: (err: { error: { message: any; }; }) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to save NAV data'
+        });
       }
     });
   }
+
 
   // ---------- Company search ----------
   searchCompany(event: any, rowIndex: number) {
@@ -802,50 +912,50 @@ export class CreateComponent implements OnInit {
 
 
   onFileSelect(event: any) {
-  const file = event.files && event.files[0];
-  if (file) {
-    this.automationForm.get('file')?.setValue(file, { emitEvent: false });
-  }
-}
-
-onFileRemove(event: any) {
-  this.automationForm.get('file')?.setValue(null, { emitEvent: false });
-}
-
-onUpload(event: any) {
-  
-}
-
-saveAutomationData() {
-
-  if (this.automationForm.invalid) {
-    this.automationForm.markAllAsTouched();
-    this.messageService.add({ severity: 'error', summary: 'Validation', detail: 'Please complete the form.' });
-    return;
-  }
-
-  const payload = this.automationForm.value;
-
-  // If file is a File object and you use FormData:
-  const formData = new FormData();
-  formData.append('category', payload.category);
-  formData.append('subcategory', payload.subcategory);
-  if (payload.file instanceof File) {
-    formData.append('file', payload.file, payload.file.name);
-  } else if (payload.file) {
-    formData.append('fileId', payload.file);
-  }
-
-  this.featuresService.uploadAutomation(formData).subscribe({
-    next: () => {
-      this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
-      this.displayAutoModal = false;
-      this.automationForm.reset();
-    },
-    error: (err) => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Save failed' });
+    const file = event.files && event.files[0];
+    if (file) {
+      this.automationForm.get('file')?.setValue(file, { emitEvent: false });
     }
-  });
-}
+  }
+
+  onFileRemove(event: any) {
+    this.automationForm.get('file')?.setValue(null, { emitEvent: false });
+  }
+
+  onUpload(event: any) {
+
+  }
+
+  saveAutomationData() {
+
+    if (this.automationForm.invalid) {
+      this.automationForm.markAllAsTouched();
+      this.messageService.add({ severity: 'error', summary: 'Validation', detail: 'Please complete the form.' });
+      return;
+    }
+
+    const payload = this.automationForm.value;
+
+    // If file is a File object and you use FormData:
+    const formData = new FormData();
+    formData.append('category', payload.category);
+    formData.append('subcategory', payload.subcategory);
+    if (payload.file instanceof File) {
+      formData.append('file', payload.file, payload.file.name);
+    } else if (payload.file) {
+      formData.append('fileId', payload.file);
+    }
+
+    this.featuresService.uploadAutomation(formData).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
+        this.displayAutoModal = false;
+        this.automationForm.reset();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Save failed' });
+      }
+    });
+  }
 
 }

@@ -89,9 +89,9 @@ export const AIF_ACTION_TABLE_FIELDS: ActionTableField[] = [
 
 export const PMS_CLIENT_ACTION_TABLE_FIELDS: ActionTableField[] = [
     { key: 'trade_date', label: 'Trade Date' },
+     { key: 'order_type', label: 'Order Type' },
     { key: 'trade_price', label: 'Trade Price' },
     { key: 'cheque', label: 'Cheque' },
-    { key: 'order_type', label: 'Order Type' },
 ]
 
 export const PMS_AMC_ACTION_TABLE_FIELDS: ActionTableField[] = [
@@ -99,5 +99,5 @@ export const PMS_AMC_ACTION_TABLE_FIELDS: ActionTableField[] = [
     { key: 'order_type', label: 'Order Type' },
     { key: 'qty', label: 'Quantity' },
     { key: 'trade_price', label: 'Trade Price' },
-    { key: 'net_total', label: 'Net Total' },
+    { key: 'net_amount', label: 'Net Total' },
 ]

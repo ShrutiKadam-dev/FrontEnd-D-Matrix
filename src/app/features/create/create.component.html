@@ -1,21 +1,21 @@
 <div class="table-card">
   <!-- Header Section -->
-<div class="entity-header p-d-flex p-ai-center p-jc-between">
-  
-  <!-- Left Section (Buttons) -->
-  <div class="button-group p-d-flex p-ai-center">
-    <p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn">
-    </p-button>
-    <p-button label="Automation" icon="pi pi-file-pdf" (click)="showAutoModal()" styleClass="add-entity-btn ml-4">
-    </p-button>
-  </div>
+  <div class="entity-header p-d-flex p-ai-center p-jc-between">
 
-  <!-- Right Section (Search Bar) -->
-  <div class="search-container">
-    <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
-  </div>
+    <!-- Left Section (Buttons) -->
+    <div class="button-group p-d-flex p-ai-center">
+      <p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn">
+      </p-button>
+      <p-button label="Automation" icon="pi pi-file-pdf" (click)="showAutoModal()" styleClass="add-entity-btn ml-4">
+      </p-button>
+    </div>
 
-</div>
+    <!-- Right Section (Search Bar) -->
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
+    </div>
+
+  </div>
 
   <!-- Entity Table -->
   <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
@@ -109,32 +109,37 @@
     <div class="edit-choice-buttons">
 
       <!-- Contract Note (always available) -->
-      <p-button label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
+      <p-button
+        *ngIf="!(selectedEntity?.subcategory === 'PMS' && (selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Fixed_Income' || selectedEntity?.category === 'Commodities'))"
+        label="Contract Note" icon="pi pi-table" styleClass="add-entity-btn"
         (click)="updateActionTable(selectedEntity)"></p-button>
 
       <!-- Underlying (hide for Direct Equity & ETF) -->
-      <p-button *ngIf="!(((selectedEntity?.category === 'Equity' 
-            || selectedEntity?.category === 'Fixed_Income' 
-            || selectedEntity?.category === 'Commodities') 
-          && (selectedEntity?.subcategory === 'Direct Equity' 
-              || selectedEntity?.subcategory === 'ETF')))" label="Underlying" icon="pi pi-list"
-        styleClass="add-entity-btn" (click)="updateUnderlyingTable(selectedEntity)"></p-button>
+      <p-button *ngIf="!(((selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Fixed_Income' || selectedEntity?.category === 'Commodities') 
+          && (selectedEntity?.subcategory === 'Direct Equity' || selectedEntity?.subcategory === 'ETF')))"
+        label="Underlying" icon="pi pi-list" styleClass="add-entity-btn"
+        (click)="updateUnderlyingTable(selectedEntity)"></p-button>
 
       <!-- NAV Update (only for AIF) -->
-      <p-button *ngIf="(
-    (
-      (selectedEntity?.category === 'Equity' 
-       || selectedEntity?.category === 'Fixed_Income' 
-       || selectedEntity?.category === 'Commodities') 
-      && selectedEntity?.subcategory === 'Alternative Investment Funds'
-    )
-    || 
-    (
-      selectedEntity?.category === 'Equity' 
-      && selectedEntity?.subcategory === 'Mutual Fund'
-    )
-  )" label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
+      <p-button
+        *ngIf="(( (selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Fixed_Income' || selectedEntity?.category === 'Commodities') 
+      && selectedEntity?.subcategory === 'Alternative Investment Funds')|| ( selectedEntity?.category === 'Equity' && selectedEntity?.subcategory === 'Mutual Fund'))"
+        label="NAV Update" icon="pi pi-dollar" styleClass="add-entity-btn"
         (click)="openNavModal(selectedEntity)"></p-button>
+
+
+      <ng-container
+        *ngIf="(selectedEntity?.subcategory === 'PMS' && (selectedEntity?.category === 'Equity' || selectedEntity?.category === 'Fixed_Income' || selectedEntity?.category === 'Commodities'))">
+
+        <p-button label="Client Action" icon="pi pi-user" styleClass="add-entity-btn"
+          (click)="openPmsClientAction(selectedEntity)">
+        </p-button>
+
+        <p-button label="AMC Action" icon="pi pi-building" styleClass="add-entity-btn"
+          (click)="openPmsAmcAction(selectedEntity)">
+        </p-button>
+
+      </ng-container>
 
     </div>
   </div>
@@ -273,70 +278,73 @@
 <!-- NAV Modal -->
 <p-dialog header="Update NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true"
   [style]="{ width: '30vw' }">
-  <form [formGroup]="navForm" class="p-fluid">
-    <div class="field">
-      <label for="pre_tax_nav">Pre-Tax NAV</label>
-      <input id="pre_tax_nav" pInputText formControlName="pre_tax_nav" placeholder="Enter Pre-Tax NAV" />
+<form [formGroup]="selectedEntity?.subcategory === 'Alternative Investment Funds' ? navFormAIF : navFormMF">
+
+    <!-- AIF fields -->
+    <div *ngIf="selectedEntity?.subcategory === 'Alternative Investment Funds'">
+      <div class="field">
+        <label for="pre_tax_nav">Pre-Tax NAV</label>
+        <input id="pre_tax_nav" pInputText formControlName="pre_tax_nav" placeholder="Enter Pre-Tax NAV" />
+      </div>
+      <div class="field">
+        <label for="post_tax_nav">Post-Tax NAV</label>
+        <input id="post_tax_nav" pInputText formControlName="post_tax_nav" placeholder="Enter Post-Tax NAV" />
+      </div>
+      <div class="field">
+        <label for="nav_date">Date</label>
+        <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy" appendTo="body"
+          [style]="{ width: '100%' }"></p-datepicker>
+      </div>
     </div>
 
-    <div class="field">
-      <label for="post_tax_nav">Post-Tax NAV</label>
-      <input id="post_tax_nav" pInputText formControlName="post_tax_nav" placeholder="Enter Post-Tax NAV" />
-    </div>
-
-    <div class="field">
-      <label for="nav_date">Date</label>
-      <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport"
-        appendTo="body" [style]="{ width: '100%' }"></p-datepicker>
+    <!-- MF fields -->
+    <div *ngIf="selectedEntity?.subcategory === 'Mutual Fund'">
+      <div class="field">
+        <label for="nav_date">Date</label>
+        <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy" appendTo="body"
+          [style]="{ width: '100%' }"></p-datepicker>
+      </div>
+      <div class="field">
+        <label for="nav">Nav</label>
+        <input id="nav" pInputText formControlName="nav" placeholder="Enter NAV" />
+      </div>
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
       <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
         (click)="displayNavModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="navForm.invalid"
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check"
+        [disabled]="(selectedEntity?.subcategory === 'Alternative Investment Funds' ? navFormAIF : navFormMF).invalid"
         (click)="saveNavData()"></p-button>
+
     </div>
   </form>
 </p-dialog>
 
+
 <!-- PDF Auto Modal -->
-<p-dialog header="Automation" [(visible)]="displayAutoModal" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
+<p-dialog header="Automation" [(visible)]="displayAutoModal" [modal]="true" [closable]="true"
+  [style]="{ width: '30vw' }">
   <form [formGroup]="automationForm" class="p-fluid">
 
     <div class="field">
       <label for="category">Category</label>
-      <p-dropdown
-        id="category"
-        formControlName="category"                   
-        [options]="categoryOptions"
-        placeholder="Select Category"
+      <p-dropdown id="category" formControlName="category" [options]="categoryOptions" placeholder="Select Category"
         appendTo="body">
       </p-dropdown>
     </div>
 
     <div class="field">
       <label for="subcategory">Sub Category</label>
-      <p-dropdown
-        id="subcategory"
-        formControlName="subcategory"                
-        [options]="automationSubCategoryOptions"
-        placeholder="Select Sub Category"
-        appendTo="body"
-        panelStyleClass="subcategory-panel"
-        dropdownPosition="top">
+      <p-dropdown id="subcategory" formControlName="subcategory" [options]="automationSubCategoryOptions"
+        placeholder="Select Sub Category" appendTo="body" panelStyleClass="subcategory-panel" dropdownPosition="top">
       </p-dropdown>
     </div>
 
     <div class="field">
       <!-- wire file upload to a handler that will update automationForm control -->
-      <p-fileupload
-        name="demo[]"
-        (onSelect)="onFileSelect($event)"
-        (onRemove)="onFileRemove($event)"
-        [multiple]="false"
-        accept=".pdf"
-        maxFileSize="1000000"
-        mode="advanced">
+      <p-fileupload name="demo[]" (onSelect)="onFileSelect($event)" (onRemove)="onFileRemove($event)" [multiple]="false"
+        accept=".pdf" maxFileSize="1000000" mode="advanced">
         <ng-template #empty>
           <div>Drag and drop files to here to upload.</div>
         </ng-template>
@@ -344,19 +352,12 @@
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button
-        label="Cancel"
-        styleClass="add-entity-btn"
-        icon="pi pi-times"
-        (click)="displayAutoModal = false">            <!-- <-- close correct modal -->
+      <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayAutoModal = false">
+        <!-- <-- close correct modal -->
       </p-button>
 
-      <p-button
-        label="Save"
-        styleClass="add-entity-btn"
-        icon="pi pi-check"
-        [disabled]="automationForm.invalid"
-        (click)="saveAutomationData()">             
+      <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" [disabled]="automationForm.invalid"
+        (click)="saveAutomationData()">
       </p-button>
     </div>
   </form>

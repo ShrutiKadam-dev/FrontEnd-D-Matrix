@@ -17,14 +17,23 @@ export class FormConfig {
   }
 
   // ---------- NAV ----------
-  navForm(): FormGroup {
-    return this.fb.group({
-      pre_tax_nav: ['', Validators.required],
-      post_tax_nav: ['', Validators.required],
-      nav_date: ['', Validators.required],
-      entityid: ['', Validators.required],
-    });
-  }
+navFormAIF(): FormGroup {
+  return this.fb.group({
+    entityid: ['', Validators.required],
+    pre_tax_nav: ['', Validators.required],
+    post_tax_nav: ['', Validators.required],
+    nav_date: ['', Validators.required],
+  });
+}
+
+navFormMF(): FormGroup {
+  return this.fb.group({
+    entityid: ['', Validators.required],
+    nav_date: ['', Validators.required],
+    nav: ['', Validators.required],
+  });
+}
+
 
   automationForm(): FormGroup {
     return this.fb.group({
@@ -143,12 +152,25 @@ export class FormConfig {
     });
   }
 
-  pmsClientActionTable(): FormGroup {
+  pmsClientActionForm(): FormGroup {
     return this.fb.group({
       trade_date: ['', Validators.required],
+      order_type: ['', Validators.required],
       trade_price: ['', Validators.required],
       cheque: ['', Validators.required],
-      order_type: ['', Validators.required],
+      entityid: ['', Validators.required],
     })
   }
+
+  pmsAmcForm(): FormGroup {
+    return this.fb.group({
+      security_description: ['', Validators.required],
+      order_type: [null, Validators.required],
+      qty: ['', Validators.required],
+      trade_price: ['', Validators.required],
+      net_amount: ['', Validators.required],
+      entityid: ['', Validators.required],
+    })
+  }
+
 }

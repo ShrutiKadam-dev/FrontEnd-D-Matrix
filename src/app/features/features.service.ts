@@ -54,8 +54,12 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/insertETFActionTable`, data);
   }
 
-  insertNavData(data: any) {
+  insertaifnavData(data: any) {
     return this.http.post(`${this.apiUrl}/insertNavData`, data);
+  }
+
+  insertmfnavData(data: any) {
+    return this.http.post(`${this.apiUrl}/insertMutualFundNavData`, data);
   }
 
   insertDirectEquityActionTable(data: any) {
@@ -66,10 +70,17 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/InsertCommoditiesDirect`, data);
   }
 
+  insertPmsAmcAction(data: any) {
+    return this.http.post(`${this.apiUrl}/insertPmsAmcAction`, data);
+  }
+
+  insertPmsClientAction(data: any) {
+    return this.http.post(`${this.apiUrl}/insertPmsClientAction`, data);
+  }
+
   uploadAutomation(data: any) {
     return this.http.post(`${this.apiUrl}/uploadAutomationData`, data);
   }
-
 
   //Mutual Fund
   getAllMutualFund(): Observable<any[]> {
