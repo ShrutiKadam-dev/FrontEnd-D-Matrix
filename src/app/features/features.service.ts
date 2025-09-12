@@ -161,7 +161,7 @@ export class FeaturesService {
   }
 
   getPMSEquityDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
+    return this.http.get<any>(`${this.apiUrl}/getPmsEquityDetailbyId`, {
       params: { entityid: id }
     });
   }
@@ -191,7 +191,7 @@ export class FeaturesService {
   }
 
   getPMSEquityAMCActionTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+    return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
       params: { entityid: mfId }
     });
   }
@@ -209,7 +209,7 @@ export class FeaturesService {
   }
 
   getPMSEquityClientActionTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getActionByentId`, {
+    return this.http.get<any>(`${this.apiUrl}/getPmsClientActionById`, {
       params: { entityid: mfId }
     });
   }
@@ -277,6 +277,11 @@ export class FeaturesService {
       params: { entityid }
     });
   }
+
+  getIrrMF() {
+    return this.http.get<any>(`${this.apiUrl}/getALLMutualFundActionTableIRR` )
+  }
+
   //Get IRR service for Direct Equity 
   getDirectEquityIrrById(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getDirectEquityIRR`, {

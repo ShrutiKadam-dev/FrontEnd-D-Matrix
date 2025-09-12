@@ -47,6 +47,9 @@ export class MutualFundsComponent implements OnInit {
   allMfs: any[] = [];
   displayMfs: any[] = [];
   actionTableList: any[] = [];
+  irrResult: number | null = null;
+  isLoading = false;
+  errorMessage: string | null = null;
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router) { }
@@ -76,6 +79,24 @@ export class MutualFundsComponent implements OnInit {
   ngOnInit() {
     this.getAllMutualFunds();
     this.getAllActionTable();
+    this.fetchIrr()
+  }
+
+  fetchIrr(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.featuresService.getIrrMF().subscribe({
+      next: (response) => {
+        this.irrResult = response?.annualized_irr_percent ?? null;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching IRR:', err);
+        this.errorMessage = 'Failed to fetch IRR';
+        this.isLoading = false;
+      }
+    });
   }
 
   goToMfDetails(mf: any) {
@@ -87,9 +108,9 @@ export class MutualFundsComponent implements OnInit {
       next: (res: any) => {
         this.allMfs = res?.data || [];
         this.allMfs.forEach(mf => {
-        mf.color = this.getColor(mf.subcategory);
-      });
-   
+          mf.color = this.getColor(mf.subcategory);
+        });
+
         this.displayMfs = [...this.allMfs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
@@ -153,17 +174,17 @@ export class MutualFundsComponent implements OnInit {
     }
   }
 
-  
-getSeverity(orderType: string) {
-  switch (orderType?.trim()?.toUpperCase()) {
-    case 'PURCHASE':
-      return 'success';
-    case 'SELL':
-      return 'danger';
-    default:
-      return 'info';
+
+  getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
-}
 
 }
 

@@ -46,7 +46,7 @@ export class PMSDetailsComponent implements OnInit {
   chartData: any;
   chartOptions: any;
   actionTableList: any[] = [];
-  underlyingTableList: any[] = [];
+  AMCActionTableList: any[] = [];
   actionCounts: any = {};
   totalPurchaseUnits = 0;
   totalPurchaseAmount = 0;
@@ -58,7 +58,7 @@ export class PMSDetailsComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
 
-  selectedDate: string = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
+  selectedDate: string = this.AMCActionTableList[0]?.created_at?.split('T')[0] || '';
 
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
@@ -142,7 +142,9 @@ calculateTotals(actionTableList: any[]) {
 
   loadpmsDetails(id: string) {
     this.featuresService.getPMSEquityDetailsById(id).subscribe({
-      next: (res: any) => { this.pmsDetails = res?.data || {}; },
+      next: (res: any) => { this.pmsDetails = res?.data || {}; 
+    
+    },
       error: (err: any) => { console.error('Failed to load PMS details', err); }
     });
   }
@@ -170,10 +172,10 @@ calculateTotals(actionTableList: any[]) {
   getpmsDetailUnderlyingTable(pmsId: string) {
     this.featuresService.getPMSEquityAMCActionTable(pmsId).subscribe({
       next: (data) => {
-        this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
+        this.AMCActionTableList = Array.isArray(data.data) ? data.data : [];
 
         const grouped: { [key: string]: number } = {};
-        this.underlyingTableList.forEach((item: any) => {
+        this.AMCActionTableList.forEach((item: any) => {
           const tag = item.tag || 'Unknown';
           grouped[tag] = (grouped[tag] || 0) + 1;
         });

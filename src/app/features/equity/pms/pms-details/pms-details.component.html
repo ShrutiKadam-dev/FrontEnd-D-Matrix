@@ -1,4 +1,4 @@
-<h3>Welcome To The {{actionTableList[0]?.scrip_name || "PMS"}}</h3>
+<h3>Welcome To The {{pmsDetails[0]?.scripname}}</h3>
 
 <div class="table-card">
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -20,36 +20,26 @@
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
-        <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
-        <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
-        <th pSortableColumn="order_number">Order No <p-sortIcon field="order_number"></p-sortIcon></th>
         <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
-        <th pSortableColumn="nav">NAV <p-sortIcon field="nav"></p-sortIcon></th>
-        <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
-        <th pSortableColumn="net_amount">Net Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
-        <th pSortableColumn="redeem_amount">Redeem Amount <p-sortIcon field="redeem_amount"></p-sortIcon></th>
-
+        <th pSortableColumn="trade_price">Trade Price <p-sortIcon field="trade_price"></p-sortIcon></th>
+        <th pSortableColumn="cheque">Cheque <p-sortIcon field="cheque"></p-sortIcon></th>
+        <th pSortableColumn="trade_date">Trade Date <p-sortIcon field="trade_date"></p-sortIcon></th>
       </tr>
     </ng-template>
 
     <!-- Body -->
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.sett_no }}</td>
-        <td>{{ entity.unit | number:'1.2-2' }}</td>
-        <td>{{ entity.order_date }}</td>
-        <td>{{ entity.order_number }}</td>
         <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
-        <td>{{ entity.nav | number:'1.2-2' }}</td>
-        <td>{{ entity.purchase_amount | number:'1.2-2' }}</td>
+        <td>{{ entity.trade_price | number:'1.2-2' }}</td>
+        <td>{{ entity.cheque | number:'1.2-2' }}</td>
         <td>{{ entity.net_amount | number:'1.2-2' }}</td>
-        <td>{{ entity.redeem_amount | number:'1.2-2' }}</td>
+        <td>{{ entity.trade_date | date:'dd-MM-yyyy' }}</td>
       </tr>
     </ng-template>
 
     <!-- Footer (Summary Row) -->
-    <ng-template pTemplate="footer">
+    <!-- <ng-template pTemplate="footer">
       <tr class="summary-row">
         <td colspan="3" class="summary green">
           Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
@@ -64,7 +54,7 @@
           Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>
-    </ng-template>
+    </ng-template> -->
 
   </p-table>
 </div>
@@ -73,12 +63,12 @@
    <h4>Summary Of AMC Action</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
 
-    <div class="underlying-date">
+  <div class="underlying-date">
       Last Updated At
       <span class="date-badge">
-        {{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}
+        {{ AMCActionTableList[0]?.created_at | date:'dd MMM yyyy' }}
       </span>
-    </div>
+    </div> 
 
     <div class="search-container">
       <input
@@ -90,7 +80,7 @@
     </div>
   </div>
   
-  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
+  <p-table #underlyingTable [value]="AMCActionTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
     scrollHeight="600px" responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand"
     class="custom-table">
@@ -98,38 +88,36 @@
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
-        <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
-        <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
-        <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
-        <th pSortableColumn="tag">Tag <p-sortIcon field="tag"></p-sortIcon></th>
-        <th pSortableColumn="isin_code">ISIN <p-sortIcon field="isin_code"></p-sortIcon></th>
+        <th pSortableColumn="security_description">Description <p-sortIcon field="security_description"></p-sortIcon></th>
+        <th pSortableColumn="order_type">Order Type <p-sortIcon field="scripcode"></p-sortIcon></th>
+        <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
+        <th pSortableColumn="trade_price">Trade Price <p-sortIcon field="trade_price"></p-sortIcon></th>
+        <th pSortableColumn="net_amount">Net Amount <p-sortIcon field="net_amount"></p-sortIcon></th>
       </tr>
     </ng-template>
 
     <!-- Body -->
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.company_name }}</td>
-        <td>{{ entity.scripcode }}</td>
-        <td>{{ entity.weightage }} %</td>
-        <td>{{ entity.sector }}</td>
-        <td>{{ entity.tag }}</td>
-        <td>{{ entity.isin_code }}</td>
+        <td>{{ entity.security_description }}</td>
+        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
+        <td>{{ entity.quantity }}</td>
+        <td>{{ entity.trade_price }}</td>
+        <td>{{ entity.net_amount }}</td>
       </tr>
     </ng-template>
 
   </p-table>
 </div>
 
-<!-- Pie Chart Card -->
+<!-- Pie Chart Card
 <div class="counts-card" style="margin-bottom: 2rem;">
   <p-card styleClass="P-card">
     <h4>MCAP Tag Allocation</h4>
     <div class="card-content">
       <div class="counts-section">
         <div>
-          <h4>Total Number of Underlying : {{underlyingTableList.length}}</h4>
+          <h4>Total Number of Underlying : {{AMCActionTableList.length}}</h4>
         </div>
         <div class="count-item">
           <span class="dot lcap"></span>
@@ -153,4 +141,4 @@
       </div>
     </div>
   </p-card>
-</div>
+</div> -->
