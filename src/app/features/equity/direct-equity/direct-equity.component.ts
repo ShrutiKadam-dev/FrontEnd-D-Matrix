@@ -15,6 +15,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @Component({
   selector: 'app-direct-equity',
   imports: [    
@@ -22,6 +24,7 @@ import { Router } from '@angular/router';
     DialogModule,
     ButtonModule,
     CalendarModule,
+    ProgressSpinnerModule,
     InputTextModule,
     DropdownModule,
     CommonModule,

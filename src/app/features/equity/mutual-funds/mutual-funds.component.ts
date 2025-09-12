@@ -144,7 +144,7 @@ getMFUnderlyingTable() {
     next: (res: any) => {
       if (!res?.data?.length) return;
 
-      this.underlyingTableList = res.data;
+      this.underlyingTableList = res.data[0].total_mf_count;
 
       // Build actionCounts from backend response
       const largeCap = res.data.find((x: any) => x.tag === 'large cap');

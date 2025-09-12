@@ -16,11 +16,13 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-etf',
   imports: [
     TagModule,
+    ProgressSpinnerModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,

@@ -1,4 +1,10 @@
-<div class="table-card">
+<!-- Loader when no data -->
+<div *ngIf="!entityList || entityList.length === 0" class="loader-container">
+  <p-progressSpinner></p-progressSpinner>
+  <p style="margin-top: 12px;">Loading entities...</p>
+</div>
+
+<div class="table-card"  *ngIf="entityList && entityList.length > 0" >
   <!-- Header Section -->
   <div class="entity-header p-d-flex p-ai-center p-jc-between">
 
@@ -47,6 +53,7 @@
       </tr>
     </ng-template>
   </p-table>
+
 </div>
 
 <!-- Add/Update Entity Dialog -->
