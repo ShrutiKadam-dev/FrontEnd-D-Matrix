@@ -190,6 +190,10 @@ export class FeaturesService {
     });
   }
 
+  getMFUnderlyingTable(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getallMfEquityUnderlyingCount`);
+  }
+
   getPMSEquityAMCActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
       params: { entityid: mfId }

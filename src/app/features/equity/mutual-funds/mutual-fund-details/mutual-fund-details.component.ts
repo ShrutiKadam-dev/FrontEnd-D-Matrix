@@ -54,7 +54,7 @@ export class MutualFundDetailsComponent implements OnInit {
   totalSalesUnits = 0;
   totalSalesAmount = 0;
   availableUnits = 0;
-  availableAmount = 0; 
+  availableAmount = 0;
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
@@ -79,59 +79,59 @@ export class MutualFundDetailsComponent implements OnInit {
       this.getMFDetailUnderlyingTable(this.mfId);
       this.fetchIrr(this.mfId)
       this.getAllMutualFundNav(this.mfId)
-      
+
     }
   }
 
 
-calculateTotals(actionTableList: any[]) {
-  if (!actionTableList || actionTableList.length === 0) {
+  calculateTotals(actionTableList: any[]) {
+    if (!actionTableList || actionTableList.length === 0) {
+      this.totalPurchaseUnits = 0;
+      this.totalPurchaseAmount = 0;
+      this.totalSalesUnits = 0;
+      this.totalSalesAmount = 0;
+      this.availableUnits = 0;
+      this.availableAmount = 0;
+      return;
+    }
+
+    // Reset totals
     this.totalPurchaseUnits = 0;
     this.totalPurchaseAmount = 0;
     this.totalSalesUnits = 0;
     this.totalSalesAmount = 0;
     this.availableUnits = 0;
     this.availableAmount = 0;
-    return;
+
+    // Single pass calculation
+    actionTableList.forEach(action => {
+      const units = isNaN(Number(action.unit)) ? 0 : Number(action.unit);
+      const amount = isNaN(Number(action.purchase_amount)) ? 0 : Number(action.purchase_amount);
+
+      if (action.order_type === 'Purchase') {
+        this.totalPurchaseUnits += units;
+        this.totalPurchaseAmount += amount;
+      }
+      else if (action.order_type === 'Sell') {
+        this.totalSalesUnits += units;
+        this.totalSalesAmount += amount;
+      }
+    });
+
+    // Available = Purchases - Sales
+    this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
+    this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
+
+
+
+    // Safety: if any totals are NaN, reset to 0
+    this.totalPurchaseUnits ||= 0;
+    this.totalPurchaseAmount ||= 0;
+    this.totalSalesUnits ||= 0;
+    this.totalSalesAmount ||= 0;
+    this.availableUnits ||= 0;
+    this.availableAmount ||= 0;
   }
-
-  // Reset totals
-  this.totalPurchaseUnits = 0;
-  this.totalPurchaseAmount = 0;
-  this.totalSalesUnits = 0;
-  this.totalSalesAmount = 0;
-  this.availableUnits = 0;
-  this.availableAmount = 0;
-
-  // Single pass calculation
-  actionTableList.forEach(action => {
-    const units = isNaN(Number(action.unit)) ? 0 : Number(action.unit);
-    const amount = isNaN(Number(action.purchase_amount)) ? 0 : Number(action.purchase_amount);
-
-    if (action.order_type === 'Purchase') {
-      this.totalPurchaseUnits += units;
-      this.totalPurchaseAmount += amount;
-    } 
-    else if (action.order_type === 'Sell') {
-      this.totalSalesUnits += units;
-      this.totalSalesAmount += amount;
-    }
-  });
-
-  // Available = Purchases - Sales
-  this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
-  this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
-
-  
-
-  // Safety: if any totals are NaN, reset to 0
-  this.totalPurchaseUnits ||= 0;
-  this.totalPurchaseAmount ||= 0;
-  this.totalSalesUnits ||= 0;
-  this.totalSalesAmount ||= 0;
-  this.availableUnits ||= 0;
-  this.availableAmount ||= 0;
-}
 
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
@@ -171,22 +171,22 @@ calculateTotals(actionTableList: any[]) {
     });
   }
 
-  getAllMutualFundNav(mfId:string) {
+  getAllMutualFundNav(mfId: string) {
     this.featuresService.getAllMutualFundNav().subscribe({
       next: (data: any) => {
-         const allNavs = Array.isArray(data.data) ? data.data : [];
-      this.NavList = allNavs.filter((nav:any) => nav.entityid === mfId);
-       if (this.NavList.length > 0) {
-        this.NavList.sort((a: any, b: any) =>
-          new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
-        );
-        this.NavList = [this.NavList[0]];
-      } else {
-        this.NavList = [];
-      }
-      
-      this.totalValue = this.availableUnits * this.NavList[0].nav  
-      
+        const allNavs = Array.isArray(data.data) ? data.data : [];
+        this.NavList = allNavs.filter((nav: any) => nav.entityid === mfId);
+        if (this.NavList.length > 0) {
+          this.NavList.sort((a: any, b: any) =>
+            new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
+          );
+          this.NavList = [this.NavList[0]];
+        } else {
+          this.NavList = [];
+        }
+
+        this.totalValue = this.availableUnits * this.NavList[0].nav
+
       },
       error: (error) => {
         this.messageService.add({
@@ -214,43 +214,50 @@ calculateTotals(actionTableList: any[]) {
         this.actionCounts = {
           lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
           mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
-          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0
+          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0,
+          lcap_count: grouped['large cap'] || 0,
+          mcap_count: grouped['mid cap'] || 0,
+          scap_count: grouped['small cap'] || 0,
+          total_count: total
         };
 
+        const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
+        const values = [
+          this.actionCounts.lcap_percent,
+          this.actionCounts.mcap_percent,
+          this.actionCounts.scap_percent
+        ];
 
-        // Prepare chart
         this.chartData = {
-          labels: Object.keys(grouped),
-          datasets: [{
-            data: Object.values(grouped),
-            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
-          }]
+          labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
+              hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+            }
+          ]
         };
 
         this.chartOptions = {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: { position: 'bottom' },
             tooltip: {
               callbacks: {
-                label: (context: any) => {
-                  const label = context.label || '';
-                  const value = context.raw || 0;
-                  const percentage = (value / total) * 100;
-                  return `${label}: ${value} (${percentage.toFixed(1)}%)`;
-                }
+                label: (context: any) => `${context.label}: ${context.raw.toFixed(1)}%`
               }
             }
           }
         };
       },
-      error: (error) => {
+      error: (err) =>
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: error.error?.message || 'Failed to load underlying'
-        });
-      }
+          detail: err.error?.message || 'Failed to load Mutual Fund chart'
+        })
     });
   }
 
@@ -262,10 +269,10 @@ calculateTotals(actionTableList: any[]) {
     this.featuresService.getIrrById(entityid).subscribe({
       next: (response) => {
         // Assuming API returns { irr: 0.1234 }
-        this.irrResult = response?.annualized_irr_percent?? null;
-        
+        this.irrResult = response?.annualized_irr_percent ?? null;
+
         console.log(entityid, this.irrResult);
-        
+
         this.isLoading = false;
       },
       error: (err) => {
@@ -276,14 +283,14 @@ calculateTotals(actionTableList: any[]) {
     });
   }
 
-getSeverity(orderType: string) {
-  switch (orderType?.trim()?.toUpperCase()) {
-    case 'PURCHASE':
-      return 'success';
-    case 'SELL':
-      return 'danger';
-    default:
-      return 'info';
+  getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
-}
 }

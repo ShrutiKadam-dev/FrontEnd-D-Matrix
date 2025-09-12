@@ -16,11 +16,13 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-create',
   standalone: true,
   imports: [
+    ChartModule,
     TagModule,
     ReactiveFormsModule,
     DialogModule,
@@ -50,6 +52,10 @@ export class MutualFundsComponent implements OnInit {
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+  underlyingTableList: any[] = [];
+  actionCounts: any = {};
+  chartData: any;
+  chartOptions: any;
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router) { }
@@ -79,6 +85,7 @@ export class MutualFundsComponent implements OnInit {
   ngOnInit() {
     this.getAllMutualFunds();
     this.getAllActionTable();
+    this.getMFUnderlyingTable()
     this.fetchIrr()
   }
 
@@ -131,6 +138,71 @@ export class MutualFundsComponent implements OnInit {
       }
     });
   }
+
+getMFUnderlyingTable() {
+  this.featuresService.getMFUnderlyingTable().subscribe({
+    next: (res: any) => {
+      if (!res?.data?.length) return;
+
+      this.underlyingTableList = res.data;
+
+      // Build actionCounts from backend response
+      const largeCap = res.data.find((x: any) => x.tag === 'large cap');
+      const midCap   = res.data.find((x: any) => x.tag === 'mid cap');
+      const smallCap = res.data.find((x: any) => x.tag === 'small cap');
+
+      this.actionCounts = {
+        lcap_percent: largeCap?.tag_percent || 0,
+        mcap_percent: midCap?.tag_percent || 0,
+        scap_percent: smallCap?.tag_percent || 0,
+        lcap_count: largeCap?.tag_count || 0,
+        mcap_count: midCap?.tag_count || 0,
+        scap_count: smallCap?.tag_count || 0,
+        total_count: res.data[0]?.total_mf_count || 0
+      };
+
+      // Chart Labels & Values
+      const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
+      const values = [
+        this.actionCounts.lcap_percent,
+        this.actionCounts.mcap_percent,
+        this.actionCounts.scap_percent
+      ];
+
+      // Chart Data
+      this.chartData = {
+        labels,
+        datasets: [
+          {
+            data: values,
+            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
+            hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+          }
+        ]
+      };
+
+      // Chart Options
+      this.chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (context: any) => `${context.label}: ${context.raw.toFixed(1)}%`
+            }
+          }
+        }
+      };
+    },
+    error: (err) =>
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
+  });
+}
 
 
   scrollToMf(mf: any) {
