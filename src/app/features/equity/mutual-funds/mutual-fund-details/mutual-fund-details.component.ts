@@ -58,6 +58,8 @@ export class MutualFundDetailsComponent implements OnInit {
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+  NavList: any[] = [];
+  totalValue = 0
 
   selectedDate: string = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
 
@@ -76,6 +78,7 @@ export class MutualFundDetailsComponent implements OnInit {
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
       this.fetchIrr(this.mfId)
+      this.getAllMutualFundNav(this.mfId)
       
     }
   }
@@ -163,6 +166,33 @@ calculateTotals(actionTableList: any[]) {
           severity: 'error',
           summary: 'Failed',
           detail: error.error?.message || 'Failed to load actions'
+        });
+      }
+    });
+  }
+
+  getAllMutualFundNav(mfId:string) {
+    this.featuresService.getAllMutualFundNav().subscribe({
+      next: (data: any) => {
+         const allNavs = Array.isArray(data.data) ? data.data : [];
+      this.NavList = allNavs.filter((nav:any) => nav.entityid === mfId);
+       if (this.NavList.length > 0) {
+        this.NavList.sort((a: any, b: any) =>
+          new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
+        );
+        this.NavList = [this.NavList[0]];
+      } else {
+        this.NavList = [];
+      }
+      
+      this.totalValue = this.availableUnits * this.NavList[0].nav  
+      
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
         });
       }
     });
