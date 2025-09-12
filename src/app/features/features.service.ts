@@ -162,6 +162,7 @@ export class FeaturesService {
       params: { entityid: id }
     });
   }
+  
   getETFDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
       params: { entityid: id }
