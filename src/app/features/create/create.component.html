@@ -276,7 +276,7 @@
 </p-dialog>
 
 <!-- NAV Modal -->
-<p-dialog header="Update NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true"
+<p-dialog header="Add NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true"
   [style]="{ width: '30vw' }">
 <form [formGroup]="selectedEntity?.subcategory === 'Alternative Investment Funds' ? navFormAIF : navFormMF">
 
@@ -300,7 +300,7 @@
     <!-- MF fields -->
     <div *ngIf="selectedEntity?.subcategory === 'Mutual Fund'">
       <div class="field">
-        <label for="nav_date">Date</label>
+        <label for="nav_date">NAV Date</label>
         <p-datepicker id="nav_date" formControlName="nav_date" showIcon="true" dateFormat="dd/mm/yy" appendTo="body"
           [style]="{ width: '100%' }"></p-datepicker>
       </div>

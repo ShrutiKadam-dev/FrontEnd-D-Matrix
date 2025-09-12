@@ -49,7 +49,7 @@ export const equityRoutes: Routes = [
         loadComponent: () => import('./pms/pms.component').then(c => c.PMSComponent)
     },
     {
-        path: 'PMS/:id',
+        path: 'PMS-details/:id',
         loadComponent: () => import('./pms/pms-details/pms-details.component').then(c => c.PMSDetailsComponent)
     },
 

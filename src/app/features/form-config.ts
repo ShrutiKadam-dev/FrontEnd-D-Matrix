@@ -166,7 +166,7 @@ navFormMF(): FormGroup {
     return this.fb.group({
       security_description: ['', Validators.required],
       order_type: [null, Validators.required],
-      qty: ['', Validators.required],
+      quantity: ['', Validators.required],
       trade_price: ['', Validators.required],
       net_amount: ['', Validators.required],
       entityid: ['', Validators.required],
