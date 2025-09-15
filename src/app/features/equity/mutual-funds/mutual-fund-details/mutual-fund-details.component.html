@@ -72,6 +72,10 @@
 
     </ng-template>
 
+    <ng-template #emptymessage>
+      <tr><td colspan="5">No Records found</td> </tr>
+    </ng-template>
+
   </p-table>
 </div>
 
@@ -118,6 +122,10 @@
         <td>{{ entity.tag }}</td>
         <td>{{ entity.isin_code }}</td>
       </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr><td colspan="6">No Records found</td> </tr>
     </ng-template>
 
   </p-table>

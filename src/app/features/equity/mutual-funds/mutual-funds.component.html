@@ -76,6 +76,10 @@
         <td>{{ entity.purchase_amount | number:'1.2-2'}}</td>
       </tr>
     </ng-template>
+
+    <ng-template #emptymessage>
+      <tr><td colspan="5">No Records found</td> </tr>
+    </ng-template>
   </p-table>
 </div>
 
