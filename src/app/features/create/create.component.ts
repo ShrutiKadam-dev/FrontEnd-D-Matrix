@@ -81,6 +81,7 @@ export class CreateComponent implements OnInit {
   aifActionTableForm: FormGroup;
   pmsClientActionForm: FormGroup;
   pmsAmcForm: FormGroup;
+  searchForm!: FormGroup;
 
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
@@ -194,6 +195,14 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     this.getEntities();
+
+    this.searchForm = this.fb.group({
+      searchText: ['']
+    });
+
+    this.searchForm.get('searchText')?.valueChanges.subscribe(value => {
+      this.dt.filterGlobal(value, 'contains');
+    });
 
     this.underlyingForm = this.fb.group({
       rows: this.fb.array([this.createRow()])
@@ -766,7 +775,7 @@ export class CreateComponent implements OnInit {
   saveNavData() {
     if (!this.selectedEntity) return;
 
-    let navForm: FormGroup;     
+    let navForm: FormGroup;
     let serviceCall: any;
 
     // Choose the correct form and service based on subcategory
@@ -789,7 +798,6 @@ export class CreateComponent implements OnInit {
       });
       return;
     }
-
     // Validate the form
     if (navForm.invalid) {
       navForm.markAllAsTouched();
@@ -829,6 +837,10 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  clearSearch() {
+    this.searchForm.get('searchText')?.setValue('');
+    this.dt.clear(); // clears filters in PrimeNG table
+  }
 
   // ---------- Company search ----------
   searchCompany(event: any, rowIndex: number) {

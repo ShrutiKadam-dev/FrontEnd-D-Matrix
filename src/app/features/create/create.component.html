@@ -4,7 +4,7 @@
   <p style="margin-top: 12px;">Loading entities...</p>
 </div>
 
-<div class="table-card"  *ngIf="entityList && entityList.length > 0" >
+<div class="table-card" *ngIf="entityList && entityList.length > 0">
   <!-- Header Section -->
   <div class="entity-header p-d-flex p-ai-center p-jc-between">
 
@@ -17,9 +17,13 @@
     </div>
 
     <!-- Right Section (Search Bar) -->
-    <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search entities..." />
-    </div>
+    <form [formGroup]="searchForm" class="search-container">
+      <input pInputText type="text" formControlName="searchText" placeholder="Search entities..." />
+
+      <button *ngIf="searchForm.get('searchText')?.value" pButton icon="pi pi-times" class="p-button-text" type="button"
+        (click)="clearSearch()">
+      </button>
+    </form>
 
   </div>
 
@@ -107,7 +111,6 @@
   </form>
 </p-dialog>
 
-
 <!-- Update Choice Dialog -->
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
   [style]="{ width: '36vw'}">
@@ -151,7 +154,6 @@
     </div>
   </div>
 </p-dialog>
-
 
 <!-- Add Underlying Table Dialog -->
 <p-dialog header="Add Underlying Data" [(visible)]="displayUnderlyingModal" [modal]="true" [style]="{ width: '70vw' }"
@@ -283,9 +285,8 @@
 </p-dialog>
 
 <!-- NAV Modal -->
-<p-dialog header="Add NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true"
-  [style]="{ width: '30vw' }">
-<form [formGroup]="selectedEntity?.subcategory === 'Alternative Investment Funds' ? navFormAIF : navFormMF">
+<p-dialog header="Add NAV" [(visible)]="displayNavModal" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
+  <form [formGroup]="selectedEntity?.subcategory === 'Alternative Investment Funds' ? navFormAIF : navFormMF">
 
     <!-- AIF fields -->
     <div *ngIf="selectedEntity?.subcategory === 'Alternative Investment Funds'">
@@ -327,7 +328,6 @@
     </div>
   </form>
 </p-dialog>
-
 
 <!-- PDF Auto Modal -->
 <p-dialog header="Automation" [(visible)]="displayAutoModal" [modal]="true" [closable]="true"
