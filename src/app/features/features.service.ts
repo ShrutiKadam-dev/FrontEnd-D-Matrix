@@ -90,10 +90,13 @@ export class FeaturesService {
   getAllPMSEquity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllPMSEquity`);
   }
-    getAllMutualFundNav(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getAllMutualFundNav`);
+
+  getAllMutualFundDetailsNav(entityid: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAllMutualFundDetailNav`, {
+      params: { entityid: entityid }
+    });
   }
-  
+
   getAllActionTableEquity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionInstrument`);
   }

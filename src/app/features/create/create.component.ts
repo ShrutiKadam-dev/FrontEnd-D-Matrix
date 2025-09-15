@@ -681,7 +681,6 @@ export class CreateComponent implements OnInit {
     const val = form.get(field)?.value;
     if (val) {
       const date = new Date(val);
-      // Remove timezone offset so date stays consistent
       const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 
       const yyyy = localDate.getFullYear();
@@ -767,7 +766,7 @@ export class CreateComponent implements OnInit {
   saveNavData() {
     if (!this.selectedEntity) return;
 
-    let navForm: FormGroup;      // <-- declare the form variable
+    let navForm: FormGroup;     
     let serviceCall: any;
 
     // Choose the correct form and service based on subcategory
@@ -777,7 +776,7 @@ export class CreateComponent implements OnInit {
 
       serviceCall = this.featuresService.insertaifnavData(navForm.getRawValue());
     } else if (this.selectedEntity.subcategory === 'Mutual Fund') {
-      this.formatDateField(this.navFormAIF, 'nav_date');
+      this.formatDateField(this.navFormMF, 'nav_date');
       navForm = this.navFormMF;
 
       serviceCall = this.featuresService.insertmfnavData(navForm.getRawValue());
