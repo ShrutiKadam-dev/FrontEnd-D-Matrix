@@ -97,20 +97,24 @@ label {
   align-items: center;     /* Vertically center */
   justify-content: space-between; /* Push button left, search right */
 }
-
 .search-container {
-  width: 350px;            /* Fixed width for input */
-  flex-shrink: 0;          /* Prevent shrinking */
+  display: flex;           /* make input + button in one row */
+  align-items: center;
+  width: 350px;
 }
 
 .search-container input {
-  width: 100%;
+  flex: 1;                 /* take all available space */
   border-radius: 6px;
   height: 38px;
   font-size: 0.95rem;
   box-sizing: border-box;
 }
-
+.search-container .clear-btn {
+  border-radius: 0 6px 6px 0;
+  height: 38px;
+  margin-left: -1px;       /* remove double border gap */
+}
 
 .edit-choice-buttons {
   display: flex;

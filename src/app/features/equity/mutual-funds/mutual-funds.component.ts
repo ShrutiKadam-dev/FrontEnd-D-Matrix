@@ -144,7 +144,7 @@ getMFUnderlyingTable() {
     next: (res: any) => {
       if (!res?.data?.length) return;
 
-      this.underlyingTableList = res.data;
+      this.underlyingTableList = res.data[0].total_mf_count;
 
       // Build actionCounts from backend response
       const largeCap = res.data.find((x: any) => x.tag === 'large cap');
@@ -204,7 +204,6 @@ getMFUnderlyingTable() {
   });
 }
 
-
   scrollToMf(mf: any) {
     if (mf) {
       this.displayMfs = [mf]; // show only selected MF card in search mode
@@ -245,7 +244,6 @@ getMFUnderlyingTable() {
       this.dt.filter(input.value, 'global', 'contains');
     }
   }
-
 
   getSeverity(orderType: string) {
     switch (orderType?.trim()?.toUpperCase()) {

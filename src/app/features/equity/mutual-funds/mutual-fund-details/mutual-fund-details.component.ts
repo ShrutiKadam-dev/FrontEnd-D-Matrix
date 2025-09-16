@@ -58,7 +58,6 @@ export class MutualFundDetailsComponent implements OnInit {
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
-  NavList: any[] = [];
   totalValue = 0
 
   selectedDate: string = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
@@ -70,6 +69,7 @@ export class MutualFundDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
+  allNavs: any;
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
@@ -78,11 +78,8 @@ export class MutualFundDetailsComponent implements OnInit {
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
       this.fetchIrr(this.mfId)
-      this.getAllMutualFundNav(this.mfId)
-
     }
   }
-
 
   calculateTotals(actionTableList: any[]) {
     if (!actionTableList || actionTableList.length === 0) {
@@ -160,6 +157,7 @@ export class MutualFundDetailsComponent implements OnInit {
           date: e.order_date,
           amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
         }));
+      this.getAllMutualFundDetailsNav(mfId);
       },
       error: (error) => {
         this.messageService.add({
@@ -171,28 +169,28 @@ export class MutualFundDetailsComponent implements OnInit {
     });
   }
 
-  getAllMutualFundNav(mfId: string) {
-    this.featuresService.getAllMutualFundNav().subscribe({
+  getAllMutualFundDetailsNav(mfId: string) {
+    this.featuresService.getAllMutualFundDetailsNav(mfId).subscribe({
       next: (data: any) => {
-        const allNavs = Array.isArray(data.data) ? data.data : [];
-        this.NavList = allNavs.filter((nav: any) => nav.entityid === mfId);
-        if (this.NavList.length > 0) {
-          this.NavList.sort((a: any, b: any) =>
+        this.allNavs = Array.isArray(data.data) ? data.data : [];
+
+        if (this.allNavs.length > 0) {
+          this.allNavs.sort((a: any, b: any) =>
             new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
           );
-          this.NavList = [this.NavList[0]];
+          this.allNavs = [this.allNavs[0]]; // keep only latest NAV
+          this.totalValue = this.availableUnits * this.allNavs[0].nav;
         } else {
-          this.NavList = [];
+          this.allNavs = [];
+          this.totalValue = 0;
         }
-
-        this.totalValue = this.availableUnits * this.NavList[0].nav
 
       },
       error: (error) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: error.error?.message || 'Update failed'
+          detail: error.error?.message || 'Update for Nav value failed'
         });
       }
     });

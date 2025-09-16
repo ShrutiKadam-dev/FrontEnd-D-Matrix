@@ -81,6 +81,7 @@ export class CreateComponent implements OnInit {
   aifActionTableForm: FormGroup;
   pmsClientActionForm: FormGroup;
   pmsAmcForm: FormGroup;
+  searchForm!: FormGroup;
 
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
@@ -194,6 +195,14 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     this.getEntities();
+
+    this.searchForm = this.fb.group({
+      searchText: ['']
+    });
+
+    this.searchForm.get('searchText')?.valueChanges.subscribe(value => {
+      this.dt.filterGlobal(value, 'contains');
+    });
 
     this.underlyingForm = this.fb.group({
       rows: this.fb.array([this.createRow()])
@@ -681,7 +690,6 @@ export class CreateComponent implements OnInit {
     const val = form.get(field)?.value;
     if (val) {
       const date = new Date(val);
-      // Remove timezone offset so date stays consistent
       const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 
       const yyyy = localDate.getFullYear();
@@ -767,7 +775,7 @@ export class CreateComponent implements OnInit {
   saveNavData() {
     if (!this.selectedEntity) return;
 
-    let navForm: FormGroup;      // <-- declare the form variable
+    let navForm: FormGroup;
     let serviceCall: any;
 
     // Choose the correct form and service based on subcategory
@@ -777,7 +785,7 @@ export class CreateComponent implements OnInit {
 
       serviceCall = this.featuresService.insertaifnavData(navForm.getRawValue());
     } else if (this.selectedEntity.subcategory === 'Mutual Fund') {
-      this.formatDateField(this.navFormAIF, 'nav_date');
+      this.formatDateField(this.navFormMF, 'nav_date');
       navForm = this.navFormMF;
 
       serviceCall = this.featuresService.insertmfnavData(navForm.getRawValue());
@@ -790,7 +798,6 @@ export class CreateComponent implements OnInit {
       });
       return;
     }
-
     // Validate the form
     if (navForm.invalid) {
       navForm.markAllAsTouched();
@@ -830,6 +837,10 @@ export class CreateComponent implements OnInit {
     });
   }
 
+  clearSearch() {
+    this.searchForm.get('searchText')?.setValue('');
+    this.dt.clear(); // clears filters in PrimeNG table
+  }
 
   // ---------- Company search ----------
   searchCompany(event: any, rowIndex: number) {

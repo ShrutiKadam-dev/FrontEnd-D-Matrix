@@ -15,13 +15,14 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
-
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-equity',
   imports: [
     ButtonModule,
     CalendarModule,
+    ProgressSpinnerModule,
     ChartModule,
     CommonModule,
     MessagesModule,
