@@ -253,7 +253,6 @@ export class CreateComponent implements OnInit {
     }
   }
 
-
   addRow() {
     const rows = this.underlyingForm.value.rows || [];
     const names = rows.map((row: any) => row.company_name?.trim().toLowerCase());
@@ -491,8 +490,6 @@ export class CreateComponent implements OnInit {
     this.isSubmitting = false; // re-enable Save
   }
 
-
-
   onUpdate(entity: any) {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = true;
@@ -574,7 +571,6 @@ export class CreateComponent implements OnInit {
       default: return this.mfActionTableFields;
     }
   }
-
 
   get currentActionTableForm() {
     const ctx = this.getActionContext(this.selectedEntity);
@@ -878,7 +874,6 @@ export class CreateComponent implements OnInit {
     });
   }
 
-
   isReadOnlyField(key: string): boolean {
     return ['scrip_code', 'scrip_name', 'isin'].includes(key);
   }
@@ -919,22 +914,16 @@ export class CreateComponent implements OnInit {
 
   }
 
-
   onFileSelect(event: any) {
     const file = event.files && event.files[0];
     if (file) {
       this.automationForm.get('file')?.setValue(file, { emitEvent: false });
     }
-
     
   }
 
   onFileRemove(event: any) {
     this.automationForm.get('file')?.setValue(null, { emitEvent: false });
-  }
-
-  onUpload(event: any) {
-
   }
 
   saveAutomationData() {
@@ -945,7 +934,7 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-    const payload = this.automationForm.value;
+  const payload = this.automationForm.value;
   const formData = new FormData();
 
   // Append category & subcategory
@@ -960,12 +949,11 @@ export class CreateComponent implements OnInit {
      console.log('FormData prepared:', formData);
 
 
-     for (const [key, value] of formData.entries()) {
-  console.log(key, value);
-}
-    
-
-    this.featuresService.uploadAutomation(formData).subscribe({
+  for (const [key, value] of formData.entries()) {
+    console.log(key, value);
+  }
+  
+  this.featuresService.uploadAutomation(formData).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
         this.displayAutoModal = false;
