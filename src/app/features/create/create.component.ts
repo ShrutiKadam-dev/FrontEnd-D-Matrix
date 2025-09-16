@@ -60,7 +60,6 @@ import { FormConfig } from '../form-config';
     ToastModule,
     ProgressSpinnerModule,
     FileUploadModule
-
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './create.component.html',
@@ -132,7 +131,6 @@ export class CreateComponent implements OnInit {
   aifActionTableFields = AIF_ACTION_TABLE_FIELDS;
   pmsClientActionTableFields = PMS_CLIENT_ACTION_TABLE_FIELDS;
   pmsAmcActionTableFields = PMS_AMC_ACTION_TABLE_FIELDS;
-
 
   private confirmationService = inject(ConfirmationService);
   private featuresService = inject(FeaturesService);

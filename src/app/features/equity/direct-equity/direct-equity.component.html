@@ -23,7 +23,7 @@
         <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="de.nickname">{{ de.nickname || 'No Name' }}</div>
+      <div class="card-title"  [pTooltip]="de.nickname">{{ de.nickname || 'No Name' }}</div>
       <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ de.entityid }}</div>
     </p-card>

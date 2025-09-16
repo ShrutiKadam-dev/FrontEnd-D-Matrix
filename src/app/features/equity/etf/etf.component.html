@@ -21,7 +21,7 @@
         <div class="card-color" [ngStyle]="{'background-color': etf.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="etf.nickname">{{ etf.nickname || 'No Name' }}</div>
+      <div class="card-title"  [pTooltip]="etf.nicknam">{{ etf.nickname || 'No Name' }}</div>
       <div class="card-value">{{ etf.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ etf.entityid }}</div>
     </p-card>

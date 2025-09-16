@@ -16,12 +16,14 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-equity',
   imports: [
     ButtonModule,
     CalendarModule,
+    TooltipModule,
     ProgressSpinnerModule,
     ChartModule,
     CommonModule,

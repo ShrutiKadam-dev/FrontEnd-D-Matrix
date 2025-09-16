@@ -46,7 +46,7 @@
 
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.scripname }}</td>
+        <td [title]="entity.scripname">{{ entity.scripname }}</td>
         <td>{{ entity.scripcode }}</td>
         <td>{{ entity.benchmark }}</td>
         <td>{{ entity.category }}</td>

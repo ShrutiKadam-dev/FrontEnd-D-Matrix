@@ -16,11 +16,13 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-direct-equity',
   imports: [
     ReactiveFormsModule,
+    TooltipModule,
     DialogModule,
     TagModule,
     ButtonModule,

@@ -20,7 +20,7 @@
       <ng-template pTemplate="header">
         <div class="card-color" [ngStyle]="{'background-color': aif.color}"></div>
       </ng-template>
-      <div class="card-title" [title]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-title"  [pTooltip]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
       <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ aif.entityid }}</div>
     </p-card>

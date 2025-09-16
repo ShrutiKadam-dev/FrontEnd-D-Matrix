@@ -22,7 +22,7 @@
         <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
+      <div class="card-title" [pTooltip]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
       <div class="card-value">{{ de.category || 'No Category' }}</div>
       <div class="status">Total Entity Count : {{ de.total }}</div>
     </p-card>

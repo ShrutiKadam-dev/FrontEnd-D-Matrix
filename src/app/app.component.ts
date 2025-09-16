@@ -110,21 +110,21 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/commodities'],
         tooltipOptions: { tooltipLabel: 'Commodities', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'ETF', 
-            icon: 'pi pi-arrow-right',
-            routerLink: ['/features/commodities/etf']
-          },
+          // { 
+          //   label: 'ETF', 
+          //   icon: 'pi pi-arrow-right',
+          //   routerLink: ['/features/commodities/etf']
+          // },
           { 
             label: 'Direct Equity', 
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/direct-equity']
           },
-          { 
-            label: 'AIF', 
-            icon: 'pi pi-arrow-right',
-            routerLink: ['/features/commodities/aif']
-          },
+          // { 
+          //   label: 'AIF', 
+          //   icon: 'pi pi-arrow-right',
+          //   routerLink: ['/features/commodities/aif']
+          // },
         ]
       },
       {

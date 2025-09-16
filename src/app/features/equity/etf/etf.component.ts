@@ -17,11 +17,13 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-etf',
   imports: [
     TagModule,
+    TooltipModule,
     ProgressSpinnerModule,
     ReactiveFormsModule,
     DialogModule,

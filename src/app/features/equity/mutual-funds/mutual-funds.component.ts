@@ -17,6 +17,7 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ChartModule } from 'primeng/chart';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-create',
@@ -24,6 +25,7 @@ import { ChartModule } from 'primeng/chart';
   imports: [
     ChartModule,
     TagModule,
+    TooltipModule,
     ReactiveFormsModule,
     DialogModule,
     ButtonModule,

@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../../features.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
+  imports: [ InputTextModule,TooltipModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })
