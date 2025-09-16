@@ -78,8 +78,8 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/insertPmsClientAction`, data);
   }
 
-  uploadAutomation(data: any) {
-    return this.http.post(`${this.apiUrl}/uploadAutomationData`, data);
+  uploadAutomation(formData:FormData) {
+    return this.http.post(`${this.apiUrl}/uploadAutomationData`, formData);
   }
 
   //Mutual Fund
