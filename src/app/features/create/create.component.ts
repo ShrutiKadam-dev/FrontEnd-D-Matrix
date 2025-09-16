@@ -916,6 +916,8 @@ export class CreateComponent implements OnInit {
     if (file) {
       this.automationForm.get('file')?.setValue(file, { emitEvent: false });
     }
+
+    
   }
 
   onFileRemove(event: any) {
@@ -935,16 +937,24 @@ export class CreateComponent implements OnInit {
     }
 
     const payload = this.automationForm.value;
+  const formData = new FormData();
 
-    // If file is a File object and you use FormData:
-    const formData = new FormData();
-    formData.append('category', payload.category);
-    formData.append('subcategory', payload.subcategory);
-    if (payload.file instanceof File) {
-      formData.append('file', payload.file, payload.file.name);
-    } else if (payload.file) {
-      formData.append('fileId', payload.file);
-    }
+  // Append category & subcategory
+  formData.append('category', payload.category);
+  formData.append('subcategory', payload.subcategory);
+
+  // Append file
+  if (payload.file instanceof File) {
+    formData.append('file', payload.file, payload.file.name);
+  }
+
+     console.log('FormData prepared:', formData);
+
+
+     for (const [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+    
 
     this.featuresService.uploadAutomation(formData).subscribe({
       next: () => {
