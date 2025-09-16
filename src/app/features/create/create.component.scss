@@ -97,6 +97,7 @@ label {
   align-items: center;     /* Vertically center */
   justify-content: space-between; /* Push button left, search right */
 }
+
 .search-container {
   display: flex;           /* make input + button in one row */
   align-items: center;
@@ -175,7 +176,7 @@ label {
 :host ::ng-deep .p-datatable td:nth-child(4) { width: 10%; }
 
 :host ::ng-deep .p-datatable th:nth-child(5),
-:host ::ng-deep .p-datatable td:nth-child(5) { width: 10%; }
+:host ::ng-deep .p-datatable td:nth-child(5) { width: 8%; }
 
 
 /* Action column */
@@ -313,4 +314,11 @@ label {
 
 :host ::ng-deep .p-fileupload-upload-button,:host ::ng-deep .p-fileupload-cancel-button {
   display: none !important;
+}
+
+/* Fix card height and prevent outer page scroll */
+.entity-table-wrapper {
+  height: 575px;          /* your fixed card height */
+   display: flex;
+  flex-direction: column;
 }
