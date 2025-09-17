@@ -88,6 +88,7 @@ export class CreateComponent implements OnInit {
   isEditMode = false;
   displayUpdateChoiceModal = false;
   selectedEntity: any = null;
+  loading: boolean = false;
 
   // Underlying
   displayUnderlyingModal = false;
@@ -292,9 +293,12 @@ export class CreateComponent implements OnInit {
   }
 
   getEntities() {
+    this.loading = true;
+
     this.featuresService.getAllEntities().subscribe({
       next: (data: any) => {
         this.entityList = Array.isArray(data.data) ? data.data : [];
+         this.loading = false;
       },
       error: (error) => {
         this.messageService.add({
@@ -302,6 +306,7 @@ export class CreateComponent implements OnInit {
           summary: 'Failed',
           detail: error.error?.message || 'Update failed'
         });
+        this.loading = false;
       }
     });
   }

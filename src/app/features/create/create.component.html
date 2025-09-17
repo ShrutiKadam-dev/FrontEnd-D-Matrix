@@ -1,7 +1,12 @@
-<!-- Loader when no data -->
-<div *ngIf="!entityList || entityList.length === 0" class="loader-container">
+<!-- Loader -->
+<div *ngIf="loading" class="loader-container">
   <p-progressSpinner></p-progressSpinner>
   <p style="margin-top: 12px;">Loading entities...</p>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!loading && entityList?.length === 0" class="empty-container">
+  <p>No records found</p>
 </div>
 
 <div class="table-card" *ngIf="entityList && entityList.length > 0">
