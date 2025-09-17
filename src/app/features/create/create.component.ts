@@ -871,9 +871,7 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-    // patch values
-    const rowGroup = this.rows.at(rowIndex) as FormGroup;
-    rowGroup.patchValue({
+    this.rows.at(rowIndex).patchValue({
       company_name: selectedCompany.company_name,
       isin_code: selectedCompany.isin,
       tag: selectedCompany.tag,
