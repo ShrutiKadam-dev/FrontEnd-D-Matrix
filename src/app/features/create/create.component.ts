@@ -283,8 +283,7 @@ export class CreateComponent implements OnInit {
     this.addRow();
     this.displayUnderlyingModal = true;
     this.displayUpdateChoiceModal = false;
-
-  }
+    }
 
   // ---------- Grid / CRUD ----------
   onGlobalFilter(event: Event) {
@@ -298,7 +297,7 @@ export class CreateComponent implements OnInit {
     this.featuresService.getAllEntities().subscribe({
       next: (data: any) => {
         this.entityList = Array.isArray(data.data) ? data.data : [];
-         this.loading = false;
+        this.loading = false;
       },
       error: (error) => {
         this.messageService.add({
@@ -402,12 +401,12 @@ export class CreateComponent implements OnInit {
           res.data.forEach((row: any) => {
             this.rows.push(
               this.fb.group({
-                company_name: [row.company_name || '', Validators.required],
-                scripcode: [row.scripcode || '', Validators.required],
-                sector: [row.sector || '', Validators.required],
-                weightage: [row.weightage || '', Validators.required],
-                tag: [row.tag || '', Validators.required],
-                isin_code: [row.isin_code || '', Validators.required]
+                company_name: [  row.company_name || '', Validators.required],
+                scripcode: [  row.scripcode || '', Validators.required],
+                sector: [  row.sector || '', Validators.required],
+                weightage: [  row.weightage || '', Validators.required],
+                tag: [  row.tag || '',    Validators.required],
+                isin_code: [  row.isin_code || '',Validators.required]
               })
             );
           });
@@ -415,7 +414,7 @@ export class CreateComponent implements OnInit {
           this.addRow();
         }
 
-        this.displayUnderlyingModal = true; // 
+        this.displayUnderlyingModal = true;
         this.displayUpdateChoiceModal = false;
 
       },
@@ -848,6 +847,7 @@ export class CreateComponent implements OnInit {
       this.featuresService.getCompanyByName(query).subscribe({
         next: (res: any) => {
           this.companySuggestions = res?.data ? res.data : [];
+
         },
         error: (err) => {
           console.error('Error fetching company list', err);
@@ -871,7 +871,9 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-    this.rows.at(rowIndex).patchValue({
+    // patch values
+    const rowGroup = this.rows.at(rowIndex) as FormGroup;
+    rowGroup.patchValue({
       company_name: selectedCompany.company_name,
       isin_code: selectedCompany.isin,
       tag: selectedCompany.tag,
@@ -924,7 +926,7 @@ export class CreateComponent implements OnInit {
     if (file) {
       this.automationForm.get('file')?.setValue(file, { emitEvent: false });
     }
-    
+
   }
 
   onFileRemove(event: any) {
@@ -939,26 +941,25 @@ export class CreateComponent implements OnInit {
       return;
     }
 
-  const payload = this.automationForm.value;
-  const formData = new FormData();
+    const payload = this.automationForm.value;
+    const formData = new FormData();
 
-  // Append category & subcategory
-  formData.append('category', payload.category);
-  formData.append('subcategory', payload.subcategory);
+    // Append category & subcategory
+    formData.append('category', payload.category);
+    formData.append('subcategory', payload.subcategory);
 
-  // Append file
-  if (payload.file instanceof File) {
-    formData.append('file', payload.file, payload.file.name);
-  }
+    if (payload.file instanceof File) {
+      formData.append('files', payload.file, payload.file.name);
+    } else if (Array.isArray(payload.file) && payload.file.length > 0) {
+      formData.append('files', payload.file[0], payload.file[0].name);
+    }
 
-     console.log('FormData prepared:', formData);
 
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
-  for (const [key, value] of formData.entries()) {
-    console.log(key, value);
-  }
-  
-  this.featuresService.uploadAutomation(formData).subscribe({
+    this.featuresService.uploadAutomation(formData).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
         this.displayAutoModal = false;
