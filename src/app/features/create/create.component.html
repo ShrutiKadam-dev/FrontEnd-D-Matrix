@@ -33,7 +33,7 @@
 <!-- Entity Table -->
   <div class="entity-table-wrapper">
    <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="12" [rowsPerPageOptions]="[12,25,50]" [paginatorDropdownAppendTo]="'body'" 
-    [scrollable]="true" 
+    [scrollable]="true"  [virtualScroll]="true" 
     [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
     scrollHeight="535px" >
     <ng-template pTemplate="header">
