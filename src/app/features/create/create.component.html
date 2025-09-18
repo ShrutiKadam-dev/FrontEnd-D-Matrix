@@ -189,26 +189,26 @@
             <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
               (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
               [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name" appendTo="viewport"
-              appendTo="body">
+              appendTo="body" >
             </p-autoComplete>
           </td>
           <td>
-            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code" />
+            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code" [readonly]="row.get('fromApi')?.value"/>
           </td>
           <td>
-            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"  />
+            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector" [readonly]="row.get('fromApi')?.value" />
           </td>
           <td class="weightage-cell">
             <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
-              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage" >
+              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"   [readonly]="row.get('fromApi')?.value">
             </p-inputNumber>
 
           </td>
           <td>
-            <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"  />
+            <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"  [readonly]="row.get('fromApi')?.value" />
           </td>
           <td>
-            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN" readonly   />
+            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN"  [readonly]="row.get('fromApi')?.value" />
           </td>
 
           <td>

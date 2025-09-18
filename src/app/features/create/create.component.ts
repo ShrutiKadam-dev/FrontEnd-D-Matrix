@@ -220,7 +220,8 @@ export class CreateComponent implements OnInit {
       sector: ['', Validators.required],
       weightage: ['', Validators.required],
       tag: ['', Validators.required],
-      isin_code: ['', Validators.required]
+      isin_code: ['', Validators.required],
+      fromApi: [false]
     });
 
     row.get('weightage')?.valueChanges.subscribe(value => {
@@ -406,7 +407,8 @@ export class CreateComponent implements OnInit {
                 sector: [  row.sector || '', Validators.required],
                 weightage: [  row.weightage || '', Validators.required],
                 tag: [  row.tag || '',    Validators.required],
-                isin_code: [  row.isin_code || '',Validators.required]
+                isin_code: [  row.isin_code || '',Validators.required],
+                fromApi: [true] 
               })
             );
           });
