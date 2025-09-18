@@ -51,29 +51,29 @@
     <!-- Footer (Summary Row) -->
     <ng-template pTemplate="footer">
       <tr class="summary-row">
-        <td colspan="3" class="summary green">
-          Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-          Amount: {{ totalPurchaseAmount | currency:'INR' }}
-        </td>
-        <td colspan="3" class="summary blue">
-          Available → Units: {{ availableUnits | number:'1.2-2' }} |
+        <td colspan="9" class="summary green">
+          Total Available Units → Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount | currency:'INR' }}
         </td>
-        <td colspan="3" class="summary red text-right">
-          Sales → Units: {{ totalSalesUnits | number:'1.2-2' }} |
-          Amount: {{ totalSalesAmount | currency:'INR' }}
+      </tr>
+      <tr class="summary-row">
+        <td colspan="9" class="summary blue">
+        Total Value → {{ totalValue | currency:'INR' }}
         </td>
       </tr>
-      <tr>
-        <td colspan="9" class="summary black text-right">
-          <strong>Total Value → {{ totalValue | currency:'INR' }}</strong>
+      <tr class="summary-row">
+        <td colspan="9" class="summary red">
+          Total Units Sold → Units: {{ totalSalesUnits | number:'1.2-2' }} |
+          Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>
 
     </ng-template>
 
     <ng-template #emptymessage>
-      <tr><td colspan="5">No Records found</td> </tr>
+      <tr>
+        <td colspan="5">No Records found</td>
+      </tr>
     </ng-template>
 
   </p-table>
@@ -125,7 +125,9 @@
     </ng-template>
 
     <ng-template #emptymessage>
-      <tr><td colspan="6">No Records found</td> </tr>
+      <tr>
+        <td colspan="6">No Records found</td>
+      </tr>
     </ng-template>
 
   </p-table>

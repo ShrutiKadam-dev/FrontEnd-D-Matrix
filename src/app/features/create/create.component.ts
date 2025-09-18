@@ -527,7 +527,10 @@ export class CreateComponent implements OnInit {
 
       case 'ETF':
         this.etfActionTableForm.reset();
-        this.etfActionTableForm.patchValue({ entityid: entity.entityid });
+        this.etfActionTableForm.patchValue({ 
+          entityid: entity.entityid,
+          security_description : entity.scripname
+        });
         break;
 
       case 'MF':
@@ -560,7 +563,7 @@ export class CreateComponent implements OnInit {
 
     if (cat === 'Equity' && sub === 'Direct Equity') return 'DE';
     if (cat === 'Equity' && sub === 'Alternative Investment Funds') return 'AIF';
-    if (cat === 'Commodities' && sub === 'ETF') return 'ETF';
+    if (cat === 'Commodities' && sub === 'ETF' || cat === 'Equity' && sub === 'ETF' || cat === 'Fixed_Income' && sub === 'ETF') return 'ETF';
     if (cat === 'Commodities' && sub === 'Direct Equity') return 'DECOM';
     if (sub === 'PMS' && this.isPmsMode === 'CLIENT') return 'PMS_CLIENT';
     if (sub === 'PMS' && this.isPmsMode === 'AMC') return 'PMS_AMC';

@@ -1,7 +1,6 @@
-/* Footer (summary row) */
 :host ::ng-deep .summary-row td {
   font-weight: 600;
-  text-align: center;
+  text-align: left;   
   padding: 10px;
   border-top: 2px solid #e5e7eb;
   font-size: 0.9rem;
