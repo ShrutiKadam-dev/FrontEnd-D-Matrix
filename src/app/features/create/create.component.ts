@@ -149,6 +149,10 @@ export class CreateComponent implements OnInit {
     const nav = Number(this.mfActionTableForm.get('nav')?.value) || 0;
     const total = unit * nav;
     this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
+
+    const netTotal = Number(this.mfActionTableForm.get('purchase_amount')?.value) || 0;
+    this.mfActionTableForm.get('net_amount')?.setValue(netTotal.toFixed(2), { emitEvent: false });
+
   }
 
   private calculateNetTotalValue(): void {
@@ -175,6 +179,7 @@ export class CreateComponent implements OnInit {
     // Auto-calc MF purchase_value
     this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
     this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.mfActionTableForm.get('purchase_amount')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
 
     this.directEquityActionTableForm.get('qty')?.valueChanges.subscribe(() => this.calculateNetTotalValue());
     this.directEquityActionTableForm.get('trade_price')?.valueChanges.subscribe(() => this.calculateNetTotalValue());
