@@ -534,7 +534,6 @@ export class CreateComponent implements OnInit {
           scrip_code: entity.scripcode,
           scrip_name: entity.scripname,
           isin: entity.isin,
-          order_date: new Date()
         });
         break;
     }
