@@ -91,9 +91,9 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllPMSEquity`);
   }
 
-  getAllMutualFundDetailsNav(entityid: string) {
+  getAllMutualFundDetailsNav(ISIN: string) {
     return this.http.get<any>(`${this.apiUrl}/getAllMutualFundDetailNav`, {
-      params: { entityid: entityid }
+      params: { ISIN: ISIN }
     });
   }
 
