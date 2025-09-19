@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectEquityComponent } from './direct-equity.component';
+import { DirectDebtComponent } from './direct-debt.component';
 
-describe('DirectEquityComponent', () => {
-  let component: DirectEquityComponent;
-  let fixture: ComponentFixture<DirectEquityComponent>;
+describe('DirectDebtComponent', () => {
+  let component: DirectDebtComponent;
+  let fixture: ComponentFixture<DirectDebtComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DirectEquityComponent]
+      imports: [DirectDebtComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DirectEquityComponent);
+    fixture = TestBed.createComponent(DirectDebtComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

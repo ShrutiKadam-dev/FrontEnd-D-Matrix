@@ -155,8 +155,8 @@ navFormMF(): FormGroup {
   pmsClientActionForm(): FormGroup {
     return this.fb.group({
       trade_date: ['', Validators.required],
-      order_type: ['', Validators.required],
-      trade_price: ['', Validators.required],
+      pms_order_type: ['', Validators.required],
+      price: [''],
       cheque: ['', Validators.required],
       entityid: ['', Validators.required],
     })

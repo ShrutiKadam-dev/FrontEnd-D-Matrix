@@ -88,9 +88,9 @@ export class AppComponent implements OnInit {
         tooltipOptions: { tooltipLabel: 'Fixed Income', tooltipPosition: 'right' },
         items: [
           { 
-            label: 'Direct Equity', 
+            label: 'Direct Debt', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/fixed-income/direct-equity']
+            routerLink: ['/features/fixed-income/direct-debt']
           },
           { 
             label: 'ETF', 

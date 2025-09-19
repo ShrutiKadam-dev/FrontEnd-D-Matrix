@@ -20,15 +20,15 @@
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
-        <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
-        <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
         <th pSortableColumn="order_number">Order No <p-sortIcon field="order_number"></p-sortIcon></th>
-        <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
+        <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
         <th pSortableColumn="nav">NAV <p-sortIcon field="nav"></p-sortIcon></th>
+        <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
+        <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
         <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
         <th pSortableColumn="net_amount">Net Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
         <th pSortableColumn="redeem_amount">Redeem Amount <p-sortIcon field="redeem_amount"></p-sortIcon></th>
+        <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
 
       </tr>
     </ng-template>
@@ -36,15 +36,16 @@
     <!-- Body -->
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.sett_no }}</td>
-        <td>{{ entity.unit | number:'1.2-2' }}</td>
-        <td>{{ entity.order_date }}</td>
         <td>{{ entity.order_number }}</td>
-        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
+        <td>{{ entity.order_date }}</td>
         <td>{{ entity.nav | number:'1.2-2' }}</td>
+        <td>{{ entity.unit | number:'1.2-2' }}</td>
+        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
         <td>{{ entity.purchase_amount | number:'1.2-2' }}</td>
         <td>{{ entity.net_amount | number:'1.2-2' }}</td>
         <td>{{ entity.redeem_amount | number:'1.2-2' }}</td>
+        <td>{{ entity.sett_no }}</td>
+
       </tr>
     </ng-template>
 
@@ -58,7 +59,7 @@
       </tr>
       <tr class="summary-row">
         <td colspan="9" class="summary blue">
-        Total Value → {{ totalValue | currency:'INR' }}
+          Total Value → {{ totalValue | currency:'INR' }}
         </td>
       </tr>
       <tr class="summary-row">
