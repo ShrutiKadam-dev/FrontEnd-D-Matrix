@@ -143,7 +143,11 @@ export class MutualFundDetailsComponent implements OnInit {
 
   loadMfDetails(id: string) {
     this.featuresService.getMutualFundDetailsById(id).subscribe({
-      next: (res: any) => { this.mfDetails = res?.data || {}; },
+      next: (res: any) => { this.mfDetails = res?.data || {}; 
+      console.log(this.mfDetails[0].isin);
+      
+      this.getAllMutualFundDetailsNav(this.mfDetails[0].isin)
+    },
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });
   }
@@ -157,7 +161,6 @@ export class MutualFundDetailsComponent implements OnInit {
           date: e.order_date,
           amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
         }));
-      this.getAllMutualFundDetailsNav(mfId);
       },
       error: (error) => {
         this.messageService.add({
@@ -169,11 +172,10 @@ export class MutualFundDetailsComponent implements OnInit {
     });
   }
 
-  getAllMutualFundDetailsNav(mfId: string) {
-    this.featuresService.getAllMutualFundDetailsNav(mfId).subscribe({
+  getAllMutualFundDetailsNav(ISIN: string) {
+    this.featuresService.getAllMutualFundDetailsNav(ISIN).subscribe({
       next: (data: any) => {
         this.allNavs = Array.isArray(data.data) ? data.data : [];
-
         if (this.allNavs.length > 0) {
           this.allNavs.sort((a: any, b: any) =>
             new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
