@@ -90,7 +90,7 @@ export class AppComponent implements OnInit {
           { 
             label: 'Direct Debt', 
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/fixed-income/direct-equity']
+            routerLink: ['/features/fixed-income/direct-debt']
           },
           { 
             label: 'ETF', 

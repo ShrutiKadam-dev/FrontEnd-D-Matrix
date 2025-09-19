@@ -28,4 +28,12 @@ export const fixedIncomeRoutes: Routes = [
         path: 'sub-aif/:id',
         loadComponent: () => import('./aif/sub-aif/sub-aif.component').then(c => c.SubAifComponent)
     },
+    {
+        path: 'direct-debt',
+        loadComponent: () => import('./direct-debt/direct-debt.component').then(c => c.DirectDebtComponent)
+    },
+    {
+        path: 'direct-debt-details/:id',
+        loadComponent: () => import('./direct-debt/direct-debt-details/direct-debt-details.component').then(c => c.DirectDebtDetailsComponent)
+    },
 ];
