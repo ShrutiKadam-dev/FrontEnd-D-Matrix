@@ -14,6 +14,11 @@ export const ORDER_TYPE_OPTIONS: DropdownOption[] = [
   { label: 'Sell', value: 'Sell' },
 ];
 
+export const PMS_ORDER_TYPE_OPTIONS: DropdownOption[] = [
+  { label: 'Subscription', value: 'Subscription' },
+  { label: 'Redemption', value: 'Redemption' },
+];
+
 export const MODE_OPTIONS: DropdownOption[] = [
   { label: 'Demat', value: 'Demat' },
 ];

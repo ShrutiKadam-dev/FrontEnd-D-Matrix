@@ -32,6 +32,7 @@ import {
 import {
   CATEGORY_OPTIONS,
   ORDER_TYPE_OPTIONS,
+  PMS_ORDER_TYPE_OPTIONS,
   MODE_OPTIONS,
   ALL_SUBCATEGORY_OPTIONS
 } from '../dropdown-options.enums';
@@ -141,6 +142,7 @@ export class CreateComponent implements OnInit {
 
   categoryOptions = CATEGORY_OPTIONS;
   orderTypeOptions = ORDER_TYPE_OPTIONS;
+  PmsOrderTypeOptions = PMS_ORDER_TYPE_OPTIONS;
   modeOptions = MODE_OPTIONS;
   allSubCategoryOptions = ALL_SUBCATEGORY_OPTIONS;
 
@@ -211,6 +213,7 @@ export class CreateComponent implements OnInit {
     this.underlyingForm = this.fb.group({
       rows: this.fb.array([this.createRow()])
     });
+
   }
 
   // ---------- Underlying helpers ----------
@@ -289,7 +292,7 @@ export class CreateComponent implements OnInit {
     this.addRow();
     this.displayUnderlyingModal = true;
     this.displayUpdateChoiceModal = false;
-    }
+  }
 
   // ---------- Grid / CRUD ----------
   onGlobalFilter(event: Event) {
@@ -407,13 +410,13 @@ export class CreateComponent implements OnInit {
           res.data.forEach((row: any) => {
             this.rows.push(
               this.fb.group({
-                company_name: [  row.company_name || '', Validators.required],
-                scripcode: [  row.scripcode || '', Validators.required],
-                sector: [  row.sector || '', Validators.required],
-                weightage: [  row.weightage || '', Validators.required],
-                tag: [  row.tag || '',    Validators.required],
-                isin_code: [  row.isin_code || '',Validators.required],
-                fromApi: [true] 
+                company_name: [row.company_name || '', Validators.required],
+                scripcode: [row.scripcode || '', Validators.required],
+                sector: [row.sector || '', Validators.required],
+                weightage: [row.weightage || '', Validators.required],
+                tag: [row.tag || '', Validators.required],
+                isin_code: [row.isin_code || '', Validators.required],
+                fromApi: [true]
               })
             );
           });
@@ -527,9 +530,9 @@ export class CreateComponent implements OnInit {
 
       case 'ETF':
         this.etfActionTableForm.reset();
-        this.etfActionTableForm.patchValue({ 
+        this.etfActionTableForm.patchValue({
           entityid: entity.entityid,
-          security_description : entity.scripname
+          security_description: entity.scripname
         });
         break;
 

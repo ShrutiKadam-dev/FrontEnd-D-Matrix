@@ -16,7 +16,8 @@
     <!-- Left Section (Buttons) -->
     <div class="button-group p-d-flex p-ai-center">
       <p-button label="Create Entity" icon="pi pi-plus" (click)="showModal()" styleClass="add-entity-btn"></p-button>
-      <p-button label="Upload PDF" icon="pi pi-file-pdf" (click)="showAutoModal()" styleClass="add-entity-btn ml-4"></p-button>
+      <p-button label="Upload PDF" icon="pi pi-file-pdf" (click)="showAutoModal()"
+        styleClass="add-entity-btn ml-4"></p-button>
     </div>
 
     <!-- Right Section (Search Bar) -->
@@ -30,43 +31,43 @@
 
   </div>
 
-<!-- Entity Table -->
+  <!-- Entity Table -->
   <div class="entity-table-wrapper">
-   <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="12" [rowsPerPageOptions]="[12,25,50]" [paginatorDropdownAppendTo]="'body'" 
-    [scrollable]="true"  [virtualScroll]="true" 
-    [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-    scrollHeight="535px" >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Scrip Name</th>
-        <th>Scrip Code</th>
-        <th>Benchmark</th>
-        <th>Category</th>
-        <th>Subcategory</th>
-        <th>Action</th>
-      </tr>
-    </ng-template>
+    <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="12" [rowsPerPageOptions]="[12,25,50]"
+      [paginatorDropdownAppendTo]="'body'" [scrollable]="true" [virtualScroll]="true"
+      [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
+      scrollHeight="535px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Scrip Name</th>
+          <th>Scrip Code</th>
+          <th>Benchmark</th>
+          <th>Category</th>
+          <th>Subcategory</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
 
-    <ng-template pTemplate="body" let-entity>
-      <tr>
-        <td [title]="entity.scripname">{{ entity.scripname }}</td>
-        <td>{{ entity.scripcode }}</td>
-        <td>{{ entity.benchmark }}</td>
-        <td>{{ entity.category }}</td>
-        <td>{{ entity.subcategory }}</td>
-        <td>
-          <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
-          <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
-          <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
-        </td>
-      </tr>
-    </ng-template>
+      <ng-template pTemplate="body" let-entity>
+        <tr>
+          <td [title]="entity.scripname">{{ entity.scripname }}</td>
+          <td>{{ entity.scripcode }}</td>
+          <td>{{ entity.benchmark }}</td>
+          <td>{{ entity.category }}</td>
+          <td>{{ entity.subcategory }}</td>
+          <td>
+            <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
+            <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
+            <p-button icon="pi pi-trash" styleClass="custom-btn-delete" (click)="confirmDelete(entity)"></p-button>
+          </td>
+        </tr>
+      </ng-template>
 
-    <ng-template #emptymessage>
-      <tr>
-        <td colspan="5">No Records found</td>
-      </tr>
-    </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="5">No Records found</td>
+        </tr>
+      </ng-template>
 
     </p-table>
   </div>
@@ -189,26 +190,31 @@
             <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
               (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
               [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name" appendTo="viewport"
-              appendTo="body" >
+              appendTo="body">
             </p-autoComplete>
           </td>
           <td>
-            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code" [readonly]="row.get('fromApi')?.value"/>
+            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code"
+              [readonly]="row.get('fromApi')?.value" />
           </td>
           <td>
-            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector" [readonly]="row.get('fromApi')?.value" />
+            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"
+              [readonly]="row.get('fromApi')?.value" />
           </td>
           <td class="weightage-cell">
             <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
-              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"   [readonly]="row.get('fromApi')?.value">
+              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"
+              [readonly]="row.get('fromApi')?.value">
             </p-inputNumber>
 
           </td>
           <td>
-            <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"  [readonly]="row.get('fromApi')?.value" />
+            <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"
+              [readonly]="row.get('fromApi')?.value" />
           </td>
           <td>
-            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN"  [readonly]="row.get('fromApi')?.value" />
+            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN"
+              [readonly]="row.get('fromApi')?.value" />
           </td>
 
           <td>
@@ -251,6 +257,9 @@
       <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
         placeholder="Select Order Type"></p-dropdown>
 
+      <p-dropdown *ngIf="field.key === 'pms_order_type'" [options]="PmsOrderTypeOptions"
+        formControlName="pms_order_type" placeholder="Select Order Type"></p-dropdown>
+
       <!-- Dropdown: Mode -->
       <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"
         placeholder="Select Mode"></p-dropdown>
@@ -281,10 +290,23 @@
                && field.key !== 'trans_date'
               && field.key !== 'net_total'
                && field.key !== 'order_time'
+               && field.key !== 'pms_order_type'
                && field.key !== 'trade_time'" [id]="field.key" pInputText [formControlName]="field.key"
         [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"
         [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
 
+    </div>
+
+    <!-- Price of pms field -->
+    <div class="field" *ngIf="currentActionTableForm.get('pms_order_type')?.value">
+      <label>
+        {{ currentActionTableForm.get('pms_order_type')?.value === 'Subscription'
+        ? 'Subscription Price'
+        : 'Redemption Price' }}
+      </label>
+      <input pInputText formControlName="price" [placeholder]="'Enter ' + (currentActionTableForm.get('pms_order_type')?.value === 'Subscription'
+                                    ? 'Subscription Price'
+                                    : 'Redemption Price')" />
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
