@@ -37,7 +37,7 @@ import { Router } from '@angular/router';
   templateUrl: './direct-equity.component.html',
   styleUrl: './direct-equity.component.scss'
 })
-export class DirectEquityComponent implements OnInit {
+export class DirectDebtComponent implements OnInit {
   selectedDirectEquityName: any = null;
   filteredDENames: any[] = [];
   allDEs: any[] = [];

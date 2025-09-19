@@ -38,7 +38,7 @@ import { TagModule } from 'primeng/tag';
   templateUrl: './direct-equity-details.component.html',
   styleUrl: './direct-equity-details.component.scss'
 })
-export class DirectEquityDetailsComponent implements OnInit{
+export class DirectDebtDetailsComponent implements OnInit{
   deId!: string | null;
   deDetails: any;
   actionTableList: any[] = [];

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectEquityDetailsComponent } from './direct-equity-details.component';
+import { DirectDebtDetailsComponent } from './direct-debt-details.component';
 
 describe('DirectEquityDetailsComponent', () => {
-  let component: DirectEquityDetailsComponent;
-  let fixture: ComponentFixture<DirectEquityDetailsComponent>;
+  let component: DirectDebtDetailsComponent;
+  let fixture: ComponentFixture<DirectDebtDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DirectEquityDetailsComponent]
+      imports: [DirectDebtDetailsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DirectEquityDetailsComponent);
+    fixture = TestBed.createComponent(DirectDebtDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DirectEquityComponent } from './direct-equity.component';
+import { DirectEquityComponent } from './direct-debt.component';
 
 describe('DirectEquityComponent', () => {
   let component: DirectEquityComponent;
