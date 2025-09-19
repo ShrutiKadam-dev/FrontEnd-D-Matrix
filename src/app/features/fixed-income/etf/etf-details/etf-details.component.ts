@@ -72,8 +72,8 @@ export class EtfDetailsComponent implements OnInit {
     this.etfId = this.route.snapshot.paramMap.get('id');
     if (this.etfId) {
       this.loadETFDetails(this.etfId);
-      this.getETFDetailActionTable(this.etfId);
-      this.getETFDetailUnderlyingTable(this.etfId);
+      this.getETFDetailFixedIncomeActionTable(this.etfId);
+      this.getFixIncomeEquityDetailUnderlyingTable(this.etfId);
       this.fetchIrr(this.etfId)
 
     }
@@ -141,14 +141,14 @@ export class EtfDetailsComponent implements OnInit {
   }
 
   loadETFDetails(id: string) {
-    this.featuresService.getETFDetailsById(id).subscribe({
+    this.featuresService.getETFDetailsFixedIncomeById(id).subscribe({
       next: (res: any) => { this.etfDetails = res?.data || {}; },
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });
   }
 
-  getETFDetailActionTable(etfId: string) {
-    this.featuresService.getETFDetailActionTable(etfId).subscribe({
+  getETFDetailFixedIncomeActionTable(etfId: string) {
+    this.featuresService.getETFDetailFixedIncomeActionTable(etfId).subscribe({
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
         this.calculateTotals(this.actionTableList);
@@ -167,8 +167,8 @@ export class EtfDetailsComponent implements OnInit {
     });
   }
 
-  getETFDetailUnderlyingTable(etfId: string) {
-    this.featuresService.getETFDetailUnderlyingTable(etfId).subscribe({
+  getFixIncomeEquityDetailUnderlyingTable(etfId: string) {
+    this.featuresService.getFixIncomeEquityDetailUnderlyingTable(etfId).subscribe({
       next: (data) => {
         this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
 

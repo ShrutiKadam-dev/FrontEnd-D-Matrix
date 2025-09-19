@@ -73,16 +73,16 @@ export class EtfComponent implements OnInit{
   ];
 
   ngOnInit() {
-    this.getAllETF();
-    this.getAllActionTable();
+    this.getAllETFFixedIncome();
+    this.getAllActionTableOFETFFixedIncome();
   }
 
   goToETFDetails(etf: any) {
-    this.router.navigate(['/features/commodities/etf-details', etf.entityid]);
+    this.router.navigate(['/features/fixed-income/etf-details', etf.entityid]);
   }
 
-  getAllETF() {
-    this.featuresService.getAllETF().subscribe({
+  getAllETFFixedIncome() {
+    this.featuresService.getAllETFFixedIncome().subscribe({
       next: (res: any) => {
         this.allETFs = res?.data || [];
         this.allETFs.forEach(etf => {
@@ -95,8 +95,8 @@ export class EtfComponent implements OnInit{
     });
   }
 
-  getAllActionTable() {
-    this.featuresService.getAllActionTableOfETF().subscribe({
+  getAllActionTableOFETFFixedIncome() {
+    this.featuresService.getAllActionTableOFETFFixedIncome().subscribe({
       next: (data: any) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
       },

@@ -72,7 +72,7 @@ export class EtfDetailsComponent implements OnInit {
     this.etfId = this.route.snapshot.paramMap.get('id');
     if (this.etfId) {
       this.loadETFDetails(this.etfId);
-      this.getETFDetailActionTable(this.etfId);
+      this.getETFEquityDetailActionTable(this.etfId);
       this.getETFDetailUnderlyingTable(this.etfId);
       this.fetchIrr(this.etfId)
 
@@ -147,8 +147,8 @@ export class EtfDetailsComponent implements OnInit {
     });
   }
 
-  getETFDetailActionTable(etfId: string) {
-    this.featuresService.getETFDetailActionTable(etfId).subscribe({
+  getETFEquityDetailActionTable(etfId: string) {
+    this.featuresService.getETFEquityDetailActionTable(etfId).subscribe({
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
         this.calculateTotals(this.actionTableList);

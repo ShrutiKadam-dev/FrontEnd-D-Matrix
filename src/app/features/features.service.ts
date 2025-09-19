@@ -109,6 +109,10 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getETFEntity`);
   }
 
+  getAllETFFixedIncome(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllFixIncomeETF`);
+  }
+
   getAllETFEquity(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllETFEquity`);
   }
@@ -126,6 +130,10 @@ export class FeaturesService {
 
   getAllActionTableOfETF(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfETF`);
+  }
+
+  getAllActionTableOFETFFixedIncome(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfFixIncomeETF`);
   }
 
   getAllActionTableOfETFEquity(): Observable<any[]> {
@@ -182,6 +190,13 @@ export class FeaturesService {
     });
   }
 
+    
+  getETFDetailsFixedIncomeById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getFixIncomeETFById`, {
+      params: { entityid: id }
+    });
+  }
+
   getETFDetailsEquityById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getETFDetailsEquityById`, {
       params: { entityid: id }
@@ -217,7 +232,13 @@ export class FeaturesService {
   }
 
   getETFDetailUnderlyingTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+    return this.http.get<any>(`${this.apiUrl}/getETFEquityDetailUnderlyingTable`, {
+      params: { entityid: mfId }
+    });
+  }
+
+  getFixIncomeEquityDetailUnderlyingTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getFixIncomeEquityDetailUnderlyingTable`, {
       params: { entityid: mfId }
     });
   }
@@ -234,13 +255,19 @@ export class FeaturesService {
     });
   }
 
+  getETFDetailFixedIncomeActionTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getFixIncomeETFDetailActionTable`, {
+      params: { entityid: mfId }
+    });
+  }
+
   getPMSEquityClientActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsClientActionById`, {
       params: { entityid: mfId }
     });
   }
 
-  getETFDetailActionTable(mfId: string) {
+  getETFCommodityDetailActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getETFActionTablebyId`, {
       params: { entityid: mfId }
     });
@@ -297,6 +324,7 @@ export class FeaturesService {
   getAifActionTableById(entityid: string) {
     return this.http.post(`${this.apiUrl}/getAifActionTablebyId`, { entityid });
   }
+  
   getUnderlyingTable(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
       params: { entityid }

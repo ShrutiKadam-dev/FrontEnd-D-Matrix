@@ -82,7 +82,7 @@ export class EtfComponent implements OnInit{
   }
 
   goToETFDetails(etf: any) {
-    this.router.navigate(['/features/commodities/etf-details', etf.entityid]);
+    this.router.navigate(['/features/equity/etf-details', etf.entityid]);
   }
 
   getAllETFEquity() {
