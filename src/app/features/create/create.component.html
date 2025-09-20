@@ -9,7 +9,7 @@
   <p>No records found</p>
 </div>
 
-<div class="table-card" *ngIf="entityList && entityList.length > 0">
+<div class="table-card"  *ngIf="!loading && (entityList?.length ?? 0) > 0">
   <!-- Header Section -->
   <div class="entity-header p-d-flex p-ai-center p-jc-between">
 
