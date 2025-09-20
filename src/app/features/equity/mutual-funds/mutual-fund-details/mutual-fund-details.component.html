@@ -12,6 +12,25 @@
     </div>
   </div>
 
+<div class="card-row">
+  <div class="card green-card">
+    <h4>Total Available Units</h4>
+    <p>Units: {{ availableUnits | number:'1.2-2' }}</p>
+    <p>Amount: {{ availableAmount | currency:'INR' }}</p>
+  </div>
+
+  <div class="card blue-card">
+    <h4>Total Units Sold</h4>
+    <p>Units: {{ totalSalesUnits | number:'1.2-2' }}</p>
+    <p>Amount: {{ totalSalesAmount | currency:'INR' }}</p>
+  </div>
+
+  <div class="card yellow-card">
+    <h4>Total Value</h4>
+    <p>{{ totalValue | currency:'INR' }}</p>
+  </div>
+</div>
+
   <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10,25,50]" [scrollable]="true" [virtualScroll]="true"
     [globalFilterFields]="['sett_no','unit','order_number','purchase_amount','redeem_amount']" scrollHeight="600px"
@@ -19,17 +38,6 @@
 
     <!-- Header -->
     <ng-template pTemplate="header">
-      <!-- <tr>
-        <th colspan="4"> Total Available Units → Units: {{ availableUnits | number:'1.2-2' }}</th>
-        <th colspan="5"> Total Available Amount → {{ availableAmount | currency:'INR' }}</th>
-      </tr>
-      <tr>
-        <th colspan="4"> Total Units Sold → Units: {{ totalSalesUnits | number:'1.2-2' }} </th>
-        <th colspan="5"> Total Sold Amount → {{ totalSalesAmount | currency:'INR' }}</th>
-      </tr>
-            <tr>
-        <th colspan="9"> Total Value → {{ totalValue | currency:'INR' }}</th>
-      </tr> -->
       <tr>
         <th pSortableColumn="order_number">Order No <p-sortIcon field="order_number"></p-sortIcon></th>
         <th pSortableColumn="order_date">Order Date <p-sortIcon field="order_date"></p-sortIcon></th>
