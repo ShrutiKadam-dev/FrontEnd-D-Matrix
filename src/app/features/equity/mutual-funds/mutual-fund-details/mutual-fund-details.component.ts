@@ -176,17 +176,7 @@ export class MutualFundDetailsComponent implements OnInit {
     this.featuresService.getAllMutualFundDetailsNav(ISIN).subscribe({
       next: (data: any) => {
         this.allNavs = Array.isArray(data.data) ? data.data : [];
-        if (this.allNavs.length > 0) {
-          this.allNavs.sort((a: any, b: any) =>
-            new Date(b.nav_date).getTime() - new Date(a.nav_date).getTime()
-          );
-          this.allNavs = [this.allNavs[0]]; // keep only latest NAV
-          this.totalValue = this.availableUnits * this.allNavs[0].nav;
-        } else {
-          this.allNavs = [];
-          this.totalValue = 0;
-        }
-
+        this.totalValue = this.availableUnits * this.allNavs[0].nav;
       },
       error: (error) => {
         this.messageService.add({
