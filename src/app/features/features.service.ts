@@ -92,8 +92,8 @@ export class FeaturesService {
   }
 
   getAllMutualFundDetailsNav(ISIN: string) {
-    return this.http.get<any>(`${this.apiUrl}/getAllMutualFundDetailNav`, {
-      params: { ISIN: ISIN }
+    return this.http.get<any>(`${this.apiUrl}/getMutualFundbyIsinId`, {
+      params: { isin: ISIN }
     });
   }
 
