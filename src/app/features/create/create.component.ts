@@ -970,10 +970,25 @@ export class CreateComponent implements OnInit {
     }
 
     this.featuresService.uploadAutomation(formData).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Saved', detail: 'Automation saved successfully' });
+      next: (res:any) => {
+        // Build message from API response
+        const inserted = res?.summary?.inserted_count || 0;
+        const skipped = res?.summary?.skipped_count || 0;
+        const total = res?.summary?.total_processed || 0;
+
+        this.messageService.add({ severity: 'success', summary: 'Upload Completed', detail: `Inserted: ${inserted}, Skipped: ${skipped}` })
+        // Optional: if you want to show details of skipped items
+            if (res?.skipped?.length) {res.skipped.forEach((item: any) => {
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Skipped',
+              detail: `Order #${item.order_number} → ${item.status}`
+                });
+              });
+            }
         this.displayAutoModal = false;
         this.automationForm.reset();
+        this.getEntities()
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Save failed' });
