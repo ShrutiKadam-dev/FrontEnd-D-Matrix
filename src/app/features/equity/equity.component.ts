@@ -17,11 +17,13 @@ import { Router } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-equity',
   imports: [
     ButtonModule,
+    TagModule,
     CalendarModule,
     TooltipModule,
     ProgressSpinnerModule,
@@ -263,6 +265,17 @@ this.directEquityTableList = res.data.direct_equity_data;
     // Generate random pastel color
     const hue = Math.floor(Math.random() * 360);
     return `hsl(${hue}, 70%, 85%)`;
+  }
+
+    getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 
 }

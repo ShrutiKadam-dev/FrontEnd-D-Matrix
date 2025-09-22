@@ -88,7 +88,7 @@
     <ng-template pTemplate="body" let-entity>
       <tr>
         <td>{{ entity.scrip_name }}</td>
-        <td>{{ entity.order_type }}</td>
+        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
       </tr>
     </ng-template>
 
