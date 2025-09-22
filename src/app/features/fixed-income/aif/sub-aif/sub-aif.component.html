@@ -23,7 +23,8 @@
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
         <th pSortableColumn="trans_date">Order Date <p-sortIcon field="trans_date"></p-sortIcon></th>
         <th pSortableColumn="trans_type">Action <p-sortIcon field="trans_type"></p-sortIcon></th>
-        <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon field="contribution_amount"></p-sortIcon></th>
+        <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon
+            field="contribution_amount"></p-sortIcon></th>
         <th pSortableColumn="stamp_duty">Stamp Duty <p-sortIcon field="stamp_duty"></p-sortIcon></th>
         <th pSortableColumn="amount_invested">Amount Invested <p-sortIcon field="amount_invested"></p-sortIcon></th>
         <th pSortableColumn="balance_units">Balance Units <p-sortIcon field="balance_units"></p-sortIcon></th>
@@ -62,6 +63,12 @@
       </tr>
     </ng-template>
 
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="5">No Records found</td>
+      </tr>
+    </ng-template>
+
   </p-table>
 </div>
 
@@ -70,7 +77,7 @@
 
 <div class="table-card">
   <!-- Header -->
- <h4>Summary Of Underlying</h4>
+  <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
 
     <div class="underlying-date">
@@ -81,12 +88,7 @@
     </div>
 
     <div class="search-container">
-      <input
-        pInputText
-        type="text"
-        (input)="onGlobalFilter($event)"
-        placeholder="Search underlying..."
-      />
+      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
     </div>
   </div>
 
@@ -94,12 +96,14 @@
   <p-table #dt [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
     [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
       <tr>
         <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
         <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
         <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
         <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
+        <th pSortableColumn="tag">Tag <p-sortIcon field="tag"></p-sortIcon></th>
+        <th pSortableColumn="isin_code">ISIN <p-sortIcon field="isin_code"></p-sortIcon></th>
       </tr>
     </ng-template>
 
@@ -109,6 +113,14 @@
         <td>{{ entity.scripcode }}</td>
         <td>{{ entity.weightage }}</td>
         <td>{{ entity.sector }}</td>
+        <td>{{ entity.tag }}</td>
+        <td>{{ entity.isin_code }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="4">No Records found</td>
       </tr>
     </ng-template>
   </p-table>
