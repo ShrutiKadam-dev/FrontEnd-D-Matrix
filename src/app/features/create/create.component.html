@@ -9,7 +9,7 @@
   <p>No records found</p>
 </div>
 
-<div class="table-card"  *ngIf="!loading && (entityList?.length ?? 0) > 0">
+<div class="table-card" *ngIf="!loading && (entityList?.length ?? 0) > 0">
   <!-- Header Section -->
   <div class="entity-header p-d-flex p-ai-center p-jc-between">
 
@@ -32,11 +32,11 @@
   </div>
 
   <!-- Entity Table -->
+  <!-- [scrollable]="true" [virtualScroll]="true"  scrollHeight="538x" -->
   <div class="entity-table-wrapper">
     <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="12" [rowsPerPageOptions]="[12,25,50]"
-      [paginatorDropdownAppendTo]="'body'" [scrollable]="true" [virtualScroll]="true"
-      [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']"
-      scrollHeight="535px">
+      [paginatorDropdownAppendTo]="'body'"
+      [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']">
       <ng-template pTemplate="header">
         <tr>
           <th>Scrip Name</th>
@@ -184,54 +184,68 @@
           <th style="width: 90px;">Action</th>
         </tr>
       </thead>
-      <tbody formArrayName="rows">
-        <tr *ngFor="let row of rows.controls; let i = index" [formGroupName]="i">
-          <td>
-            <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
-              (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
-              [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name" appendTo="viewport"
-              appendTo="body">
-            </p-autoComplete>
-          </td>
-          <td>
-            <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code"
-              [readonly]="row.get('fromApi')?.value" />
-          </td>
-          <td>
-            <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"
-              [readonly]="row.get('fromApi')?.value" />
-          </td>
-          <td class="weightage-cell">
-            <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
-              [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"
-              [readonly]="row.get('fromApi')?.value">
-            </p-inputNumber>
-
-          </td>
-          <td>
-            <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"
-              [readonly]="row.get('fromApi')?.value" />
-          </td>
-          <td>
-            <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN"
-              [readonly]="row.get('fromApi')?.value" />
-          </td>
-
-          <td>
-            <button type="button" class="remove-row-btn" *ngIf="rows.length >= 1" (click)="removeRow(i)">
-              Remove
-            </button>
-          </td>
-        </tr>
-      </tbody>
     </table>
+    <div class="underlying-table-container">
+      <table class="underlying-table">
 
-    <button type="button" class="add-row-btn" (click)="addRow()">+ Add Row</button>
+        <tbody formArrayName="rows">
+          <tr *ngIf="rows.length === 0">
+            <td colspan="7" style="text-align: center; padding: 1rem; color: #777;">
+              No records found
+            </td>
+          </tr>
+          <tr *ngFor="let row of rows.controls; let i = index" [formGroupName]="i">
+            <td>
+              <p-autoComplete formControlName="company_name" [suggestions]="companySuggestions"
+                (completeMethod)="searchCompany($event, i)" (onSelect)="onCompanySelect($event, i)"
+                [field]="'company_name'" [forceSelection]="true" placeholder="Enter company name" appendTo="viewport"
+                appendTo="body">
+              </p-autoComplete>
+            </td>
+            <td>
+              <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code"
+                [readonly]="row.get('fromApi')?.value" />
+            </td>
+            <td>
+              <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"
+                [readonly]="row.get('fromApi')?.value" />
+            </td>
+            <td class="weightage-cell">
+              <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
+                [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"
+                [readonly]="row.get('fromApi')?.value">
+              </p-inputNumber>
+
+            </td>
+            <td>
+              <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"
+                [readonly]="row.get('fromApi')?.value" />
+            </td>
+            <td>
+              <input pInputText type="text" formControlName="isin_code" placeholder="Enter ISIN"
+                [readonly]="row.get('fromApi')?.value" />
+            </td>
+
+            <td>
+              <button type="button" class="remove-row-btn" *ngIf="rows.length >= 1" (click)="removeRow(i)">
+                Remove
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="modal-actions">
-      <p-button label="Cancel" styleClass="add-entity-btn" (click)="displayUnderlyingModal = false"></p-button>
-      <p-button label="Save" styleClass="add-entity-btn" (click)="submitUnderlyingData()"></p-button>
+      <div class="left-actions">
+        <button type="button" class="add-row-btn" (click)="addRow()">+ Add Row</button>
+      </div>
+      <div class="right-actions">
+        <p-button label="Cancel" styleClass="add-entity-btn" (click)="displayUnderlyingModal = false"></p-button>
+        <p-button label="Save" styleClass="add-entity-btn" (click)="submitUnderlyingData()"></p-button>
+      </div>
     </div>
+
   </form>
 </p-dialog>
 

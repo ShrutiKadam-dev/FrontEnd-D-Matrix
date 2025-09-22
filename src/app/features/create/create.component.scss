@@ -83,6 +83,7 @@ label {
   font-weight: 600 !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
+
 :host ::ng-deep .add-entity-btn.p-button:hover {
   background: linear-gradient(145deg, #7ea7dd, #6a8fbe) !important; 
 }
@@ -226,22 +227,31 @@ label {
 ::ng-deep .custom-btn-delete:hover { background: #c82333 !important; }
 
 /* ===== Underlying Data Modal ===== */
+.underlying-table-container {
+  max-height: 400px; /* adjust as needed */
+  overflow-y: auto;
+  display: block;
+}
+
 .underlying-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
 }
+
+.underlying-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f4f6f8;
+  z-index: 2;
+}
+
 .underlying-table th,
 .underlying-table td {
   padding: 0.5rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
 }
-.underlying-table th {
-  background: #f4f6f8;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
+
 .underlying-table input {
   width: 100%;
   padding: 0.4rem;
@@ -274,9 +284,19 @@ label {
 }
 .remove-row-btn:hover { background: #d32f2f; }
 
+
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* left & right split */
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.left-actions button {
+  margin-right: auto; /* push it fully left */
+}
+.right-actions {
+  display: flex;
   gap: 0.6rem;
 }
 
