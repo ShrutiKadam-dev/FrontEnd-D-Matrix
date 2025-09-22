@@ -2,42 +2,42 @@
 
 <!-- Search Section -->
 <div class="search-section">
-  <p-autoComplete [(ngModel)]="selectedDirectEquityName" [suggestions]="filteredDENames"
+  <p-autoComplete [(ngModel)]="selectedEquityName" [suggestions]="filteredENames"
     (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..."
     [minLength]="1">
   </p-autoComplete>
 
-  <button *ngIf="selectedDirectEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  <button *ngIf="selectedEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
   </button>
 </div>
 
 <!-- Carousel -->
-<p-carousel [value]="displayDEs" [numVisible]="3" [numScroll]="3" [circular]="false"
-  [responsiveOptions]="responsiveOptions" *ngIf="!selectedDirectEquityName">
+<p-carousel [value]="displayEs" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedEquityName">
 
-  <ng-template let-de pTemplate="item">
-    <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+  <ng-template let-e pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToEquityDetails(e)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [pTooltip]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
-      <div class="card-value">{{ de.category || 'No Category' }}</div>
-      <div class="status">Total Entity Count : {{ de.total }}</div>
+      <div class="card-title" [pTooltip]="e.subcategory">{{ e.subcategory || 'No Subcategory' }}</div>
+      <div class="card-value">{{ e.category || 'No Category' }}</div>
+      <div class="status">Total Entity Count : {{ e.total }}</div>
     </p-card>
   </ng-template>
 </p-carousel>
 
 <!-- Search Result Card -->
-<div *ngIf="selectedDirectEquityName" class="card-container">
-  <p-card *ngFor="let de of displayDEs" styleClass="P-card">
+<div *ngIf="selectedEquityName" class="card-container">
+  <p-card *ngFor="let e of displayEs" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="de.subcategory">{{ de.nickname || 'No Name' }}</div>
-    <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
-    <div class="status">{{ de.entityid }}</div>
+    <div class="card-title" [title]="e.subcategory">{{ e.nickname || 'No Name' }}</div>
+    <div class="card-value">{{ e.subcategory || 'No Subcategory' }}</div>
+    <div class="status">{{ e.entityid }}</div>
   </p-card>
 </div>
 
@@ -78,7 +78,7 @@
   <h3>Summary Of Actions</h3>
 
   <h4>Mutual Fund Action Table</h4>
-  <p-table [value]="actionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+  <p-table [value]="MFActionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
     <ng-template pTemplate="header">
       <tr>
         <th>Scrip Name</th>
@@ -121,7 +121,7 @@
   </p-table>
 
   <h4>Direct Equity Action Table</h4>
-  <p-table [value]="equityTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+  <p-table [value]="directEquityTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
     <ng-template pTemplate="header">
       <tr>
         <th>Order Type</th>
