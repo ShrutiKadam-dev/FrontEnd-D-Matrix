@@ -152,10 +152,15 @@ export class EquityComponent implements OnInit {
         this.router.navigate(['/features/equity/aif']);
         break;
 
+      case 'pms':
+        this.router.navigate(['/features/equity/PMS']);
+        break;
+
       default:
         console.warn('Unknown subcategory, staying on page', de.subcategory);
         break;
     }
+    
   }
 
   getAllEntityHome() {
