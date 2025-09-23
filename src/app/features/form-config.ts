@@ -13,26 +13,28 @@ export class FormConfig {
       category: ['', Validators.required],
       subcategory: ['', Validators.required],
       isin: ['', Validators.required],
+      aifCategory: [{ value: '', disabled: true }],  
+      aifClass: [{ value: '', disabled: true }]      
     });
   }
 
   // ---------- NAV ----------
-navFormAIF(): FormGroup {
-  return this.fb.group({
-    entityid: ['', Validators.required],
-    pre_tax_nav: ['', Validators.required],
-    post_tax_nav: ['', Validators.required],
-    nav_date: ['', Validators.required],
-  });
-}
+  navFormAIF(): FormGroup {
+    return this.fb.group({
+      entityid: ['', Validators.required],
+      pre_tax_nav: ['', Validators.required],
+      post_tax_nav: ['', Validators.required],
+      nav_date: ['', Validators.required],
+    });
+  }
 
-navFormMF(): FormGroup {
-  return this.fb.group({
-    entityid: ['', Validators.required],
-    nav_date: ['', Validators.required],
-    nav: ['', Validators.required],
-  });
-}
+  navFormMF(): FormGroup {
+    return this.fb.group({
+      entityid: ['', Validators.required],
+      nav_date: ['', Validators.required],
+      nav: ['', Validators.required],
+    });
+  }
 
 
   automationForm(): FormGroup {
@@ -164,7 +166,8 @@ navFormMF(): FormGroup {
 
   pmsAmcForm(): FormGroup {
     return this.fb.group({
-      security_description: ['', Validators.required],
+      scripname: ['', Validators.required],
+      scripcode: ['', Validators.required],
       order_type: [null, Validators.required],
       quantity: ['', Validators.required],
       trade_price: ['', Validators.required],

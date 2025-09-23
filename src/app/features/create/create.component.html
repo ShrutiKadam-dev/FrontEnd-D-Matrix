@@ -77,20 +77,6 @@
 <p-dialog [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'" [(visible)]="displayModal" [modal]="true"
   [closable]="true" [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
   <form [formGroup]="entityForm" class="p-fluid">
-    <div class="field">
-      <label for="scripname">Scrip Name</label>
-      <input id="scripname" pInputText formControlName="scripname" placeholder="Enter Scrip Name" />
-    </div>
-
-    <div class="field">
-      <label for="scripcode">Scrip Code</label>
-      <input id="scripcode" pInputText formControlName="scripcode" placeholder="Enter Scrip Code" />
-    </div>
-
-    <div class="field">
-      <label for="nickname">Nick Name</label>
-      <input id="nickname" pInputText formControlName="nickname" placeholder="Enter Nickname" />
-    </div>
 
     <div class="field">
       <label for="category">Category</label>
@@ -106,13 +92,43 @@
     </div>
 
     <div class="field">
+      <label for="isin">ISIN Code</label>
+      <input id="isin" pInputText formControlName="isin" placeholder="Enter ISIN Code" />
+    </div>
+
+    <div class="field">
+      <label for="scripname">Scrip Name</label>
+      <input id="scripname" pInputText formControlName="scripname" placeholder="Enter Scrip Name" />
+    </div>
+
+    <div class="field">
+      <label for="scripcode">Scrip Code</label>
+      <input id="scripcode" pInputText formControlName="scripcode" placeholder="Enter Scrip Code" />
+    </div>
+
+    <div class="field">
+      <label for="nickname">Nick Name</label>
+      <input id="nickname" pInputText formControlName="nickname" placeholder="Enter Nickname" />
+    </div>
+
+
+    <div class="field">
       <label for="benchmark">Benchmark</label>
       <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark" />
     </div>
 
-    <div class="field">
-      <label for="isin">ISIN Code</label>
-      <input id="isin" pInputText formControlName="isin" placeholder="Enter ISIN Code" />
+
+
+    <div class="field" *ngIf="entityForm.get('aifCategory')?.enabled">
+      <label for="aifCategory">AIF Category</label>
+      <p-dropdown id="aifCategory" formControlName="aifCategory" [options]="subAIFCategoryOptions"
+        placeholder="Select AIF Category" appendTo="body" panelStyleClass="subcategory-panel" dropdownPosition="top">
+      </p-dropdown>
+    </div>
+
+    <div class="field" *ngIf="entityForm.get('aifClass')?.enabled">
+      <label for="aifClass">AIF Class</label>
+      <input id="aifClass" pInputText formControlName="aifClass" placeholder="Enter AIF Class" />
     </div>
 
     <div class="dialog-actions">
@@ -177,8 +193,8 @@
         <tr>
           <th>Company Name</th>
           <th>Scrip</th>
-          <th>Sector</th>
           <th>Weightage</th>
+          <th>Sector</th>
           <th>MCAP</th>
           <th>ISIN</th>
           <th style="width: 90px;">Action</th>
@@ -203,11 +219,7 @@
               </p-autoComplete>
             </td>
             <td>
-              <input pInputText type="text" formControlName="scripcode" placeholder="Enter Code"
-                [readonly]="row.get('fromApi')?.value" />
-            </td>
-            <td>
-              <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"
+              <input pInputText type="text" formControlName="scripcode" placeholder="Enter Scrip"
                 [readonly]="row.get('fromApi')?.value" />
             </td>
             <td class="weightage-cell">
@@ -215,8 +227,12 @@
                 [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"
                 [readonly]="row.get('fromApi')?.value">
               </p-inputNumber>
-
             </td>
+            <td>
+              <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"
+                [readonly]="row.get('fromApi')?.value" />
+            </td>
+
             <td>
               <input pInputText type="text" formControlName="tag" placeholder="Enter MCAP"
                 [readonly]="row.get('fromApi')?.value" />
@@ -421,3 +437,5 @@
 <p-confirmDialog></p-confirmDialog>
 
 <p-toast></p-toast>
+
+
