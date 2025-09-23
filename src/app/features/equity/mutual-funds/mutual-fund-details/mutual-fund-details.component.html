@@ -177,10 +177,10 @@
           <span class="percent">{{ actionCounts?.scap_percent | number:'1.0-1' }}%</span>
         </div>
       </div>
+<div class="chart-section" *ngIf="chartData?.datasets?.length">
+  <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
+</div>
 
-      <div class="chart-section">
-        <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
-      </div>
     </div>
   </p-card>
 </div>
