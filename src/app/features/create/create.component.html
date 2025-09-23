@@ -75,70 +75,80 @@
 
 <!-- Add/Update Entity Dialog -->
 <p-dialog [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'" [(visible)]="displayModal" [modal]="true"
-  [closable]="true" [style]="{ width: '35vw', 'max-height': '90vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
-  <form [formGroup]="entityForm" class="p-fluid">
+  [closable]="true" [style]="{ width: '50vw', 'max-height': '100vh' }" 
+  [contentStyle]="{ 'overflow-y': 'auto' }">
 
-    <div class="field">
-      <label for="category">Category</label>
-      <p-dropdown id="category" formControlName="category" [options]="categoryOptions" placeholder="Select Category"
-        appendTo="body"></p-dropdown>
+  <form [formGroup]="entityForm">
+
+    <!-- 1st line: Category + Subcategory (50% + 50%) -->
+    <div class="grid mb-3">
+      <div class="col-12 md:col-6">
+        <label for="category">Category</label>
+        <p-dropdown id="category" formControlName="category" [options]="categoryOptions" placeholder="Select Category"
+          appendTo="body"></p-dropdown>
+      </div>
+      <div class="col-12 md:col-6">
+        <label for="subcategory">Sub Category</label>
+        <p-dropdown id="subcategory" formControlName="subcategory" [options]="subCategoryOptions"
+          placeholder="Select Sub Category" appendTo="body"></p-dropdown>
+      </div>
     </div>
 
-    <div class="field">
-      <label for="subcategory">Sub Category</label>
-      <p-dropdown id="subcategory" formControlName="subcategory" [options]="subCategoryOptions"
-        placeholder="Select Sub Category" appendTo="body" panelStyleClass="subcategory-panel"
-        dropdownPosition="top"></p-dropdown>
+    <!-- 2nd line: ISIN (100%) -->
+    <div class="grid mb-3">
+      <div class="col-12">
+        <label for="isin">ISIN Code</label>
+        <input id="isin" pInputText formControlName="isin" placeholder="Enter ISIN Code" />
+      </div>
     </div>
 
-    <div class="field">
-      <label for="isin">ISIN Code</label>
-      <input id="isin" pInputText formControlName="isin" placeholder="Enter ISIN Code" />
+    <!-- 3rd line: Name + Code + Nickname (33% each) -->
+    <div class="grid mb-3">
+      <div class="col-12 md:col-4">
+        <label for="scripname">Scrip Name</label>
+        <input id="scripname" pInputText formControlName="scripname" placeholder="Enter Scrip Name" />
+      </div>
+      <div class="col-12 md:col-4">
+        <label for="scripcode">Scrip Code</label>
+        <input id="scripcode" pInputText formControlName="scripcode" placeholder="Enter Scrip Code" />
+      </div>
+      <div class="col-12 md:col-4">
+        <label for="nickname">Nick Name</label>
+        <input id="nickname" pInputText formControlName="nickname" placeholder="Enter Nickname" />
+      </div>
     </div>
 
-    <div class="field">
-      <label for="scripname">Scrip Name</label>
-      <input id="scripname" pInputText formControlName="scripname" placeholder="Enter Scrip Name" />
+    <!-- 4th line: Benchmark (100%) -->
+    <div class="grid mb-3">
+      <div class="col-12">
+        <label for="benchmark">Benchmark</label>
+        <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark" />
+      </div>
     </div>
 
-    <div class="field">
-      <label for="scripcode">Scrip Code</label>
-      <input id="scripcode" pInputText formControlName="scripcode" placeholder="Enter Scrip Code" />
+    <!-- 5th line: AIF Category + AIF Class (50% + 50%) -->
+    <div class="grid mb-3" *ngIf="entityForm.get('aifCategory')?.enabled || entityForm.get('aifClass')?.enabled">
+      <div class="col-12 md:col-6" *ngIf="entityForm.get('aifCategory')?.enabled">
+        <label for="aifCategory">AIF Category</label>
+        <p-dropdown id="aifCategory" formControlName="aifCategory" [options]="subAIFCategoryOptions"
+          placeholder="Select AIF Category" appendTo="body"></p-dropdown>
+      </div>
+      <div class="col-12 md:col-6" *ngIf="entityForm.get('aifClass')?.enabled">
+        <label for="aifClass">AIF Class</label>
+        <input id="aifClass" pInputText formControlName="aifClass" placeholder="Enter AIF Class" />
+      </div>
     </div>
 
-    <div class="field">
-      <label for="nickname">Nick Name</label>
-      <input id="nickname" pInputText formControlName="nickname" placeholder="Enter Nickname" />
-    </div>
-
-
-    <div class="field">
-      <label for="benchmark">Benchmark</label>
-      <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark" />
-    </div>
-
-
-
-    <div class="field" *ngIf="entityForm.get('aifCategory')?.enabled">
-      <label for="aifCategory">AIF Category</label>
-      <p-dropdown id="aifCategory" formControlName="aifCategory" [options]="subAIFCategoryOptions"
-        placeholder="Select AIF Category" appendTo="body" panelStyleClass="subcategory-panel" dropdownPosition="top">
-      </p-dropdown>
-    </div>
-
-    <div class="field" *ngIf="entityForm.get('aifClass')?.enabled">
-      <label for="aifClass">AIF Class</label>
-      <input id="aifClass" pInputText formControlName="aifClass" placeholder="Enter AIF Class" />
-    </div>
-
-    <div class="dialog-actions">
-      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn" (click)="displayModal = false"></p-button>
-
-      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check" styleClass="add-entity-btn"
-        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" [disabled]="entityForm.invalid"></p-button>
+    <!-- Footer -->
+    <div class="dialog-actions flex justify-content-end gap-2 mt-3">
+      <p-button label="Cancel" icon="pi pi-times"  styleClass="add-entity-btn" (click)="displayModal = false"></p-button>
+      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check"  styleClass="add-entity-btn"
+        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" 
+        [disabled]="entityForm.invalid"></p-button>
     </div>
   </form>
 </p-dialog>
+
 
 <!-- Update Choice Dialog -->
 <p-dialog header="Update Table" [(visible)]="displayUpdateChoiceModal" [modal]="true" [closable]="true"
@@ -437,5 +447,3 @@
 <p-confirmDialog></p-confirmDialog>
 
 <p-toast></p-toast>
-
-

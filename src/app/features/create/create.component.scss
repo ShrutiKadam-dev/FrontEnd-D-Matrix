@@ -343,3 +343,43 @@ label {
   display: flex;
   flex-direction: column;
 }
+
+/* Wrapper for fields */
+.grid .col-12,
+.grid .col-6,
+.grid .col-4 {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling */
+.grid label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Inputs + Dropdowns same height */
+.p-inputtext,
+.p-dropdown {
+  width: 100%;
+  min-height: 38px; /* equal height */
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+/* Textarea styling (if you add later) */
+.p-inputtextarea {
+  width: 100%;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  resize: vertical; /* optional */
+}
+
+/* Spacing between rows */
+.grid.mb-3 {
+  margin-bottom: 1rem;
+}
+
