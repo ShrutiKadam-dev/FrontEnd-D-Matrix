@@ -41,6 +41,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CardModule,
     FormsModule
   ],
+  providers: [ MessageService],
   templateUrl: './mutual-funds.component.html',
   styleUrls: ['./mutual-funds.component.scss']
 })
