@@ -94,7 +94,8 @@ export const PMS_CLIENT_ACTION_TABLE_FIELDS: ActionTableField[] = [
 ]
 
 export const PMS_AMC_ACTION_TABLE_FIELDS: ActionTableField[] = [
-    { key: 'security_description', label: 'Security / Contract Description' },
+    { key: 'scrip_name', label: 'Scrip Name' },
+    { key: 'scrip_code', label: 'Scrip Code' },
     { key: 'order_type', label: 'Order Type' },
     { key: 'quantity', label: 'Quantity' },
     { key: 'trade_price', label: 'Trade Price' },

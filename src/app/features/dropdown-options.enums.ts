@@ -51,3 +51,9 @@ export const ALL_SUBCATEGORY_OPTIONS: Record<string, DropdownOption[]> = {
     { label: 'PMS', value: 'PMS' },
   ],
 };
+
+export const SUB_AIF_CATEGORY_OPTIONS: DropdownOption[] = [
+  { label: 'Category I', value: 'Category I' },
+  { label: 'Category II', value: 'Category II' },
+  { label: 'Category III', value: 'Category III' },
+];

@@ -44,8 +44,17 @@ import { FeaturesService } from '../../../features.service';
 export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
-  chartData: any;
-  chartOptions: any;
+chartData: any = {
+  labels: [],
+  datasets: []
+};
+
+chartOptions: any = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { position: 'bottom' } }
+};
+
   actionTableList: any[] = [];
   underlyingTableList: any[] = [];
   actionCounts: any = {};
@@ -188,68 +197,71 @@ export class MutualFundDetailsComponent implements OnInit {
     });
   }
 
-  getMFDetailUnderlyingTable(mfId: string) {
-    this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
-      next: (data) => {
-        this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
+getMFDetailUnderlyingTable(mfId: string) {
+  this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
+    next: (data) => {
+      this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
 
-        const grouped: { [key: string]: number } = {};
-        this.underlyingTableList.forEach((item: any) => {
-          const tag = item.tag || 'Unknown';
-          grouped[tag] = (grouped[tag] || 0) + 1;
-        });
+      const grouped: { [key: string]: number } = {};
+      this.underlyingTableList.forEach((item: any) => {
+        const tag = item.tag?.toLowerCase() || 'unknown'; // normalize keys
+        grouped[tag] = (grouped[tag] || 0) + 1;
+      });
 
-        const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
+      const total = Object.values(grouped).reduce((sum, v) => sum + v, 0) || 1; // avoid /0
 
-        this.actionCounts = {
-          lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
-          mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
-          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0,
-          lcap_count: grouped['large cap'] || 0,
-          mcap_count: grouped['mid cap'] || 0,
-          scap_count: grouped['small cap'] || 0,
-          total_count: total
-        };
+      this.actionCounts = {
+        lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
+        mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
+        scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0,
+        lcap_count: grouped['large cap'] || 0,
+        mcap_count: grouped['mid cap'] || 0,
+        scap_count: grouped['small cap'] || 0,
+        total_count: total
+      };
 
-        const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
-        const values = [
-          this.actionCounts.lcap_percent,
-          this.actionCounts.mcap_percent,
-          this.actionCounts.scap_percent
-        ];
+      const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
+      const values = [
+        this.actionCounts.lcap_percent,
+        this.actionCounts.mcap_percent,
+        this.actionCounts.scap_percent
+      ];
 
-        this.chartData = {
-          labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
-              hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
-            }
-          ]
-        };
+      this.chartData = {
+        labels,
+        datasets: [
+          {
+            data: values,
+            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
+            hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+          }
+        ]
+      };
 
-        this.chartOptions = {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label: (context: any) => `${context.label}: ${context.raw.toFixed(1)}%`
-              }
+      this.chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
             }
           }
-        };
-      },
-      error: (err) =>
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: err.error?.message || 'Failed to load Mutual Fund chart'
-        })
-    });
-  }
+        }
+      };
+
+      console.log('ChartData →', this.chartData); // ✅ debug
+    },
+    error: (err) =>
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
+  });
+}
+
 
   // Function to fetch IRR
   fetchIrr(entityid: string): void {

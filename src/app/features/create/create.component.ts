@@ -34,7 +34,8 @@ import {
   ORDER_TYPE_OPTIONS,
   PMS_ORDER_TYPE_OPTIONS,
   MODE_OPTIONS,
-  ALL_SUBCATEGORY_OPTIONS
+  ALL_SUBCATEGORY_OPTIONS,
+  SUB_AIF_CATEGORY_OPTIONS
 } from '../dropdown-options.enums';
 import { FormConfig } from '../form-config';
 
@@ -145,8 +146,16 @@ export class CreateComponent implements OnInit {
   PmsOrderTypeOptions = PMS_ORDER_TYPE_OPTIONS;
   modeOptions = MODE_OPTIONS;
   allSubCategoryOptions = ALL_SUBCATEGORY_OPTIONS;
+  subAIFCategoryOptions = SUB_AIF_CATEGORY_OPTIONS;
 
   private calculatePurchaseValue(): void {
+    const orderType = this.mfActionTableForm.get('order_type')?.value;
+
+    //Skip calculation for Sell
+    if (orderType === 'Sell') {
+      return;
+    }
+
     const unit = Number(this.mfActionTableForm.get('unit')?.value) || 0;
     const nav = Number(this.mfActionTableForm.get('nav')?.value) || 0;
     const total = unit * nav;
@@ -197,6 +206,19 @@ export class CreateComponent implements OnInit {
       this.automationSubCategoryOptions = this.allSubCategoryOptions[selectedCategory] || [];
       this.automationForm.get('subcategory')?.reset();
     });
+
+    this.entityForm.valueChanges.subscribe(val => {
+      const category = val.category;
+      const subcategory = val.subcategory;
+
+      if (category === 'Equity' && subcategory === 'PMS') {
+        this.entityForm.get('isin')?.disable({ emitEvent: false });
+      } else {
+        this.entityForm.get('isin')?.enable({ emitEvent: false });
+      }
+    });
+
+
   }
 
   ngOnInit() {
@@ -212,6 +234,19 @@ export class CreateComponent implements OnInit {
 
     this.underlyingForm = this.fb.group({
       rows: this.fb.array([this.createRow()])
+    });
+
+    this.entityForm.get('subcategory')?.valueChanges.subscribe(sub => {
+      const category = this.entityForm.get('category')?.value;
+
+      if (category === 'Equity' && sub === 'Alternative Investment Funds') {
+        this.entityForm.get('aifCategory')?.enable();
+        this.entityForm.get('aifClass')?.enable();
+      } else {
+        this.entityForm.get('aifCategory')?.disable();
+        this.entityForm.get('aifClass')?.disable();
+        this.entityForm.patchValue({ aifCategory: '', aifClass: '' });
+      }
     });
 
   }
@@ -516,7 +551,6 @@ export class CreateComponent implements OnInit {
 
     const ctx = this.getActionContext(entity);
 
-    // Reset only the relevant form
     switch (ctx) {
       case 'DE':
         this.directEquityActionTableForm.reset();
@@ -537,7 +571,6 @@ export class CreateComponent implements OnInit {
         break;
 
       case 'MF':
-      default:
         this.mfActionTableForm.reset();
         // Patch MF readonly defaults
         this.mfActionTableForm.patchValue({
@@ -546,6 +579,25 @@ export class CreateComponent implements OnInit {
           scrip_name: entity.scripname,
           isin: entity.isin,
         });
+
+        this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
+          if (val === 'Purchase') {
+            this.mfActionTableForm.get('redeem_amount')?.disable({ emitEvent: false });
+          }
+          else if (val === 'Sell') {
+            this.mfActionTableForm.get('purchase_amount')?.disable({ emitEvent: false });
+            this.mfActionTableForm.get('purchase_value')?.disable({ emitEvent: false });
+            this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+          }
+          else {
+            this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+            this.mfActionTableForm.get('purchase_amount')?.enable({ emitEvent: false });
+            this.mfActionTableForm.get('purchase_value')?.enable({ emitEvent: false });
+          }
+        });
+
+        break;
+      default:
         break;
     }
 
@@ -970,7 +1022,7 @@ export class CreateComponent implements OnInit {
     }
 
     this.featuresService.uploadAutomation(formData).subscribe({
-      next: (res:any) => {
+      next: (res: any) => {
         // Build message from API response
         const inserted = res?.summary?.inserted_count || 0;
         const skipped = res?.summary?.skipped_count || 0;
@@ -978,14 +1030,15 @@ export class CreateComponent implements OnInit {
 
         this.messageService.add({ severity: 'success', summary: 'Upload Completed', detail: `Inserted: ${inserted}, Skipped: ${skipped}` })
         // Optional: if you want to show details of skipped items
-            if (res?.skipped?.length) {res.skipped.forEach((item: any) => {
+        if (res?.skipped?.length) {
+          res.skipped.forEach((item: any) => {
             this.messageService.add({
               severity: 'warn',
               summary: 'Skipped',
               detail: `Order #${item.order_number} → ${item.status}`
-                });
-              });
-            }
+            });
+          });
+        }
         this.displayAutoModal = false;
         this.automationForm.reset();
         this.getEntities()

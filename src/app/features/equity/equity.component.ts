@@ -17,11 +17,13 @@ import { Router } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-equity',
   imports: [
     ButtonModule,
+    TagModule,
     CalendarModule,
     TooltipModule,
     ProgressSpinnerModule,
@@ -41,12 +43,12 @@ import { TooltipModule } from 'primeng/tooltip';
   styleUrl: './equity.component.scss'
 })
 export class EquityComponent implements OnInit {
-  selectedDirectEquityName: any = null;
-  filteredDENames: any[] = [];
-  allDEs: any[] = [];
-  displayDEs: any[] = [];
-  actionTableList: any[] = [];
-  equityTableList:any[] = [];
+  selectedEquityName: any = null;
+  filteredENames: any[] = [];
+  allEs: any[] = [];
+  displayEs: any[] = [];
+  MFActionTableList: any[] = [];
+  directEquityTableList:any[] = [];
   aifTableList:any[] = [];
   chartData: any;
   chartOptions: any;
@@ -132,10 +134,10 @@ export class EquityComponent implements OnInit {
     });
   }
 
-  goToDirectEquityDetails(de: any) {
-    if (!de) return;
+  goToEquityDetails(e: any) {
+    if (!e) return;
 
-    switch (de.subcategory?.toLowerCase()) {
+    switch (e.subcategory?.toLowerCase()) {
       case 'mutual fund':
         this.router.navigate(['/features/equity/mutual-funds']);
         break;
@@ -152,21 +154,26 @@ export class EquityComponent implements OnInit {
         this.router.navigate(['/features/equity/aif']);
         break;
 
+      case 'pms':
+        this.router.navigate(['/features/equity/PMS']);
+        break;
+
       default:
-        console.warn('Unknown subcategory, staying on page', de.subcategory);
+        console.warn('Unknown subcategory, staying on page', e.subcategory);
         break;
     }
+
   }
 
   getAllEntityHome() {
     this.featuresService.getAllEntityHome().subscribe({
       next: (res: any) => {
-        this.allDEs = res?.data || [];
+        this.allEs = res?.data || [];
         // Assign colors once
-        this.allDEs.forEach(de => {
-          de.color = this.getColor(de.subcategory);
+        this.allEs.forEach(e => {
+          e.color = this.getColor(e.subcategory);
         });
-        this.displayDEs = [...this.allDEs]; // for carousel
+        this.displayEs = [...this.allEs]; // for carousel
       },
       error: () => console.error('Failed to load Mutual Funds')
     });
@@ -176,7 +183,7 @@ getAllActionTableEquity() {
   this.featuresService.getAllActionTableEquity().subscribe({
     next: (res: any) => {
       if (res && res.data) {
-        const actionData = (res.data.action_data || []).map((item: any) => ({
+        const MFData = (res.data.action_data || []).map((item: any) => ({
           scrip_name: item.scrip_name,
           order_type: item.order_type,
           unit: item.unit || '-',
@@ -203,9 +210,9 @@ getAllActionTableEquity() {
           source: 'Equity'
         }));
 
-this.actionTableList = res.data.action_data;
+this.MFActionTableList = res.data.action_data;
 this.aifTableList = res.data.aif_data;
-this.equityTableList = res.data.direct_equity_data;
+this.directEquityTableList = res.data.direct_equity_data;
       }
     },
     error: (error) => {
@@ -226,22 +233,22 @@ this.equityTableList = res.data.direct_equity_data;
     }
   }
 
-  scrollToDE(de: any) {
-    if (de) {
-      this.displayDEs = [de]; // show only selected DE card in search mode
+  scrollToDE(e: any) {
+    if (e) {
+      this.displayEs = [e]; // show only selected DE card in search mode
     }
   }
 
   searchDEs(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredDENames = this.allDEs.filter(de =>
-      de.nickname?.toLowerCase().includes(query)
+    this.filteredENames = this.allEs.filter(e =>
+      e.nickname?.toLowerCase().includes(query)
     );
   }
 
   clearSearch() {
-    this.selectedDirectEquityName = null;
-    this.displayDEs = [...this.allDEs]; // restore carousel items
+    this.selectedEquityName = null;
+    this.displayEs = [...this.allEs]; // restore carousel items
   }
 
   getColor(subcategory?: string) {
@@ -258,6 +265,17 @@ this.equityTableList = res.data.direct_equity_data;
     // Generate random pastel color
     const hue = Math.floor(Math.random() * 360);
     return `hsl(${hue}, 70%, 85%)`;
+  }
+
+    getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'PURCHASE':
+        return 'success';
+      case 'SELL':
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 
 }

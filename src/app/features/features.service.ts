@@ -225,6 +225,10 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getallMfEquityUnderlyingCount`);
   }
 
+  getallMfEquitySectorCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getallMFEquitySectorCount`);
+  }
+
   getPMSEquityAMCActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
       params: { entityid: mfId }
