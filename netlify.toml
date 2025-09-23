@@ -1,8 +1,7 @@
-[build]
-  publish = "dist/your-project-name"
+
+  publish = "dist/mutual-fund"
   command = "ng build --prod"
 
-[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
