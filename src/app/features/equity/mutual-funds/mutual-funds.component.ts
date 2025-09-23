@@ -36,7 +36,6 @@ import { TooltipModule } from 'primeng/tooltip';
     MessagesModule,
     MessageModule,
     TableModule,
-    InputTextModule,
     AutoCompleteModule,
     CarouselModule,
     CardModule,
@@ -54,41 +53,38 @@ export class MutualFundsComponent implements OnInit {
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+
   underlyingTableList: any[] = [];
+  sectorTableList: any[] = [];
+
   actionCounts: any = {};
-  chartData: any;
-  chartOptions: any;
+  sectorCounts: any = {};
+
+  // Separate chart data & options for MCAP and Sector
+  mcapChartData: any;
+  mcapChartOptions: any;
+  sectorChartData: any;
+  sectorChartOptions: any;
 
   @ViewChild('dt') dt!: Table;
+
   constructor(private router: Router) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
 
-  // Carousel responsive breakpoints
   responsiveOptions = [
-    {
-      breakpoint: '1024px',
-      numVisible: 3,
-      numScroll: 3
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 2,
-      numScroll: 2
-    },
-    {
-      breakpoint: '560px',
-      numVisible: 1,
-      numScroll: 1
-    }
+    { breakpoint: '1024px', numVisible: 3, numScroll: 3 },
+    { breakpoint: '768px', numVisible: 2, numScroll: 2 },
+    { breakpoint: '560px', numVisible: 1, numScroll: 1 }
   ];
 
   ngOnInit() {
     this.getAllMutualFunds();
     this.getAllActionTable();
-    this.getMFUnderlyingTable()
-    this.fetchIrr()
+    this.getMFUnderlyingTable();
+    this.getAllMfEquitySectorCount();
+    this.fetchIrr();
   }
 
   fetchIrr(): void {
@@ -116,11 +112,8 @@ export class MutualFundsComponent implements OnInit {
     this.featuresService.getAllMutualFund().subscribe({
       next: (res: any) => {
         this.allMfs = res?.data || [];
-        this.allMfs.forEach(mf => {
-          mf.color = this.getColor(mf.subcategory);
-        });
-
-        this.displayMfs = [...this.allMfs]; // for carousel
+        this.allMfs.forEach(mf => mf.color = this.getColor(mf.subcategory));
+        this.displayMfs = [...this.allMfs];
       },
       error: () => console.error('Failed to load Mutual Funds')
     });
@@ -141,123 +134,141 @@ export class MutualFundsComponent implements OnInit {
     });
   }
 
-getMFUnderlyingTable() {
-  this.featuresService.getMFUnderlyingTable().subscribe({
-    next: (res: any) => {
-      if (!res?.data?.length) return;
+  getMFUnderlyingTable() {
+    this.featuresService.getMFUnderlyingTable().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.underlyingTableList = [];
+          this.mcapChartData = null;
+          return;
+        }
 
-      this.underlyingTableList = res.data[0].total_mf_count;
+        this.underlyingTableList = res.data;
+        const totalCount = res.data[0]?.total_mf_count || 0;
 
-      // Build actionCounts from backend response
-      const largeCap = res.data.find((x: any) => x.tag === 'large cap');
-      const midCap   = res.data.find((x: any) => x.tag === 'mid cap');
-      const smallCap = res.data.find((x: any) => x.tag === 'small cap');
+        const largeCap = res.data.find((x: any) => x.tag.toLowerCase() === 'large cap');
+        const midCap = res.data.find((x: any) => x.tag.toLowerCase() === 'mid cap');
+        const smallCap = res.data.find((x: any) => x.tag.toLowerCase() === 'small cap');
 
-      this.actionCounts = {
-        lcap_percent: largeCap?.tag_percent || 0,
-        mcap_percent: midCap?.tag_percent || 0,
-        scap_percent: smallCap?.tag_percent || 0,
-        lcap_count: largeCap?.tag_count || 0,
-        mcap_count: midCap?.tag_count || 0,
-        scap_count: smallCap?.tag_count || 0,
-        total_count: res.data[0]?.total_mf_count || 0
-      };
+        this.actionCounts = {
+          lcap_percent: largeCap?.tag_percent || 0,
+          mcap_percent: midCap?.tag_percent || 0,
+          scap_percent: smallCap?.tag_percent || 0,
+          lcap_count: largeCap?.tag_count || 0,
+          mcap_count: midCap?.tag_count || 0,
+          scap_count: smallCap?.tag_count || 0,
+          total_count: totalCount
+        };
 
-      // Chart Labels & Values
-      const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
-      const values = [
-        this.actionCounts.lcap_percent,
-        this.actionCounts.mcap_percent,
-        this.actionCounts.scap_percent
-      ];
-
-      // Chart Data
-      this.chartData = {
-        labels,
-        datasets: [
-          {
-            data: values,
+        this.mcapChartData = {
+          labels: ['Large Cap', 'Mid Cap', 'Small Cap'],
+          datasets: [{
+            data: [this.actionCounts.lcap_percent, this.actionCounts.mcap_percent, this.actionCounts.scap_percent],
             backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
             hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
-          }
-        ]
-      };
+          }]
+        };
 
-      // Chart Options
-      this.chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom' },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => `${context.label}: ${context.raw.toFixed(1)}%`
+        this.mcapChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
             }
           }
-        }
-      };
-    },
-    error: (err) =>
-      this.messageService.add({
+        };
+      },
+      error: (err) => this.messageService.add({
         severity: 'error',
         summary: 'Failed',
         detail: err.error?.message || 'Failed to load Mutual Fund chart'
       })
-  });
-}
+    });
+  }
+
+  getAllMfEquitySectorCount() {
+    this.featuresService.getallMfEquitySectorCount().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.sectorTableList = [];
+          this.sectorChartData = null;
+          return;
+        }
+
+        this.sectorTableList = res.data;
+        const colors = ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043'];
+        this.sectorTableList.forEach((s, i) => s.color = colors[i % colors.length]);
+
+        const totalCount = res.data[0]?.total_mf_count || 0;
+        this.sectorCounts = { total_count: totalCount };
+
+        this.sectorChartData = {
+          labels: this.sectorTableList.map(s => s.sector),
+          datasets: [{
+            data: this.sectorTableList.map(s => s.sector_percent),
+            backgroundColor: this.sectorTableList.map(s => s.color),
+            hoverBackgroundColor: this.sectorTableList.map(s => s.color)
+          }]
+        };
+
+        this.sectorChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
+    });
+  }
 
   scrollToMf(mf: any) {
-    if (mf) {
-      this.displayMfs = [mf]; // show only selected MF card in search mode
-    }
+    if (mf) this.displayMfs = [mf];
   }
 
   searchMfs(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredMfNames = this.allMfs.filter(mf =>
-      mf.nickname?.toLowerCase().includes(query)
-    );
+    this.filteredMfNames = this.allMfs.filter(mf => mf.nickname?.toLowerCase().includes(query));
   }
 
   clearSearch() {
     this.selectedMfName = null;
-    this.displayMfs = [...this.allMfs]; // restore carousel items
+    this.displayMfs = [...this.allMfs];
   }
 
   getColor(nickname?: string) {
-    const predefinedColors: { [key: string]: string } = {
-      'MF1': '#FFD580',
-      'MF2': '#FFB3B3',
-      'MF3': '#B3E5FF'
+    const predefinedColors: Record<string, string> = {
+      MF1: '#FFD580',
+      MF2: '#FFB3B3',
+      MF3: '#B3E5FF'
     };
-
-    if (nickname && predefinedColors[nickname]) {
-      return predefinedColors[nickname];
-    }
-
-    // Generate random pastel color
-    const hue = Math.floor(Math.random() * 360);
-    return `hsl(${hue}, 70%, 85%)`;
+    return nickname && predefinedColors[nickname] ? predefinedColors[nickname] : `hsl(${Math.floor(Math.random() * 360)},70%,85%)`;
   }
 
   onGlobalFilter(event: Event) {
     const input = event.target as HTMLInputElement | null;
-    if (input && this.dt) {
-      this.dt.filter(input.value, 'global', 'contains');
-    }
+    if (input && this.dt) this.dt.filter(input.value, 'global', 'contains');
   }
 
   getSeverity(orderType: string) {
     switch (orderType?.trim()?.toUpperCase()) {
-      case 'PURCHASE':
-        return 'success';
-      case 'SELL':
-        return 'danger';
-      default:
-        return 'info';
+      case 'PURCHASE': return 'success';
+      case 'SELL': return 'danger';
+      default: return 'info';
     }
   }
-
 }
-
-
