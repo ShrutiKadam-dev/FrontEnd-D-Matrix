@@ -1,0 +1,7 @@
+
+  publish = "dist/mutual-fund"
+  command = "ng build --prod"
+
+  from = "/*"
+  to = "/index.html"
+  status = 200
