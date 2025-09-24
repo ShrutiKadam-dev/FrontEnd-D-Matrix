@@ -229,6 +229,17 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getallMFEquitySectorCount`);
   }
 
+  getallMfDetailsEquitySectorCount(mfId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getallMFDetailsEquitySectorCount`, {
+      params: { entityid: mfId }
+    });
+  }
+  getallMfDetailsEquityMCAPCount(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getallMfDetailsEquityMCAPCount`, {
+      params: { entityid: mfId }
+    });
+  }
+
   getPMSEquityAMCActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
       params: { entityid: mfId }

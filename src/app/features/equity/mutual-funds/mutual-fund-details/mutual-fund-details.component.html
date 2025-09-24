@@ -1,4 +1,4 @@
-<h3>Welcome To The {{actionTableList[0]?.scrip_name || "Mutual Fund"}}</h3>
+<h3>Welcome To The {{actionTableList[0]?.scrip_name || "Mutual Fund Details"}}</h3>
 
 <div class="table-card">
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -181,6 +181,28 @@
   <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
 </div>
 
+    </div>
+  </p-card>
+</div>
+
+<!-- Sector Chart -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>Sector Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let s of sectorTableList" class="count-item">
+          <span class="dot" [ngStyle]="{'background-color': s.color}"></span>
+          <span class="label">{{ s.sector }}</span>
+          <span class="percent">{{ s.sector_percent | number:'1.0-1' }}%</span>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
+      </div>
     </div>
   </p-card>
 </div>

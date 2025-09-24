@@ -16,8 +16,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
+
 @Component({
   selector: 'app-mutual-fund-details',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     DialogModule,
@@ -27,7 +29,6 @@ import { FeaturesService } from '../../../features.service';
     CommonModule,
     MessagesModule,
     TableModule,
-    InputTextModule,
     AutoCompleteModule,
     CarouselModule,
     CardModule,
@@ -36,25 +37,24 @@ import { FeaturesService } from '../../../features.service';
     ChartModule,
     TagModule
   ],
-  providers: [ MessageService],
+  providers: [MessageService],
   templateUrl: './mutual-fund-details.component.html',
-  styleUrl: './mutual-fund-details.component.scss'
+  styleUrls: ['./mutual-fund-details.component.scss']
 })
-
-
 export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
-chartData: any = {
-  labels: [],
-  datasets: []
-};
 
-chartOptions: any = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: { legend: { position: 'bottom' } }
-};
+  chartData: any = {
+    labels: [],
+    datasets: []
+  };
+
+  chartOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } }
+  };
 
   actionTableList: any[] = [];
   underlyingTableList: any[] = [];
@@ -68,9 +68,14 @@ chartOptions: any = {
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
-  totalValue = 0
+  totalValue = 0;
 
-  selectedDate: string = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
+  mcapChartData: any;
+  mcapChartOptions: any;
+  sectorChartData: any;
+  sectorChartOptions: any;
+
+  selectedDate = '';
 
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
@@ -87,12 +92,13 @@ chartOptions: any = {
       this.loadMfDetails(this.mfId);
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
-      this.fetchIrr(this.mfId)
+      this.getAllMFDetailsEquitySectorCount(this.mfId);
+      this.fetchIrr(this.mfId);
     }
   }
 
   calculateTotals(actionTableList: any[]) {
-    if (!actionTableList || actionTableList.length === 0) {
+    if (!Array.isArray(actionTableList) || actionTableList.length === 0) {
       this.totalPurchaseUnits = 0;
       this.totalPurchaseAmount = 0;
       this.totalSalesUnits = 0;
@@ -112,14 +118,13 @@ chartOptions: any = {
 
     // Single pass calculation
     actionTableList.forEach(action => {
-      const units = isNaN(Number(action.unit)) ? 0 : Number(action.unit);
-      const amount = isNaN(Number(action.purchase_amount)) ? 0 : Number(action.purchase_amount);
+      const units = Number.isFinite(Number(action.unit)) ? Number(action.unit) : 0;
+      const amount = Number.isFinite(Number(action.purchase_amount)) ? Number(action.purchase_amount) : 0;
 
-      if (action.order_type === 'Purchase') {
+      if ((action.order_type || '').toString().trim().toUpperCase() === 'PURCHASE') {
         this.totalPurchaseUnits += units;
         this.totalPurchaseAmount += amount;
-      }
-      else if (action.order_type === 'Sell') {
+      } else if ((action.order_type || '').toString().trim().toUpperCase() === 'SELL') {
         this.totalSalesUnits += units;
         this.totalSalesAmount += amount;
       }
@@ -129,23 +134,21 @@ chartOptions: any = {
     this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
     this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
 
-
-
-    // Safety: if any totals are NaN, reset to 0
-    this.totalPurchaseUnits ||= 0;
-    this.totalPurchaseAmount ||= 0;
-    this.totalSalesUnits ||= 0;
-    this.totalSalesAmount ||= 0;
-    this.availableUnits ||= 0;
-    this.availableAmount ||= 0;
+    // Safety: keep valid 0 values (use Number.isFinite)
+    this.totalPurchaseUnits = Number.isFinite(this.totalPurchaseUnits) ? this.totalPurchaseUnits : 0;
+    this.totalPurchaseAmount = Number.isFinite(this.totalPurchaseAmount) ? this.totalPurchaseAmount : 0;
+    this.totalSalesUnits = Number.isFinite(this.totalSalesUnits) ? this.totalSalesUnits : 0;
+    this.totalSalesAmount = Number.isFinite(this.totalSalesAmount) ? this.totalSalesAmount : 0;
+    this.availableUnits = Number.isFinite(this.availableUnits) ? this.availableUnits : 0;
+    this.availableAmount = Number.isFinite(this.availableAmount) ? this.availableAmount : 0;
   }
 
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
     if (input) {
-      if (tableType === 'action') {
+      if (tableType === 'action' && this.actionTableSummary) {
         this.actionTableSummary.filterGlobal(input.value, 'contains');
-      } else {
+      } else if (tableType === 'underlying' && this.underlyingTable) {
         this.underlyingTable.filterGlobal(input.value, 'contains');
       }
     }
@@ -153,11 +156,14 @@ chartOptions: any = {
 
   loadMfDetails(id: string) {
     this.featuresService.getMutualFundDetailsById(id).subscribe({
-      next: (res: any) => { this.mfDetails = res?.data || {}; 
-      console.log(this.mfDetails[0].isin);
-      
-      this.getAllMutualFundDetailsNav(this.mfDetails[0].isin)
-    },
+      next: (res: any) => {
+        this.mfDetails = res?.data || {};
+        // guard access
+        const isin = Array.isArray(this.mfDetails) && this.mfDetails[0]?.isin ? this.mfDetails[0].isin : (this.mfDetails?.isin ?? null);
+        if (isin) {
+          this.getAllMutualFundDetailsNav(isin);
+        }
+      },
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });
   }
@@ -167,10 +173,8 @@ chartOptions: any = {
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
         this.calculateTotals(this.actionTableList);
-        const cashflows = this.actionTableList.map((e: any) => ({
-          date: e.order_date,
-          amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
-        }));
+        // If needed later: prepare cashflows for IRR function
+        // const cashflows = this.actionTableList.map((e: any) => ({ date: e.order_date, amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount }));
       },
       error: (error) => {
         this.messageService.add({
@@ -186,7 +190,8 @@ chartOptions: any = {
     this.featuresService.getAllMutualFundDetailsNav(ISIN).subscribe({
       next: (data: any) => {
         this.allNavs = Array.isArray(data.data) ? data.data : [];
-        this.totalValue = this.availableUnits * this.allNavs[0].nav;
+        const navValue = this.allNavs?.[0]?.nav;
+        this.totalValue = Number.isFinite(navValue) ? (navValue * this.availableUnits) : 0;
       },
       error: (error) => {
         this.messageService.add({
@@ -198,68 +203,72 @@ chartOptions: any = {
     });
   }
 
-getMFDetailUnderlyingTable(mfId: string) {
-  this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
-    next: (data) => {
-      this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
+  getMFDetailUnderlyingTable(mfId: string) {
+    this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
+      next: (data) => {
+        this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
 
-      const grouped: { [key: string]: number } = {};
-      this.underlyingTableList.forEach((item: any) => {
-        const tag = item.tag?.toLowerCase() || 'unknown'; // normalize keys
-        grouped[tag] = (grouped[tag] || 0) + 1;
+        this.selectedDate = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
+      },
+      error: (err) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: err.error?.message || 'Failed to load Mutual Fund chart'
+        })
+    });
+  }
+
+getAllMFDetailsEquitySectorCount(mfId: string) {
+  this.featuresService.getallMfDetailsEquitySectorCount(mfId).subscribe({
+    next: (res: any) => {
+      if (!res?.data?.length) {
+        this.sectorTableList = [];
+        this.sectorChartData = null;
+        return;
+      }
+
+      this.sectorTableList = res.data;
+
+      // Generate dynamic colors using HSL
+      const total = this.sectorTableList.length;
+      this.sectorTableList.forEach((s: any, i: number) => {
+        s.color = `hsl(${(i * 360) / total}, 65%, 55%)`; // evenly spaced hues
       });
 
-      const total = Object.values(grouped).reduce((sum, v) => sum + v, 0) || 1; // avoid /0
+      const totalCount = res.data[0]?.total_mf_count || 0;
+      this.sectorCounts = { total_count: totalCount };
 
-      this.actionCounts = {
-        lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
-        mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
-        scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0,
-        lcap_count: grouped['large cap'] || 0,
-        mcap_count: grouped['mid cap'] || 0,
-        scap_count: grouped['small cap'] || 0,
-        total_count: total
+      this.sectorChartData = {
+        labels: this.sectorTableList.map((s: any) => s.sector),
+        datasets: [{
+          data: this.sectorTableList.map((s: any) => s.sector_percent),
+          backgroundColor: this.sectorTableList.map((s: any) => s.color),
+          hoverBackgroundColor: this.sectorTableList.map((s: any) => s.color)
+        }]
       };
 
-      const labels = ['Large Cap', 'Mid Cap', 'Small Cap'];
-      const values = [
-        this.actionCounts.lcap_percent,
-        this.actionCounts.mcap_percent,
-        this.actionCounts.scap_percent
-      ];
-
-      this.chartData = {
-        labels,
-        datasets: [
-          {
-            data: values,
-            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
-            hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
-          }
-        ]
-      };
-
-      this.chartOptions = {
+      this.sectorChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: 'bottom' },
+          legend: { display : false },
           tooltip: {
             callbacks: {
-              label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              label: (context: any) => {
+                const value = typeof context.raw === 'number' ? context.raw : 0;
+                return `${context.label}: ${value.toFixed(1)}%`;
+              }
             }
           }
         }
       };
-
-      console.log('ChartData →', this.chartData); // ✅ debug
     },
-    error: (err) =>
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Failed',
-        detail: err.error?.message || 'Failed to load Mutual Fund chart'
-      })
+    error: (err) => this.messageService.add({
+      severity: 'error',
+      summary: 'Failed',
+      detail: err.error?.message || 'Failed to load Mutual Fund chart'
+    })
   });
 }
 
@@ -271,11 +280,9 @@ getMFDetailUnderlyingTable(mfId: string) {
 
     this.featuresService.getIrrById(entityid).subscribe({
       next: (response) => {
-        // Assuming API returns { irr: 0.1234 }
+        // Assuming API returns annualized_irr_percent
         this.irrResult = response?.annualized_irr_percent ?? null;
-
         console.log(entityid, this.irrResult);
-
         this.isLoading = false;
       },
       error: (err) => {
@@ -287,7 +294,7 @@ getMFDetailUnderlyingTable(mfId: string) {
   }
 
   getSeverity(orderType: string) {
-    switch (orderType?.trim()?.toUpperCase()) {
+    switch ((orderType || '').toString().trim().toUpperCase()) {
       case 'PURCHASE':
         return 'success';
       case 'SELL':
@@ -296,4 +303,8 @@ getMFDetailUnderlyingTable(mfId: string) {
         return 'info';
     }
   }
+
+  // ensure these properties exist so template references compile
+  sectorTableList: any[] = [];
+  sectorCounts: any = {};
 }
