@@ -36,6 +36,7 @@ import { FeaturesService } from '../../../features.service';
     ChartModule,
     TagModule
   ],
+  providers: [ MessageService],
   templateUrl: './mutual-fund-details.component.html',
   styleUrl: './mutual-fund-details.component.scss'
 })
