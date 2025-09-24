@@ -351,13 +351,13 @@
         {{
         (currentActionTableForm.get('pms_order_type')?.value || currentActionTableForm.get('trans_type')?.value) ===
         'Subscription'
-        ? 'Subscription Price'
-        : 'Redemption Price'
+        ? 'Subscription Amount'
+        : 'Redemption Amount'
         }}
       </label>
       <input pInputText formControlName="price" [placeholder]="'Enter ' + ((currentActionTableForm.get('pms_order_type')?.value || currentActionTableForm.get('trans_type')?.value) === 'Subscription'
-      ? 'Subscription Price'
-      : 'Redemption Price')" />
+      ? 'Subscription Amount'
+      : 'Redemption Amount')" />
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
