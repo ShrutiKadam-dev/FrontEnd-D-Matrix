@@ -75,8 +75,7 @@
 
 <!-- Add/Update Entity Dialog -->
 <p-dialog [header]="isEditMode ? 'Edit Entity' : 'Add New Entity'" [(visible)]="displayModal" [modal]="true"
-  [closable]="true" [style]="{ width: '50vw', 'max-height': '100vh' }" 
-  [contentStyle]="{ 'overflow-y': 'auto' }">
+  [closable]="true" [style]="{ width: '50vw', 'max-height': '100vh' }" [contentStyle]="{ 'overflow-y': 'auto' }">
 
   <form [formGroup]="entityForm">
 
@@ -141,10 +140,9 @@
 
     <!-- Footer -->
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">
-      <p-button label="Cancel" icon="pi pi-times"  styleClass="add-entity-btn" (click)="displayModal = false"></p-button>
-      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check"  styleClass="add-entity-btn"
-        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" 
-        [disabled]="entityForm.invalid"></p-button>
+      <p-button label="Cancel" icon="pi pi-times" styleClass="add-entity-btn" (click)="displayModal = false"></p-button>
+      <p-button [label]="isEditMode ? 'Update' : 'Add'" icon="pi pi-check" styleClass="add-entity-btn"
+        (click)="isEditMode ? saveUpdatedEntity() : addEntity()" [disabled]="entityForm.invalid"></p-button>
     </div>
   </form>
 </p-dialog>
@@ -296,8 +294,8 @@
       <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
         placeholder="Select Order Type"></p-dropdown>
 
-      <p-dropdown *ngIf="field.key === 'pms_order_type'" [options]="PmsOrderTypeOptions"
-        formControlName="pms_order_type" placeholder="Select Order Type"></p-dropdown>
+      <p-dropdown *ngIf="field.key === 'pms_order_type' || field.key === 'trans_type'" [options]="PmsOrderTypeOptions"
+       [formControlName]="field.key" placeholder="Select Type"></p-dropdown>
 
       <!-- Dropdown: Mode -->
       <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"
@@ -326,6 +324,7 @@
                && field.key !== 'purchase_value'
                && field.key !== 'order_date'
                && field.key !== 'trade_date'
+               && field.key !== 'trans_type'
                && field.key !== 'trans_date'
               && field.key !== 'net_total'
                && field.key !== 'order_time'
@@ -337,15 +336,19 @@
     </div>
 
     <!-- Price of pms field -->
-    <div class="field" *ngIf="currentActionTableForm.get('pms_order_type')?.value">
+    <div class="field"
+      *ngIf="currentActionTableForm.get('pms_order_type')?.value || currentActionTableForm.get('trans_type')?.value">
       <label>
-        {{ currentActionTableForm.get('pms_order_type')?.value === 'Subscription'
+        {{
+        (currentActionTableForm.get('pms_order_type')?.value || currentActionTableForm.get('trans_type')?.value) ===
+        'Subscription'
         ? 'Subscription Price'
-        : 'Redemption Price' }}
+        : 'Redemption Price'
+        }}
       </label>
-      <input pInputText formControlName="price" [placeholder]="'Enter ' + (currentActionTableForm.get('pms_order_type')?.value === 'Subscription'
-                                    ? 'Subscription Price'
-                                    : 'Redemption Price')" />
+      <input pInputText formControlName="price" [placeholder]="'Enter ' + ((currentActionTableForm.get('pms_order_type')?.value || currentActionTableForm.get('trans_type')?.value) === 'Subscription'
+      ? 'Subscription Price'
+      : 'Redemption Price')" />
     </div>
 
     <div class="dialog-actions flex justify-content-end gap-2 mt-3">

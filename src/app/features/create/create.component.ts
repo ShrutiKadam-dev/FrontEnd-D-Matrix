@@ -239,7 +239,7 @@ export class CreateComponent implements OnInit {
     this.entityForm.get('subcategory')?.valueChanges.subscribe(sub => {
       const category = this.entityForm.get('category')?.value;
 
-      if (category === 'Equity' && sub === 'Alternative Investment Funds') {
+      if ((category === 'Equity' ||category === 'Commodities' || category === 'Fixed_Income') && sub === 'Alternative Investment Funds') {
         this.entityForm.get('aifCategory')?.enable();
         this.entityForm.get('aifClass')?.enable();
       } else {

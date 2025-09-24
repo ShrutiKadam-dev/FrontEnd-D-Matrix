@@ -53,7 +53,7 @@ export class FormConfig {
       contribution_amount: ['', Validators.required],
       setup_expense: [''],
       stamp_duty: [''],
-      amount_invested: ['', Validators.required],
+      price: [''],
       post_tax_nav: [''],
       num_units: ['', Validators.required],
       balance_units: [''],

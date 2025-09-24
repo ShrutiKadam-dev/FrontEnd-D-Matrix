@@ -234,8 +234,9 @@ export class FeaturesService {
       params: { entityid: mfId }
     });
   }
+  
   getallMfDetailsEquityMCAPCount(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getallMfDetailsEquityMCAPCount`, {
+    return this.http.get<any>(`${this.apiUrl}/getallMFDetailsEquityMCAPCount`, {
       params: { entityid: mfId }
     });
   }

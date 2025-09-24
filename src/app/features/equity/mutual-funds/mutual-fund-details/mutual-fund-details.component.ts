@@ -45,38 +45,49 @@ export class MutualFundDetailsComponent implements OnInit {
   mfId!: string | null;
   mfDetails: any;
 
-  chartData: any = {
-    labels: [],
-    datasets: []
-  };
-
+  // ---- Chart Data
+  chartData: any = { labels: [], datasets: [] };
   chartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { position: 'bottom' } }
   };
 
+  // ---- Tables & Lists
   actionTableList: any[] = [];
   underlyingTableList: any[] = [];
+  mcapTableList: any[] = [];
+  sectorTableList: any[] = [];
+
+  // ---- Counts
   actionCounts: any = {};
+  sectorCounts: any = {};
+
+  // ---- Totals
   totalPurchaseUnits = 0;
   totalPurchaseAmount = 0;
   totalSalesUnits = 0;
   totalSalesAmount = 0;
   availableUnits = 0;
   availableAmount = 0;
-  irrResult: number | null = null;
-  isLoading = false;
-  errorMessage: string | null = null;
   totalValue = 0;
 
+  // ---- Results
+  irrResult: number | null = null;
+
+  // ---- States
+  isLoading = false;
+  errorMessage: string | null = null;
+  selectedDate = '';
+  allNavs: any;
+
+  // ---- Chart configs
   mcapChartData: any;
   mcapChartOptions: any;
   sectorChartData: any;
   sectorChartOptions: any;
 
-  selectedDate = '';
-
+  // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
@@ -84,7 +95,6 @@ export class MutualFundDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
-  allNavs: any;
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
@@ -93,33 +103,26 @@ export class MutualFundDetailsComponent implements OnInit {
       this.getMFDetailActionTable(this.mfId);
       this.getMFDetailUnderlyingTable(this.mfId);
       this.getAllMFDetailsEquitySectorCount(this.mfId);
+      this.getallMfDetailsEquityMCAPCount(this.mfId);
       this.fetchIrr(this.mfId);
     }
   }
 
+  // ---------------- Action Table ----------------
   calculateTotals(actionTableList: any[]) {
     if (!Array.isArray(actionTableList) || actionTableList.length === 0) {
-      this.totalPurchaseUnits = 0;
-      this.totalPurchaseAmount = 0;
-      this.totalSalesUnits = 0;
-      this.totalSalesAmount = 0;
-      this.availableUnits = 0;
-      this.availableAmount = 0;
+      this.totalPurchaseUnits = this.totalPurchaseAmount = 0;
+      this.totalSalesUnits = this.totalSalesAmount = 0;
+      this.availableUnits = this.availableAmount = 0;
       return;
     }
 
-    // Reset totals
-    this.totalPurchaseUnits = 0;
-    this.totalPurchaseAmount = 0;
-    this.totalSalesUnits = 0;
-    this.totalSalesAmount = 0;
-    this.availableUnits = 0;
-    this.availableAmount = 0;
+    this.totalPurchaseUnits = this.totalPurchaseAmount = 0;
+    this.totalSalesUnits = this.totalSalesAmount = 0;
 
-    // Single pass calculation
     actionTableList.forEach(action => {
-      const units = Number.isFinite(Number(action.unit)) ? Number(action.unit) : 0;
-      const amount = Number.isFinite(Number(action.purchase_amount)) ? Number(action.purchase_amount) : 0;
+      const units = Number(action.unit) || 0;
+      const amount = Number(action.purchase_amount) || 0;
 
       if ((action.order_type || '').toString().trim().toUpperCase() === 'PURCHASE') {
         this.totalPurchaseUnits += units;
@@ -130,17 +133,8 @@ export class MutualFundDetailsComponent implements OnInit {
       }
     });
 
-    // Available = Purchases - Sales
     this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
     this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
-
-    // Safety: keep valid 0 values (use Number.isFinite)
-    this.totalPurchaseUnits = Number.isFinite(this.totalPurchaseUnits) ? this.totalPurchaseUnits : 0;
-    this.totalPurchaseAmount = Number.isFinite(this.totalPurchaseAmount) ? this.totalPurchaseAmount : 0;
-    this.totalSalesUnits = Number.isFinite(this.totalSalesUnits) ? this.totalSalesUnits : 0;
-    this.totalSalesAmount = Number.isFinite(this.totalSalesAmount) ? this.totalSalesAmount : 0;
-    this.availableUnits = Number.isFinite(this.availableUnits) ? this.availableUnits : 0;
-    this.availableAmount = Number.isFinite(this.availableAmount) ? this.availableAmount : 0;
   }
 
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
@@ -154,17 +148,17 @@ export class MutualFundDetailsComponent implements OnInit {
     }
   }
 
+  // ---------------- APIs ----------------
   loadMfDetails(id: string) {
     this.featuresService.getMutualFundDetailsById(id).subscribe({
       next: (res: any) => {
         this.mfDetails = res?.data || {};
-        // guard access
-        const isin = Array.isArray(this.mfDetails) && this.mfDetails[0]?.isin ? this.mfDetails[0].isin : (this.mfDetails?.isin ?? null);
-        if (isin) {
-          this.getAllMutualFundDetailsNav(isin);
-        }
+        const isin = Array.isArray(this.mfDetails) && this.mfDetails[0]?.isin
+          ? this.mfDetails[0].isin
+          : (this.mfDetails?.isin ?? null);
+        if (isin) this.getAllMutualFundDetailsNav(isin);
       },
-      error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
+      error: (err: any) => console.error('Failed to load Mutual Fund details', err)
     });
   }
 
@@ -173,16 +167,13 @@ export class MutualFundDetailsComponent implements OnInit {
       next: (data) => {
         this.actionTableList = Array.isArray(data.data) ? data.data : [];
         this.calculateTotals(this.actionTableList);
-        // If needed later: prepare cashflows for IRR function
-        // const cashflows = this.actionTableList.map((e: any) => ({ date: e.order_date, amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount }));
       },
-      error: (error) => {
+      error: (error) =>
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
           detail: error.error?.message || 'Failed to load actions'
-        });
-      }
+        })
     });
   }
 
@@ -191,15 +182,14 @@ export class MutualFundDetailsComponent implements OnInit {
       next: (data: any) => {
         this.allNavs = Array.isArray(data.data) ? data.data : [];
         const navValue = this.allNavs?.[0]?.nav;
-        this.totalValue = Number.isFinite(navValue) ? (navValue * this.availableUnits) : 0;
+        this.totalValue = Number.isFinite(navValue) ? navValue * this.availableUnits : 0;
       },
-      error: (error) => {
+      error: (error) =>
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
           detail: error.error?.message || 'Update for Nav value failed'
-        });
-      }
+        })
     });
   }
 
@@ -207,86 +197,135 @@ export class MutualFundDetailsComponent implements OnInit {
     this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
       next: (data) => {
         this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
-
         this.selectedDate = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
       },
       error: (err) =>
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: err.error?.message || 'Failed to load Mutual Fund chart'
+          detail: err.error?.message || 'Failed to load Mutual Fund underlying table'
         })
     });
   }
 
-getAllMFDetailsEquitySectorCount(mfId: string) {
-  this.featuresService.getallMfDetailsEquitySectorCount(mfId).subscribe({
-    next: (res: any) => {
-      if (!res?.data?.length) {
-        this.sectorTableList = [];
-        this.sectorChartData = null;
-        return;
-      }
+  getallMfDetailsEquityMCAPCount(mfId: string) {
+    this.featuresService.getallMfDetailsEquityMCAPCount(mfId).subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.mcapTableList = [];
+          this.mcapChartData = null;
+          this.actionCounts = {};
+          return;
+        }
 
-      this.sectorTableList = res.data;
+        this.mcapTableList = res.data.map((s: any, i: number) => ({
+          ...s,
+          color: `hsl(${(i * 360) / res.data.length}, 70%, 50%)`
+        }));
 
-      // Generate dynamic colors using HSL
-      const total = this.sectorTableList.length;
-      this.sectorTableList.forEach((s: any, i: number) => {
-        s.color = `hsl(${(i * 360) / total}, 65%, 55%)`; // evenly spaced hues
-      });
+        const totalCount = res.data[0]?.total_mf_count || 0;
+        this.actionCounts = { total_count: totalCount };
 
-      const totalCount = res.data[0]?.total_mf_count || 0;
-      this.sectorCounts = { total_count: totalCount };
+        this.mcapTableList.forEach((tagData: any) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
 
-      this.sectorChartData = {
-        labels: this.sectorTableList.map((s: any) => s.sector),
-        datasets: [{
-          data: this.sectorTableList.map((s: any) => s.sector_percent),
-          backgroundColor: this.sectorTableList.map((s: any) => s.color),
-          hoverBackgroundColor: this.sectorTableList.map((s: any) => s.color)
-        }]
-      };
+        this.mcapChartData = {
+          labels: this.mcapTableList.map((d: any) => d.tag),
+          datasets: [{
+            data: this.mcapTableList.map((d: any) => d.tag_percent),
+            backgroundColor: this.mcapTableList.map((s: any) => s.color),
+            hoverBackgroundColor: this.mcapTableList.map((s: any) => s.color)
+          }]
+        };
 
-      this.sectorChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display : false },
-          tooltip: {
-            callbacks: {
-              label: (context: any) => {
-                const value = typeof context.raw === 'number' ? context.raw : 0;
-                return `${context.label}: ${value.toFixed(1)}%`;
+        this.mcapChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
               }
             }
           }
+        };
+      },
+      error: (err) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: err.error?.message || 'Failed to load Mutual Fund MCAP chart'
+        })
+    });
+  }
+
+  getAllMFDetailsEquitySectorCount(mfId: string) {
+    this.featuresService.getallMfDetailsEquitySectorCount(mfId).subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.sectorTableList = [];
+          this.sectorChartData = null;
+          this.sectorCounts = {};
+          return;
         }
-      };
-    },
-    error: (err) => this.messageService.add({
-      severity: 'error',
-      summary: 'Failed',
-      detail: err.error?.message || 'Failed to load Mutual Fund chart'
-    })
-  });
-}
 
+        this.sectorTableList = res.data.map((s: any, i: number) => ({
+          ...s,
+          color: `hsl(${(i * 360) / res.data.length}, 65%, 55%)`
+        }));
 
-  // Function to fetch IRR
+        const totalCount = res.data[0]?.total_mf_count || 0;
+        this.sectorCounts = { total_count: totalCount };
+
+        this.sectorChartData = {
+          labels: this.sectorTableList.map((s: any) => s.sector),
+          datasets: [{
+            data: this.sectorTableList.map((s: any) => s.sector_percent),
+            backgroundColor: this.sectorTableList.map((s: any) => s.color),
+            hoverBackgroundColor: this.sectorTableList.map((s: any) => s.color)
+          }]
+        };
+
+        this.sectorChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => {
+                  const value = typeof context.raw === 'number' ? context.raw : 0;
+                  return `${context.label}: ${value.toFixed(1)}%`;
+                }
+              }
+            }
+          }
+        };
+      },
+      error: (err) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: err.error?.message || 'Failed to load Mutual Fund sector chart'
+        })
+    });
+  }
+
+  // ---------------- IRR ----------------
   fetchIrr(entityid: string): void {
     this.isLoading = true;
     this.errorMessage = null;
 
     this.featuresService.getIrrById(entityid).subscribe({
       next: (response) => {
-        // Assuming API returns annualized_irr_percent
         this.irrResult = response?.annualized_irr_percent ?? null;
-        console.log(entityid, this.irrResult);
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching IRR:', err);
         this.errorMessage = 'Failed to fetch IRR';
         this.isLoading = false;
       }
@@ -303,8 +342,4 @@ getAllMFDetailsEquitySectorCount(mfId: string) {
         return 'info';
     }
   }
-
-  // ensure these properties exist so template references compile
-  sectorTableList: any[] = [];
-  sectorCounts: any = {};
 }
