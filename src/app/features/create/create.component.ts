@@ -103,6 +103,9 @@ export class CreateComponent implements OnInit {
   // NAV
   displayNavModal = false;
 
+  //automation
+  pdfIsSubmitting = false
+
   //PMS
   isPmsMode: 'CLIENT' | 'AMC' | null = null;
 
@@ -997,6 +1000,8 @@ export class CreateComponent implements OnInit {
 
   saveAutomationData() {
 
+    this.pdfIsSubmitting = true
+
     if (this.automationForm.invalid) {
       this.automationForm.markAllAsTouched();
       this.messageService.add({ severity: 'error', summary: 'Validation', detail: 'Please complete the form.' });
@@ -1042,9 +1047,11 @@ export class CreateComponent implements OnInit {
         this.displayAutoModal = false;
         this.automationForm.reset();
         this.getEntities()
+        this.pdfIsSubmitting = false
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'Save failed' });
+        this.pdfIsSubmitting = false
       }
     });
   }

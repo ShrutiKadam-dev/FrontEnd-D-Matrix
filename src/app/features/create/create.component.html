@@ -52,7 +52,7 @@
         <tr>
           <td [title]="entity.scripname">{{ entity.scripname }}</td>
           <td>{{ entity.scripcode }}</td>
-          <td>{{ entity.benchmark }}</td>
+          <td>{{ entity.created_at }}</td>
           <td>{{ entity.category }}</td>
           <td>{{ entity.subcategory }}</td>
           <td>
@@ -272,12 +272,21 @@
   </form>
 </p-dialog>
 
-<!-- Simple Loading Modal -->
+<!-- Simple Uploading underlying properties Loading Modal -->
 <p-dialog header="Please Wait" [(visible)]="isSubmitting" [modal]="true" [closable]="false"
   [style]="{ width: '350px' }">
   <div style="text-align:center; padding:20px;">
     <p-progressSpinner styleClass="w-4 h-4"></p-progressSpinner>
     <p style="margin-top: 15px;">Uploading underlying properties...</p>
+  </div>
+</p-dialog>
+
+<!-- Simple Uploading underlying properties Loading Modal -->
+<p-dialog header="Please Wait" [(visible)]="pdfIsSubmitting" [modal]="true" [closable]="false"
+  [style]="{ width: '350px' }">
+  <div style="text-align:center; padding:20px;">
+    <p-progressSpinner styleClass="w-4 h-4"></p-progressSpinner>
+    <p style="margin-top: 15px;">Uploading Pdf...</p>
   </div>
 </p-dialog>
 
