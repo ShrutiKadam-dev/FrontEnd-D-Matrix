@@ -41,7 +41,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CardModule,
     FormsModule
   ],
-  providers: [ MessageService],
+  providers: [MessageService],
   templateUrl: './mutual-funds.component.html',
   styleUrls: ['./mutual-funds.component.scss']
 })
@@ -145,28 +145,29 @@ export class MutualFundsComponent implements OnInit {
         }
 
         this.underlyingTableList = res.data;
+        this.underlyingTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.underlyingTableList.length; // spread across 360°
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
+
         const totalCount = res.data[0]?.total_mf_count || 0;
 
-        const largeCap = res.data.find((x: any) => x.tag.toLowerCase() === 'large cap');
-        const midCap = res.data.find((x: any) => x.tag.toLowerCase() === 'mid cap');
-        const smallCap = res.data.find((x: any) => x.tag.toLowerCase() === 'small cap');
+        // Dynamic actionCounts
+        this.actionCounts = { total_count: totalCount };
+        res.data.forEach((tagData: { tag: string; tag_count: number; tag_percent: number }) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
 
-        this.actionCounts = {
-          lcap_percent: largeCap?.tag_percent || 0,
-          mcap_percent: midCap?.tag_percent || 0,
-          scap_percent: smallCap?.tag_percent || 0,
-          lcap_count: largeCap?.tag_count || 0,
-          mcap_count: midCap?.tag_count || 0,
-          scap_count: smallCap?.tag_count || 0,
-          total_count: totalCount
-        };
-
+        // Dynamic chart colors
+ 
         this.mcapChartData = {
-          labels: ['Large Cap', 'Mid Cap', 'Small Cap'],
+          labels: res.data.map((d: { tag: string }) => d.tag),
           datasets: [{
-            data: [this.actionCounts.lcap_percent, this.actionCounts.mcap_percent, this.actionCounts.scap_percent],
-            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
-            hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+            data: res.data.map((d: { tag_percent: number }) => d.tag_percent),
+            backgroundColor: this.underlyingTableList.map(s => s.color),
+            hoverBackgroundColor: this.underlyingTableList.map(s => s.color)
           }]
         };
 
@@ -191,6 +192,7 @@ export class MutualFundsComponent implements OnInit {
     });
   }
 
+
   getAllMfEquitySectorCount() {
     this.featuresService.getallMfEquitySectorCount().subscribe({
       next: (res: any) => {
@@ -201,9 +203,10 @@ export class MutualFundsComponent implements OnInit {
         }
 
         this.sectorTableList = res.data;
-        const colors = ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043'];
-        this.sectorTableList.forEach((s, i) => s.color = colors[i % colors.length]);
-
+        this.sectorTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.sectorTableList.length; // spread across 360°
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
         const totalCount = res.data[0]?.total_mf_count || 0;
         this.sectorCounts = { total_count: totalCount };
 
@@ -220,7 +223,7 @@ export class MutualFundsComponent implements OnInit {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' },
+            legend: { display: false },
             tooltip: {
               callbacks: {
                 label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
