@@ -79,7 +79,7 @@
 <h3>Summary Of Actions</h3>
 
 <h4>ETF Table</h4>
-<p-table [value]="actionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+<p-table [value]="actionTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]">
   <ng-template pTemplate="header">
     <tr>
       <th>Scrip Name</th>
@@ -95,7 +95,7 @@
 </p-table>
 
 <h4>AIF Action Table</h4>
-<p-table [value]="aifTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+<p-table [value]="aifTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]">
   <ng-template pTemplate="header">
     <tr>
       <th>AMC Name</th>
@@ -111,7 +111,7 @@
 </p-table>
 
 <h4>Direct Equity Action Table</h4>
-<p-table [value]="equityTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]">
+<p-table [value]="equityTableList" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]">
   <ng-template pTemplate="header">
     <tr>
       <th>Order Type</th>

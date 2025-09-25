@@ -59,7 +59,7 @@
 
   <!-- Action Table -->
   <p-table #dt [value]="allAifContractNotes" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
