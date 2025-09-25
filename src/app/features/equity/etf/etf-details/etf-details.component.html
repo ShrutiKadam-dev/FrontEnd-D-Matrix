@@ -106,6 +106,7 @@
         <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
         <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
         <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
+                <th pSortableColumn="tag">Tag <p-sortIcon field="tag"></p-sortIcon></th>
         <th pSortableColumn="isin_code">ISIN <p-sortIcon field="isin_code"></p-sortIcon></th>
       </tr>
     </ng-template>
@@ -117,6 +118,7 @@
         <td>{{ etf.scripcode }}</td>
         <td>{{ etf.weightage }} %</td>
         <td>{{ etf.sector }}</td>
+                <td>{{ etf.tag }}</td>
         <td>{{ etf.isin_code }}</td>
       </tr>
     </ng-template>

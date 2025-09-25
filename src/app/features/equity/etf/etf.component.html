@@ -1,4 +1,3 @@
-
 <h3>Welcome To The ETF</h3>
 
 <!-- Search Section -->
@@ -21,7 +20,7 @@
         <div class="card-color" [ngStyle]="{'background-color': etf.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title"  [pTooltip]="etf.nicknam">{{ etf.nickname || 'No Name' }}</div>
+      <div class="card-title" [pTooltip]="etf.nicknam">{{ etf.nickname || 'No Name' }}</div>
       <div class="card-value">{{ etf.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ etf.entityid }}</div>
     </p-card>
@@ -56,7 +55,7 @@
   <!-- Entity Table -->
   <p-table #etf [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
     [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scripname']" scrollHeight="700px">
-    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+    <ng-template pTemplate="header">
       <tr>
         <th>Scrip Name</th>
         <th>Quantity</th>
@@ -76,10 +75,11 @@
       </tr>
     </ng-template>
 
-        <ng-template #emptymessage>
-      <tr><td colspan="6">No Records found</td> </tr>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">No Records found</td>
+      </tr>
     </ng-template>
 
   </p-table>
 </div>
-
