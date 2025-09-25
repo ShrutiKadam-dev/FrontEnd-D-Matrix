@@ -120,9 +120,9 @@
     <!-- 4th line: Benchmark (100%) -->
     <div class="grid mb-3">
       <div class="col-12">
-        <label for="benchmark">Benchmark</label>
-        <p-dropdown [options]="benchmarkOptions" optionLabel="label" optionValue="value"
-          formControlName="benchmark_name" placeholder="Select Benchmark">
+        <label for="benchmark_name">Benchmark</label>
+        <p-dropdown formControlName="benchmark_name" [options]="benchmarkOptions" optionLabel="label"
+          optionValue="value" placeholder="Select Benchmark" appendTo="body">
         </p-dropdown>
 
       </div>

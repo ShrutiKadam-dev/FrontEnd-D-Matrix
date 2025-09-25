@@ -275,10 +275,12 @@ export class CreateComponent implements OnInit {
   fetchBenchmarks(categoryId: string, selectedBenchmark?: string) {
     this.featuresService.getBenchmarksByCategory(categoryId).subscribe({
       next: (res: any) => {
-        this.benchmarkOptions = res.data || [];
+        this.benchmarkOptions = (res.data || []).map((b: any) => ({
+          label: b.benchmark_name,
+          value: b.benchmark_name
+        }));
 
         if (selectedBenchmark) {
-          // Patch benchmark after options are ready
           this.entityForm.get('benchmark_name')?.setValue(selectedBenchmark, { emitEvent: false });
         }
       },
@@ -418,7 +420,6 @@ export class CreateComponent implements OnInit {
     this.isEditMode = true;
     this.selectedEntity = entity;
 
-    // Patch main fields first
     this.entityForm.patchValue({
       category: entity.category,
       subcategory: entity.subcategory,
@@ -427,24 +428,21 @@ export class CreateComponent implements OnInit {
       nickname: entity.nickname,
       isin: entity.isin,
       aifCategory: entity.aifCategory || '',
-      aifClass: entity.aifClass || ''
+      aifClass: entity.aifClass || '',
+      benchmark_name: null // leave null until options are loaded
     });
 
-    // Populate subcategories
     this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
 
-    // Fetch benchmarks and patch selected benchmark AFTER options are loaded
     const previousBenchmark = entity.benchmark_name || entity.benchmark;
 
     this.featuresService.getBenchmarksByCategory(entity.category).subscribe({
       next: (res: any) => {
-        // Map API to dropdown format for PrimeNG
         this.benchmarkOptions = (res.data || []).map((b: any) => ({
           label: b.benchmark_name,
           value: b.benchmark_name
         }));
 
-        // Patch selected benchmark
         if (previousBenchmark) {
           const matched = this.benchmarkOptions.find(
             (b: any) => b.value?.toLowerCase() === previousBenchmark.toLowerCase()
@@ -453,13 +451,13 @@ export class CreateComponent implements OnInit {
             this.entityForm.get('benchmark_name')?.setValue(matched.value, { emitEvent: false });
           }
         }
-
       },
       error: (err) => console.error('Error fetching benchmarks', err)
     });
 
     this.displayModal = true;
   }
+
 
   saveUpdatedEntity() {
     const updatedData = { id: this.selectedEntity.id, ...this.entityForm.value };
