@@ -53,7 +53,7 @@
   </div>
 
   <!-- Entity Table -->
-  <p-table #etf [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
+  <p-table #etf [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scripname']" scrollHeight="700px">
     <ng-template pTemplate="header">
       <tr>

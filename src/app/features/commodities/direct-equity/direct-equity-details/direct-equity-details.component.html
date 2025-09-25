@@ -16,7 +16,7 @@
 
   <!-- Action Table -->
   <p-table #actionTable [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['client_name', 'order_number','order_type','trade_price']"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]" [globalFilterFields]="['client_name', 'order_number','order_type','trade_price']"
     scrollHeight="700px" [resizableColumns]="true" columnResizeMode="expand" responsiveLayout="scroll"
     [resizableColumns]="true">
 

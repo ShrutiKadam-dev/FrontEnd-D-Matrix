@@ -13,7 +13,7 @@
   </div>
 
   <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['net_total_before_levies','order_number','order_number','trade_number','redeem_amount']" scrollHeight="600px"
     responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand" class="custom-table">
 
@@ -95,7 +95,7 @@
   </div>
   
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
     scrollHeight="600px" responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand"
     class="custom-table">
 
