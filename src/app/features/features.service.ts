@@ -271,6 +271,12 @@ export class FeaturesService {
     });
   }
 
+  getBenchmarksByCategory(category: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getBenchmarksByCategory`, {
+      params: { category: category }
+    });
+  }
+
   getETFDetailFixedIncomeActionTable(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getFixIncomeETFDetailActionTable`, {
       params: { entityid: mfId }

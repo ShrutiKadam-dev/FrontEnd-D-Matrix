@@ -121,7 +121,10 @@
     <div class="grid mb-3">
       <div class="col-12">
         <label for="benchmark">Benchmark</label>
-        <input id="benchmark" pInputText formControlName="benchmark" placeholder="Enter Benchmark" />
+        <p-dropdown [options]="benchmarkOptions" optionLabel="label" optionValue="value"
+          formControlName="benchmark_name" placeholder="Select Benchmark">
+        </p-dropdown>
+
       </div>
     </div>
 
@@ -304,7 +307,7 @@
         placeholder="Select Order Type"></p-dropdown>
 
       <p-dropdown *ngIf="field.key === 'pms_order_type' || field.key === 'trans_type'" [options]="PmsOrderTypeOptions"
-       [formControlName]="field.key" placeholder="Select Type"></p-dropdown>
+        [formControlName]="field.key" placeholder="Select Type"></p-dropdown>
 
       <!-- Dropdown: Mode -->
       <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"

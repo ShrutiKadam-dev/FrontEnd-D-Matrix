@@ -86,6 +86,7 @@ export class CreateComponent implements OnInit {
 
   entityList: any[] = [];
   subCategoryOptions: any[] = [];
+  benchmarkOptions: any[] = [];
   automationSubCategoryOptions: any[] = [];
   isEditMode = false;
   displayUpdateChoiceModal = false;
@@ -222,6 +223,7 @@ export class CreateComponent implements OnInit {
     });
 
 
+
   }
 
   ngOnInit() {
@@ -242,7 +244,7 @@ export class CreateComponent implements OnInit {
     this.entityForm.get('subcategory')?.valueChanges.subscribe(sub => {
       const category = this.entityForm.get('category')?.value;
 
-      if ((category === 'Equity' ||category === 'Commodities' || category === 'Fixed_Income') && sub === 'Alternative Investment Funds') {
+      if ((category === 'Equity' || category === 'Commodities' || category === 'Fixed_Income') && sub === 'Alternative Investment Funds') {
         this.entityForm.get('aifCategory')?.enable();
         this.entityForm.get('aifClass')?.enable();
       } else {
@@ -252,6 +254,36 @@ export class CreateComponent implements OnInit {
       }
     });
 
+    this.entityForm.get('category')?.valueChanges.subscribe(category => {
+      this.subCategoryOptions = this.allSubCategoryOptions[category] || [];
+      this.entityForm.get('subcategory')?.reset();
+
+      if (!category) {
+        this.benchmarkOptions = [];
+        if (!this.isEditMode) this.entityForm.get('benchmark_name')?.reset();
+        return;
+      }
+
+      if (!this.isEditMode) {
+        this.entityForm.get('benchmark_name')?.reset();
+        this.fetchBenchmarks(category);
+      }
+    });
+
+  }
+
+  fetchBenchmarks(categoryId: string, selectedBenchmark?: string) {
+    this.featuresService.getBenchmarksByCategory(categoryId).subscribe({
+      next: (res: any) => {
+        this.benchmarkOptions = res.data || [];
+
+        if (selectedBenchmark) {
+          // Patch benchmark after options are ready
+          this.entityForm.get('benchmark_name')?.setValue(selectedBenchmark, { emitEvent: false });
+        }
+      },
+      error: (err) => console.error('Error fetching benchmarks', err)
+    });
   }
 
   // ---------- Underlying helpers ----------
@@ -386,17 +418,46 @@ export class CreateComponent implements OnInit {
     this.isEditMode = true;
     this.selectedEntity = entity;
 
+    // Patch main fields first
     this.entityForm.patchValue({
+      category: entity.category,
+      subcategory: entity.subcategory,
       scripname: entity.scripname,
       scripcode: entity.scripcode,
       nickname: entity.nickname,
-      benchmark: entity.benchmark,
-      category: entity.category,
-      subcategory: entity.subcategory,
-      isin: entity.isin
+      isin: entity.isin,
+      aifCategory: entity.aifCategory || '',
+      aifClass: entity.aifClass || ''
     });
 
+    // Populate subcategories
     this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
+
+    // Fetch benchmarks and patch selected benchmark AFTER options are loaded
+    const previousBenchmark = entity.benchmark_name || entity.benchmark;
+
+    this.featuresService.getBenchmarksByCategory(entity.category).subscribe({
+      next: (res: any) => {
+        // Map API to dropdown format for PrimeNG
+        this.benchmarkOptions = (res.data || []).map((b: any) => ({
+          label: b.benchmark_name,
+          value: b.benchmark_name
+        }));
+
+        // Patch selected benchmark
+        if (previousBenchmark) {
+          const matched = this.benchmarkOptions.find(
+            (b: any) => b.value?.toLowerCase() === previousBenchmark.toLowerCase()
+          );
+          if (matched) {
+            this.entityForm.get('benchmark_name')?.setValue(matched.value, { emitEvent: false });
+          }
+        }
+
+      },
+      error: (err) => console.error('Error fetching benchmarks', err)
+    });
+
     this.displayModal = true;
   }
 
@@ -947,7 +1008,11 @@ export class CreateComponent implements OnInit {
   }
 
   isReadOnlyField(key: string): boolean {
-    return ['scrip_code', 'scrip_name', 'isin'].includes(key);
+    const ctx = this.getActionContext(this.selectedEntity);
+    if (ctx === 'MF') {
+      return ['scrip_code', 'scrip_name', 'isin'].includes(key);
+    }
+    return false;
   }
 
   confirmDelete(entity: any) {

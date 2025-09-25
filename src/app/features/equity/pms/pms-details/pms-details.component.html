@@ -20,8 +20,8 @@
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
-        <th pSortableColumn="trade_price">Trade Price <p-sortIcon field="trade_price"></p-sortIcon></th>
+        <th pSortableColumn="price">Trade Price <p-sortIcon field="price"></p-sortIcon></th>
+        <th pSortableColumn="pms_order_type">Action <p-sortIcon field="pms_order_type"></p-sortIcon></th>
         <th pSortableColumn="cheque">Cheque <p-sortIcon field="cheque"></p-sortIcon></th>
         <th pSortableColumn="trade_date">Trade Date <p-sortIcon field="trade_date"></p-sortIcon></th>
       </tr>
@@ -30,11 +30,10 @@
     <!-- Body -->
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
-        <td>{{ entity.trade_price | number:'1.2-2' }}</td>
-        <td>{{ entity.cheque | number:'1.2-2' }}</td>
-        <td>{{ entity.net_amount | number:'1.2-2' }}</td>
-        <td>{{ entity.trade_date | date:'dd-MM-yyyy' }}</td>
+        <td>{{ entity.price|| 0 | number:'1.2-2' }}</td>
+        <td><p-tag [value]="entity.pms_order_type" [severity]="getSeverity(entity.pms_order_type)" /></td>
+        <td>{{ entity.cheque }}</td>
+        <td>{{ entity.trade_date|| 0 | date:'dd-MM-yyyy' }}</td>
       </tr>
     </ng-template>
 
@@ -91,7 +90,7 @@
       <tr>
         <th pSortableColumn="security_description">Description <p-sortIcon field="security_description"></p-sortIcon>
         </th>
-        <th pSortableColumn="order_type">Order Type <p-sortIcon field="scripcode"></p-sortIcon></th>
+        <th pSortableColumn="pms_order_type">Order Type <p-sortIcon field="scripcode"></p-sortIcon></th>
         <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
         <th pSortableColumn="trade_price">Trade Price <p-sortIcon field="trade_price"></p-sortIcon></th>
         <th pSortableColumn="net_amount">Net Amount <p-sortIcon field="net_amount"></p-sortIcon></th>

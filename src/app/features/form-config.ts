@@ -9,7 +9,7 @@ export class FormConfig {
       scripname: ['', Validators.required],
       scripcode: ['', Validators.required],
       nickname: [''],
-      benchmark: [''],
+      benchmark_name: [''],
       category: ['', Validators.required],
       subcategory: ['', Validators.required],
       isin: ['', Validators.required],
@@ -166,8 +166,8 @@ export class FormConfig {
 
   pmsAmcForm(): FormGroup {
     return this.fb.group({
-      scripname: ['', Validators.required],
-      scripcode: ['', Validators.required],
+      scrip_name: ['', Validators.required],
+      scrip_code: ['', Validators.required],
       order_type: [null, Validators.required],
       quantity: ['', Validators.required],
       trade_price: ['', Validators.required],

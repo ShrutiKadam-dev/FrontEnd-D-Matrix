@@ -104,11 +104,11 @@ calculateTotals(actionTableList: any[]) {
     const units = isNaN(Number(action.unit)) ? 0 : Number(action.unit);
     const amount = isNaN(Number(action.purchase_amount)) ? 0 : Number(action.purchase_amount);
 
-    if (action.order_type === 'Purchase') {
+    if (action.pms_order_type === 'Purchase') {
       this.totalPurchaseUnits += units;
       this.totalPurchaseAmount += amount;
     } 
-    else if (action.order_type === 'Sell') {
+    else if (action.pms_order_type === 'Sell') {
       this.totalSalesUnits += units;
       this.totalSalesAmount += amount;
     }
@@ -156,7 +156,7 @@ calculateTotals(actionTableList: any[]) {
         this.calculateTotals(this.actionTableList);
         const cashflows = this.actionTableList.map((e: any) => ({
           date: e.order_date,
-          amount: e.order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
+          amount: e.pms_order_type === 'Purchase' ? -e.purchase_amount : +e.purchase_amount
         }));
       },
       error: (error) => {
@@ -247,8 +247,8 @@ calculateTotals(actionTableList: any[]) {
     });
   }
 
-getSeverity(orderType: string) {
-  switch (orderType?.trim()?.toUpperCase()) {
+getSeverity(pms_order_type: string) {
+  switch (pms_order_type?.trim()?.toUpperCase()) {
     case 'PURCHASE':
       return 'success';
     case 'SELL':
