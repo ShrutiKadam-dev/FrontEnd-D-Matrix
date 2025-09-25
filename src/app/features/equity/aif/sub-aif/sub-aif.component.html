@@ -14,7 +14,7 @@
     </div>
   </div>
   <!-- Action Table -->
-  <p-table #dt [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 50]"
+  <p-table #dt [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
@@ -91,7 +91,7 @@
 
   <!-- Underlying Table -->
   <p-table #dt [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
