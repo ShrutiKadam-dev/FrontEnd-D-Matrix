@@ -249,10 +249,14 @@ calculateTotals(actionTableList: any[]) {
 
 getSeverity(pms_order_type: string) {
   switch (pms_order_type?.trim()?.toUpperCase()) {
-    case 'PURCHASE':
+    case 'SUBSCRIPTION':
       return 'success';
+    case 'REDEMPTION':
+      return 'danger';
     case 'SELL':
       return 'danger';
+    case 'PURCHASE':
+      return 'success';
     default:
       return 'info';
   }

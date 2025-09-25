@@ -81,14 +81,14 @@
   </div>
 
   <p-table #underlyingTable [value]="AMCActionTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scripcode','weightage','isin_code','company_name']"
+    [rowsPerPageOptions]="[10,25,50]" [globalFilterFields]="['scrip_name','scripcode','weightage','isin_code','company_name']"
     scrollHeight="600px" responsiveLayout="scroll" [resizableColumns]="true" columnResizeMode="expand"
     class="custom-table">
 
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="security_description">Description <p-sortIcon field="security_description"></p-sortIcon>
+        <th pSortableColumn="scrip_name">Scrip Name <p-sortIcon field="scrip_name"></p-sortIcon>
         </th>
         <th pSortableColumn="pms_order_type">Order Type <p-sortIcon field="scripcode"></p-sortIcon></th>
         <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
@@ -100,7 +100,7 @@
     <!-- Body -->
     <ng-template pTemplate="body" let-entity>
       <tr>
-        <td>{{ entity.security_description }}</td>
+        <td>{{ entity.scrip_name }}</td>
         <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
         <td>{{ entity.quantity }}</td>
         <td>{{ entity.trade_price }}</td>

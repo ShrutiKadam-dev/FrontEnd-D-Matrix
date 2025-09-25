@@ -36,7 +36,7 @@
   <div class="entity-table-wrapper">
     <p-table #dt [value]="entityList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,25,50]"
       [paginatorDropdownAppendTo]="'body'"
-      [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark']">
+      [globalFilterFields]="['scripname', 'scripcode', 'nickname', 'category', 'subcategory', 'benchmark_name']">
       <ng-template pTemplate="header">
         <tr>
           <th>Scrip Name</th>
@@ -52,7 +52,7 @@
         <tr>
           <td [title]="entity.scripname">{{ entity.scripname }}</td>
           <td>{{ entity.scripcode }}</td>
-          <td>{{ entity.benchmark }}</td>
+          <td>{{ entity.benchmark_name }}</td>
           <td>{{ entity.category }}</td>
           <td>{{ entity.subcategory }}</td>
           <td>
