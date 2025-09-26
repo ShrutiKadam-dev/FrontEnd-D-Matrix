@@ -296,7 +296,7 @@ export class CreateComponent implements OnInit {
       company_name: ['', Validators.required],
       scripcode: ['', Validators.required],
       sector: ['', Validators.required],
-      weightage: [null, Validators.required],
+      weightage: [null, Validators.required, Validators.min(0.0001)],
       tag: ['', Validators.required],
       isin_code: ['', Validators.required],
       fromApi: [false]
