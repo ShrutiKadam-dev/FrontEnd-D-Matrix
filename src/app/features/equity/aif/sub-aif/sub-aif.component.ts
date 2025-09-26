@@ -10,11 +10,13 @@ import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
   selector: 'app-sub-aif',
   imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule, CardModule, ChartModule, ButtonModule, CommonModule ],
+    providers: [MessageService],
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
 })
@@ -23,7 +25,6 @@ export class SubAifComponent {
   aifId!: string;
   contractNote :any[]= [];
   underlyingList :any[]= [];
-  actionCounts: any = {};
   irrResult: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
@@ -34,10 +35,24 @@ export class SubAifComponent {
   availableUnits = 0;
   availableAmount = 0; 
   
+  // ---- Chart configs
+  mcapChartData: any;
+  mcapChartOptions: any;
+  sectorChartData: any;
+  sectorChartOptions: any;
+
+  mcapTableList: any[] = [];
+  sectorTableList: any[] = [];
+
+    // ---- Counts
+  actionCounts: any = {};
+  sectorCounts: any = {};
 
   // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
+
+  private messageService = inject(MessageService);
 
   constructor(private route: ActivatedRoute) {}
 
@@ -48,7 +63,6 @@ export class SubAifComponent {
     this.fetchIrr(this.aifId)
 
   }
-
 
   private featuresService = inject(FeaturesService);  
 
@@ -147,7 +161,114 @@ export class SubAifComponent {
   this.availableAmount ||= 0;
 }
 
+  getallMfDetailsEquityMCAPCount(aifID: string) {
+    this.featuresService.getAIFDetailsEquityMCAPCount(aifID).subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.mcapTableList = [];
+          this.mcapChartData = null;
+          this.actionCounts = {};
+          return;
+        }
 
+        this.mcapTableList = res.data.map((s: any, i: number) => ({
+          ...s,
+          color: `hsl(${(i * 360) / res.data.length}, 70%, 50%)`
+        }));
+
+        const totalCount = res.data[0]?.total_mf_count || 0;
+        this.actionCounts = { total_count: totalCount };
+
+        this.mcapTableList.forEach((tagData: any) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
+
+        this.mcapChartData = {
+          labels: this.mcapTableList.map((d: any) => d.tag),
+          datasets: [{
+            data: this.mcapTableList.map((d: any) => d.tag_percent),
+            backgroundColor: this.mcapTableList.map((s: any) => s.color),
+            hoverBackgroundColor: this.mcapTableList.map((s: any) => s.color)
+          }]
+        };
+
+        this.mcapChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: err.error?.message || 'Failed to load Mutual Fund MCAP chart'
+        })
+    });
+  }
+
+  getAllMFDetailsEquitySectorCount(aifID: string) {
+    this.featuresService.getAIFDetailsEquitySectorCount(aifID).subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.sectorTableList = [];
+          this.sectorChartData = null;
+          this.sectorCounts = {};
+          return;
+        }
+
+        this.sectorTableList = res.data.map((s: any, i: number) => ({
+          ...s,
+          color: `hsl(${(i * 360) / res.data.length}, 65%, 55%)`
+        }));
+
+        const totalCount = res.data[0]?.total_mf_count || 0;
+        this.sectorCounts = { total_count: totalCount };
+
+        this.sectorChartData = {
+          labels: this.sectorTableList.map((s: any) => s.sector),
+          datasets: [{
+            data: this.sectorTableList.map((s: any) => s.sector_percent),
+            backgroundColor: this.sectorTableList.map((s: any) => s.color),
+            hoverBackgroundColor: this.sectorTableList.map((s: any) => s.color)
+          }]
+        };
+
+        this.sectorChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => {
+                  const value = typeof context.raw === 'number' ? context.raw : 0;
+                  return `${context.label}: ${value.toFixed(1)}%`;
+                }
+              }
+            }
+          }
+        };
+      },
+      error: (err) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: err.error?.message || 'Failed to load Mutual Fund sector chart'
+        })
+    });
+  }
+
+  
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
     if (input) {

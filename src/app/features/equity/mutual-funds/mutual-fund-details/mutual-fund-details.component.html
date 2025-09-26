@@ -98,7 +98,6 @@
   </p-table>
 </div>
 
-<!-- Underlying Table -->
 <div class="table-card">
   <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -115,8 +114,8 @@
 
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
     [rowsPerPageOptions]="[10, 25, 100, 500, 1000]"
-    [globalFilterFields]="['scripcode','weightage','isin_code','company_name']" scrollHeight="400px" [responsiveLayout]="'scroll'"
-     columnResizeMode="expand" class="custom-table">
+    [globalFilterFields]="['scripcode','weightage','isin_code','company_name']" scrollHeight="400px"
+    [responsiveLayout]="'scroll'" columnResizeMode="expand" class="custom-table">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>

@@ -234,9 +234,22 @@ export class FeaturesService {
       params: { entityid: mfId }
     });
   }
+
+  getAIFDetailsEquitySectorCount(mfId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAIFDetailsEquitySectorCount`, {
+      params: { entityid: mfId }
+    });
+  }
+  
   
   getallMfDetailsEquityMCAPCount(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getallMFDetailsEquityMCAPCount`, {
+      params: { entityid: mfId }
+    });
+  }
+
+  getAIFDetailsEquityMCAPCount(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAIFDetailsEquityMCAPCount`, {
       params: { entityid: mfId }
     });
   }

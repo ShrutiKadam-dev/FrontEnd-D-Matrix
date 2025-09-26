@@ -121,3 +121,50 @@
   </p-table>
 </div>
 
+<!-- MCAP Tag Allocation -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>MCAP Tag Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ actionCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let tag of mcapTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
+            <span class="label">{{ tag.tag }}</span>
+            <span class="percent">{{ tag.tag_percent | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="mcapChartData" type="pie" [data]="mcapChartData" [options]="mcapChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- Sector Allocation -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>Sector Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let sector of sectorTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': sector.color || '#42A5F5'}"></span>
+            <span class="label">{{ sector.sector }}</span>
+            <span class="percent">{{ sector.sector_percent | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
