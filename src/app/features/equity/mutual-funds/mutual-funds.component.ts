@@ -83,7 +83,7 @@ export class MutualFundsComponent implements OnInit {
   ngOnInit() {
     this.getAllMutualFunds();
     this.getAllActionTable();
-    this.getMFUnderlyingTable();
+    this.getallMfEquityUnderlyingCount();
     this.getAllMfEquitySectorCount();
     this.fetchIrr();
   }
@@ -135,8 +135,8 @@ export class MutualFundsComponent implements OnInit {
     });
   }
 
-  getMFUnderlyingTable() {
-    this.featuresService.getMFUnderlyingTable().subscribe({
+  getallMfEquityUnderlyingCount() {
+    this.featuresService.getallMfEquityUnderlyingCount().subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.underlyingTableList = [];
@@ -150,7 +150,7 @@ export class MutualFundsComponent implements OnInit {
           s.color = `hsl(${hue}, 70%, 50%)`;
         });
 
-        const totalCount = res.data[0]?.total_mf_count || 0;
+        const totalCount = res.data[0]?.total_tag_count || 0;
 
         // Dynamic actionCounts
         this.actionCounts = { total_count: totalCount };
@@ -192,7 +192,6 @@ export class MutualFundsComponent implements OnInit {
     });
   }
 
-
   getAllMfEquitySectorCount() {
     this.featuresService.getallMfEquitySectorCount().subscribe({
       next: (res: any) => {
@@ -207,7 +206,7 @@ export class MutualFundsComponent implements OnInit {
           const hue = (i * 360) / this.sectorTableList.length; // spread across 360°
           s.color = `hsl(${hue}, 70%, 50%)`;
         });
-        const totalCount = res.data[0]?.total_mf_count || 0;
+        const totalCount = res.data[0]?.total_sector_count || 0;
         this.sectorCounts = { total_count: totalCount };
 
         this.sectorChartData = {

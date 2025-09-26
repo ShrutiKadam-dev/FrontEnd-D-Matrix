@@ -223,7 +223,7 @@ export class MutualFundDetailsComponent implements OnInit {
           color: `hsl(${(i * 360) / res.data.length}, 70%, 50%)`
         }));
 
-        const totalCount = res.data[0]?.total_mf_count || 0;
+        const totalCount = res.data[0]?.total_tag_count || 0;
         this.actionCounts = { total_count: totalCount };
 
         this.mcapTableList.forEach((tagData: any) => {
@@ -278,7 +278,7 @@ export class MutualFundDetailsComponent implements OnInit {
           color: `hsl(${(i * 360) / res.data.length}, 65%, 55%)`
         }));
 
-        const totalCount = res.data[0]?.total_mf_count || 0;
+        const totalCount = res.data[0]?.total_sector_count || 0;
         this.sectorCounts = { total_count: totalCount };
 
         this.sectorChartData = {

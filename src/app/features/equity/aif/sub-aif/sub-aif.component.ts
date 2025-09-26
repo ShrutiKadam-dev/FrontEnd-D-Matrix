@@ -58,10 +58,11 @@ export class SubAifComponent {
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id')!; 
-    this.getAifActionTableById(this.aifId)
-    this.getUnderlyingTable(this.aifId)
-    this.fetchIrr(this.aifId)
-
+    this.getAifActionTableById(this.aifId);
+    this.getUnderlyingTable(this.aifId);
+    this.getAIFDetailsEquityMCAPCount(this.aifId);
+    this.getAIFDetailsEquitySectorCount(this.aifId);
+    this.fetchIrr(this.aifId);
   }
 
   private featuresService = inject(FeaturesService);  
@@ -161,7 +162,7 @@ export class SubAifComponent {
   this.availableAmount ||= 0;
 }
 
-  getallMfDetailsEquityMCAPCount(aifID: string) {
+  getAIFDetailsEquityMCAPCount(aifID: string) {
     this.featuresService.getAIFDetailsEquityMCAPCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
@@ -216,7 +217,7 @@ export class SubAifComponent {
     });
   }
 
-  getAllMFDetailsEquitySectorCount(aifID: string) {
+  getAIFDetailsEquitySectorCount(aifID: string) {
     this.featuresService.getAIFDetailsEquitySectorCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {

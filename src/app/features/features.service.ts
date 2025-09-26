@@ -125,7 +125,7 @@ export class FeaturesService {
   }
 
   getAllActionTableOfMutualFund(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getMfByentId`);
+    return this.http.get<any[]>(`${this.apiUrl}/getAllActionTableOfMFEquity`);
   }
 
   getAllActionTableOfETF(): Observable<any[]> {
@@ -221,7 +221,7 @@ export class FeaturesService {
     });
   }
 
-  getMFUnderlyingTable(): Observable<any[]> {
+  getallMfEquityUnderlyingCount(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getallMfEquityUnderlyingCount`);
   }
 
@@ -240,7 +240,6 @@ export class FeaturesService {
       params: { entityid: mfId }
     });
   }
-  
   
   getallMfDetailsEquityMCAPCount(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getallMFDetailsEquityMCAPCount`, {
