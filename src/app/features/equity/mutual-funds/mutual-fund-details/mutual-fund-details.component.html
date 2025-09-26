@@ -114,7 +114,7 @@
   </div>
 
   <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
+    [rowsPerPageOptions]="[10, 25, 100, 500, 1000]"
     [globalFilterFields]="['scripcode','weightage','isin_code','company_name']" scrollHeight="400px" [responsiveLayout]="'scroll'"
      columnResizeMode="expand" class="custom-table">
     <ng-template pTemplate="header">

@@ -33,8 +33,6 @@ export class SubAifComponent {
   totalSalesAmount = 0;
   availableUnits = 0;
   availableAmount = 0; 
-  chartData: any;
-  chartOptions: any;
   
 
   // ---- Table refs
@@ -68,58 +66,10 @@ export class SubAifComponent {
   }
 
   getUnderlyingTable(aifId:string){
-
     this.featuresService.getUnderlyingTable(aifId).subscribe({
       next:(res:any ) => {
-       
-        
         this.underlyingList = res?.data || [];
-        const grouped: { [key: string]: number } = {};
-        this.underlyingList.forEach((item: any) => {
-          const tag = item.tag || 'Unknown';
-          grouped[tag] = (grouped[tag] || 0) + 1;
-        });
-
-        const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
-
-        this.actionCounts = {
-          lcap_percent: grouped['large cap'] ? (grouped['large cap'] / total) * 100 : 0,
-          mcap_percent: grouped['mid cap'] ? (grouped['mid cap'] / total) * 100 : 0,
-          scap_percent: grouped['small cap'] ? (grouped['small cap'] / total) * 100 : 0
-        };
-
-
-        // Prepare chart
-        this.chartData = {
-          labels: Object.keys(grouped),
-          datasets: [{
-            data: Object.values(grouped),
-            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
-          }]
-        };
-
-        console.log(grouped, this.chartData);
-
-        this.chartOptions = {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label: (context: any) => {
-                  const label = context.label || '';
-                  const value = context.raw || 0;
-                  const percentage = (value / total) * 100;
-                  return `${label}: ${value} (${percentage.toFixed(1)}%)`;
-                }
-              }
-            }
-          }
-          
-        };
-        
-          console.log(this.actionCounts);
-        
+       
       },
        error: () => console.error('Failed to fetch AIF Action Table')
     })
@@ -158,8 +108,6 @@ export class SubAifComponent {
     this.availableAmount = 0;
     return;
   }
-
-  console.log(actionTableList)
 
   // Reset totals
   this.totalPurchaseUnits = 0;
