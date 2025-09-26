@@ -1,4 +1,4 @@
-<h3>Welcome To The {{contractNote[0]?.amc_name || "AIF"}}</h3>
+<h3>Welcome To The {{aifDetails[0]?.scripname || "AIF"}}</h3>
 <!-- summary of action -->
 
 <div class="table-card">
@@ -146,7 +146,7 @@
 </div>
 
 <!-- Sector Allocation -->
-<div class="counts-card" style="margin-bottom: 2rem;">
+<div class="counts-card" style="margin-bottom: 2rem;" *ngIf="underlyingList.length > 0">
   <p-card styleClass="P-card">
     <h4>Sector Allocation</h4>
     <div class="card-content">

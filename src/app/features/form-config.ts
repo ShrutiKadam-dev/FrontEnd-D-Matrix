@@ -13,8 +13,8 @@ export class FormConfig {
       category: ['', Validators.required],
       subcategory: ['', Validators.required],
       isin: ['', Validators.required],
-      aifCategory: [{ value: '', disabled: true }],  
-      aifClass: [{ value: '', disabled: true }]      
+      aif_category: [{ value: '', disabled: true }],  
+      aif_class: [{ value: '', disabled: true }]      
     });
   }
 

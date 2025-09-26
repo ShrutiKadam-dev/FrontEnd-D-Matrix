@@ -243,12 +243,12 @@ export class CreateComponent implements OnInit {
       const category = this.entityForm.get('category')?.value;
 
       if ((category === 'Equity' || category === 'Commodities' || category === 'Fixed_Income') && sub === 'Alternative Investment Funds') {
-        this.entityForm.get('aifCategory')?.enable();
-        this.entityForm.get('aifClass')?.enable();
+        this.entityForm.get('aif_category')?.enable();
+        this.entityForm.get('aif_class')?.enable();
       } else {
-        this.entityForm.get('aifCategory')?.disable();
-        this.entityForm.get('aifClass')?.disable();
-        this.entityForm.patchValue({ aifCategory: '', aifClass: '' });
+        this.entityForm.get('aif_category')?.disable();
+        this.entityForm.get('aif_class')?.disable();
+        this.entityForm.patchValue({ aif_category: '', aif_class: '' });
       }
     });
 
@@ -425,8 +425,8 @@ export class CreateComponent implements OnInit {
       scripcode: entity.scripcode,
       nickname: entity.nickname,
       isin: entity.isin,
-      aifCategory: entity.aifCategory || '',
-      aifClass: entity.aifClass || '',
+      aif_category: entity.aif_category || '',
+      aif_class: entity.aif_class || '',
       benchmark_name: null // leave null until options are loaded
     });
 

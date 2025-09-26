@@ -178,6 +178,12 @@ export class FeaturesService {
     });
   }
 
+  getAIFEquityDetailsById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAIFEquityDetailsById`, {
+      params: { entityid: id }
+    });
+  }
+
   getPMSEquityDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsEquityDetailbyId`, {
       params: { entityid: id }
@@ -355,6 +361,7 @@ export class FeaturesService {
   getAllAifUnderlyingProperties(mfId: string) {
     return this.http.get<any[]>(`${this.apiUrl}/getAllAifUnderlyingProperties`)
   }
+
   getAifActionTableById(entityid: string) {
     return this.http.post(`${this.apiUrl}/getAifActionTablebyId`, { entityid });
   }
@@ -388,7 +395,5 @@ export class FeaturesService {
       params: { entityid }
     });
   }
-
-
 
 }

@@ -62,7 +62,7 @@
     [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
-    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+    <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>

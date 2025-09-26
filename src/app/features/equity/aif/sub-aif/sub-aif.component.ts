@@ -22,7 +22,7 @@ import { MessageService } from 'primeng/api';
 })
 export class SubAifComponent {
 
-  aifId!: string;
+  aifId!: string | null;
   contractNote :any[]= [];
   underlyingList :any[]= [];
   irrResult: number | null = null;
@@ -34,7 +34,9 @@ export class SubAifComponent {
   totalSalesAmount = 0;
   availableUnits = 0;
   availableAmount = 0; 
-  
+
+  aifDetails: any;
+
   // ---- Chart configs
   mcapChartData: any;
   mcapChartOptions: any;
@@ -57,12 +59,16 @@ export class SubAifComponent {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.aifId = this.route.snapshot.paramMap.get('id')!; 
+    this.aifId = this.route.snapshot.paramMap.get('id');
+    if(this.aifId){
+    this.loadAIFDetails(this.aifId);
     this.getAifActionTableById(this.aifId);
     this.getUnderlyingTable(this.aifId);
     this.getAIFDetailsEquityMCAPCount(this.aifId);
     this.getAIFDetailsEquitySectorCount(this.aifId);
     this.fetchIrr(this.aifId);
+    }
+
   }
 
   private featuresService = inject(FeaturesService);  
@@ -89,6 +95,19 @@ export class SubAifComponent {
        error: () => console.error('Failed to fetch AIF Action Table')
     })
 
+  }
+
+  loadAIFDetails(id: string) {
+    this.featuresService.getAIFEquityDetailsById(id).subscribe({
+      next: (res: any) => {
+        this.aifDetails = res?.data || {};
+        // const isin = Array.isArray(this.aifDetails) && this.aifDetails[0]?.isin
+        //   ? this.aifDetails[0].isin
+        //   : (this.aifDetails?.isin ?? null);
+        // if (isin) this.getAllMutualFundDetailsNav(isin);
+      },
+      error: (err: any) => console.error('Failed to load Mutual Fund details', err)
+    });
   }
 
     // Function to fetch IRR
@@ -268,7 +287,6 @@ export class SubAifComponent {
         })
     });
   }
-
   
   onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
