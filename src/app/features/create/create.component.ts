@@ -211,18 +211,16 @@ export class CreateComponent implements OnInit {
       this.automationForm.get('subcategory')?.reset();
     });
 
-    this.entityForm.valueChanges.subscribe(val => {
-      const category = val.category;
-      const subcategory = val.subcategory;
+    this.entityForm.get('subcategory')?.valueChanges.subscribe(subcategory => {
+      const isinControl = this.entityForm.get('isin');
 
-      if (category === 'Equity' && subcategory === 'PMS') {
-        this.entityForm.get('isin')?.disable({ emitEvent: false });
+      if (subcategory === 'PMS') {
+        isinControl?.reset(); // remove existing ISIN
+        isinControl?.disable({ emitEvent: false });
       } else {
-        this.entityForm.get('isin')?.enable({ emitEvent: false });
+        isinControl?.enable({ emitEvent: false });
       }
     });
-
-
 
   }
 
@@ -431,6 +429,14 @@ export class CreateComponent implements OnInit {
       aifClass: entity.aifClass || '',
       benchmark_name: null // leave null until options are loaded
     });
+
+    // Apply ISIN rules after patch
+    if (entity.subcategory === 'PMS') {
+      this.entityForm.get('isin')?.reset();
+      this.entityForm.get('isin')?.disable({ emitEvent: false });
+    } else {
+      this.entityForm.get('isin')?.enable({ emitEvent: false });
+    }
 
     this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
 

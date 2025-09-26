@@ -1,6 +1,4 @@
 <h3>Welcome To The {{contractNote[0]?.amc_name || "AIF"}}</h3>
-
-
 <!-- summary of action -->
 
 <div class="table-card">
@@ -10,11 +8,11 @@
         style="height: 28px;"></button>
     </h4>
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search actions..." />
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search actions..." />
     </div>
   </div>
   <!-- Action Table -->
-  <p-table #dt [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
+  <p-table #actionTableSummary [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
@@ -85,12 +83,12 @@
     </div>
 
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
     </div>
   </div>
 
   <!-- Underlying Table -->
-  <p-table #dt [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
+  <p-table #underlyingTable [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
     [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">

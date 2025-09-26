@@ -37,7 +37,9 @@ export class SubAifComponent {
   chartOptions: any;
   
 
-  @ViewChild('dt') dt!: Table;
+  // ---- Table refs
+  @ViewChild('actionTableSummary') actionTableSummary!: Table;
+  @ViewChild('underlyingTable') underlyingTable!: Table;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -198,13 +200,16 @@ export class SubAifComponent {
 }
 
 
-  onGlobalFilter(event: Event) {
+  onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
     const input = event.target as HTMLInputElement | null;
-    if (input && this.dt) {
-      this.dt.filter(input.value, 'global', 'contains');
+    if (input) {
+      if (tableType === 'action' && this.actionTableSummary) {
+        this.actionTableSummary.filterGlobal(input.value, 'contains');
+      } else if (tableType === 'underlying' && this.underlyingTable) {
+        this.underlyingTable.filterGlobal(input.value, 'contains');
+      }
     }
   }
-
 
 
 }
