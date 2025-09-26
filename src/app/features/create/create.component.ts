@@ -296,7 +296,7 @@ export class CreateComponent implements OnInit {
       company_name: ['', Validators.required],
       scripcode: ['', Validators.required],
       sector: ['', Validators.required],
-      weightage: ['', Validators.required],
+      weightage: [null, Validators.required],
       tag: ['', Validators.required],
       isin_code: ['', Validators.required],
       fromApi: [false]
@@ -311,7 +311,7 @@ export class CreateComponent implements OnInit {
 
   onWeightageChange(currentRow: FormGroup, enteredValue: string | number | null) {
     // normalize everything to a number
-    const safeValue = enteredValue === null || enteredValue === '' ? 0 : Number(enteredValue);
+    const safeValue = enteredValue === null || enteredValue === '' ? null : Number(enteredValue);
 
     const totalExcludingCurrent = this.rows.controls.reduce((sum, group) => {
       if (group !== currentRow) {
@@ -320,7 +320,7 @@ export class CreateComponent implements OnInit {
       return sum;
     }, 0);
 
-    const newTotal = totalExcludingCurrent + safeValue;
+    const newTotal = totalExcludingCurrent + (safeValue ?? 0);
 
     if (newTotal > 100) {
       currentRow.get('weightage')?.setValue(0, { emitEvent: false });
