@@ -14,6 +14,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-commodities',
@@ -48,7 +49,7 @@ export class CommoditiesComponent implements OnInit {
   actionCounts: any = null;
 
   @ViewChild('dt') dt!: Table;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -76,6 +77,10 @@ export class CommoditiesComponent implements OnInit {
     this.getAllCommoditiesHome();
     this.loadCommodityChart();
     this.getAllActionTableCommodity()
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   loadCommodityChart() {
