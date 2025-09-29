@@ -18,6 +18,8 @@ import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { ChartModule } from 'primeng/chart';
 import { TooltipModule } from 'primeng/tooltip';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-create',
@@ -69,7 +71,7 @@ export class MutualFundsComponent implements OnInit {
 
   @ViewChild('dt') dt!: Table;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -133,6 +135,10 @@ export class MutualFundsComponent implements OnInit {
         });
       }
     });
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   getallMfEquityUnderlyingCount() {

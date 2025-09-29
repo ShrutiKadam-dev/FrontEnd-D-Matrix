@@ -16,6 +16,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -95,6 +96,7 @@ export class MutualFundDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
+  constructor(private location: Location) {}
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
@@ -191,6 +193,10 @@ export class MutualFundDetailsComponent implements OnInit {
           detail: error.error?.message || 'Update for Nav value failed'
         })
     });
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   getMFDetailUnderlyingTable(mfId: string) {
