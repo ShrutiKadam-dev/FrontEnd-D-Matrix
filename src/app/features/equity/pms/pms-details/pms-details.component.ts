@@ -16,6 +16,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pms-details',
@@ -67,6 +68,7 @@ export class PMSDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
+  constructor(private location: Location) {}
 
   ngOnInit() {
     this.pmsId = this.route.snapshot.paramMap.get('id');
@@ -79,6 +81,9 @@ export class PMSDetailsComponent implements OnInit {
     }
   }
 
+  goBack(){
+    this.location.back();
+  }
 
 calculateTotals(actionTableList: any[]) {
   if (!actionTableList || actionTableList.length === 0) {

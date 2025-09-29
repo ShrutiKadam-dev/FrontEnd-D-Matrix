@@ -17,6 +17,7 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pms',
@@ -50,7 +51,7 @@ export class PMSComponent implements OnInit {
   actionTableList: any[] = [];
 
   @ViewChild('dt') dt!: Table;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -79,6 +80,10 @@ export class PMSComponent implements OnInit {
     this.getAllActionTable();
   }
 
+  goBack(){
+    this.location.back();
+  }
+  
   goToPMSDetails(pms: any) {
     this.router.navigate(['/features/equity/PMS-details', pms.entityid]);
   }

@@ -11,7 +11,7 @@ import { ChartModule } from 'primeng/chart';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-sub-aif',
@@ -56,7 +56,7 @@ export class SubAifComponent {
 
   private messageService = inject(MessageService);
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private location: Location) {}
 
   ngOnInit(): void {
     this.aifId = this.route.snapshot.paramMap.get('id');
@@ -69,6 +69,10 @@ export class SubAifComponent {
     this.fetchIrr(this.aifId);
     }
 
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   private featuresService = inject(FeaturesService);  

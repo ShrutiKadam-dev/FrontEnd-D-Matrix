@@ -10,6 +10,7 @@ import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../../features.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-aif',
@@ -21,7 +22,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 export class AifComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private location: Location) {}
   
   selectedAifName: any = null;
   filteredAifNames: any[] = [];
@@ -72,7 +73,11 @@ export class AifComponent {
     }
   ];  
 
-   goToAif(item: any) {
+  goBack(){
+    this.location.back();
+  }
+
+  goToAif(item: any) {
     this.router.navigate(['/features/equity/sub-aif', item.entityid]);
   }
 

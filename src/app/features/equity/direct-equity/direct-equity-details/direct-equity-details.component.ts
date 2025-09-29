@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TagModule } from 'primeng/tag';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-direct-equity-details',
@@ -57,7 +58,7 @@ export class DirectEquityDetailsComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
-
+  constructor(private location: Location) {}
   ngOnInit() {
     this.deId = this.route.snapshot.paramMap.get('id');
     if (this.deId) {
@@ -75,6 +76,10 @@ export class DirectEquityDetailsComponent implements OnInit{
     }
   }
 
+  goBack(){
+    this.location.back();
+  }
+  
   calculateTotals(actionTableList: any[]) {
   if (!actionTableList || actionTableList.length === 0) {
     this.totalPurchaseUnits = 0;

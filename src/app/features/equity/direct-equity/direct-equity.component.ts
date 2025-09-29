@@ -17,6 +17,7 @@ import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-direct-equity',
@@ -50,7 +51,7 @@ export class DirectEquityComponent implements OnInit {
   actionTableList: any[] = [];
 
   @ViewChild('dt') dt!: Table;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -79,6 +80,10 @@ export class DirectEquityComponent implements OnInit {
     this.getAllActionTable();
   }
 
+  goBack(){
+    this.location.back();
+  }
+  
   goToDirectEquityDetails(de: any) {
     this.router.navigate(['/features/equity/direct-equity-details', de.entityid]);
   }
