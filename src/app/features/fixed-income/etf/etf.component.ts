@@ -16,6 +16,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-etf',
@@ -48,7 +49,7 @@ export class EtfComponent implements OnInit{
   actionTableList: any[] = [];
 
   @ViewChild('etf') etf!: Table;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -75,6 +76,10 @@ export class EtfComponent implements OnInit{
   ngOnInit() {
     this.getAllETFFixedIncome();
     this.getAllActionTableOFETFFixedIncome();
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   goToETFDetails(etf: any) {
