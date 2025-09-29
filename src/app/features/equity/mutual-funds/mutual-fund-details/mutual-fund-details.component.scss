@@ -78,7 +78,6 @@
 }
 .chart-section p-chart { width: 100% !important; height: 100% !important; }
 
-
 .counts-card {
   margin-top:2rem; /* or any value you prefer */
 }
@@ -112,3 +111,11 @@
   font-size: 0.85rem;
   font-weight: 500;
 }
+
+:host ::ng-deep .p-speeddial-action {
+  width: 24px;        
+  height: 24px;
+  padding: 0;
+  line-height: 24px;
+}
+

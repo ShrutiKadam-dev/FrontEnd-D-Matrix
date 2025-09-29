@@ -65,7 +65,7 @@
 
   <p-table #dt [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
            [globalFilterFields]="['unit', 'order_date', 'order_type', 'purchase_amount','scrip_name']" scrollHeight="700px">
-    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+    <ng-template pTemplate="header" >
       <tr>
         <th>Scrip Name</th>
         <th>Units</th>

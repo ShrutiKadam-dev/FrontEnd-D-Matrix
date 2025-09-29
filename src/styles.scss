@@ -197,3 +197,18 @@ app-home {
   justify-content: center;
   height: 650px; /* adjust as needed */
 }
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+
