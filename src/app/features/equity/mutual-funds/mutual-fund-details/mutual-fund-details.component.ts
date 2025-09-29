@@ -12,6 +12,7 @@ import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
@@ -33,6 +34,7 @@ import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enum
     CommonModule,
     SpeedDial,
     MessagesModule,
+    ConfirmDialogModule,
     TableModule,
     AutoCompleteModule,
     CarouselModule,
@@ -188,7 +190,17 @@ export class MutualFundDetailsComponent implements OnInit {
 
   onEditRow(entity: any) {
     this.editingRow = entity;
-    this.mfActionTableForm.patchValue(entity);
+
+    // Clone entity to avoid mutation
+    const patchData = { ...entity };
+
+    // Convert order_date string to Date object
+    if (patchData.order_date) {
+      const parts = patchData.order_date.split('-'); // ["08","09","2025"]
+      patchData.order_date = new Date(+parts[2], +parts[1] - 1, +parts[0]);
+    }
+
+    this.mfActionTableForm.patchValue(patchData);
     this.displayEditDialog = true;
   }
 
@@ -200,7 +212,15 @@ export class MutualFundDetailsComponent implements OnInit {
 
     const updatedData = this.mfActionTableForm.getRawValue(); // includes disabled fields
 
-    this.featuresService.updateMFDetailActionTableRow(this.mfId!, this.editingRow.id, updatedData).subscribe({
+    if (updatedData.order_date instanceof Date) {
+      const d = updatedData.order_date;
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      updatedData.order_date = `${day}-${month}-${year}`;
+    }
+
+    this.featuresService.updateMFDetailActionTableRow(this.editingRow.id, updatedData).subscribe({
       next: () => {
         Object.assign(this.editingRow, updatedData);
         this.messageService.add({ severity: 'success', summary: 'Updated', detail: `Order No ${this.editingRow.order_number} updated successfully` });
@@ -217,7 +237,7 @@ export class MutualFundDetailsComponent implements OnInit {
       header: 'Confirm Delete',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.featuresService.deleteMFDetailActionTableRow(this.mfId!, entity.id).subscribe({
+        this.featuresService.deleteMFDetailActionTableRow(entity.id).subscribe({
           next: () => {
             this.actionTableList = this.actionTableList.filter(row => row.id !== entity.id);
 
@@ -483,5 +503,5 @@ export class MutualFundDetailsComponent implements OnInit {
     }
   }
 
-  goBack(){}
+  goBack() { }
 }

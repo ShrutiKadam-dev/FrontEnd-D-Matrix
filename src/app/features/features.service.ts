@@ -184,15 +184,15 @@ export class FeaturesService {
     });
   }
 
-  updateMFDetailActionTableRow(entityid: string, rowId: string, payload: any) {
+  updateMFDetailActionTableRow(rowId: string, payload: any) {
     return this.http.put<any>(`${this.apiUrl}/updateMFDetailActionTableRow`, payload, {
-      params: { entityid, rowid: rowId }
+      params: { id: rowId }
     });
   }
 
-  deleteMFDetailActionTableRow(entityid: string, rowId: string) {
+  deleteMFDetailActionTableRow(Id: string) {
     return this.http.delete<any>(`${this.apiUrl}/deleteMFDetailActionTableRow`, {
-      params: { entityid, rowid: rowId }
+      params: { id: Id }
     });
   }
 
