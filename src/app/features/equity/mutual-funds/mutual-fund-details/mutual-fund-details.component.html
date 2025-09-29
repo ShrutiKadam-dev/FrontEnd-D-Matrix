@@ -5,6 +5,7 @@
 <h3>Welcome To The {{mfDetails[0]?.scripname || "Mutual Fund Details"}}</h3>
 </div>
 
+<!-- Summary of Action -->
 <div class="table-card">
   <div class="search-header p-d-flex p-ai-center p-jc-between">
     <h4>
@@ -50,9 +51,10 @@
         <th pSortableColumn="unit">Units <p-sortIcon field="unit"></p-sortIcon></th>
         <th pSortableColumn="order_type">Action <p-sortIcon field="order_type"></p-sortIcon></th>
         <th pSortableColumn="purchase_amount">Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
-        <th pSortableColumn="net_amount">Net Amount <p-sortIcon field="purchase_amount"></p-sortIcon></th>
-        <th pSortableColumn="redeem_amount">Redeem Amount <p-sortIcon field="redeem_amount"></p-sortIcon></th>
+        <th pSortableColumn="net_amount">Net Amt <p-sortIcon field="purchase_amount"></p-sortIcon></th>
+        <th pSortableColumn="redeem_amount">Redeem <p-sortIcon field="redeem_amount"></p-sortIcon></th>
         <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
+        <th pSortableColumn="sett_no">Action <p-sortIcon field="sett_no"></p-sortIcon></th>
       </tr>
     </ng-template>
 
@@ -68,25 +70,29 @@
         <td>{{ entity.net_amount | number:'1.2-2' }}</td>
         <td>{{ entity.redeem_amount | number:'1.2-2' }}</td>
         <td>{{ entity.sett_no }}</td>
-
+        <td>
+          <p-speeddial [model]="getRowActions(entity)" direction="left" type="linear" showIcon="pi pi-plus"
+            hideIcon="pi pi-times" [buttonStyle]="{'height':'25px','min-width':'27px','margin-right':'40px' }">
+          </p-speeddial>
+        </td>
       </tr>
     </ng-template>
 
     <!-- Footer (Summary Row) -->
     <ng-template pTemplate="footer">
       <tr class="summary-row">
-        <td colspan="9" class="summary green">
+        <td colspan="10" class="summary green">
           Total Available Units → Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount | currency:'INR' }}
         </td>
       </tr>
       <tr class="summary-row">
-        <td colspan="9" class="summary blue">
+        <td colspan="10" class="summary blue">
           Total Value → {{ totalValue | currency:'INR' }}
         </td>
       </tr>
       <tr class="summary-row">
-        <td colspan="9" class="summary red">
+        <td colspan="10" class="summary red">
           Total Units Sold → Units: {{ totalSalesUnits | number:'1.2-2' }} |
           Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
@@ -127,7 +133,7 @@
   </p-card>
 </div>
 
-
+<!-- Summary of underlying -->
 <div class="table-card">
   <h4>Summary Of Underlying</h4>
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -199,3 +205,43 @@
     </div>
   </p-card>
 </div>
+
+<p-dialog header="Edit Action" [(visible)]="displayEditDialog" [modal]="true" [closable]="true"
+  [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+  <form [formGroup]="mfActionTableForm" class="p-fluid">
+    <div class="field" *ngFor="let field of currentActionTableFields">
+      <label [for]="field.key">{{ field.label }}</label>
+
+      <!-- Dropdown: Order Type -->
+      <p-dropdown *ngIf="field.key === 'order_type'" [options]="orderTypeOptions" formControlName="order_type"
+        placeholder="Select Order Type"></p-dropdown>
+
+      <!-- Dropdown: Mode -->
+      <p-dropdown *ngIf="field.key === 'mode'" [options]="modeOptions" formControlName="mode"
+        placeholder="Select Mode"></p-dropdown>
+
+      <!-- Calendar: order_date / trade_date / trans_date -->
+      <p-datepicker *ngIf="field.key === 'order_date'" [formControlName]="field.key" placeholder="Select Date"
+        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body" [style]="{ width: '100%' }">
+      </p-datepicker>
+
+      <!-- Readonly Purchase Value -->
+
+      <input *ngIf="field.key === 'net_total'" pInputText formControlName="net_total" readonly />
+
+      <input *ngIf="field.key === 'entityid'" type="hidden" formControlName="entityid" />
+
+      <!-- Default Input -->
+      <input *ngIf="field.key !== 'order_type' && field.key !== 'mode'
+               && field.key !== 'order_date'" [id]="field.key" pInputText [formControlName]="field.key"
+        [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"
+        [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancel" class="p-button-text" (click)="displayEditDialog=false"></button>
+    <button pButton label="Save" class="p-button-primary" (click)="saveEdit()"></button>
+  </ng-template>
+</p-dialog>

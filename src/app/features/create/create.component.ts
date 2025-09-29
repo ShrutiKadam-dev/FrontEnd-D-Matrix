@@ -748,7 +748,6 @@ export class CreateComponent implements OnInit {
 
     const payload = this.mfActionTableForm.getRawValue();
 
-
     this.featuresService.insertActionTable(payload).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Action table data added successfully' });

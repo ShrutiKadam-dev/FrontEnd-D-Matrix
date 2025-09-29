@@ -78,7 +78,7 @@ export class FeaturesService {
     return this.http.post(`${this.apiUrl}/insertPmsClientAction`, data);
   }
 
-  uploadAutomation(formData:FormData) {
+  uploadAutomation(formData: FormData) {
     return this.http.post(`${this.apiUrl}/uploadAutomationData`, formData);
   }
 
@@ -184,19 +184,31 @@ export class FeaturesService {
     });
   }
 
+  updateMFDetailActionTableRow(entityid: string, rowId: string, payload: any) {
+    return this.http.put<any>(`${this.apiUrl}/updateMFDetailActionTableRow`, payload, {
+      params: { entityid, rowid: rowId }
+    });
+  }
+
+  deleteMFDetailActionTableRow(entityid: string, rowId: string) {
+    return this.http.delete<any>(`${this.apiUrl}/deleteMFDetailActionTableRow`, {
+      params: { entityid, rowid: rowId }
+    });
+  }
+
   getPMSEquityDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getPmsEquityDetailbyId`, {
       params: { entityid: id }
     });
   }
-  
+
   getETFDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getETFDetailsById`, {
       params: { entityid: id }
     });
   }
 
-    
+
   getETFDetailsFixedIncomeById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getFixIncomeETFById`, {
       params: { entityid: id }
@@ -246,7 +258,7 @@ export class FeaturesService {
       params: { entityid: mfId }
     });
   }
-  
+
   getallMfDetailsEquityMCAPCount(mfId: string) {
     return this.http.get<any>(`${this.apiUrl}/getallMFDetailsEquityMCAPCount`, {
       params: { entityid: mfId }
@@ -365,7 +377,7 @@ export class FeaturesService {
   getAifActionTableById(entityid: string) {
     return this.http.post(`${this.apiUrl}/getAifActionTablebyId`, { entityid });
   }
-  
+
   getUnderlyingTable(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
       params: { entityid }
@@ -380,7 +392,7 @@ export class FeaturesService {
   }
 
   getIrrMF() {
-    return this.http.get<any>(`${this.apiUrl}/getALLMutualFundActionTableIRR` )
+    return this.http.get<any>(`${this.apiUrl}/getALLMutualFundActionTableIRR`)
   }
 
   //Get IRR service for Direct Equity 

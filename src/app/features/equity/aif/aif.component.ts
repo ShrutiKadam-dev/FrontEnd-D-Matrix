@@ -11,11 +11,13 @@ import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../../features.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule,TooltipModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
+  imports: [ InputTextModule,
+    TagModule,TooltipModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })
@@ -38,22 +40,6 @@ export class AifComponent {
   }
   
   private featuresService = inject(FeaturesService);
-
-   actionTableList = [
-    { id: 1, scrip_name: 'ABC Ltd', unit: 100, order_date: '2025-08-10', order_type: 'Buy', purchase_amount: 5000 },
-    { id: 2, scrip_name: 'XYZ Corp', unit: 50, order_date: '2025-08-11', order_type: 'Sell', purchase_amount: 2500 },
-    { id: 3, scrip_name: 'LMN Pvt', unit: 200, order_date: '2025-08-12', order_type: 'Buy', purchase_amount: 10000 },
-    { id: 4, scrip_name: 'QRS Inc', unit: 75, order_date: '2025-08-13', order_type: 'Sell', purchase_amount: 3750 },
-    { id: 5, scrip_name: 'TUV Group', unit: 120, order_date: '2025-08-14', order_type: 'Buy', purchase_amount: 6000 }
-  ];
-
-    aifList = [
-    {id:1, name: 'AIF One', value: '₹1,00,000', entityId: 'ENT-001' },
-    {id:2, name: 'AIF Two', value: '₹2,50,000', entityId: 'ENT-002' },
-    {id:3, name: 'AIF Three', value: '₹3,75,000', entityId: 'ENT-003' },
-    {id:4, name: 'AIF Four', value: '₹4,50,000', entityId: 'ENT-004' },
-    {id:5, name: 'AIF Five', value: '₹5,00,000', entityId: 'ENT-005' }
-  ];
 
     responsiveOptions = [
     {
@@ -133,7 +119,6 @@ export class AifComponent {
   }
 
   getAllAifContractNotes(){
-
       this.featuresService.getAllAifContractNotes().subscribe({
         next:(res:any ) => {
           this.allAifContractNotes = res?.data || [];
@@ -152,7 +137,13 @@ export class AifComponent {
     }
   }
 
-
+    getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'SUBSCRIPTION': return 'success';
+      case 'REDEMPTION': return 'danger';
+      default: return 'info';
+    }
+  }
   
 
 }

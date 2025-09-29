@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,12 +11,15 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
-import { Location } from '@angular/common';
+import { SpeedDial } from 'primeng/speeddial';
+import { FormConfig } from '../../../form-config';
+import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
+import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -28,6 +31,7 @@ import { Location } from '@angular/common';
     InputTextModule,
     DropdownModule,
     CommonModule,
+    SpeedDial,
     MessagesModule,
     TableModule,
     AutoCompleteModule,
@@ -38,7 +42,7 @@ import { Location } from '@angular/common';
     ChartModule,
     TagModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './mutual-fund-details.component.html',
   styleUrls: ['./mutual-fund-details.component.scss']
 })
@@ -88,6 +92,15 @@ export class MutualFundDetailsComponent implements OnInit {
   sectorChartData: any;
   sectorChartOptions: any;
 
+  displayEditDialog = false;
+  mfActionTableForm: FormGroup;
+  editingRow: any = null;
+  mfActionTableFields = MF_ACTION_TABLE_FIELDS;
+  currentActionTableFields: ActionTableField[] = MF_ACTION_TABLE_FIELDS;
+  orderTypeOptions = ORDER_TYPE_OPTIONS;
+  modeOptions = MODE_OPTIONS;
+
+
   // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
@@ -96,10 +109,37 @@ export class MutualFundDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
-  constructor(private location: Location) {}
+  private confirmationService = inject(ConfirmationService);
+
+  constructor(private fb: FormBuilder) {
+    const formConfig = new FormConfig(this.fb);
+    this.mfActionTableForm = formConfig.mfActionTableForm();
+
+    this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.mfActionTableForm.get('purchase_amount')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+
+    this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
+      if (val === 'Purchase') {
+        this.mfActionTableForm.get('redeem_amount')?.disable({ emitEvent: false });
+      }
+      else if (val === 'Sell') {
+        this.mfActionTableForm.get('purchase_amount')?.disable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_value')?.disable({ emitEvent: false });
+        this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+      }
+      else {
+        this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_amount')?.enable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_value')?.enable({ emitEvent: false });
+      }
+    });
+
+  }
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
+
     if (this.mfId) {
       this.loadMfDetails(this.mfId);
       this.getMFDetailActionTable(this.mfId);
@@ -108,6 +148,104 @@ export class MutualFundDetailsComponent implements OnInit {
       this.getallMfDetailsEquityMCAPCount(this.mfId);
       this.fetchIrr(this.mfId);
     }
+  }
+
+  private calculatePurchaseValue(): void {
+    const orderType = this.mfActionTableForm.get('order_type')?.value;
+    //Skip calculation for Sell
+    if (orderType === 'Sell') {
+      return;
+    }
+
+    const unit = Number(this.mfActionTableForm.get('unit')?.value) || 0;
+    const nav = Number(this.mfActionTableForm.get('nav')?.value) || 0;
+    const total = unit * nav;
+    this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
+
+    const netTotal = Number(this.mfActionTableForm.get('purchase_amount')?.value) || 0;
+    this.mfActionTableForm.get('net_amount')?.setValue(netTotal.toFixed(2), { emitEvent: false });
+
+  }
+
+  isReadOnlyField(key: string): boolean {
+    return ['entityid'].includes(key);
+  }
+
+  getRowActions(entity: any) {
+    return [
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => this.onEditRow(entity)
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => this.onDeleteRow(entity)
+      }
+    ];
+  }
+
+  onEditRow(entity: any) {
+    this.editingRow = entity;
+    this.mfActionTableForm.patchValue(entity);
+    this.displayEditDialog = true;
+  }
+
+  saveEdit() {
+    if (this.mfActionTableForm.invalid) {
+      this.messageService.add({ severity: 'warn', summary: 'Validation', detail: 'Please fill required fields correctly' });
+      return;
+    }
+
+    const updatedData = this.mfActionTableForm.getRawValue(); // includes disabled fields
+
+    this.featuresService.updateMFDetailActionTableRow(this.mfId!, this.editingRow.id, updatedData).subscribe({
+      next: () => {
+        Object.assign(this.editingRow, updatedData);
+        this.messageService.add({ severity: 'success', summary: 'Updated', detail: `Order No ${this.editingRow.order_number} updated successfully` });
+        this.displayEditDialog = false;
+        this.calculateTotals(this.actionTableList);
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: 'Failed', detail: err.error?.message || 'Update failed' })
+    });
+  }
+
+  onDeleteRow(entity: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete Order No: "${entity.order_number}"?`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.featuresService.deleteMFDetailActionTableRow(this.mfId!, entity.id).subscribe({
+          next: () => {
+            this.actionTableList = this.actionTableList.filter(row => row.id !== entity.id);
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: `Order No ${entity.order_number} deleted`
+            });
+
+            this.calculateTotals(this.actionTableList);
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Failed',
+              detail: err.error?.message || 'Delete failed'
+            });
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelled',
+          detail: 'Delete cancelled'
+        });
+      }
+    });
   }
 
   // ---------------- Action Table ----------------
@@ -193,10 +331,6 @@ export class MutualFundDetailsComponent implements OnInit {
           detail: error.error?.message || 'Update for Nav value failed'
         })
     });
-  }
-
-  goBack(){
-    this.location.back();
   }
 
   getMFDetailUnderlyingTable(mfId: string) {
@@ -348,4 +482,6 @@ export class MutualFundDetailsComponent implements OnInit {
         return 'info';
     }
   }
+
+  goBack(){}
 }
