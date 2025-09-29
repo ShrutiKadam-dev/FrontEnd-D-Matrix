@@ -16,6 +16,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
+import { SpeedDial } from 'primeng/speeddial';
+import { FormConfig } from '../../../form-config';
+import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
+import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -105,6 +109,33 @@ export class MutualFundDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+
+  constructor(private fb: FormBuilder) {
+    const formConfig = new FormConfig(this.fb);
+    this.mfActionTableForm = formConfig.mfActionTableForm();
+
+    this.mfActionTableForm.get('unit')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.mfActionTableForm.get('nav')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+    this.mfActionTableForm.get('purchase_amount')?.valueChanges.subscribe(() => this.calculatePurchaseValue());
+
+    this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
+      if (val === 'Purchase') {
+        this.mfActionTableForm.get('redeem_amount')?.disable({ emitEvent: false });
+      }
+      else if (val === 'Sell') {
+        this.mfActionTableForm.get('purchase_amount')?.disable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_value')?.disable({ emitEvent: false });
+        this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+      }
+      else {
+        this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_amount')?.enable({ emitEvent: false });
+        this.mfActionTableForm.get('purchase_value')?.enable({ emitEvent: false });
+      }
+    });
+
+  }
 
   ngOnInit() {
     this.mfId = this.route.snapshot.paramMap.get('id');
@@ -300,10 +331,6 @@ export class MutualFundDetailsComponent implements OnInit {
           detail: error.error?.message || 'Update for Nav value failed'
         })
     });
-  }
-
-  goBack(){
-    this.location.back();
   }
 
   getMFDetailUnderlyingTable(mfId: string) {
