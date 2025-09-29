@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-fixed-income',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class FixedIncomeComponent {
 
+  constructor(private location: Location) {}
+
+  goBack(){
+    this.location.back();
+  }
 }
