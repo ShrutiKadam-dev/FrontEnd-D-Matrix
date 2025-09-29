@@ -28,6 +28,15 @@
     cursor: pointer;
     transition: all 0.3s ease;
 
+     i {
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background: rgba(41, 40, 40, 0.3);
+      transform: scale(1.1);
+    }
+
 }
 
 .first-div{

@@ -18,6 +18,7 @@ import { ChartModule } from 'primeng/chart';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-equity',
@@ -56,7 +57,8 @@ export class EquityComponent implements OnInit {
   totalActionTableCount = 0;
 
   @ViewChild('dt') dt!: Table;
-  constructor(private router: Router) { }
+  constructor(private router: Router,private location: Location) { }
+
 
   private featuresService = inject(FeaturesService);
   private messageService = inject(MessageService);
@@ -134,6 +136,11 @@ export class EquityComponent implements OnInit {
     });
   }
 
+  goBack(){
+    this.location.back();
+  }
+  
+
   goToEquityDetails(e: any) {
     if (!e) return;
 
@@ -179,7 +186,7 @@ export class EquityComponent implements OnInit {
     });
   }
 
-getAllActionTableEquity() {
+  getAllActionTableEquity() {
   this.featuresService.getAllActionTableEquity().subscribe({
     next: (res: any) => {
       if (res && res.data) {
@@ -223,7 +230,7 @@ this.directEquityTableList = res.data.direct_equity_data;
       });
     }
   });
-}
+  }
 
 
   onGlobalFilter(event: Event) {
