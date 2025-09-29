@@ -482,4 +482,6 @@ export class MutualFundDetailsComponent implements OnInit {
         return 'info';
     }
   }
+
+  goBack(){}
 }

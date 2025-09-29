@@ -12,10 +12,13 @@ import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { Location } from '@angular/common';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-sub-aif',
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule, CardModule, ChartModule, ButtonModule, CommonModule ],
+  imports: [ InputTextModule, 
+    TagModule,
+    FormsModule, AutoCompleteModule, CarouselModule, TableModule, CardModule, ChartModule, ButtonModule, CommonModule ],
     providers: [MessageService],
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
@@ -303,5 +306,12 @@ export class SubAifComponent {
     }
   }
 
+    getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'SUBSCRIPTION': return 'success';
+      case 'REDEMPTION': return 'danger';
+      default: return 'info';
+    }
+  }
 
 }
