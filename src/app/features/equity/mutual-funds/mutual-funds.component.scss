@@ -33,19 +33,6 @@
   margin-top: 50%;
 }
 
-
-/* ===== Card Container ===== */
-.counts-card .p-card {
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-  background: #fff;
-  min-height: 340px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 50%;
-}
-
 /* ===== Card Content ===== */
 .counts-card .card-content {
   display: flex;
@@ -109,28 +96,6 @@
   width: 100% !important;
   height: 100% !important;
 }
-
-/* ===== Dot Colors for Tags ===== */
-.dot.lcap {
-  background: #42A5F5;
-}
-
-/* Large Cap - Blue */
-.dot.mcap {
-  background: #66BB6A;
-}
-
-/* Mid Cap - Green */
-.dot.scap {
-  background: #FFA726;
-}
-
-/* Small Cap - Orange */
-.dot.Unknown {
-  background: #AB47BC;
-}
-
-/* Unknown / Others - Purple */
 
 .counts-card {
   margin-top: 2rem;
