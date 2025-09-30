@@ -235,8 +235,10 @@
             <td class="weightage-cell">
               <p-inputNumber formControlName="weightage" mode="decimal" [min]="0" [max]="100" [minFractionDigits]="0"
                 [maxFractionDigits]="3" [step]="0.001" placeholder="Enter weightage"
-                [readonly]="row.get('fromApi')?.value">
+                (onInput)="onWeightageChange(row, $event.value)">
               </p-inputNumber>
+
+
             </td>
             <td>
               <input pInputText type="text" formControlName="sector" placeholder="Enter Sector"

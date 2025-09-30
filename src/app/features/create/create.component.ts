@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -110,25 +110,6 @@ export class CreateComponent implements OnInit {
   //PMS
   isPmsMode: 'CLIENT' | 'AMC' | null = null;
 
-  openPmsClientAction(entity: any) {
-    this.selectedEntity = entity;
-    this.isPmsMode = 'CLIENT';
-    this.displayActionTableModal = true;
-    this.displayUpdateChoiceModal = false;
-
-    this.pmsClientActionForm.reset();
-    this.pmsClientActionForm.patchValue({ entityid: entity.entityid });
-  }
-
-  openPmsAmcAction(entity: any) {
-    this.selectedEntity = entity;
-    this.isPmsMode = 'AMC';
-    this.displayActionTableModal = true;
-    this.displayUpdateChoiceModal = false;
-    this.pmsAmcForm.reset();
-    this.pmsAmcForm.patchValue({ entityid: entity.entityid });
-  }
-
   companySuggestions: any[] = [];
   date: Date | undefined = new Date();
 
@@ -139,12 +120,6 @@ export class CreateComponent implements OnInit {
   pmsClientActionTableFields = PMS_CLIENT_ACTION_TABLE_FIELDS;
   pmsAmcActionTableFields = PMS_AMC_ACTION_TABLE_FIELDS;
 
-  private confirmationService = inject(ConfirmationService);
-  private featuresService = inject(FeaturesService);
-  private messageService = inject(MessageService);
-
-  @ViewChild('dt') dt!: Table;
-
   categoryOptions = CATEGORY_OPTIONS;
   orderTypeOptions = ORDER_TYPE_OPTIONS;
   PmsOrderTypeOptions = PMS_ORDER_TYPE_OPTIONS;
@@ -152,32 +127,13 @@ export class CreateComponent implements OnInit {
   allSubCategoryOptions = ALL_SUBCATEGORY_OPTIONS;
   subAIFCategoryOptions = SUB_AIF_CATEGORY_OPTIONS;
 
-  private calculatePurchaseValue(): void {
-    const orderType = this.mfActionTableForm.get('order_type')?.value;
+  private confirmationService = inject(ConfirmationService);
+  private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
 
-    //Skip calculation for Sell
-    if (orderType === 'Sell') {
-      return;
-    }
+  @ViewChild('dt') dt!: Table;
 
-    const unit = Number(this.mfActionTableForm.get('unit')?.value) || 0;
-    const nav = Number(this.mfActionTableForm.get('nav')?.value) || 0;
-    const total = unit * nav;
-    this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
-
-    const netTotal = Number(this.mfActionTableForm.get('purchase_amount')?.value) || 0;
-    this.mfActionTableForm.get('net_amount')?.setValue(netTotal.toFixed(2), { emitEvent: false });
-
-  }
-
-  private calculateNetTotalValue(): void {
-    const qty = Number(this.directEquityActionTableForm.get('qty')?.value) || 0;
-    const trade_price = Number(this.directEquityActionTableForm.get('trade_price')?.value) || 0;
-    const total = qty * trade_price;
-    this.directEquityActionTableForm.get('net_total')?.setValue(total.toFixed(2), { emitEvent: false });
-  }
-
-  constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder) {
     const formConfig = new FormConfig(this.fb);
 
     this.entityForm = formConfig.entityForm();
@@ -270,6 +226,45 @@ export class CreateComponent implements OnInit {
 
   }
 
+  private calculatePurchaseValue(): void {
+    const orderType = this.mfActionTableForm.get('order_type')?.value;
+
+    //Skip calculation for Sell
+    if (orderType === 'Sell') {
+      return;
+    }
+
+    const unit = Number(this.mfActionTableForm.get('unit')?.value) || 0;
+    const nav = Number(this.mfActionTableForm.get('nav')?.value) || 0;
+    const total = unit * nav;
+    this.mfActionTableForm.get('purchase_value')?.setValue(total.toFixed(2), { emitEvent: false });
+
+    const netTotal = Number(this.mfActionTableForm.get('purchase_amount')?.value) || 0;
+    this.mfActionTableForm.get('net_amount')?.setValue(netTotal.toFixed(2), { emitEvent: false });
+
+  }
+
+  private calculateNetTotalValue(): void {
+    const qty = Number(this.directEquityActionTableForm.get('qty')?.value) || 0;
+    const trade_price = Number(this.directEquityActionTableForm.get('trade_price')?.value) || 0;
+    const total = qty * trade_price;
+    this.directEquityActionTableForm.get('net_total')?.setValue(total.toFixed(2), { emitEvent: false });
+  }
+
+  private formatDateField(form: FormGroup, field: string) {
+    const val = form.get(field)?.value;
+    if (val) {
+      const date = new Date(val);
+      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+      const yyyy = localDate.getFullYear();
+      const mm = String(localDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(localDate.getDate()).padStart(2, '0');
+
+      form.get(field)?.setValue(`${yyyy}-${mm}-${dd}`, { emitEvent: false });
+    }
+  }
+
   fetchBenchmarks(categoryId: string, selectedBenchmark?: string) {
     this.featuresService.getBenchmarksByCategory(categoryId).subscribe({
       next: (res: any) => {
@@ -309,26 +304,28 @@ export class CreateComponent implements OnInit {
     return row;
   }
 
-  onWeightageChange(currentRow: FormGroup, enteredValue: string | number | null) {
-    // normalize everything to a number
-    const safeValue = enteredValue === null || enteredValue === '' ? null : Number(enteredValue);
+  onWeightageChange(currentRow: AbstractControl, enteredValue: string | number | null) {
+    const row = currentRow as FormGroup; // cast AbstractControl to FormGroup
+
+    // normalize to number
+    const safeValue = enteredValue === null || enteredValue === '' ? 0 : Number(enteredValue);
 
     const totalExcludingCurrent = this.rows.controls.reduce((sum, group) => {
-      if (group !== currentRow) {
+      if (group !== row) {
         return sum + (Number(group.get('weightage')?.value) || 0);
       }
       return sum;
     }, 0);
 
-    const newTotal = totalExcludingCurrent + (safeValue ?? 0);
+    const maxAllowed = 100 - totalExcludingCurrent;
 
-    if (newTotal > 100) {
-      currentRow.get('weightage')?.setValue(0, { emitEvent: false });
+    if (safeValue > maxAllowed) {
+      row.get('weightage')?.setValue(maxAllowed, { emitEvent: false });
 
       this.messageService.add({
         severity: 'error',
         summary: 'Invalid Weightage',
-        detail: 'Total weightage cannot exceed 100%'
+        detail: `Weightage cannot exceed ${maxAllowed}%`
       });
     }
   }
@@ -364,138 +361,6 @@ export class CreateComponent implements OnInit {
     this.displayUpdateChoiceModal = false;
   }
 
-  // ---------- Grid / CRUD ----------
-  onGlobalFilter(event: Event) {
-    const input = event.target as HTMLInputElement | null;
-    if (input && this.dt) this.dt.filter(input.value, 'global', 'contains');
-  }
-
-  getEntities() {
-    this.loading = true;
-
-    this.featuresService.getAllEntities().subscribe({
-      next: (data: any) => {
-        this.entityList = Array.isArray(data.data) ? data.data : [];
-        this.loading = false;
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: error.error?.message || 'Update failed'
-        });
-        this.loading = false;
-      }
-    });
-  }
-
-  showModal() {
-    this.isEditMode = false;
-    this.entityForm.reset();
-    this.displayModal = true;
-  }
-
-  addEntity() {
-    const formData = this.entityForm.value;
-    this.featuresService.createEntity(formData).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Entity added successfully' });
-        this.entityForm.reset();
-        this.displayModal = false;
-        this.getEntities();
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: error.error?.message || 'Update failed'
-        });
-      }
-    });
-  }
-
-  editEntity(entity: any) {
-    this.isEditMode = true;
-    this.selectedEntity = entity;
-
-    this.entityForm.patchValue({
-      category: entity.category,
-      subcategory: entity.subcategory,
-      scripname: entity.scripname,
-      scripcode: entity.scripcode,
-      nickname: entity.nickname,
-      isin: entity.isin,
-      aif_category: entity.aif_category || '',
-      aif_class: entity.aif_class || '',
-      benchmark_name: null // leave null until options are loaded
-    });
-
-    // Apply ISIN rules after patch
-    if (entity.subcategory === 'PMS') {
-      this.entityForm.get('isin')?.reset();
-      this.entityForm.get('isin')?.disable({ emitEvent: false });
-    } else {
-      this.entityForm.get('isin')?.enable({ emitEvent: false });
-    }
-
-    this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
-
-    const previousBenchmark = entity.benchmark_name || entity.benchmark;
-
-    this.featuresService.getBenchmarksByCategory(entity.category).subscribe({
-      next: (res: any) => {
-        this.benchmarkOptions = (res.data || []).map((b: any) => ({
-          label: b.benchmark_name,
-          value: b.benchmark_name
-        }));
-
-        if (previousBenchmark) {
-          const matched = this.benchmarkOptions.find(
-            (b: any) => b.value?.toLowerCase() === previousBenchmark.toLowerCase()
-          );
-          if (matched) {
-            this.entityForm.get('benchmark_name')?.setValue(matched.value, { emitEvent: false });
-          }
-        }
-      },
-      error: (err) => console.error('Error fetching benchmarks', err)
-    });
-
-    this.displayModal = true;
-  }
-
-
-  saveUpdatedEntity() {
-    const updatedData = { id: this.selectedEntity.id, ...this.entityForm.value };
-    this.featuresService.updateEntity(updatedData).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Entity updated successfully' });
-        this.resetForm();
-        this.getEntities();
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: error.error?.message || 'Update failed'
-        });
-      }
-    });
-  }
-
-  updateEntity(entity: any) {
-    this.selectedEntity = entity;
-    this.displayUpdateChoiceModal = true;
-  }
-
-  resetForm() {
-    this.entityForm.reset();
-    this.isEditMode = false;
-    this.selectedEntity = null;
-    this.displayModal = false;
-  }
-
-  // ---------- Underlying ----------
   updateUnderlyingTable(entity: any) {
     this.selectedEntityId = entity.entityid;
 
@@ -594,6 +459,158 @@ export class CreateComponent implements OnInit {
       },
       error: () => this.isSubmitting = false
     });
+  }
+
+    openPmsClientAction(entity: any) {
+    this.selectedEntity = entity;
+    this.isPmsMode = 'CLIENT';
+    this.displayActionTableModal = true;
+    this.displayUpdateChoiceModal = false;
+
+    this.pmsClientActionForm.reset();
+    this.pmsClientActionForm.patchValue({ entityid: entity.entityid });
+  }
+
+  openPmsAmcAction(entity: any) {
+    this.selectedEntity = entity;
+    this.isPmsMode = 'AMC';
+    this.displayActionTableModal = true;
+    this.displayUpdateChoiceModal = false;
+    this.pmsAmcForm.reset();
+    this.pmsAmcForm.patchValue({ entityid: entity.entityid });
+  }
+
+
+  // ---------- Grid / CRUD ----------
+  onGlobalFilter(event: Event) {
+    const input = event.target as HTMLInputElement | null;
+    if (input && this.dt) this.dt.filter(input.value, 'global', 'contains');
+  }
+
+  getEntities() {
+    this.loading = true;
+
+    this.featuresService.getAllEntities().subscribe({
+      next: (data: any) => {
+        this.entityList = Array.isArray(data.data) ? data.data : [];
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
+        this.loading = false;
+      }
+    });
+  }
+
+  showModal() {
+    this.isEditMode = false;
+    this.entityForm.reset();
+    this.displayModal = true;
+  }
+
+  // Entity Helper
+  addEntity() {
+    const formData = this.entityForm.value;
+    this.featuresService.createEntity(formData).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Entity added successfully' });
+        this.entityForm.reset();
+        this.displayModal = false;
+        this.getEntities();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
+      }
+    });
+  }
+
+  editEntity(entity: any) {
+    this.isEditMode = true;
+    this.selectedEntity = entity;
+
+    this.entityForm.patchValue({
+      category: entity.category,
+      subcategory: entity.subcategory,
+      scripname: entity.scripname,
+      scripcode: entity.scripcode,
+      nickname: entity.nickname,
+      isin: entity.isin,
+      aif_category: entity.aif_category || '',
+      aif_class: entity.aif_class || '',
+      benchmark_name: null // leave null until options are loaded
+    });
+
+    // Apply ISIN rules after patch
+    if (entity.subcategory === 'PMS') {
+      this.entityForm.get('isin')?.reset();
+      this.entityForm.get('isin')?.disable({ emitEvent: false });
+    } else {
+      this.entityForm.get('isin')?.enable({ emitEvent: false });
+    }
+
+    this.subCategoryOptions = this.allSubCategoryOptions[entity.category] || [];
+
+    const previousBenchmark = entity.benchmark_name || entity.benchmark;
+
+    this.featuresService.getBenchmarksByCategory(entity.category).subscribe({
+      next: (res: any) => {
+        this.benchmarkOptions = (res.data || []).map((b: any) => ({
+          label: b.benchmark_name,
+          value: b.benchmark_name
+        }));
+
+        if (previousBenchmark) {
+          const matched = this.benchmarkOptions.find(
+            (b: any) => b.value?.toLowerCase() === previousBenchmark.toLowerCase()
+          );
+          if (matched) {
+            this.entityForm.get('benchmark_name')?.setValue(matched.value, { emitEvent: false });
+          }
+        }
+      },
+      error: (err) => console.error('Error fetching benchmarks', err)
+    });
+
+    this.displayModal = true;
+  }
+
+  saveUpdatedEntity() {
+    const updatedData = { id: this.selectedEntity.id, ...this.entityForm.value };
+    this.featuresService.updateEntity(updatedData).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Entity updated successfully' });
+        this.resetForm();
+        this.getEntities();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
+      }
+    });
+  }
+
+  updateEntity(entity: any) {
+    this.selectedEntity = entity;
+    this.displayUpdateChoiceModal = true;
+  }
+
+
+  resetForm() {
+    this.entityForm.reset();
+    this.isEditMode = false;
+    this.selectedEntity = null;
+    this.displayModal = false;
   }
 
   private finishSubmission(successMessage: string) {
@@ -813,20 +830,6 @@ export class CreateComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to save ETF data' });
       }
     });
-  }
-
-  private formatDateField(form: FormGroup, field: string) {
-    const val = form.get(field)?.value;
-    if (val) {
-      const date = new Date(val);
-      const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-
-      const yyyy = localDate.getFullYear();
-      const mm = String(localDate.getMonth() + 1).padStart(2, '0');
-      const dd = String(localDate.getDate()).padStart(2, '0');
-
-      form.get(field)?.setValue(`${yyyy}-${mm}-${dd}`, { emitEvent: false });
-    }
   }
 
   saveAifActionTableData() {
