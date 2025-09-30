@@ -21,6 +21,7 @@ import { SpeedDial } from 'primeng/speeddial';
 import { FormConfig } from '../../../form-config';
 import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
 import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -113,7 +114,7 @@ export class MutualFundDetailsComponent implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private location: Location) {
     const formConfig = new FormConfig(this.fb);
     this.mfActionTableForm = formConfig.mfActionTableForm();
 
@@ -186,6 +187,10 @@ export class MutualFundDetailsComponent implements OnInit {
         command: () => this.onDeleteRow(entity)
       }
     ];
+  }
+
+  goBack(){
+    this.location.back();
   }
 
   onEditRow(entity: any) {
@@ -503,5 +508,5 @@ export class MutualFundDetailsComponent implements OnInit {
     }
   }
 
-  goBack() { }
+  
 }
