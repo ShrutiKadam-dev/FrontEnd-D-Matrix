@@ -90,34 +90,3 @@
 .counts-card {
   margin-top:2rem; /* or any value you prefer */
 }
-
-//back button css
-.back-btn{
-  background: rgba(49, 36, 36, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-     i {
-      font-size: 1rem;
-    }
-
-    &:hover {
-      background: rgba(41, 40, 40, 0.3);
-      transform: scale(1.1);
-    }
-
-}
-
-.first-div{
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-
-
