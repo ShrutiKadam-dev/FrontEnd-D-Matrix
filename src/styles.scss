@@ -212,3 +212,20 @@ label {
 }
 
 
+/* Add Entity Button */
+.add-entity-btn.p-button {
+  background: linear-gradient(145deg, #7299cd, #5a7fb8) !important; 
+  border: none !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+.add-entity-btn.p-button:hover {
+  background: linear-gradient(145deg, #7ea7dd, #6a8fbe) !important; 
+}
+
+.add-entity-btn.p-button:focus {
+  box-shadow: 0 0 0 3px rgba(114, 153, 205, 0.4) !important;
+}

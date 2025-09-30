@@ -241,8 +241,8 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <button pButton label="Cancel" class="p-button-text" (click)="displayEditDialog=false"></button>
-    <button pButton label="Save" class="p-button-primary" (click)="saveEdit()"></button>
+    <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayEditDialog=false"></p-button>
+    <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check"  (click)="saveEdit()"></p-button>
   </ng-template>
 </p-dialog>
 
