@@ -216,7 +216,7 @@ export class MutualFundsComponent implements OnInit {
         this.sectorCounts = { total_count: totalCount };
 
         this.sectorChartData = {
-          labels: this.sectorTableList.map(s => s.sector),
+          labels: this.sectorTableList.map(s => s.tag),
           datasets: [{
             data: this.sectorTableList.map(s => s.overall_tag_percent),
             backgroundColor: this.sectorTableList.map(s => s.color),
