@@ -461,7 +461,7 @@ export class CreateComponent implements OnInit {
     });
   }
 
-    openPmsClientAction(entity: any) {
+  openPmsClientAction(entity: any) {
     this.selectedEntity = entity;
     this.isPmsMode = 'CLIENT';
     this.displayActionTableModal = true;
@@ -479,7 +479,6 @@ export class CreateComponent implements OnInit {
     this.pmsAmcForm.reset();
     this.pmsAmcForm.patchValue({ entityid: entity.entityid });
   }
-
 
   // ---------- Grid / CRUD ----------
   onGlobalFilter(event: Event) {
@@ -604,7 +603,6 @@ export class CreateComponent implements OnInit {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = true;
   }
-
 
   resetForm() {
     this.entityForm.reset();

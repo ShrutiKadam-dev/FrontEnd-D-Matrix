@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, viewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -108,6 +108,7 @@ export class MutualFundDetailsComponent implements OnInit {
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('actionTableTransactions') actionTableTransactions!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
+  @ViewChild('navTableSummary') navTableSummary!: Table;
 
   private route = inject(ActivatedRoute);
   private featuresService = inject(FeaturesService);
@@ -302,13 +303,15 @@ export class MutualFundDetailsComponent implements OnInit {
     this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
   }
 
-  onGlobalFilter(event: Event, tableType: 'action' | 'underlying') {
+  onGlobalFilter(event: Event, tableType: 'action' | 'underlying' | 'nav') {
     const input = event.target as HTMLInputElement | null;
     if (input) {
       if (tableType === 'action' && this.actionTableSummary) {
         this.actionTableSummary.filterGlobal(input.value, 'contains');
       } else if (tableType === 'underlying' && this.underlyingTable) {
         this.underlyingTable.filterGlobal(input.value, 'contains');
+      } else if (tableType === 'nav' && this.navTableSummary){
+        this.navTableSummary.filterGlobal(input.value, 'contains')
       }
     }
   }

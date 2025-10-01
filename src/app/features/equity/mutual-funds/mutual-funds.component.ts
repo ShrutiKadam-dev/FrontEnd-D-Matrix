@@ -160,9 +160,9 @@ export class MutualFundsComponent implements OnInit {
 
         // Dynamic actionCounts
         this.actionCounts = { total_count: totalCount };
-        res.data.forEach((tagData: { tag: string; tag_count: number; tag_percent: number }) => {
+        res.data.forEach((tagData: { tag: string; tag_count: number; overall_tag_percent: number }) => {
           const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
-          this.actionCounts[`${key}_percent`] = tagData.tag_percent || 0;
+          this.actionCounts[`${key}_percent`] = tagData.overall_tag_percent || 0;
           this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
         });
 
@@ -171,7 +171,7 @@ export class MutualFundsComponent implements OnInit {
         this.mcapChartData = {
           labels: res.data.map((d: { tag: string }) => d.tag),
           datasets: [{
-            data: res.data.map((d: { tag_percent: number }) => d.tag_percent),
+            data: res.data.map((d: { overall_tag_percent: number }) => d.overall_tag_percent),
             backgroundColor: this.underlyingTableList.map(s => s.color),
             hoverBackgroundColor: this.underlyingTableList.map(s => s.color)
           }]
@@ -218,7 +218,7 @@ export class MutualFundsComponent implements OnInit {
         this.sectorChartData = {
           labels: this.sectorTableList.map(s => s.sector),
           datasets: [{
-            data: this.sectorTableList.map(s => s.sector_percent),
+            data: this.sectorTableList.map(s => s.overall_tag_percent),
             backgroundColor: this.sectorTableList.map(s => s.color),
             hoverBackgroundColor: this.sectorTableList.map(s => s.color)
           }]
