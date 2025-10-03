@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, viewChild } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ChangeDetectorRef  } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -103,6 +103,8 @@ export class MutualFundDetailsComponent implements OnInit {
   orderTypeOptions = ORDER_TYPE_OPTIONS;
   modeOptions = MODE_OPTIONS;
 
+  data: any;
+  options: any;
 
   // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
@@ -115,7 +117,8 @@ export class MutualFundDetailsComponent implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
-  constructor(private fb: FormBuilder, private location: Location) {
+  constructor(private fb: FormBuilder, private location: Location, private cd: ChangeDetectorRef) {
+    
     const formConfig = new FormConfig(this.fb);
     this.mfActionTableForm = formConfig.mfActionTableForm();
 
@@ -347,10 +350,66 @@ export class MutualFundDetailsComponent implements OnInit {
 
   getAllMutualFundDetailsNav(ISIN: string) {
     this.featuresService.getAllMutualFundDetailsNav(ISIN).subscribe({
-      next: (data: any) => {
-        this.allNavs = Array.isArray(data.data) ? data.data : [];
+      next: (res: any) => {
+        const allNavs = Array.isArray(res.data) ? res.data : [];
+
         const navValue = this.allNavs?.[0]?.nav;
         this.totalValue = Number.isFinite(navValue) ? navValue * this.availableUnits : 0;
+
+        const labels = allNavs.map((item: any) => item.nav_date);
+        const values = allNavs.map((item: any) => item.nav);
+
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--p-text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+        const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+
+        this.data = {
+          labels,
+          datasets: [
+            {
+              label: 'NAV',
+              data: values,
+              fill: false,
+              borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
+              tension: 0.4
+            }
+          ]
+        };
+
+        this.options = {
+          maintainAspectRatio: false,
+          aspectRatio: 0.6,
+          plugins: {
+            legend: {
+              labels: {
+                color: textColor
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: textColorSecondary
+              },
+              grid: {
+                color: surfaceBorder,
+                drawBorder: false
+              }
+            },
+            y: {
+              ticks: {
+                color: textColorSecondary
+              },
+              grid: {
+                color: surfaceBorder,
+                drawBorder: false
+              }
+            }
+          }
+        };
+
+        this.cd.markForCheck();
       },
       error: (error) =>
         this.messageService.add({
