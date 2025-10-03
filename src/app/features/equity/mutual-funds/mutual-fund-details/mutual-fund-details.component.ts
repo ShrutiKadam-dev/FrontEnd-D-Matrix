@@ -87,7 +87,6 @@ export class MutualFundDetailsComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   selectedDate = '';
-  allNavs: any;
 
   // ---- Chart configs
   mcapChartData: any;
@@ -105,6 +104,7 @@ export class MutualFundDetailsComponent implements OnInit {
 
   data: any;
   options: any;
+  allNavs: any[] = []; 
 
   // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
@@ -351,13 +351,13 @@ export class MutualFundDetailsComponent implements OnInit {
   getAllMutualFundDetailsNav(ISIN: string) {
     this.featuresService.getAllMutualFundDetailsNav(ISIN).subscribe({
       next: (res: any) => {
-        const allNavs = Array.isArray(res.data) ? res.data : [];
+         this.allNavs = Array.isArray(res.data) ? res.data : [];
 
         const navValue = this.allNavs?.[0]?.nav;
         this.totalValue = Number.isFinite(navValue) ? navValue * this.availableUnits : 0;
 
-        const labels = allNavs.map((item: any) => item.nav_date);
-        const values = allNavs.map((item: any) => item.nav);
+        const labels = this.allNavs.map((item: any) => item.nav_date);
+        const values = this.allNavs.map((item: any) => item.nav);
 
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--p-text-color');
