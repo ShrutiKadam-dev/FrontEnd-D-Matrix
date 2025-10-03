@@ -395,6 +395,10 @@ export class FeaturesService {
     return this.http.get<any>(`${this.apiUrl}/getALLMutualFundActionTableIRR`)
   }
 
+  getAllMFEquityTotalValue() {
+    return this.http.get<any>(`${this.apiUrl}/getAllMFEquitytotalValue`)
+  }
+
   //Get IRR service for Direct Equity 
   getDirectEquityIrrById(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getDirectEquityIRR`, {

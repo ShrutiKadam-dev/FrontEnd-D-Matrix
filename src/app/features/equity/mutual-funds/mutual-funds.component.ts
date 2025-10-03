@@ -87,7 +87,22 @@ export class MutualFundsComponent implements OnInit {
     this.getAllActionTable();
     this.getallMfEquityUnderlyingCount();
     this.getAllMfEquitySectorCount();
+    this.getAllMFEquityTotalValue();
     this.fetchIrr();
+  }
+
+  getAllMFEquityTotalValue(){
+     this.featuresService.getAllMFEquityTotalValue().subscribe({
+      next: (response) => {
+        this.irrResult = response?.annualized_irr_percent ?? null;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching IRR:', err);
+        this.errorMessage = 'Failed to fetch IRR';
+        this.isLoading = false;
+      }
+    });
   }
 
   fetchIrr(): void {
