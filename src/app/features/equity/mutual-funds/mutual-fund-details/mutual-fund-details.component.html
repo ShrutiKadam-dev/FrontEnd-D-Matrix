@@ -1,8 +1,8 @@
 <div class="first-div">
   <button class="back-btn" (click)="goBack()">
-  <i class="pi pi-arrow-left"></i>
-</button>
-<h3>Welcome To The {{mfDetails[0]?.scripname || "Mutual Fund Details"}}</h3>
+    <i class="pi pi-arrow-left"></i>
+  </button>
+  <h3>Welcome To The {{mfDetails[0]?.scripname || "Mutual Fund Details"}}</h3>
 </div>
 
 <!-- Summary of Action -->
@@ -66,9 +66,13 @@
         <td>{{ entity.nav | number:'1.2-2' }}</td>
         <td>{{ entity.unit | number:'1.2-2' }}</td>
         <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
-        <td>{{ entity.purchase_amount | number:'1.2-2' }}</td>
+        <td>
+          {{ entity.purchase_amount !== '-' ? (entity.purchase_amount | number:'1.2-2') : '-' }}
+        </td>
         <td>{{ entity.net_amount | number:'1.2-2' }}</td>
-        <td>{{ entity.redeem_amount | number:'1.2-2' }}</td>
+        <td>
+          {{ entity.redeem_amount !== '-' ? (entity.redeem_amount | number:'1.2-2') : '-' }}
+        </td>
         <td>{{ entity.sett_no }}</td>
         <td>
           <p-speeddial [model]="getRowActions(entity)" direction="left" type="linear" showIcon="pi pi-plus"
@@ -242,16 +246,17 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times" (click)="displayEditDialog=false"></p-button>
-    <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check"  (click)="saveEdit()"></p-button>
+    <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
+      (click)="displayEditDialog=false"></p-button>
+    <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" (click)="saveEdit()"></p-button>
   </ng-template>
 </p-dialog>
 
 <div class="table-card" *ngIf="allNavs.length > 0">
-   <h4>Summary Of NAV</h4>
+  <h4>Summary Of NAV</h4>
   <div class="card">
     <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-</div>
+  </div>
 </div>
 
 

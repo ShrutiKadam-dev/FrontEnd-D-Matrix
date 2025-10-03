@@ -107,7 +107,7 @@
         </div>
         <div *ngFor="let s of sectorTableList" class="count-item">
           <span class="dot" [ngStyle]="{'background-color': s.color}"></span>
-          <span class="label">{{ s.tag }}</span>
+          <span class="label">{{ s.sector }}</span>
           <span class="percent">{{ s.overall_tag_percent | number:'1.0-1' }}%</span>
         </div>
       </div>
