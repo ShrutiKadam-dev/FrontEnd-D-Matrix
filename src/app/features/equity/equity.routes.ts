@@ -5,11 +5,11 @@ import { EquityComponent } from './equity.component';
 export const equityRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'equity',
+        redirectTo: 'equity-home',
         pathMatch: 'full'
     },
     {
-        path: 'equity',
+        path: 'equity-home',
         component: EquityComponent
     },
     {

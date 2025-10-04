@@ -316,3 +316,40 @@ label {
 .counts-card {
   margin-top: 2rem;
 }
+
+//table total value cards 
+.green-card { background-color: #d4edda; }
+.blue-card { background-color: #cce5ff; }
+.yellow-card { background-color: #fff3cd; }
+
+
+.summary.green { color: #16a34a; }
+.summary.blue { color: #2563eb; }
+.summary.red { color: #dc2626; }
+
+
+.card {
+  flex: 1 1 120px; /* small width cards */
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.card h4 {
+  margin: 0 0 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.card-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}

@@ -5,11 +5,11 @@ import { CommoditiesComponent } from './commodities.component';
 export const commoditiesRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'commodities',
+        redirectTo: 'commodities-home',
         pathMatch: 'full'
     },
     {
-        path: 'commodities',
+        path: 'commodities-home',
         component: CommoditiesComponent
     },
     {

@@ -62,7 +62,7 @@
     <ng-template pTemplate="body" let-entity>
       <tr>
         <td>{{ entity.order_number }}</td>
-        <td>{{ entity.order_date }}</td>
+        <td>{{ entity.order_date | date:'dd-MM-yyyy'}}</td>
         <td>{{ entity.nav | number:'1.2-2' }}</td>
         <td>{{ entity.unit | number:'1.2-2' }}</td>
         <td><p-tag [value]="entity.order_type" [severity]="getSeverity(entity.order_type)" /></td>
@@ -101,7 +101,6 @@
           Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>
-
     </ng-template>
 
     <ng-template #emptymessage>

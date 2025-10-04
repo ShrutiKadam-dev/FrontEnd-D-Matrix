@@ -53,6 +53,8 @@ export class SubAifComponent {
   actionCounts: any = {};
   sectorCounts: any = {};
 
+  totalValue = 0;
+
   // ---- Table refs
   @ViewChild('actionTableSummary') actionTableSummary!: Table;
   @ViewChild('underlyingTable') underlyingTable!: Table;
@@ -124,11 +126,8 @@ export class SubAifComponent {
 
     this.featuresService.getAifIrrById(entityid).subscribe({
       next: (response) => {
-        // Assuming API returns { irr: 0.1234 }
         this.irrResult = response?.annualized_irr_percent?? null;
-        
-        console.log(entityid, this.irrResult);
-        
+                
         this.isLoading = false;
       },
       error: (err) => {
@@ -176,8 +175,6 @@ export class SubAifComponent {
   // Available = Purchases - Sales
   this.availableUnits = this.totalPurchaseUnits - this.totalSalesUnits;
   this.availableAmount = this.totalPurchaseAmount - this.totalSalesAmount;
-
-  
 
   // Safety: if any totals are NaN, reset to 0
   this.totalPurchaseUnits ||= 0;
@@ -306,7 +303,7 @@ export class SubAifComponent {
     }
   }
 
-    getSeverity(orderType: string) {
+  getSeverity(orderType: string) {
     switch (orderType?.trim()?.toUpperCase()) {
       case 'SUBSCRIPTION': return 'success';
       case 'REDEMPTION': return 'danger';

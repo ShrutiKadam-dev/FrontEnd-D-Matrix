@@ -5,11 +5,11 @@ import { FixedIncomeComponent } from './fixed-income.component';
 export const fixedIncomeRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'fixed-income',
+        redirectTo: 'fixed-income-home',
         pathMatch: 'full'
     },
     {
-        path: 'fixed-income',
+        path: 'fixed-income-home',
         component: FixedIncomeComponent
     },
     {

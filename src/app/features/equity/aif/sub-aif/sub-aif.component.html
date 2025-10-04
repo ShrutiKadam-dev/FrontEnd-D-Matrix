@@ -4,8 +4,8 @@
 </button>
 <h3>Welcome To The {{aifDetails[0]?.scripname || "AIF"}}</h3>
 </div>
-<!-- summary of action -->
 
+<!-- summary of action -->
 <div class="table-card">
   <!-- Header -->
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -16,6 +16,26 @@
       <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search actions..." />
     </div>
   </div>
+
+    <div class="card-row">
+    <div class="card green-card">
+      <h4>Total Available Units</h4>
+      <p>Units: {{ availableUnits | number:'1.2-2' }}</p>
+      <p>Amount: {{ availableAmount | currency:'INR' }}</p>
+    </div>
+
+    <div class="card blue-card">
+      <h4>Total Units Sold</h4>
+      <p>Units: {{ totalSalesUnits | number:'1.2-2' }}</p>
+      <p>Amount: {{ totalSalesAmount | currency:'INR' }}</p>
+    </div>
+
+    <div class="card yellow-card">
+      <h4>Total Value</h4>
+      <p>{{ totalValue | currency:'INR' }}</p>
+    </div>
+  </div>
+
   <!-- Action Table -->
   <p-table #actionTableSummary [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
@@ -24,7 +44,7 @@
       <tr>
         <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
-        <th pSortableColumn="trans_date">Order Date <p-sortIcon field="trans_date"></p-sortIcon></th>
+        <th pSortableColumn="trans_date">Trade Date <p-sortIcon field="trans_date"></p-sortIcon></th>
         <th pSortableColumn="trans_type">Action <p-sortIcon field="trans_type"></p-sortIcon></th>
         <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon
             field="contribution_amount"></p-sortIcon></th>
@@ -39,7 +59,7 @@
       <tr>
         <td>{{ entity.amc_name }}</td>
         <td>{{ entity.num_units }}</td>
-        <td>{{ entity.trans_date }}</td>
+        <td>{{ entity.trans_date | date:'dd-MM-yyyy' }}</td>
         <td><p-tag [value]="entity.trans_type" [severity]="getSeverity(entity.trans_type)"></p-tag></td>
         <td>{{ entity.contribution_amount }}</td>
         <td>{{ entity.stamp_duty }}</td>
@@ -49,18 +69,22 @@
       </tr>
     </ng-template>
 
+        <!-- Footer (Summary Row) -->
     <ng-template pTemplate="footer">
       <tr class="summary-row">
-        <td colspan="3" class="summary green">
-          Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-          Amount: {{ totalPurchaseAmount | currency:'INR' }}
-        </td>
-        <td colspan="3" class="summary blue">
-          Available → Units: {{ availableUnits | number:'1.2-2' }} |
+        <td colspan="9" class="summary green">
+          Total Available Units → Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount | currency:'INR' }}
         </td>
-        <td colspan="3" class="summary red text-right">
-          Sales → Units: {{ totalSalesUnits | number:'1.2-2' }} |
+      </tr>
+      <tr class="summary-row">
+        <td colspan="9" class="summary blue">
+          Total Value → {{ totalValue | currency:'INR' }}
+        </td>
+      </tr>
+      <tr class="summary-row">
+        <td colspan="9" class="summary red">
+          Total Units Sold → Units: {{ totalSalesUnits | number:'1.2-2' }} |
           Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>

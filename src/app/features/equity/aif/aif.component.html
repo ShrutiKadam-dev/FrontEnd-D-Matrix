@@ -81,7 +81,7 @@
       <tr>
         <td>{{ entity.amc_name }}</td>
         <td>{{ entity.num_units }}</td>
-        <td>{{ entity.trans_date }}</td>
+        <td>{{ entity.trans_date | date:'dd-MM-yyyy' }}</td>
         <td><p-tag [value]="entity.trans_type" [severity]="getSeverity(entity.trans_type)"></p-tag></td>
         <td>{{ entity.amount_invested }}</td>
       </tr>
