@@ -224,10 +224,10 @@ export class MutualFundsComponent implements OnInit {
 
         this.sectorTableList = res.data;
         this.sectorTableList.forEach((s, i) => {
-          const hue = (i * 360) / this.sectorTableList.length; // spread across 360°
+          const hue = (i * 360) / this.sectorTableList.length;
           s.color = `hsl(${hue}, 70%, 50%)`;
         });
-        const totalCount = res.data[0]?.total_sector_count || 0;
+        const totalCount = res.data[0]?.overall_tag_count || 0;
         this.sectorCounts = { total_count: totalCount };
 
         this.sectorChartData = {
