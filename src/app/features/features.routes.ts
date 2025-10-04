@@ -23,6 +23,10 @@ export const featuresRoutes: Routes = [
         loadComponent: () => import('./create/create.component').then(c => c.CreateComponent)
     },
     {
+        path: 'compare',
+        loadComponent: () => import('./compare/compare.component').then(c => c.CompareComponent)
+    },
+    {
         path: 'fixed-income',
         loadChildren: () => import('./fixed-income/fixed-income.routes').then(c => c.fixedIncomeRoutes)
     }

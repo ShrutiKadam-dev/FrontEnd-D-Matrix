@@ -128,6 +128,12 @@ export class AppComponent implements OnInit {
         ]
       },
       {
+        label: 'Compare',
+        icon: 'pi pi-arrow-right-arrow-left',
+        routerLink: ['/features/compare'],
+        tooltipOptions: { tooltipLabel: 'Compare', tooltipPosition: 'right' }
+      },
+      {
         label: 'Entity',
         icon: 'pi pi-plus-circle',
         routerLink: ['/features/create'],

@@ -1,0 +1,66 @@
+<div class="table-card p-4">
+  <div class="card flex flex-col items-center gap-4">
+
+    <form [formGroup]="compareForm" class="flex flex-col md:flex-row gap-3 w-full justify-center" (ngSubmit)="compareEntities($event)">
+
+      <!-- Entity 1 -->
+      <p-dropdown
+        formControlName="entity1"
+        [options]="entityList"
+        optionLabel="scripname"
+        optionValue="scripcode"
+        [filter]="true"
+        filterBy="scripname"
+        [showClear]="true"
+        placeholder="Select Entity 1"
+        styleClass="w-64"
+      >
+        <ng-template let-entity pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ entity.scripname }}</div>
+            <small class="text-color-secondary ml-2">({{ entity.scripcode }})</small>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <!-- Entity 2 -->
+      <p-dropdown
+        formControlName="entity2"
+        [options]="filteredEntity2List"
+        optionLabel="scripname"
+        optionValue="scripcode"
+        [filter]="true"
+        filterBy="scripname"
+        [showClear]="true"
+        placeholder="Select Entity 2"
+        styleClass="w-64"
+      >
+        <ng-template let-entity pTemplate="item">
+          <div class="flex align-items-center gap-2">
+            <div>{{ entity.scripname }}</div>
+            <small class="text-color-secondary ml-2">({{ entity.scripcode }})</small>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
+      <button
+        pButton
+        type="submit"
+        label="Compare"
+        icon="pi pi-chart-bar"
+        [disabled]="compareForm.invalid"
+      ></button>
+
+    </form>
+
+  </div>
+
+      <!-- Comparison Result -->
+    <div *ngIf="comparisonResult !== null" class="mt-4 p-4 w-full md:w-2/3 border rounded shadow-sm bg-gray-50 text-center">
+      <h3 class="text-lg font-semibold mb-2">Comparison Result</h3>
+      <p>
+        {{ selectedEntity1?.scripname }} vs {{ selectedEntity2?.scripname }}:
+        <span class="font-bold text-blue-600">{{ comparisonResult }}%</span>
+      </p>
+    </div>
+</div>
