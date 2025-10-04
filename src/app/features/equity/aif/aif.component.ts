@@ -113,7 +113,7 @@ export class AifComponent {
         console.log(this.displayAifs)
       },
       
-      error: () => console.error('Failed to load Mutual Funds')
+      error: () => console.error('Failed to load AIF')
     }); 
     
   }
@@ -121,12 +121,9 @@ export class AifComponent {
   getAllAifContractNotes(){
       this.featuresService.getAllAifContractNotes().subscribe({
         next:(res:any ) => {
-          this.allAifContractNotes = res?.data || [];
-          console.log(this.allAifContractNotes);
-          
-          
+          this.allAifContractNotes = res?.data || [];          
         },
-        error: () => console.error('Failed to load Mutual Funds')
+        error: () => console.error('Failed to load AIF')
       })
   }
 

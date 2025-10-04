@@ -115,7 +115,7 @@ export class SubAifComponent {
         //   : (this.aifDetails?.isin ?? null);
         // if (isin) this.getAllMutualFundDetailsNav(isin);
       },
-      error: (err: any) => console.error('Failed to load Mutual Fund details', err)
+      error: (err: any) => console.error('Failed to load AIF details', err)
     });
   }
 

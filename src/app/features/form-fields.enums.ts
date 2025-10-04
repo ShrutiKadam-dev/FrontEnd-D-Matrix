@@ -79,7 +79,7 @@ export const AIF_ACTION_TABLE_FIELDS: ActionTableField[] = [
     { key: 'contribution_amount', label: 'Contribution Amount' },
     { key: 'setup_expense', label: 'Setup Expense' },
     { key: 'stamp_duty', label: 'Stamp Duty' },
-    { key: 'post_tax_nav', label: 'Post-Tax Allotment/ Redemption NAV' },
+    { key: 'post_tax_nav', label: 'Post-Tax Allotment / Redemption NAV' },
     { key: 'num_units', label: 'Number of Units' },
     { key: 'balance_units', label: 'Balance Units' },
     { key: 'strategy_name', label: 'Strategy Name' },
