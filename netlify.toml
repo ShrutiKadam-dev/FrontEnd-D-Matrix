@@ -1,7 +1,7 @@
 
-  publish = "dist/mutual-fund"
+  publish = "dist/mutual-fund/browser"
   command = "ng build --prod"
 
   from = "/*"
   to = "/index.html"
-  status = 200
+  status = 200  
