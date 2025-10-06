@@ -666,21 +666,37 @@ export class CreateComponent implements OnInit {
           isin: entity.isin,
         });
 
-        this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
-          if (val === 'Purchase') {
-            this.mfActionTableForm.get('redeem_amount')?.disable({ emitEvent: false });
-          }
-          else if (val === 'Sell') {
-            this.mfActionTableForm.get('purchase_amount')?.disable({ emitEvent: false });
-            this.mfActionTableForm.get('purchase_value')?.disable({ emitEvent: false });
-            this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
-          }
-          else {
-            this.mfActionTableForm.get('redeem_amount')?.enable({ emitEvent: false });
-            this.mfActionTableForm.get('purchase_amount')?.enable({ emitEvent: false });
-            this.mfActionTableForm.get('purchase_value')?.enable({ emitEvent: false });
-          }
-        });
+this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
+  const purchaseAmount = this.mfActionTableForm.get('purchase_amount');
+  const purchaseValue = this.mfActionTableForm.get('purchase_value');
+  const redeemAmount = this.mfActionTableForm.get('redeem_amount');
+
+  if (val === 'Purchase') {
+    // Clear and disable redeem fields
+    redeemAmount?.reset(null, { emitEvent: false });
+    redeemAmount?.disable({ emitEvent: false });
+
+    // Enable purchase fields
+    purchaseAmount?.enable({ emitEvent: false });
+    purchaseValue?.enable({ emitEvent: false });
+  }
+  else if (val === 'Sell') {
+    // Clear and disable purchase fields
+    purchaseAmount?.reset(null, { emitEvent: false });
+    purchaseValue?.reset(null, { emitEvent: false });
+    purchaseAmount?.disable({ emitEvent: false });
+    purchaseValue?.disable({ emitEvent: false });
+
+    // Enable redeem field
+    redeemAmount?.enable({ emitEvent: false });
+  }
+  else {
+    // Enable everything
+    purchaseAmount?.enable({ emitEvent: false });
+    purchaseValue?.enable({ emitEvent: false });
+    redeemAmount?.enable({ emitEvent: false });
+  }
+});
 
         break;
       default:
