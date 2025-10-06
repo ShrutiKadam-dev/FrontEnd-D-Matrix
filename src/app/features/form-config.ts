@@ -25,6 +25,7 @@ export class FormConfig {
       pre_tax_nav: ['', Validators.required],
       post_tax_nav: ['', Validators.required],
       nav_date: ['', Validators.required],
+      isin: ['', Validators.required],
     });
   }
 
@@ -33,6 +34,7 @@ export class FormConfig {
       entityid: ['', Validators.required],
       nav_date: ['', Validators.required],
       nav: ['', Validators.required],
+      isin: ['', Validators.required],
     });
   }
 

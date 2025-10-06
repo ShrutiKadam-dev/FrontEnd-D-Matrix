@@ -642,7 +642,10 @@ export class CreateComponent implements OnInit {
 
       case 'AIF':
         this.aifActionTableForm.reset();
-        this.aifActionTableForm.patchValue({ entityid: entity.entityid });
+        this.aifActionTableForm.patchValue({ 
+          entityid: entity.entityid,
+          isin: entity.isin
+        });
         break;
 
       case 'ETF':
@@ -887,13 +890,19 @@ export class CreateComponent implements OnInit {
     this.selectedEntity = entity;
     this.displayUpdateChoiceModal = false;
 
-    if (entity.category === 'Equity' && entity.subcategory === 'Alternative Investment Funds') {
+    if (entity.subcategory === 'Alternative Investment Funds') {
       this.navFormAIF.reset();
-      this.navFormAIF.patchValue({ entityid: entity.entityid });
+      this.navFormAIF.patchValue({ 
+        entityid: entity.entityid,
+        isin: entity.isin,
+       });
       this.displayNavModal = true;
     } else if (entity.category === 'Equity' && entity.subcategory === 'Mutual Fund') {
       this.navFormMF.reset();
-      this.navFormMF.patchValue({ entityid: entity.entityid });
+      this.navFormMF.patchValue({ 
+        entityid: entity.entityid,
+        isin: entity.isin,
+      });
       this.displayNavModal = true;
     }
   }
