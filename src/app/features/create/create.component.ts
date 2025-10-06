@@ -133,7 +133,7 @@ export class CreateComponent implements OnInit {
 
   @ViewChild('dt') dt!: Table;
 
-    constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     const formConfig = new FormConfig(this.fb);
 
     this.entityForm = formConfig.entityForm();
@@ -642,7 +642,7 @@ export class CreateComponent implements OnInit {
 
       case 'AIF':
         this.aifActionTableForm.reset();
-        this.aifActionTableForm.patchValue({ 
+        this.aifActionTableForm.patchValue({
           entityid: entity.entityid,
           isin: entity.isin
         });
@@ -666,39 +666,39 @@ export class CreateComponent implements OnInit {
           isin: entity.isin,
         });
 
-this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
-  const purchaseAmount = this.mfActionTableForm.get('purchase_amount');
-  const purchaseValue = this.mfActionTableForm.get('purchase_value');
-  const redeemAmount = this.mfActionTableForm.get('redeem_amount');
+        this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) => {
+          const purchaseAmount = this.mfActionTableForm.get('purchase_amount');
+          const purchaseValue = this.mfActionTableForm.get('purchase_value');
+          const redeemAmount = this.mfActionTableForm.get('redeem_amount');
 
-  if (val === 'Purchase') {
-    // Clear and disable redeem fields
-    redeemAmount?.reset(null, { emitEvent: false });
-    redeemAmount?.disable({ emitEvent: false });
+          if (val === 'Purchase') {
+            // Clear and disable redeem fields
+            redeemAmount?.reset(null, { emitEvent: false });
+            redeemAmount?.disable({ emitEvent: false });
 
-    // Enable purchase fields
-    purchaseAmount?.enable({ emitEvent: false });
-    purchaseValue?.enable({ emitEvent: false });
-  }
-  else if (val === 'Sell') {
-    // Clear and disable purchase fields
-    purchaseAmount?.reset(null, { emitEvent: false });
-    purchaseValue?.reset(null, { emitEvent: false });
-    purchaseAmount?.disable({ emitEvent: false });
-    purchaseValue?.disable({ emitEvent: false });
+            // Enable purchase fields
+            purchaseAmount?.enable({ emitEvent: false });
+            purchaseValue?.enable({ emitEvent: false });
+          }
+          else if (val === 'Sell') {
+            // Clear and disable purchase fields
+            purchaseAmount?.reset(null, { emitEvent: false });
+            purchaseValue?.reset(null, { emitEvent: false });
+            purchaseAmount?.disable({ emitEvent: false });
+            purchaseValue?.disable({ emitEvent: false });
 
-    // Enable redeem field
-    redeemAmount?.enable({ emitEvent: false });
-  }
-  else {
-    // Enable everything
-    purchaseAmount?.enable({ emitEvent: false });
-    purchaseValue?.enable({ emitEvent: false });
-    redeemAmount?.enable({ emitEvent: false });
-  }
-});
-
+            // Enable redeem field
+            redeemAmount?.enable({ emitEvent: false });
+          }
+          else {
+            // Enable everything
+            purchaseAmount?.enable({ emitEvent: false });
+            purchaseValue?.enable({ emitEvent: false });
+            redeemAmount?.enable({ emitEvent: false });
+          }
+        });
         break;
+
       default:
         break;
     }
@@ -908,14 +908,14 @@ this.mfActionTableForm.get('order_type')?.valueChanges.subscribe((val: string) =
 
     if (entity.subcategory === 'Alternative Investment Funds') {
       this.navFormAIF.reset();
-      this.navFormAIF.patchValue({ 
+      this.navFormAIF.patchValue({
         entityid: entity.entityid,
         isin: entity.isin,
-       });
+      });
       this.displayNavModal = true;
     } else if (entity.category === 'Equity' && entity.subcategory === 'Mutual Fund') {
       this.navFormMF.reset();
-      this.navFormMF.patchValue({ 
+      this.navFormMF.patchValue({
         entityid: entity.entityid,
         isin: entity.isin,
       });
