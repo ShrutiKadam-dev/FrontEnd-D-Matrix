@@ -247,6 +247,14 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getallMFEquitySectorCount`);
   }
 
+  getAllAIFEquityUnderlyingCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFEquityUnderlyingCount`);
+  }
+
+  getAllAIFEquitySectorCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFEquitySectorCount`);
+  }
+
   getallMfDetailsEquitySectorCount(mfId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getallMFDetailsEquitySectorCount`, {
       params: { entityid: mfId }

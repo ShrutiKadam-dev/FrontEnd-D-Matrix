@@ -78,6 +78,8 @@ export const AIF_ACTION_TABLE_FIELDS: ActionTableField[] = [
     { key: 'trans_type', label: 'Transaction Type' },
     { key: 'contribution_amount', label: 'Contribution Amount' },
     { key: 'setup_expense', label: 'Setup Expense' },
+    { key: 'isin', label: 'ISIN' },
+    { key: 'amount_invested', label: 'Amount Invested' },
     { key: 'stamp_duty', label: 'Stamp Duty' },
     { key: 'post_tax_nav', label: 'Post-Tax Allotment / Redemption NAV' },
     { key: 'num_units', label: 'Number of Units' },

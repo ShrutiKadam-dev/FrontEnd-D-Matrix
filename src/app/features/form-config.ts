@@ -52,6 +52,8 @@ export class FormConfig {
       trans_type: ['', Validators.required],
       contribution_amount: ['', Validators.required],
       setup_expense: [''],
+      isin: ['', Validators.required],
+      amount_invested: ['', Validators.required],
       stamp_duty: [''],
       price: [''],
       post_tax_nav: [''],

@@ -12,12 +12,24 @@ import { FeaturesService } from '../../features.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
 import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule,
-    TagModule,TooltipModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
+  imports: [ 
+    InputTextModule,
+    TagModule,
+    TooltipModule,
+     FormsModule, 
+     AutoCompleteModule, 
+     CarouselModule, 
+     TableModule,
+     CardModule,
+     CommonModule,
+     ChartModule
+    ],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })
@@ -32,16 +44,30 @@ export class AifComponent {
   displayAifs: any[] = [];
   allAifContractNotes: any[] = [];
 
+  underlyingTableList: any[] = [];
+  sectorTableList: any[] = [];
+
+  actionCounts: any = {};
+  sectorCounts: any = {};
+
+  mcapChartData: any;
+  mcapChartOptions: any;
+  sectorChartData: any;
+  sectorChartOptions: any;
+
   @ViewChild('dt') dt!: Table;
 
   ngOnInit() {
     this.getAllAifEntities();
-    this.getAllAifContractNotes()
+    this.getAllAifContractNotes();
+    this.getAllMfEquitySectorCount();
+    this.getallMfEquityUnderlyingCount();
   }
   
   private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
 
-    responsiveOptions = [
+  responsiveOptions = [
     {
       breakpoint: '1024px',
       numVisible: 3,
@@ -74,7 +100,7 @@ export class AifComponent {
     );
   }
 
-    scrollToAif(mf: any) {
+   scrollToAif(mf: any) {
     if (mf) {
       this.displayAifs = [mf]; // show only selected MF card in search mode
     }
@@ -85,7 +111,7 @@ export class AifComponent {
     this.displayAifs = [...this.allAifs]; // restore carousel items
   }
  
-   getColor(nickname?: string) {
+  getColor(nickname?: string) {
     const predefinedColors: { [key: string]: string } = {
       'MF1': '#FFD580',
       'MF2': '#FFB3B3',
@@ -115,7 +141,7 @@ export class AifComponent {
       
       error: () => console.error('Failed to load AIF')
     }); 
-    
+   
   }
 
   getAllAifContractNotes(){
@@ -134,7 +160,7 @@ export class AifComponent {
     }
   }
 
-    getSeverity(orderType: string) {
+  getSeverity(orderType: string) {
     switch (orderType?.trim()?.toUpperCase()) {
       case 'SUBSCRIPTION': return 'success';
       case 'REDEMPTION': return 'danger';
@@ -142,5 +168,109 @@ export class AifComponent {
     }
   }
   
+  getallMfEquityUnderlyingCount() {
+    this.featuresService.getAllAIFEquityUnderlyingCount().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.underlyingTableList = [];
+          this.mcapChartData = null;
+          return;
+        }
+
+        this.underlyingTableList = res.data;
+        this.underlyingTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.underlyingTableList.length; // spread across 360°
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
+
+        const totalCount = res.data[0]?.total_tag_count || 0;
+
+        // Dynamic actionCounts
+        this.actionCounts = { total_count: totalCount };
+        res.data.forEach((tagData: { tag: string; tag_count: number; overall_tag_percent: number }) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.overall_tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
+
+        // Dynamic chart colors
+ 
+        this.mcapChartData = {
+          labels: res.data.map((d: { tag: string }) => d.tag),
+          datasets: [{
+            data: res.data.map((d: { overall_tag_percent: number }) => d.overall_tag_percent),
+            backgroundColor: this.underlyingTableList.map(s => s.color),
+            hoverBackgroundColor: this.underlyingTableList.map(s => s.color)
+          }]
+        };
+
+        this.mcapChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
+    });
+  }
+
+  getAllMfEquitySectorCount() {
+    this.featuresService.getAllAIFEquitySectorCount().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.sectorTableList = [];
+          this.sectorChartData = null;
+          return;
+        }
+
+        this.sectorTableList = res.data;
+        this.sectorTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.sectorTableList.length;
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
+        const totalCount = res.data[0]?.overall_tag_count || 0;
+        this.sectorCounts = { total_count: totalCount };
+
+        this.sectorChartData = {
+          labels: this.sectorTableList.map(s => s.sector),
+          datasets: [{
+            data: this.sectorTableList.map(s => s.overall_tag_percent),
+            backgroundColor: this.sectorTableList.map(s => s.color),
+            hoverBackgroundColor: this.sectorTableList.map(s => s.color)
+          }]
+        };
+
+        this.sectorChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
+    });
+  }
+
 
 }
