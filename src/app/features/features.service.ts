@@ -190,8 +190,20 @@ export class FeaturesService {
     });
   }
 
+  updateAIFDetailActionTableRow(rowId: string, payload: any) {
+    return this.http.put<any>(`${this.apiUrl}/updateAIFDetailActionTableRow`, payload, {
+      params: { id: rowId }
+    });
+  }
+
   deleteMFDetailActionTableRow(Id: string) {
     return this.http.delete<any>(`${this.apiUrl}/deleteMFDetailActionTableRow`, {
+      params: { id: Id }
+    });
+  }
+
+  deleteAIFDetailActionTableRow(Id: string) {
+    return this.http.delete<any>(`${this.apiUrl}/deleteAIFDetailActionTableRow`, {
       params: { id: Id }
     });
   }

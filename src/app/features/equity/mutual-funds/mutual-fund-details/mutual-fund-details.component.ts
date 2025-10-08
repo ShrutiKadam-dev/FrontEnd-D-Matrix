@@ -22,6 +22,7 @@ import { FormConfig } from '../../../form-config';
 import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
 import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
 import { Location } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-mutual-fund-details',
@@ -32,6 +33,7 @@ import { Location } from '@angular/common';
     ButtonModule,
     InputTextModule,
     DropdownModule,
+    ToastModule,
     CommonModule,
     SpeedDial,
     MessagesModule,
@@ -94,7 +96,7 @@ export class MutualFundDetailsComponent implements OnInit {
   sectorChartData: any;
   sectorChartOptions: any;
 
-  displayEditDialog = false;
+  displayActionRowEditDialog = false;
   mfActionTableForm: FormGroup;
   editingRow: any = null;
   mfActionTableFields = MF_ACTION_TABLE_FIELDS;
@@ -210,7 +212,7 @@ export class MutualFundDetailsComponent implements OnInit {
     }
 
     this.mfActionTableForm.patchValue(patchData);
-    this.displayEditDialog = true;
+    this.displayActionRowEditDialog = true;
   }
 
   saveEdit() {
@@ -226,14 +228,14 @@ export class MutualFundDetailsComponent implements OnInit {
       const day = String(d.getDate()).padStart(2, '0');
       const month = String(d.getMonth() + 1).padStart(2, '0');
       const year = d.getFullYear();
-      updatedData.order_date = `${day}-${month}-${year}`;
+      updatedData.order_date = `${year}-${month}-${day}`;
     }
 
     this.featuresService.updateMFDetailActionTableRow(this.editingRow.id, updatedData).subscribe({
       next: () => {
         Object.assign(this.editingRow, updatedData);
         this.messageService.add({ severity: 'success', summary: 'Updated', detail: `Order No ${this.editingRow.order_number} updated successfully` });
-        this.displayEditDialog = false;
+        this.displayActionRowEditDialog = false;
         this.calculateTotals(this.actionTableList);
       },
       error: (err) => this.messageService.add({ severity: 'error', summary: 'Failed', detail: err.error?.message || 'Update failed' })
@@ -424,7 +426,7 @@ export class MutualFundDetailsComponent implements OnInit {
     this.featuresService.getMFDetailUnderlyingTable(mfId).subscribe({
       next: (data) => {
         this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
-        this.selectedDate = this.underlyingTableList[0]?.created_at?.split('T')[0] || '';
+        this.selectedDate = this.underlyingTableList?.[0]?.created_at?.split('T')[0] ?? '';
       },
       error: (err) =>
         this.messageService.add({

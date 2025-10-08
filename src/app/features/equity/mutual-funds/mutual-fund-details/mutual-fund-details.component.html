@@ -2,7 +2,7 @@
   <button class="back-btn" (click)="goBack()">
     <i class="pi pi-arrow-left"></i>
   </button>
-  <h3>Welcome To The {{mfDetails[0]?.scripname || "Mutual Fund Details"}}</h3>
+   <h3> Welcome To The {{ mfDetails?.[0]?.scripname || mfDetails?.scripname || 'Mutual Fund Details' }}</h3>
 </div>
 
 <!-- Summary of Action -->
@@ -54,7 +54,7 @@
         <th pSortableColumn="net_amount">Net Amt <p-sortIcon field="purchase_amount"></p-sortIcon></th>
         <th pSortableColumn="redeem_amount">Redeem <p-sortIcon field="redeem_amount"></p-sortIcon></th>
         <th pSortableColumn="sett_no">Sett No <p-sortIcon field="sett_no"></p-sortIcon></th>
-        <th pSortableColumn="sett_no">Action <p-sortIcon field="sett_no"></p-sortIcon></th>
+        <th>Action  </th>
       </tr>
     </ng-template>
 
@@ -210,7 +210,7 @@
 </div>
 
 <!-- edit action table row -->
-<p-dialog header="Edit Action" [(visible)]="displayEditDialog" [modal]="true" [closable]="true"
+<p-dialog header="Edit Action" [(visible)]="displayActionRowEditDialog" [modal]="true" [closable]="true"
   [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
   <form [formGroup]="mfActionTableForm" class="p-fluid">
     <div class="field" *ngFor="let field of currentActionTableFields">
@@ -246,7 +246,7 @@
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
-      (click)="displayEditDialog=false"></p-button>
+      (click)="displayActionRowEditDialog=false"></p-button>
     <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" (click)="saveEdit()"></p-button>
   </ng-template>
 </p-dialog>
@@ -260,3 +260,4 @@
 </div>
 
 <p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

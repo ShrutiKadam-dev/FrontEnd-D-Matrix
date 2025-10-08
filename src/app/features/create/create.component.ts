@@ -101,6 +101,8 @@ export class CreateComponent implements OnInit {
   // Contract note modal
   displayActionTableModal = false;
 
+  private weightageErrorShown = false;
+
   // NAV
   displayNavModal = false;
 
@@ -305,7 +307,7 @@ export class CreateComponent implements OnInit {
   }
 
   onWeightageChange(currentRow: AbstractControl, enteredValue: string | number | null) {
-    const row = currentRow as FormGroup; // cast AbstractControl to FormGroup
+    const row = currentRow as FormGroup;
 
     // normalize to number
     const safeValue = enteredValue === null || enteredValue === '' ? 0 : Number(enteredValue);
@@ -320,13 +322,20 @@ export class CreateComponent implements OnInit {
     const maxAllowed = 100 - totalExcludingCurrent;
 
     if (safeValue > maxAllowed) {
-      row.get('weightage')?.setValue(maxAllowed, { emitEvent: false });
+      // Prevent multiple messages
+      if (!this.weightageErrorShown) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Invalid Weightage',
+          detail: `Weightage cannot exceed ${maxAllowed}%`
+        });
+        this.weightageErrorShown = true;
+      }
 
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Invalid Weightage',
-        detail: `Weightage cannot exceed ${maxAllowed}%`
-      });
+      // Update the value
+      row.get('weightage')?.setValue(maxAllowed, { emitEvent: false });
+    } else {
+      this.weightageErrorShown = false; // reset when value is valid
     }
   }
 
