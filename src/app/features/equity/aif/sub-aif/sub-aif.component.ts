@@ -22,11 +22,13 @@ import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-sub-aif',
   imports: [
     InputTextModule,
     TagModule,
+    ConfirmDialog,
     FormsModule,
     SpeedDial,
     AutoCompleteModule,
@@ -49,7 +51,6 @@ import { ToastModule } from 'primeng/toast';
 export class SubAifComponent {
 
   aifId!: string | null;
-  contractNote: any[] = [];
   underlyingList: any[] = [];
   irrResult: number | null = null;
   isLoading = false;
@@ -107,8 +108,8 @@ export class SubAifComponent {
       this.loadAIFDetails(this.aifId);
       this.getAifActionTableById(this.aifId);
       this.getUnderlyingTable(this.aifId);
-      this.getAIFDetailsEquityMCAPCount(this.aifId);
       this.getAIFDetailsEquitySectorCount(this.aifId);
+      this.getAIFDetailsEquityMCAPCount(this.aifId);
       this.fetchIrr(this.aifId);
     }
 
@@ -123,9 +124,9 @@ export class SubAifComponent {
 
     this.featuresService.getAifActionTableById(aifId).subscribe({
       next: (res: any) => {
-        this.contractNote = res?.data || [];
-        this.calculateTotals(this.contractNote)
-        console.log(this.contractNote);
+        this.actionTableList = res?.data || [];
+        this.calculateTotals(this.actionTableList)
+        console.log(this.actionTableList);
       },
       error: () => console.error('Failed to fetch AIF Action Table')
     })
@@ -392,18 +393,17 @@ export class SubAifComponent {
 
   onDeleteRow(entity: any) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete Order No: "${entity.order_number}"?`,
+      message: `Are you sure you want to delete AMC Name: "${entity.amc_name}"?`,
       header: 'Confirm Delete',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.featuresService.deleteAIFDetailActionTableRow(entity.id).subscribe({
+        this.featuresService.deleteAIFDetailActionTableRow(entity.aif_id).subscribe({
           next: () => {
-            this.actionTableList = this.actionTableList.filter(row => row.id !== entity.id);
-
+            this.actionTableList = this.actionTableList.filter(row => row.aif_id !== entity.aif_id);
             this.messageService.add({
               severity: 'success',
               summary: 'Deleted',
-              detail: `Order No ${entity.order_number} deleted`
+              detail: `AMC Name ${entity.amc_name} deleted`
             });
 
             this.calculateTotals(this.actionTableList);

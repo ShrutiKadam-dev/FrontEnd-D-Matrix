@@ -57,7 +57,6 @@ export class FormConfig {
       isin: ['', Validators.required],
       amount_invested: ['', Validators.required],
       stamp_duty: [''],
-      price: [''],
       post_tax_nav: [''],
       num_units: ['', Validators.required],
       balance_units: [''],

@@ -37,7 +37,7 @@
   </div>
 
   <!-- Action Table -->
-  <p-table #actionTableSummary [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5"
+  <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="5"
     [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
@@ -244,4 +244,5 @@
   </ng-template>
 </p-dialog>
 
+<p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>

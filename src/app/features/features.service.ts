@@ -191,7 +191,7 @@ export class FeaturesService {
   }
 
   updateAIFDetailActionTableRow(rowId: string, payload: any) {
-    return this.http.put<any>(`${this.apiUrl}/updateAIFDetailActionTableRow`, payload, {
+    return this.http.post<any>(`${this.apiUrl}/updateAIFDetailActionTableRow`, payload, {
       params: { id: rowId }
     });
   }
@@ -202,9 +202,9 @@ export class FeaturesService {
     });
   }
 
-  deleteAIFDetailActionTableRow(Id: string) {
+  deleteAIFDetailActionTableRow(aif_id: string) {
     return this.http.delete<any>(`${this.apiUrl}/deleteAIFDetailActionTableRow`, {
-      params: { id: Id }
+      params: { aif_id: aif_id }
     });
   }
 
