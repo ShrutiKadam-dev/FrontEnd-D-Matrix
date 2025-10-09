@@ -208,12 +208,6 @@ export class FeaturesService {
     });
   }
 
-  getETFDetailsEquityById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getETFDetailsEquityById`, {
-      params: { entityid: id }
-    });
-  }
-
   getDirectEquityCommodityDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getDEDetailCommoditiesEntityById`, {
       params: { entityid: id }
