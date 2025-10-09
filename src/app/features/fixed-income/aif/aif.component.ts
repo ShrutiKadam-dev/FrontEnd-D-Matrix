@@ -9,13 +9,27 @@ import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { FeaturesService } from '../../features.service';
+import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
-
+import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
+import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
+  imports: [ 
+    InputTextModule,
+    TagModule,
+    TooltipModule,
+     FormsModule, 
+     AutoCompleteModule, 
+     CarouselModule, 
+     TableModule,
+     CardModule,
+     CommonModule,
+     ChartModule
+    ],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })
@@ -30,32 +44,30 @@ export class AifComponent {
   displayAifs: any[] = [];
   allAifContractNotes: any[] = [];
 
+  underlyingTableList: any[] = [];
+  sectorTableList: any[] = [];
+
+  actionCounts: any = {};
+  sectorCounts: any = {};
+
+  mcapChartData: any;
+  mcapChartOptions: any;
+  sectorChartData: any;
+  sectorChartOptions: any;
+
   @ViewChild('dt') dt!: Table;
 
   ngOnInit() {
-    this.getAllAifEntities();
-    this.getAllAifContractNotes()
+    this.getAllAifFixedIncomeEntities();
+    this.getAllAifFixedIncomeActionTable();
+    this.getAllAIFFixedIncomeSectorCount();
+    this.getAllAIFFixedIncomeUnderlyingCount();
   }
   
   private featuresService = inject(FeaturesService);
+  private messageService = inject(MessageService);
 
-   actionTableList = [
-    { id: 1, scrip_name: 'ABC Ltd', unit: 100, order_date: '2025-08-10', order_type: 'Buy', purchase_amount: 5000 },
-    { id: 2, scrip_name: 'XYZ Corp', unit: 50, order_date: '2025-08-11', order_type: 'Sell', purchase_amount: 2500 },
-    { id: 3, scrip_name: 'LMN Pvt', unit: 200, order_date: '2025-08-12', order_type: 'Buy', purchase_amount: 10000 },
-    { id: 4, scrip_name: 'QRS Inc', unit: 75, order_date: '2025-08-13', order_type: 'Sell', purchase_amount: 3750 },
-    { id: 5, scrip_name: 'TUV Group', unit: 120, order_date: '2025-08-14', order_type: 'Buy', purchase_amount: 6000 }
-  ];
-
-    aifList = [
-    {id:1, name: 'AIF One', value: '₹1,00,000', entityId: 'ENT-001' },
-    {id:2, name: 'AIF Two', value: '₹2,50,000', entityId: 'ENT-002' },
-    {id:3, name: 'AIF Three', value: '₹3,75,000', entityId: 'ENT-003' },
-    {id:4, name: 'AIF Four', value: '₹4,50,000', entityId: 'ENT-004' },
-    {id:5, name: 'AIF Five', value: '₹5,00,000', entityId: 'ENT-005' }
-  ];
-
-    responsiveOptions = [
+  responsiveOptions = [
     {
       breakpoint: '1024px',
       numVisible: 3,
@@ -73,12 +85,12 @@ export class AifComponent {
     }
   ];  
 
-   goToAif(item: any) {
-    this.router.navigate(['/features/equity/sub-aif', item.entityid]);
-  }
-
   goBack(){
     this.location.back();
+  }
+
+  goToAif(item: any) {
+    this.router.navigate(['/features/fixed-income/sub-aif', item.entityid]);
   }
 
   searchAifs(event: any) {
@@ -88,7 +100,7 @@ export class AifComponent {
     );
   }
 
-    scrollToAif(mf: any) {
+   scrollToAif(mf: any) {
     if (mf) {
       this.displayAifs = [mf]; // show only selected MF card in search mode
     }
@@ -99,7 +111,7 @@ export class AifComponent {
     this.displayAifs = [...this.allAifs]; // restore carousel items
   }
  
-   getColor(nickname?: string) {
+  getColor(nickname?: string) {
     const predefinedColors: { [key: string]: string } = {
       'MF1': '#FFD580',
       'MF2': '#FFB3B3',
@@ -115,8 +127,8 @@ export class AifComponent {
     return `hsl(${hue}, 70%, 85%)`;
   }
 
-  getAllAifEntities() {
-    this.featuresService.getAllAifEntities().subscribe({
+  getAllAifFixedIncomeEntities() {
+    this.featuresService.getAllAifFixedIncomeEntities().subscribe({
       next: (res: any) => {
         this.allAifs = res?.data || [];
         this.allAifs.forEach(de => {
@@ -127,21 +139,17 @@ export class AifComponent {
         console.log(this.displayAifs)
       },
       
-      error: () => console.error('Failed to load Mutual Funds')
+      error: () => console.error('Failed to load AIF Entity')
     }); 
-    
+   
   }
 
-  getAllAifContractNotes(){
-
-      this.featuresService.getAllAifContractNotes().subscribe({
+  getAllAifFixedIncomeActionTable(){
+      this.featuresService.getAllAifFixedIncomeActionTable().subscribe({
         next:(res:any ) => {
-          this.allAifContractNotes = res?.data || [];
-          console.log(this.allAifContractNotes);
-          
-          
+          this.allAifContractNotes = res?.data || [];          
         },
-        error: () => console.error('Failed to load Mutual Funds')
+        error: () => console.error('Failed to load AIF Action Table')
       })
   }
 
@@ -152,7 +160,117 @@ export class AifComponent {
     }
   }
 
-
+  getSeverity(orderType: string) {
+    switch (orderType?.trim()?.toUpperCase()) {
+      case 'SUBSCRIPTION': return 'success';
+      case 'REDEMPTION': return 'danger';
+      default: return 'info';
+    }
+  }
   
+  getAllAIFFixedIncomeUnderlyingCount() {
+    this.featuresService.getAllAIFFixedIncomeUnderlyingCount().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.underlyingTableList = [];
+          this.mcapChartData = null;
+          return;
+        }
+
+        this.underlyingTableList = res.data;
+        this.underlyingTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.underlyingTableList.length; // spread across 360°
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
+
+        const totalCount = res.data[0]?.total_tag_count || 0;
+
+        // Dynamic actionCounts
+        this.actionCounts = { total_count: totalCount };
+        res.data.forEach((tagData: { tag: string; tag_count: number; overall_tag_percent: number }) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.overall_tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
+
+        // Dynamic chart colors
+ 
+        this.mcapChartData = {
+          labels: res.data.map((d: { tag: string }) => d.tag),
+          datasets: [{
+            data: res.data.map((d: { overall_tag_percent: number }) => d.overall_tag_percent),
+            backgroundColor: this.underlyingTableList.map(s => s.color),
+            hoverBackgroundColor: this.underlyingTableList.map(s => s.color)
+          }]
+        };
+
+        this.mcapChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load AIF MCAP chart'
+      })
+    });
+  }
+
+  getAllAIFFixedIncomeSectorCount() {
+    this.featuresService.getAllAIFFixedIncomeSectorCount().subscribe({
+      next: (res: any) => {
+        if (!res?.data?.length) {
+          this.sectorTableList = [];
+          this.sectorChartData = null;
+          return;
+        }
+
+        this.sectorTableList = res.data;
+        this.sectorTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.sectorTableList.length;
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
+        const totalCount = res.data[0]?.overall_tag_count || 0;
+        this.sectorCounts = { total_count: totalCount };
+
+        this.sectorChartData = {
+          labels: this.sectorTableList.map(s => s.sector),
+          datasets: [{
+            data: this.sectorTableList.map(s => s.overall_tag_percent),
+            backgroundColor: this.sectorTableList.map(s => s.color),
+            hoverBackgroundColor: this.sectorTableList.map(s => s.color)
+          }]
+        };
+
+        this.sectorChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
+              }
+            }
+          }
+        };
+      },
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load AIF Sector chart'
+      })
+    });
+  }
+
 
 }

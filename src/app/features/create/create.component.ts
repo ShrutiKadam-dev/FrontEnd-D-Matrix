@@ -728,7 +728,7 @@ export class CreateComponent implements OnInit {
     const sub = entity?.subcategory;
 
     if (cat === 'Equity' && sub === 'Direct Equity') return 'DE';
-    if (cat === 'Equity' && sub === 'Alternative Investment Funds') return 'AIF';
+    if ( sub === 'Alternative Investment Funds') return 'AIF';
     if (cat === 'Commodities' && sub === 'ETF' || cat === 'Equity' && sub === 'ETF' || cat === 'Fixed_Income' && sub === 'ETF') return 'ETF';
     if (cat === 'Commodities' && sub === 'Direct Equity') return 'DECOM';
     if (sub === 'PMS' && this.isPmsMode === 'CLIENT') return 'PMS_CLIENT';

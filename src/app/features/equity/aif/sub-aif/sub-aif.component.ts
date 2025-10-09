@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -48,7 +48,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
 })
-export class SubAifComponent {
+export class SubAifComponent implements OnInit {
 
   aifId!: string | null;
   underlyingList: any[] = [];
@@ -144,7 +144,7 @@ export class SubAifComponent {
   }
 
   loadAIFDetails(id: string) {
-    this.featuresService.getAIFEquityDetailsById(id).subscribe({
+    this.featuresService.getEntityById(id).subscribe({
       next: (res: any) => {
         this.aifDetails = res?.data || {};
         // const isin = Array.isArray(this.aifDetails) && this.aifDetails[0]?.isin

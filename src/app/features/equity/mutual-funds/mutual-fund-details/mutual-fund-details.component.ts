@@ -323,7 +323,7 @@ export class MutualFundDetailsComponent implements OnInit {
 
   // ---------------- APIs ----------------
   loadMfDetails(id: string) {
-    this.featuresService.getMutualFundDetailsById(id).subscribe({
+    this.featuresService.getEntityById(id).subscribe({
       next: (res: any) => {
         this.mfDetails = res?.data || {};
         const isin = Array.isArray(this.mfDetails) && this.mfDetails[0]?.isin

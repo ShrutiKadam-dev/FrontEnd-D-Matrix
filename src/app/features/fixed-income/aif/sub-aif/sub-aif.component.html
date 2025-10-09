@@ -1,8 +1,11 @@
-<h3>Welcome To The {{contractNote[0]?.amc_name || "AIF"}}</h3>
-
+<div class="first-div">
+  <button class="back-btn" (click)="goBack()">
+    <i class="pi pi-arrow-left"></i>
+  </button>
+  <h3>Welcome To The {{aifDetails[0]?.scripname || "AIF"}}</h3>
+</div>
 
 <!-- summary of action -->
-
 <div class="table-card">
   <!-- Header -->
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -10,18 +13,39 @@
         style="height: 28px;"></button>
     </h4>
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search actions..." />
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search actions..." />
     </div>
   </div>
+
+  <div class="card-row">
+    <div class="card green-card">
+      <h4>Total Available Units</h4>
+      <p>Units: {{ availableUnits | number:'1.2-2' }}</p>
+      <p>Amount: {{ availableAmount | currency:'INR' }}</p>
+    </div>
+
+    <div class="card blue-card">
+      <h4>Total Units Sold</h4>
+      <p>Units: {{ totalSalesUnits | number:'1.2-2' }}</p>
+      <p>Amount: {{ totalSalesAmount | currency:'INR' }}</p>
+    </div>
+
+    <div class="card yellow-card">
+      <h4>Total Value</h4>
+      <p>{{ totalValue | currency:'INR' }}</p>
+    </div>
+  </div>
+
   <!-- Action Table -->
-  <p-table #dt [value]="contractNote" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 25, 50]"
+  <p-table #actionTableSummary [value]="actionTableList" dataKey="id" [paginator]="true" [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
-        <th pSortableColumn="trans_date">Order Date <p-sortIcon field="trans_date"></p-sortIcon></th>
+        <th pSortableColumn="trans_date">Trade Date <p-sortIcon field="trans_date"></p-sortIcon></th>
         <th pSortableColumn="trans_type">Action <p-sortIcon field="trans_type"></p-sortIcon></th>
         <th pSortableColumn="contribution_amount">Contribution Amount <p-sortIcon
             field="contribution_amount"></p-sortIcon></th>
@@ -29,6 +53,7 @@
         <th pSortableColumn="amount_invested">Amount Invested <p-sortIcon field="amount_invested"></p-sortIcon></th>
         <th pSortableColumn="balance_units">Balance Units <p-sortIcon field="balance_units"></p-sortIcon></th>
         <th pSortableColumn="post_tax_nav">Post Tax Nav <p-sortIcon field="post_tax_nav"></p-sortIcon></th>
+        <th>Action </th>
       </tr>
     </ng-template>
 
@@ -36,28 +61,37 @@
       <tr>
         <td>{{ entity.amc_name }}</td>
         <td>{{ entity.num_units }}</td>
-        <td>{{ entity.trans_date }}</td>
-        <td>{{ entity.trans_type }}</td>
+        <td>{{ entity.trans_date | date:'dd-MM-yyyy' }}</td>
+        <td><p-tag [value]="entity.trans_type" [severity]="getSeverity(entity.trans_type)"></p-tag></td>
         <td>{{ entity.contribution_amount }}</td>
         <td>{{ entity.stamp_duty }}</td>
         <td>{{ entity.amount_invested }}</td>
         <td>{{ entity.balance_units }}</td>
         <td>{{ entity.post_tax_nav }}</td>
+        <td>
+          <p-speeddial [model]="getRowActions(entity)" direction="left" type="linear" showIcon="pi pi-plus"
+            hideIcon="pi pi-times" [buttonStyle]="{'height':'25px','min-width':'27px','margin-right':'40px' }">
+          </p-speeddial>
+        </td>
       </tr>
     </ng-template>
 
+    <!-- Footer (Summary Row) -->
     <ng-template pTemplate="footer">
       <tr class="summary-row">
-        <td colspan="3" class="summary green">
-          Purchases → Units: {{ totalPurchaseUnits | number:'1.2-2' }} |
-          Amount: {{ totalPurchaseAmount | currency:'INR' }}
-        </td>
-        <td colspan="3" class="summary blue">
-          Available → Units: {{ availableUnits | number:'1.2-2' }} |
+        <td colspan="10" class="summary green">
+          Total Available Units → Units: {{ availableUnits | number:'1.2-2' }} |
           Amount: {{ availableAmount | currency:'INR' }}
         </td>
-        <td colspan="3" class="summary red text-right">
-          Sales → Units: {{ totalSalesUnits | number:'1.2-2' }} |
+      </tr>
+      <tr class="summary-row">
+        <td colspan="10" class="summary blue">
+          Total Value → {{ totalValue | currency:'INR' }}
+        </td>
+      </tr>
+      <tr class="summary-row">
+        <td colspan="10" class="summary red">
+          Total Units Sold → Units: {{ totalSalesUnits | number:'1.2-2' }} |
           Amount: {{ totalSalesAmount | currency:'INR' }}
         </td>
       </tr>
@@ -65,15 +99,12 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="5">No Records found</td>
+        <td colspan="9">No Records found</td>
       </tr>
     </ng-template>
 
   </p-table>
 </div>
-
-
-
 
 <div class="table-card">
   <!-- Header -->
@@ -88,15 +119,16 @@
     </div>
 
     <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search underlying..." />
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
     </div>
   </div>
 
   <!-- Underlying Table -->
-  <p-table #dt [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]" [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']"
-    scrollHeight="400px" [responsiveLayout]="'scroll'">
-    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+  <p-table #underlyingTable [value]="underlyingList" dataKey="id" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 100, 500, 1000]"
+    [globalFilterFields]="['company_name','scripcode', 'weightage', 'sector']" scrollHeight="400px"
+    [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
         <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
@@ -120,42 +152,97 @@
 
     <ng-template #emptymessage>
       <tr>
-        <td colspan="4">No Records found</td>
+        <td colspan="5">No Records found</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-
-<!-- Pie Chart Card -->
+<!-- MCAP Tag Allocation -->
 <div class="counts-card" style="margin-bottom: 2rem;">
   <p-card styleClass="P-card">
     <h4>MCAP Tag Allocation</h4>
     <div class="card-content">
       <div class="counts-section">
         <div>
-          <h4>Total Companies : {{underlyingList.length}}</h4>
+          <h4>Total Number of Underlying : {{ actionCounts?.total_count }}</h4>
         </div>
-        <div class="count-item">
-          <span class="dot lcap"></span>
-          <span class="label">Large Cap</span>
-          <span class="percent">{{ actionCounts?.lcap_percent | number:'1.0-1' }}%</span>
-        </div>
-        <div class="count-item">
-          <span class="dot mcap"></span>
-          <span class="label">Mid Cap</span>
-          <span class="percent">{{ actionCounts?.mcap_percent | number:'1.0-1' }}%</span>
-        </div>
-        <div class="count-item">
-          <span class="dot scap"></span>
-          <span class="label">Small Cap</span>
-          <span class="percent">{{ actionCounts?.scap_percent | number:'1.0-1' }}%</span>
+        <div *ngFor="let tag of mcapTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
+            <span class="label">{{ tag.tag }}</span>
+            <span class="percent">{{ tag.tag_percent | number:'1.0-2' }}%</span>
+          </div>
         </div>
       </div>
-
       <div class="chart-section">
-        <p-chart type="pie" [data]="chartData" [options]="chartOptions"></p-chart>
+        <p-chart *ngIf="mcapChartData" type="pie" [data]="mcapChartData" [options]="mcapChartOptions"></p-chart>
       </div>
     </div>
   </p-card>
 </div>
+
+<!-- Sector Allocation -->
+<div class="counts-card" style="margin-bottom: 2rem;" *ngIf="underlyingList.length > 0">
+  <p-card styleClass="P-card">
+    <h4>Sector Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let sector of sectorTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': sector.color || '#42A5F5'}"></span>
+            <span class="label">{{ sector.sector }}</span>
+            <span class="percent">{{ sector.sector_percent | number:'1.0-2' }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- edit action table row -->
+<p-dialog header="Edit Action" [(visible)]="displayActionRowEditDialog" [modal]="true" [closable]="true"
+  [style]="{ width: '40vw' }" [contentStyle]="{ 'overflow-y': 'auto' }">
+  <form [formGroup]="aifActionTableForm" class="p-fluid">
+    <div class="field" *ngFor="let field of currentActionTableFields">
+      <label [for]="field.key">{{ field.label }}</label>
+
+      <!-- Dropdown: transaction Type -->
+      <p-dropdown *ngIf="field.key === 'trans_type'" [options]="PmsOrderTypeOptions"
+        [formControlName]="field.key" placeholder="Select Type"></p-dropdown>
+
+      <!-- Calendar: trans_date -->
+      <p-datepicker *ngIf="field.key === 'trans_date'" [formControlName]="field.key" placeholder="Select Date"
+        showIcon="true" dateFormat="dd/mm/yy" appendTo="viewport" appendTo="body" [style]="{ width: '100%' }">
+      </p-datepicker>
+
+      <!-- Readonly Purchase Value -->
+
+      <input *ngIf="field.key === 'net_total'" pInputText formControlName="net_total" readonly />
+
+      <input *ngIf="field.key === 'entityid'" type="hidden" formControlName="entityid" />
+
+      <!-- Default Input -->
+      <input *ngIf="field.key !== 'trans_type' 
+               && field.key !== 'trans_date'" [id]="field.key" pInputText [formControlName]="field.key"
+        [placeholder]="'Enter ' + field.label" [readonly]="isReadOnlyField(field.key)"
+        [ngClass]="{ 'readonly-field': isReadOnlyField(field.key) }" />
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" styleClass="add-entity-btn" icon="pi pi-times"
+      (click)="displayActionRowEditDialog=false"></p-button>
+    <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" (click)="saveEdit()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

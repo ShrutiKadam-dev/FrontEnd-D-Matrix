@@ -146,7 +146,7 @@ calculateTotals(actionTableList: any[]) {
   }
 
   loadpmsDetails(id: string) {
-    this.featuresService.getPMSEquityDetailsById(id).subscribe({
+    this.featuresService.getEntityById(id).subscribe({
       next: (res: any) => { this.pmsDetails = res?.data || {}; 
     
     },

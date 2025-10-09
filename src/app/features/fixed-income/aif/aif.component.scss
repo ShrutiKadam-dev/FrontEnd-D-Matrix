@@ -1,6 +1,7 @@
-
 /* ===== Carousel ===== */
-:host ::ng-deep .p-carousel { padding: 1rem 0; }
+:host ::ng-deep .p-carousel {
+  padding: 1rem 0;
+}
 
 :host ::ng-deep .p-carousel-item {
   padding: 0 0.5rem;
@@ -20,4 +21,22 @@
   text-overflow: ellipsis !important;
 }
 
+/* ===== Card Container ===== */
+.counts-card .p-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  background: #fff;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50%;
+}
 
+.counts-card .card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+}

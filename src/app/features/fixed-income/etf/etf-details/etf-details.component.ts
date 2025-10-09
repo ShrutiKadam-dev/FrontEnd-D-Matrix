@@ -147,7 +147,7 @@ export class EtfDetailsComponent implements OnInit {
   }
 
   loadETFDetails(id: string) {
-    this.featuresService.getETFDetailsFixedIncomeById(id).subscribe({
+    this.featuresService.getEntityById(id).subscribe({
       next: (res: any) => { this.etfDetails = res?.data || {}; },
       error: (err: any) => { console.error('Failed to load Mutual Fund details', err); }
     });

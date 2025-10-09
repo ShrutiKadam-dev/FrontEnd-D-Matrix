@@ -47,7 +47,7 @@ export class FeaturesService {
   }
 
   insertAifActionTable(data: any) {
-    return this.http.post(`${this.apiUrl}/InsertAifData`, data);
+    return this.http.post(`${this.apiUrl}/insertAifActionData`, data);
   }
 
   insertETFActionTable(data: any) {
@@ -172,14 +172,8 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getCommodityActionTable`);
   }
 
-  getMutualFundDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getMutualFundDataById`, {
-      params: { entityid: id }
-    });
-  }
-
-  getAIFEquityDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getAIFEquityDetailsById`, {
+  getEntityById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/getEntityById`, {
       params: { entityid: id }
     });
   }
@@ -208,33 +202,14 @@ export class FeaturesService {
     });
   }
 
-  getPMSEquityDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getPmsEquityDetailbyId`, {
-      params: { entityid: id }
-    });
-  }
-
   getETFDetailsById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getETFDetailsById`, {
       params: { entityid: id }
     });
   }
 
-
-  getETFDetailsFixedIncomeById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getFixIncomeETFById`, {
-      params: { entityid: id }
-    });
-  }
-
   getETFDetailsEquityById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/getETFDetailsEquityById`, {
-      params: { entityid: id }
-    });
-  }
-
-  getDirectEquityDetailsById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/getDirectEquityDetailsById`, {
       params: { entityid: id }
     });
   }
@@ -263,8 +238,16 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAllAIFEquityUnderlyingCount`);
   }
 
+  getAllAIFFixedIncomeUnderlyingCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFFixedIncomeUnderlyingCount`);
+  }
+
   getAllAIFEquitySectorCount(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAllAIFEquitySectorCount`);
+  }
+  
+  getAllAIFFixedIncomeSectorCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFFixedIncomeSectorCount`);
   }
 
   getallMfDetailsEquitySectorCount(mfId: string): Observable<any[]> {
@@ -275,6 +258,12 @@ export class FeaturesService {
 
   getAIFDetailsEquitySectorCount(mfId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getAIFDetailsEquitySectorCount`, {
+      params: { entityid: mfId }
+    });
+  }
+
+  getAIFDetailsFixedIncomeSectorCount(mfId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getAIFDetailsFixedIncomeSectorCount`, {
       params: { entityid: mfId }
     });
   }
@@ -291,14 +280,14 @@ export class FeaturesService {
     });
   }
 
-  getPMSEquityAMCActionTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
+  getAIFDetailsFixedIncomeMCAPCount(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAIFDetailsFixedIncomeMCAPCount`, {
       params: { entityid: mfId }
     });
   }
 
-  getETFDetailUnderlyingTable(mfId: string) {
-    return this.http.get<any>(`${this.apiUrl}/getETFEquityDetailUnderlyingTable`, {
+  getPMSEquityAMCActionTable(mfId: string) {
+    return this.http.get<any>(`${this.apiUrl}/getPmsAmcActionById`, {
       params: { entityid: mfId }
     });
   }
@@ -386,8 +375,16 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getAifEntity`)
   }
 
+  getAllAifFixedIncomeEntities() {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFFixedIncomeEntities`)
+  }
+
   getAllAifContractNotes() {
     return this.http.get<any[]>(`${this.apiUrl}/getAllAif`)
+  }
+
+  getAllAifFixedIncomeActionTable() {
+    return this.http.get<any[]>(`${this.apiUrl}/getAllAIFFixedIncomeActionTable`)
   }
 
   getAllAifUnderlyingProperties(mfId: string) {
@@ -400,6 +397,12 @@ export class FeaturesService {
 
   getUnderlyingTable(entityid: string) {
     return this.http.get<any>(`${this.apiUrl}/getUnderlyingById`, {
+      params: { entityid }
+    });
+  }
+
+  getAifDetailsFixedIncomeUnderlyingTable(entityid: string) {
+    return this.http.get<any>(`${this.apiUrl}/getAifDetailsFixedIncomeUnderlyingTable`, {
       params: { entityid }
     });
   }

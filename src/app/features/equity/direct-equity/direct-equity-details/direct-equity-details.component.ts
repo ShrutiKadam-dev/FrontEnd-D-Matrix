@@ -155,7 +155,7 @@ export class DirectEquityDetailsComponent implements OnInit{
   }
 
   loadMfDetails(id: string) {
-    this.featuresService.getDirectEquityDetailsById(id).subscribe({
+    this.featuresService.getEntityById(id).subscribe({
       next: (res: any) => {
         this.deDetails = res?.data || {};
       },

@@ -4,6 +4,7 @@
 </button>
 <h3>Alternative Investment Fund</h3>
 </div>
+
 <!-- Search Section -->
 <div class="search-section" style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedAifName" [suggestions]="filteredAifNames" (completeMethod)="searchAifs($event)"
@@ -14,7 +15,6 @@
   </button>
 </div>
 
-
 <!-- Carousel -->
 <p-carousel [value]="displayAifs" [numVisible]="3" [numScroll]="3" [circular]="false"
   [responsiveOptions]="responsiveOptions" styleClass="custom-carousel" *ngIf="!selectedAifName">
@@ -24,7 +24,7 @@
       <ng-template pTemplate="header">
         <div class="card-color" [ngStyle]="{'background-color': aif.color}"></div>
       </ng-template>
-      <div class="card-title" [title]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
+      <div class="card-title"  [pTooltip]="aif.nickname">{{ aif.nickname || 'No Name' }}</div>
       <div class="card-value">{{ aif.subcategory || 'No Subcategory' }}</div>
       <div class="status">{{ aif.entityid }}</div>
     </p-card>
@@ -45,10 +45,35 @@
       <div class="status">{{ aif.entityid }}</div>
     </p-card>
   </ng-template>
+
+
 </p-carousel>
 
-<!-- summary of action -->
+<!-- MCAP Chart -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>MCAP Tag Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div >
+          <h4>Total Number of Underlying : {{ actionCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let tag of underlyingTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
+            <span class="label">{{ tag.tag }}</span>
+            <span class="percent">{{ tag.overall_tag_percent | number:'1.0-1' }}%</span>
+          </div>
+      </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="mcapChartData" type="pie" [data]="mcapChartData" [options]="mcapChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
 
+<!-- summary of action -->
 <div class="table-card">
   <!-- Header -->
   <div class="search-header p-d-flex p-ai-center p-jc-between">
@@ -61,10 +86,10 @@
 
   <!-- Action Table -->
   <p-table #dt [value]="allAifContractNotes" dataKey="id" [paginator]="true" [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [rowsPerPageOptions]="[5, 10, 25, 100, 500, 1000]"
     [globalFilterFields]="['amc_name', 'num_units', 'trans_date', 'trans_type', 'contribution_amount']"
     scrollHeight="400px" [responsiveLayout]="'scroll'">
-    <ng-template pTemplate="header" [resizableColumns]="true" columnResizeMode="expand">
+    <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="amc_name">Scrip Name <p-sortIcon field="amc_name"></p-sortIcon></th>
         <th pSortableColumn="num_units">Units <p-sortIcon field="num_units"></p-sortIcon></th>
@@ -78,18 +103,38 @@
       <tr>
         <td>{{ entity.amc_name }}</td>
         <td>{{ entity.num_units }}</td>
-        <td>{{ entity.trans_date }}</td>
-        <td>{{ entity.trans_type }}</td>
+        <td>{{ entity.trans_date | date:'dd-MM-yyyy' }}</td>
+        <td><p-tag [value]="entity.trans_type" [severity]="getSeverity(entity.trans_type)"></p-tag></td>
         <td>{{ entity.amount_invested }}</td>
       </tr>
     </ng-template>
 
-    <ng-template #emptymessage>
-      <tr>
-        <td colspan="5">No Records found</td>
-      </tr>
-    </ng-template>
+      <ng-template #emptymessage>
+    <tr>
+      <td colspan="5">No Records found</td>
+    </tr>
+  </ng-template>
   </p-table>
 </div>
 
-<!-- mcap allocation -->
+<!-- Sector Chart -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>Sector Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let s of sectorTableList" class="count-item">
+          <span class="dot" [ngStyle]="{'background-color': s.color}"></span>
+          <span class="label">{{ s.sector }}</span>
+          <span class="percent">{{ s.overall_tag_percent | number:'1.0-1' }}%</span>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>

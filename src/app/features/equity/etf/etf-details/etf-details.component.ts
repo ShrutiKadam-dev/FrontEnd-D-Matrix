@@ -172,7 +172,7 @@ export class EtfDetailsComponent implements OnInit {
   }
 
   getETFDetailUnderlyingTable(etfId: string) {
-    this.featuresService.getETFDetailUnderlyingTable(etfId).subscribe({
+    this.featuresService.getEntityById(etfId).subscribe({
       next: (data) => {
         this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
 
