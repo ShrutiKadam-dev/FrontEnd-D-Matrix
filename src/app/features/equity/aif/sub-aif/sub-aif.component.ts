@@ -272,7 +272,7 @@ export class SubAifComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: err.error?.message || 'Failed to load Mutual Fund MCAP chart'
+          detail: err.error?.message || 'Failed to load AIF Details MCAP chart'
         })
     });
   }
@@ -324,7 +324,7 @@ export class SubAifComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Failed',
-          detail: err.error?.message || 'Failed to load Mutual Fund sector chart'
+          detail: err.error?.message || 'Failed to load AIF Details Sector chart'
         })
     });
   }

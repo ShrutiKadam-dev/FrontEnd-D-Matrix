@@ -60,8 +60,8 @@ export class AifComponent {
   ngOnInit() {
     this.getAllAifEntities();
     this.getAllAifContractNotes();
-    this.getAllMfEquitySectorCount();
-    this.getallMfEquityUnderlyingCount();
+    this.getAllAIFEquitySectorCount();
+    this.getAllAIFEquityUnderlyingCount();
   }
   
   private featuresService = inject(FeaturesService);
@@ -168,7 +168,7 @@ export class AifComponent {
     }
   }
   
-  getallMfEquityUnderlyingCount() {
+  getAllAIFEquityUnderlyingCount() {
     this.featuresService.getAllAIFEquityUnderlyingCount().subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
@@ -220,12 +220,12 @@ export class AifComponent {
       error: (err) => this.messageService.add({
         severity: 'error',
         summary: 'Failed',
-        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+        detail: err.error?.message || 'Failed to load AIF MCAP chart'
       })
     });
   }
 
-  getAllMfEquitySectorCount() {
+  getAllAIFEquitySectorCount() {
     this.featuresService.getAllAIFEquitySectorCount().subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
@@ -267,7 +267,7 @@ export class AifComponent {
       error: (err) => this.messageService.add({
         severity: 'error',
         summary: 'Failed',
-        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+        detail: err.error?.message || 'Failed to load AIF Sector chart'
       })
     });
   }
