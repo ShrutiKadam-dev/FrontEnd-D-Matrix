@@ -48,7 +48,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
 })
-export class SubAifComponent implements OnInit{
+export class SubAifComponent implements OnInit {
 
   aifId!: string | null;
   underlyingList: any[] = [];
@@ -106,10 +106,10 @@ export class SubAifComponent implements OnInit{
     this.aifId = this.route.snapshot.paramMap.get('id');
     if (this.aifId) {
       this.loadAIFDetails(this.aifId);
-      this.getAifDetailsFixedIncomeActionTable(this.aifId);
+      this.getAifActionTableById(this.aifId);
       this.getAifDetailsFixedIncomeUnderlyingTable(this.aifId);
       this.getAIFDetailsFixedIncomeSectorCount(this.aifId);
-      this.getAIFDetailsFixedIncomeMCAPCount(this.aifId);
+      this.getAIFDetailsEquityMCAPCount(this.aifId);
       this.fetchIrr(this.aifId);
     }
 
@@ -119,7 +119,7 @@ export class SubAifComponent implements OnInit{
     this.location.back();
   }
 
-  getAifDetailsFixedIncomeActionTable(aifId: string) {
+  getAifActionTableById(aifId: string) {
     console.log(aifId);
 
     this.featuresService.getAifActionTableById(aifId).subscribe({
@@ -222,8 +222,8 @@ export class SubAifComponent implements OnInit{
     this.availableAmount ||= 0;
   }
 
-  getAIFDetailsFixedIncomeMCAPCount(aifID: string) {
-    this.featuresService.getAIFDetailsFixedIncomeMCAPCount(aifID).subscribe({
+  getAIFDetailsEquityMCAPCount(aifID: string) {
+    this.featuresService.getAIFDetailsEquityMCAPCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.mcapTableList = [];
@@ -278,7 +278,7 @@ export class SubAifComponent implements OnInit{
   }
 
   getAIFDetailsFixedIncomeSectorCount(aifID: string) {
-    this.featuresService.getAIFDetailsFixedIncomeSectorCount(aifID).subscribe({
+    this.featuresService.getAIFDetailsEquitySectorCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.sectorTableList = [];
