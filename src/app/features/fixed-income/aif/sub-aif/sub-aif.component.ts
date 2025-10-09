@@ -109,7 +109,7 @@ export class SubAifComponent implements OnInit {
       this.getAifActionTableById(this.aifId);
       this.getAifDetailsFixedIncomeUnderlyingTable(this.aifId);
       this.getAIFDetailsFixedIncomeSectorCount(this.aifId);
-      this.getAIFDetailsEquityMCAPCount(this.aifId);
+      this.getAIFDetailsFixedIncomeMCAPCount(this.aifId);
       this.fetchIrr(this.aifId);
     }
 
@@ -222,8 +222,8 @@ export class SubAifComponent implements OnInit {
     this.availableAmount ||= 0;
   }
 
-  getAIFDetailsEquityMCAPCount(aifID: string) {
-    this.featuresService.getAIFDetailsEquityMCAPCount(aifID).subscribe({
+  getAIFDetailsFixedIncomeMCAPCount(aifID: string) {
+    this.featuresService.getAIFDetailsFixedIncomeMCAPCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.mcapTableList = [];
@@ -278,7 +278,7 @@ export class SubAifComponent implements OnInit {
   }
 
   getAIFDetailsFixedIncomeSectorCount(aifID: string) {
-    this.featuresService.getAIFDetailsEquitySectorCount(aifID).subscribe({
+    this.featuresService.getAIFDetailsFixedIncomeSectorCount(aifID).subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.sectorTableList = [];
