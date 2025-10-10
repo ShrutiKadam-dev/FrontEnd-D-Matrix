@@ -1,52 +1,19 @@
-import { Component, OnInit, inject, ViewChild, ChangeDetectorRef  } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { ChangeDetectorRef, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { SHARED_IMPORTS } from '../../../../shared/shared-imports'
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { DatePickerModule } from 'primeng/datepicker';
-import { ChartModule } from 'primeng/chart';
-import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
-import { SpeedDial } from 'primeng/speeddial';
-import { FormConfig } from '../../../form-config';
-import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
-import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Location } from '@angular/common';
-import { ToastModule } from 'primeng/toast';
+import { FormConfig } from '../../../../shared/form-config';
+import { Table } from 'primeng/table';
+import { ActionTableField, MF_ACTION_TABLE_FIELDS } from '../../../../shared/form-fields.enums';
+import { MODE_OPTIONS, ORDER_TYPE_OPTIONS } from '../../../../shared/dropdown-options.enums';
 
 @Component({
   selector: 'app-mutual-fund-details',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    ToastModule,
-    CommonModule,
-    SpeedDial,
-    MessagesModule,
-    ConfirmDialogModule,
-    TableModule,
-    AutoCompleteModule,
-    CarouselModule,
-    CardModule,
-    FormsModule,
-    DatePickerModule,
-    ChartModule,
-    TagModule
-  ],
+  imports: [SHARED_IMPORTS], 
   providers: [MessageService, ConfirmationService],
   templateUrl: './mutual-fund-details.component.html',
   styleUrls: ['./mutual-fund-details.component.scss']

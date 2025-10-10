@@ -1,50 +1,20 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { FeaturesService } from '../../features.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { TagModule } from 'primeng/tag';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-etf',
-  imports: [
-    TagModule,
-    TooltipModule,
-    ProgressSpinnerModule,
-    ReactiveFormsModule,
-    DialogModule,
-    ButtonModule,
-    CalendarModule,
-    InputTextModule,
-    DropdownModule,
-    CommonModule,
-    MessagesModule,
-    MessageModule,
-    TableModule,
-    InputTextModule,
-    AutoCompleteModule,
-    CarouselModule,
-    CardModule,
-    FormsModule
-  ],
+  standalone: true,
+  imports: [...SHARED_IMPORTS],
+  providers: [MessageService],
   templateUrl: './etf.component.html',
   styleUrl: './etf.component.scss'
 })
+
 export class EtfComponent implements OnInit{
   selectedETFName: any = null;
   filteredETFNames: any[] = [];

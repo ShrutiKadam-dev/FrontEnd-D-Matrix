@@ -1,43 +1,15 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { SHARED_IMPORTS } from '../../../../shared/shared-imports'
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { DatePickerModule } from 'primeng/datepicker';
-import { ChartModule } from 'primeng/chart';
-import { TagModule } from 'primeng/tag';
 import { FeaturesService } from '../../../features.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Location } from '@angular/common';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-pms-details',
-  imports: [
-    ReactiveFormsModule,
-    DialogModule,
-    ButtonModule,
-    InputTextModule,
-    DropdownModule,
-    CommonModule,
-    MessagesModule,
-    TableModule,
-    InputTextModule,
-    AutoCompleteModule,
-    CarouselModule,
-    CardModule,
-    FormsModule,
-    DatePickerModule,
-    ChartModule,
-    TagModule
-  ],
+  imports: [SHARED_IMPORTS], 
+  providers: [MessageService, ConfirmationService],
   templateUrl: './pms-details.component.html',
   styleUrl: './pms-details.component.scss'
 })

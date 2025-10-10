@@ -1,26 +1,7 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
+import { SHARED_IMPORTS } from '../../shared/shared-imports'; 
 import { FeaturesService } from '../features.service';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { DatePicker } from 'primeng/datepicker';
-import { InputMask } from 'primeng/inputmask';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { FileUploadModule } from 'primeng/fileupload';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import {
   MF_ACTION_TABLE_FIELDS,
   DIRECT_EQUITY_ACTION_TABLE_FIELDS,
@@ -28,7 +9,7 @@ import {
   AIF_ACTION_TABLE_FIELDS,
   PMS_AMC_ACTION_TABLE_FIELDS,
   PMS_CLIENT_ACTION_TABLE_FIELDS
-} from '../form-fields.enums';
+} from '../../shared/form-fields.enums';
 import {
   CATEGORY_OPTIONS,
   ORDER_TYPE_OPTIONS,
@@ -36,34 +17,16 @@ import {
   MODE_OPTIONS,
   ALL_SUBCATEGORY_OPTIONS,
   SUB_AIF_CATEGORY_OPTIONS
-} from '../dropdown-options.enums';
-import { FormConfig } from '../form-config';
+} from '../../shared/dropdown-options.enums';
+import { FormConfig } from '../../shared/form-config';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [
-    ConfirmDialogModule,
-    ReactiveFormsModule,
-    DialogModule,
-    ButtonModule,
-    CalendarModule,
-    InputTextModule,
-    DropdownModule,
-    CommonModule,
-    MessagesModule,
-    MessageModule,
-    InputTextModule,
-    InputNumberModule,
-    AutoCompleteModule,
-    TableModule,
-    DatePicker,
-    InputMask,
-    ToastModule,
-    ProgressSpinnerModule,
-    FileUploadModule
-  ],
-  providers: [ConfirmationService, MessageService],
+  imports: [...SHARED_IMPORTS],
+  providers: [MessageService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss',
 })

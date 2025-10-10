@@ -1,49 +1,18 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { SHARED_IMPORTS } from '../../../../shared/shared-imports'
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { InputTextModule } from 'primeng/inputtext';
-import { Table, TableModule } from 'primeng/table';
 import { FeaturesService } from '../../../features.service';
-import { CardModule } from 'primeng/card';
-import { ChartModule } from 'primeng/chart';
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Location } from '@angular/common';
-import { TagModule } from 'primeng/tag';
-import { FormConfig } from '../../../form-config';
-import { SpeedDial } from 'primeng/speeddial';
-import { ActionTableField, AIF_ACTION_TABLE_FIELDS } from '../../../form-fields.enums';
-import { DatePickerModule } from 'primeng/datepicker';
-import { PMS_ORDER_TYPE_OPTIONS } from '../../../dropdown-options.enums';
-import { DialogModule } from 'primeng/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
-import { ToastModule } from 'primeng/toast';
-import { ConfirmDialog } from 'primeng/confirmdialog';
+import { FormConfig } from '../../../../shared/form-config';
+import { Table } from 'primeng/table';
+import { ActionTableField, AIF_ACTION_TABLE_FIELDS } from '../../../../shared/form-fields.enums';
+import { PMS_ORDER_TYPE_OPTIONS } from '../../../../shared/dropdown-options.enums';
+
 @Component({
   selector: 'app-sub-aif',
-  imports: [
-    InputTextModule,
-    TagModule,
-    ConfirmDialog,
-    FormsModule,
-    SpeedDial,
-    AutoCompleteModule,
-    DropdownModule,
-    CarouselModule,
-    TableModule,
-    ToastModule,
-    DialogModule,
-    ReactiveFormsModule,
-    CardModule,
-    ChartModule,
-    ButtonModule,
-    CommonModule,
-    DatePickerModule
-  ],
+  imports: [SHARED_IMPORTS], 
   providers: [MessageService, ConfirmationService],
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'

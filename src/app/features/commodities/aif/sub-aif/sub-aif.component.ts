@@ -1,23 +1,18 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { SHARED_IMPORTS } from '../../../../shared/shared-imports'
 import { ActivatedRoute } from '@angular/router';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { InputTextModule } from 'primeng/inputtext';
-import { Table, TableModule } from 'primeng/table';
 import { FeaturesService } from '../../../features.service';
-import { CardModule } from 'primeng/card';
-import { ChartModule } from 'primeng/chart';
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-sub-aif',
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule, CardModule, ChartModule, ButtonModule, CommonModule ],
+  imports: [SHARED_IMPORTS], 
+  providers: [MessageService, ConfirmationService],
   templateUrl: './sub-aif.component.html',
   styleUrl: './sub-aif.component.scss'
 })
+
 export class SubAifComponent {
 
   aifId!: string;

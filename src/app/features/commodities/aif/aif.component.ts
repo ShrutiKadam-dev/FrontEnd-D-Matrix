@@ -1,19 +1,15 @@
-
-import { Component, inject, ViewChild } from '@angular/core';
-import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { Table, TableModule } from 'primeng/table';
-import { Router } from '@angular/router';
-import { CardModule } from 'primeng/card';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { FeaturesService } from '../../features.service';
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-aif',
   standalone: true,
-  imports: [ InputTextModule, FormsModule, AutoCompleteModule, CarouselModule, TableModule,CardModule ,CommonModule],
+  imports: [...SHARED_IMPORTS],
+  providers: [MessageService],
   templateUrl: './aif.component.html',
   styleUrls: ['./aif.component.scss']
 })

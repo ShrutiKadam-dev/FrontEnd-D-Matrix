@@ -1,51 +1,20 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { SHARED_IMPORTS } from '../../../shared/shared-imports';
 import { FeaturesService } from '../../features.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { TagModule } from 'primeng/tag';
-import { ChartModule } from 'primeng/chart';
-import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [
-    ChartModule,
-    TagModule,
-    TooltipModule,
-    ReactiveFormsModule,
-    DialogModule,
-    ButtonModule,
-    CalendarModule,
-    InputTextModule,
-    DropdownModule,
-    CommonModule,
-    MessagesModule,
-    MessageModule,
-    TableModule,
-    AutoCompleteModule,
-    CarouselModule,
-    CardModule,
-    FormsModule
-  ],
+  imports: [...SHARED_IMPORTS],
   providers: [MessageService],
   templateUrl: './mutual-funds.component.html',
   styleUrls: ['./mutual-funds.component.scss']
 })
+
 export class MutualFundsComponent implements OnInit {
   selectedMfName: any = null;
   filteredMfNames: any[] = [];
