@@ -223,6 +223,10 @@ export class FeaturesService {
   getallMfEquityUnderlyingCount(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getallMfEquityUnderlyingCount`);
   }
+  
+  getEquityMCAPCount(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getEquityUnderlyingCount`);
+  }
 
   getallMfEquitySectorCount(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getallMFEquitySectorCount`);

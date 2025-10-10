@@ -2,7 +2,6 @@ import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
@@ -14,10 +13,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CarouselModule } from 'primeng/carousel';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
-import { ChartModule } from 'primeng/chart';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
+import { ChartModule } from 'primeng/chart';
+import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
 
 @Component({
@@ -27,7 +25,6 @@ import { Location } from '@angular/common';
     TagModule,
     CalendarModule,
     TooltipModule,
-    ProgressSpinnerModule,
     ChartModule,
     CommonModule,
     MessagesModule,
@@ -48,13 +45,21 @@ export class EquityComponent implements OnInit {
   filteredENames: any[] = [];
   allEs: any[] = [];
   displayEs: any[] = [];
+
   MFActionTableList: any[] = [];
   directEquityTableList:any[] = [];
   aifTableList:any[] = [];
-  chartData: any;
-  chartOptions: any;
-  actionCounts: any = null;
+
+        underlyingTableList: any[] = [];
+
   totalActionTableCount = 0;
+
+    mcapChartData: any;
+  mcapChartOptions: any;
+
+    actionCounts: any = {};
+
+
 
   @ViewChild('dt') dt!: Table;
   constructor(private router: Router,private location: Location) { }
@@ -84,55 +89,64 @@ export class EquityComponent implements OnInit {
 
   ngOnInit() {
     this.getAllEntityHome();
-    this.loadEquityChart();
+    this.getEquityMCAPCount();
     this.getAllActionTableEquity() 
   }
 
-  loadEquityChart() {
-    this.featuresService.getEquityActionTable().subscribe({
+  getEquityMCAPCount() {
+    this.featuresService.getallMfEquityUnderlyingCount().subscribe({
       next: (res: any) => {
-        if (!res?.data?.length) return;
+        if (!res?.data?.length) {
+          this.underlyingTableList = [];
+          this.mcapChartData = null;
+          return;
+        }
 
-        this.actionCounts = res.data[0];  // store counts + percents
+        this.underlyingTableList = res.data;
+        this.underlyingTableList.forEach((s, i) => {
+          const hue = (i * 360) / this.underlyingTableList.length; // spread across 360°
+          s.color = `hsl(${hue}, 70%, 50%)`;
+        });
 
-        this.totalActionTableCount =this.actionCounts.action_count + this.actionCounts.aif_count +this.actionCounts.equity_count;
-        
-        const labels = ['Mutual Fund', 'AIF', 'Direct Equity'];
-        const values = [
-          Number(this.actionCounts.action_percent),
-          Number(this.actionCounts.aif_percent),
-          Number(this.actionCounts.equity_percent)
-        ];
+        const totalCount = res.data[0]?.total_tag_count || 0;
 
-        this.chartData = {
-          labels,
-          datasets: [
-            {
-              data: values,
-              backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
-              hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
-            }
-          ]
+        // Dynamic actionCounts
+        this.actionCounts = { total_count: totalCount };
+        res.data.forEach((tagData: { tag: string; tag_count: number; overall_tag_percent: number }) => {
+          const key = tagData.tag.toLowerCase().replace(/\s+/g, '_');
+          this.actionCounts[`${key}_percent`] = tagData.overall_tag_percent || 0;
+          this.actionCounts[`${key}_count`] = tagData.tag_count || 0;
+        });
+
+        // Dynamic chart colors
+ 
+        this.mcapChartData = {
+          labels: res.data.map((d: { tag: string }) => d.tag),
+          datasets: [{
+            data: res.data.map((d: { overall_tag_percent: number }) => d.overall_tag_percent),
+            backgroundColor: this.underlyingTableList.map(s => s.color),
+            hoverBackgroundColor: this.underlyingTableList.map(s => s.color)
+          }]
         };
 
-        this.chartOptions = {
+        this.mcapChartOptions = {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: {
-              display: true, // HIDE default legend
-              position: 'bottom',
-            },
+            legend: { position: 'bottom' },
             tooltip: {
               callbacks: {
-                label: (context: any) => `${context.label}: ${context.raw}%`
+                label: (context: any) => `${context.label}: ${context.raw?.toFixed(1) || 0}%`
               }
             }
           }
         };
-
       },
-      error: (err) => console.error('Chart API error:', err)
+      error: (err) => this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: err.error?.message || 'Failed to load Mutual Fund chart'
+      })
     });
   }
 
