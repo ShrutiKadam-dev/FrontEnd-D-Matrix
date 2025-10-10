@@ -186,7 +186,7 @@ export class FeaturesService {
 
   updateAIFDetailActionTableRow(rowId: string, payload: any) {
     return this.http.post<any>(`${this.apiUrl}/updateAIFDetailActionTableRow`, payload, {
-      params: { id: rowId }
+      params: { aif_id: rowId }
     });
   }
 

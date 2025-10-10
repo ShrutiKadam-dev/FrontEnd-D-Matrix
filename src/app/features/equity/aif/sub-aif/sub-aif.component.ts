@@ -351,10 +351,8 @@ export class SubAifComponent implements OnInit {
   onEditRow(entity: any) {
     this.editingRow = entity;
 
-    // Clone entity to avoid mutation
     const patchData = { ...entity };
 
-    // Convert order_date string to Date object
     if (patchData.trans_date) {
       const parts = patchData.trans_date.split('-'); // ["08","09","2025"]
       patchData.trans_date = new Date(+parts[2], +parts[1] - 1, +parts[0]);
