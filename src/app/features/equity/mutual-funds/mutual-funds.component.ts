@@ -20,7 +20,6 @@ import { ChartModule } from 'primeng/chart';
 import { TooltipModule } from 'primeng/tooltip';
 import { Location } from '@angular/common';
 
-
 @Component({
   selector: 'app-create',
   standalone: true,

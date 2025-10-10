@@ -17,6 +17,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ChartModule } from 'primeng/chart';
 import { TagModule } from 'primeng/tag';
 import { Location } from '@angular/common';
+
 @Component({
   selector: 'app-etf-details',
   imports: [
@@ -74,7 +75,6 @@ export class EtfDetailsComponent implements OnInit {
     if (this.etfId) {
       this.loadETFDetails(this.etfId);
       this.getETFEquityDetailActionTable(this.etfId);
-      this.getETFDetailUnderlyingTable(this.etfId);
       this.fetchIrr(this.etfId)
 
     }
@@ -171,61 +171,6 @@ export class EtfDetailsComponent implements OnInit {
     });
   }
 
-  getETFDetailUnderlyingTable(etfId: string) {
-    this.featuresService.getEntityById(etfId).subscribe({
-      next: (data) => {
-        this.underlyingTableList = Array.isArray(data.data) ? data.data : [];
-
-        const grouped: { [key: string]: number } = {};
-        this.underlyingTableList.forEach((item: any) => {
-          const tag = item.tag || 'Unknown';
-          grouped[tag] = (grouped[tag] || 0) + 1;
-        });
-
-        const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
-
-        this.actionCounts = {
-          lcap_percent: grouped['lcap'] ? (grouped['lcap'] / total) * 100 : 0,
-          mcap_percent: grouped['mcap'] ? (grouped['mcap'] / total) * 100 : 0,
-          scap_percent: grouped['scap'] ? (grouped['scap'] / total) * 100 : 0
-        };
-
-
-        // Prepare chart
-        this.chartData = {
-          labels: Object.keys(grouped),
-          datasets: [{
-            data: Object.values(grouped),
-            backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#AB47BC', '#FF7043', '#26C6DA', '#FFCA28']
-          }]
-        };
-
-        this.chartOptions = {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom' },
-            tooltip: {
-              callbacks: {
-                label: (context: any) => {
-                  const label = context.label || '';
-                  const value = context.raw || 0;
-                  const percentage = (value / total) * 100;
-                  return `${label}: ${value} (${percentage.toFixed(1)}%)`;
-                }
-              }
-            }
-          }
-        };
-      },
-      error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: error.error?.message || 'Failed to load underlying'
-        });
-      }
-    });
-  }
 
   // Function to fetch IRR
   fetchIrr(entityid: string): void {
