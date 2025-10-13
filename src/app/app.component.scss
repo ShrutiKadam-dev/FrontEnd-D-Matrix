@@ -217,16 +217,19 @@
 /* Topbar */
 .topbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;  // left and right alignment
   align-items: center;
   background: #f8fafc;
-  padding: 0rem 2rem;
+  padding: 0 2rem;                 // no extra top/bottom padding
   height: 60px;
   border-bottom: 1px solid #e2e8f0;
   position: sticky;
   top: 0;
   z-index: 100;
+  margin-bottom: 0.5rem; 
+  padding-left: 2px;    
 }
+
 
 .topbar-right {
   display: flex;
@@ -237,10 +240,14 @@
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex: 1; // take remaining space
+  gap: 0.5rem;                     // smaller gap before breadcrumb
+  flex: 1;                          // take remaining space
 }
 
+button.p-button-text {
+  margin: 0;                        // remove extra margin around back button
+  padding: 0;                       // remove default padding
+}
 
 .profile-avatar {
   width: 40px;
@@ -277,6 +284,7 @@
 }
 
 ::ng-deep .p-breadcrumb {
-  background: transparent !important;   // remove default white
-  padding: 0 !important;               // remove extra padding
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;             // remove extra margin before breadcrumb
 }

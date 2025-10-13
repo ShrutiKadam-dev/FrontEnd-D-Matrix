@@ -14,8 +14,8 @@
 
   <!-- Main Content -->
   <div class="content-container">
-    <!-- Top Navbar -->
-    <div class="topbar">
+    <!-- Top showNavBar -->
+    <div class="topbar" *ngIf="showNavBar">
       <div class="topbar-left flex items-center gap-2">
         <!-- Back Button -->
         <button *ngIf="showBackButton" pButton type="button" icon="pi pi-arrow-left" class="p-button-text"

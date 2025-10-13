@@ -36,7 +36,8 @@ export class AppComponent implements OnInit {
   profileItems: MenuItem[] = [];
 
   showSidebar = true;
-  isCollapsed = false;   // ⬅ NEW: collapse state
+  showNavBar = true;
+  isCollapsed = false;  
 
   breadcrumbItems: MenuItem[] = [];
   home: MenuItem = { icon: 'pi pi-home', routerLink: '/home', title: 'Home' };
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
         const currentUrl = event.urlAfterRedirects.split('?')[0];
 
         this.showSidebar = !currentUrl.startsWith('/auth');
+        this.showNavBar = !currentUrl.startsWith('/auth');
 
         // Update breadcrumbs and back button
         this.updateBreadcrumbs(currentUrl);
@@ -176,13 +178,13 @@ export class AppComponent implements OnInit {
   }
 
   updateBreadcrumbs(url: string) {
-    const cleanUrl = url.replace(/^\/features/, ''); // remove /features prefix
+    const cleanUrl = url.replace(/^\/features/, ''); 
     const segments = cleanUrl.split('/').filter(seg => seg);
 
     this.breadcrumbItems = segments.map((seg, index) => ({
       label: this.formatLabel(seg),
       routerLink: '/' + segments.slice(0, index + 1).join('/'),
-      title: this.formatLabel(seg) // tooltip on hover
+      title: this.formatLabel(seg) 
     }));
   }
 
