@@ -56,7 +56,7 @@ export class DirectEquityComponent implements OnInit {
   }
   
   goToDirectEquityDetails(de: any) {
-    this.router.navigate(['/features/equity/direct-equity-details', de.entityid]);
+    this.router.navigate(['/features/equity/direct-equity', de.entityid]);
   }
 
   getAllDirectEquity() {

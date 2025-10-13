@@ -71,7 +71,7 @@ export class AifComponent {
   }
 
   goToAif(item: any) {
-    this.router.navigate(['/features/equity/sub-aif', item.entityid]);
+    this.router.navigate(['/features/equity/aif', item.entityid]);
   }
 
   searchAifs(event: any) {

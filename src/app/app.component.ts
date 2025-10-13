@@ -7,7 +7,7 @@ import { CardModule } from 'primeng/card';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';  
+import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { Location } from '@angular/common';
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
   showSidebar = true;
   showNavBar = true;
-  isCollapsed = false;  
+  isCollapsed = false;
 
   breadcrumbItems: MenuItem[] = [];
   home: MenuItem = { icon: 'pi pi-home', routerLink: '/features/home', title: 'Home' };
@@ -173,20 +173,21 @@ export class AppComponent implements OnInit {
       }
     ];
   }
+  
   goBack() {
     this.location.back();
   }
 
-updateBreadcrumbs(url: string) {
-  const cleanUrl = url.replace(/^\/features/, ''); 
-  const segments = cleanUrl.split('/').filter(seg => seg);
+  updateBreadcrumbs(url: string) {
+    const cleanUrl = url.replace(/^\/features/, '');
+    const segments = cleanUrl.split('/').filter(seg => seg);
 
-  this.breadcrumbItems = segments.map((seg, index) => ({
-    label: this.formatLabel(seg),
-    routerLink: ['/features', ...segments.slice(0, index + 1)], // <-- Use array for proper routerLink
-    title: this.formatLabel(seg)
-  }));
-}
+    this.breadcrumbItems = segments.map((seg, index) => ({
+      label: this.formatLabel(seg),
+      routerLink: ['/features', ...segments.slice(0, index + 1)], // <-- Use array for proper routerLink
+      title: this.formatLabel(seg)
+    }));
+  }
 
   formatLabel(str: string) {
     return str.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());

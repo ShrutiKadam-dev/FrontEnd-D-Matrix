@@ -108,7 +108,7 @@ export class EquityComponent implements OnInit {
           s.color = `hsl(${hue}, 70%, 50%)`;
         });
 
-        const totalCount = res.data[0]?.total_tag_count || 0;
+        const totalCount = res.data[0]?.overall_tag_count || 0;
 
         // Dynamic actionCounts
         this.actionCounts = { total_count: totalCount };
