@@ -9,36 +9,53 @@ import { filter } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';  // ⬅ Needed for toggle button
 import { TooltipModule } from 'primeng/tooltip'; // ⬅ Needed for tooltips
+import { MenuModule } from 'primeng/menu';
+import { Location } from '@angular/common';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
+    RouterOutlet,
     CommonModule,
-    RouterModule, 
-    PanelMenuModule, 
+    BreadcrumbModule,
+    RouterModule,
+    PanelMenuModule,
     CardModule,
-    ToastModule, 
+    ToastModule,
     ButtonModule,
-    TooltipModule
+    TooltipModule,
+    MenuModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   menuItems: MenuItem[] = [];
+  profileItems: MenuItem[] = [];
+
   showSidebar = true;
   isCollapsed = false;   // ⬅ NEW: collapse state
 
-  constructor(private router: Router) {}
+  breadcrumbItems: MenuItem[] = [];
+  home: MenuItem = { icon: 'pi pi-home', routerLink: '/home', title: 'Home' };
+
+  showBackButton = false;
+
+  constructor(private router: Router, private location: Location) { }
 
   ngOnInit() {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         const currentUrl = event.urlAfterRedirects.split('?')[0];
+
         this.showSidebar = !currentUrl.startsWith('/auth');
+
+        // Update breadcrumbs and back button
+        this.updateBreadcrumbs(currentUrl);
+        this.showBackButton = currentUrl !== '/home';
       });
 
     this.menuItems = [
@@ -54,28 +71,28 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/equity'],
         tooltipOptions: { tooltipLabel: 'Equity', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'Direct Equity', 
+          {
+            label: 'Direct Equity',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/direct-equity']
           },
-          { 
-            label: 'Mutual Funds', 
+          {
+            label: 'Mutual Funds',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/mutual-funds']
           },
-          { 
-            label: 'AIF', 
+          {
+            label: 'AIF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/aif']
           },
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/etf']
           },
-          { 
-            label: 'PMS', 
+          {
+            label: 'PMS',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/PMS']
           },
@@ -87,18 +104,18 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/fixed-income'],
         tooltipOptions: { tooltipLabel: 'Fixed Income', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'Direct Debt', 
+          {
+            label: 'Direct Debt',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/direct-debt']
           },
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/etf']
           },
-          { 
-            label: 'AIF', 
+          {
+            label: 'AIF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/aif']
           },
@@ -110,13 +127,13 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/commodities'],
         tooltipOptions: { tooltipLabel: 'Commodities', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/etf']
           },
-          { 
-            label: 'Direct Equity', 
+          {
+            label: 'Direct Equity',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/direct-equity']
           },
@@ -140,5 +157,41 @@ export class AppComponent implements OnInit {
         tooltipOptions: { tooltipLabel: 'Entity', tooltipPosition: 'right' }
       }
     ];
+
+    this.profileItems = [
+      {
+        label: 'Edit Profile',
+        icon: 'pi pi-user-edit',
+        command: () => this.router.navigate(['/features/profile'])
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.logout()
+      }
+    ];
+  }
+  goBack() {
+    this.location.back();
+  }
+
+  updateBreadcrumbs(url: string) {
+    const cleanUrl = url.replace(/^\/features/, ''); // remove /features prefix
+    const segments = cleanUrl.split('/').filter(seg => seg);
+
+    this.breadcrumbItems = segments.map((seg, index) => ({
+      label: this.formatLabel(seg),
+      routerLink: '/' + segments.slice(0, index + 1).join('/'),
+      title: this.formatLabel(seg) // tooltip on hover
+    }));
+  }
+
+  formatLabel(str: string) {
+    return str.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  logout() {
+    console.log('User logged out');
+    this.router.navigate(['/auth/login']);
   }
 }
