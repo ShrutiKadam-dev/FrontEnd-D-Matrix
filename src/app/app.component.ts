@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   isCollapsed = false;  
 
   breadcrumbItems: MenuItem[] = [];
-  home: MenuItem = { icon: 'pi pi-home', routerLink: '/home', title: 'Home' };
+  home: MenuItem = { icon: 'pi pi-home', routerLink: '/features/home', title: 'Home' };
 
   showBackButton = false;
 

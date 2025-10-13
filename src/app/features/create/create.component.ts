@@ -26,7 +26,7 @@ import { Table } from 'primeng/table';
   selector: 'app-create',
   standalone: true,
   imports: [...SHARED_IMPORTS],
-  providers: [MessageService],
+  providers: [MessageService,ConfirmationService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss',
 })
