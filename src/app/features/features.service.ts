@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -432,5 +432,14 @@ export class FeaturesService {
       params: { entityid }
     });
   }
+
+  //compare entity
+  compareEntities(entity1Id: string, entity2Id: string): Observable<any> {
+  const params = new HttpParams()
+    .set('entity1', entity1Id)
+    .set('entity2', entity2Id);
+
+  return this.http.get(`${this.apiUrl}/compare_weight`, { params });
+}
 
 }
