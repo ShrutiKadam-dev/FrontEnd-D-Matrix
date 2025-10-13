@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -12,6 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { Location } from '@angular/common';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { FeaturesService } from './features/features.service';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,8 @@ export class AppComponent implements OnInit {
   home: MenuItem = { icon: 'pi pi-home', routerLink: '/features/home', title: 'Home' };
 
   showBackButton = false;
+
+  private featuresService = inject(FeaturesService);
 
   constructor(private router: Router, private location: Location) { }
 
@@ -173,7 +176,7 @@ export class AppComponent implements OnInit {
       }
     ];
   }
-  
+
   goBack() {
     this.location.back();
   }
@@ -184,9 +187,26 @@ export class AppComponent implements OnInit {
 
     this.breadcrumbItems = segments.map((seg, index) => ({
       label: this.formatLabel(seg),
-      routerLink: ['/features', ...segments.slice(0, index + 1)], // <-- Use array for proper routerLink
+      routerLink: ['/features', ...segments.slice(0, index + 1)],
       title: this.formatLabel(seg)
     }));
+
+    // Detect Mutual Fund ID (like ENT-0329) and replace its label with real name
+    const lastSegment = segments[segments.length - 1];
+    if (lastSegment && lastSegment.startsWith('ENT')) {
+      this.featuresService.getEntityById(lastSegment).subscribe({
+        next: (res: any) => {
+          const fundName = res?.data?.[0]?.scripname || lastSegment;
+
+          this.breadcrumbItems = this.breadcrumbItems.map((item, i) =>
+            i === this.breadcrumbItems.length - 1
+              ? { ...item, label: fundName, title: fundName }
+              : item
+          );
+        },
+        error: (err: any) => console.error('Failed to load fund details', err)
+      });
+    }
   }
 
   formatLabel(str: string) {
