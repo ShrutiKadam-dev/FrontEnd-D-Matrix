@@ -94,9 +94,6 @@
   transition: all 0.3s ease;
 }
 
-
-
-
 // roshan
 
 ::ng-deep .custom-menu{
@@ -225,11 +222,10 @@
   border-bottom: 1px solid #e2e8f0;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1100;
   margin-bottom: 0.5rem; 
   padding-left: 2px;    
 }
-
 
 .topbar-right {
   display: flex;
@@ -286,5 +282,5 @@ button.p-button-text {
 ::ng-deep .p-breadcrumb {
   background: transparent !important;
   padding: 0 !important;
-  margin: 0 !important;             // remove extra margin before breadcrumb
+  margin: 0 !important;           
 }

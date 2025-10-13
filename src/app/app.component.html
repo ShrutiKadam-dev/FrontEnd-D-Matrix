@@ -27,7 +27,7 @@
       </div>
 
       <div class="topbar-right">
-        <p-menu #profileMenu [popup]="true" [model]="profileItems"></p-menu>
+        <p-menu #profileMenu [popup]="true" [appendTo]="'body'" [model]="profileItems"></p-menu>
         <div class="profile-avatar cursor-pointer" (click)="profileMenu.toggle($event)">
           <img src="https://avatars.githubusercontent.com/u/127954506?v=4" alt="Profile" />
         </div>
