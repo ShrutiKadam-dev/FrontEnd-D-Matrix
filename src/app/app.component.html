@@ -14,6 +14,26 @@
 
   <!-- Main Content -->
   <div class="content-container">
+    <!-- Top showNavBar -->
+    <div class="topbar" *ngIf="showNavBar">
+      <div class="topbar-left flex items-center gap-2">
+        <!-- Back Button -->
+        <button *ngIf="showBackButton" pButton type="button" icon="pi pi-arrow-left" class="p-button-text"
+          (click)="goBack()">
+        </button>
+
+        <!-- Dynamic Breadcrumbs -->
+        <p-breadcrumb [model]="breadcrumbItems" [home]="home"></p-breadcrumb>
+      </div>
+
+      <div class="topbar-right">
+        <p-menu #profileMenu [popup]="true" [appendTo]="'body'" [model]="profileItems"></p-menu>
+        <div class="profile-avatar cursor-pointer" (click)="profileMenu.toggle($event)">
+          <img src="https://avatars.githubusercontent.com/u/127954506?v=4" alt="Profile" />
+        </div>
+      </div>
+    </div>
+
     <p-toast></p-toast>
     <router-outlet></router-outlet>
   </div>

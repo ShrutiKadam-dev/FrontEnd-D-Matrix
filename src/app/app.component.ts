@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -7,38 +7,60 @@ import { CardModule } from 'primeng/card';
 import { MenuItem } from 'primeng/api';
 import { filter } from 'rxjs/operators';
 import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';  // ⬅ Needed for toggle button
-import { TooltipModule } from 'primeng/tooltip'; // ⬅ Needed for tooltips
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
+import { MenuModule } from 'primeng/menu';
+import { Location } from '@angular/common';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { FeaturesService } from './features/features.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
+    RouterOutlet,
     CommonModule,
-    RouterModule, 
-    PanelMenuModule, 
+    BreadcrumbModule,
+    RouterModule,
+    PanelMenuModule,
     CardModule,
-    ToastModule, 
+    ToastModule,
     ButtonModule,
-    TooltipModule
+    TooltipModule,
+    MenuModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   menuItems: MenuItem[] = [];
-  showSidebar = true;
-  isCollapsed = false;   // ⬅ NEW: collapse state
+  profileItems: MenuItem[] = [];
 
-  constructor(private router: Router) {}
+  showSidebar = true;
+  showNavBar = true;
+  isCollapsed = false;
+
+  breadcrumbItems: MenuItem[] = [];
+  home: MenuItem = { icon: 'pi pi-home', routerLink: '/features/home', title: 'Home' };
+
+  showBackButton = false;
+
+  private featuresService = inject(FeaturesService);
+
+  constructor(private router: Router, private location: Location) { }
 
   ngOnInit() {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         const currentUrl = event.urlAfterRedirects.split('?')[0];
+
         this.showSidebar = !currentUrl.startsWith('/auth');
+        this.showNavBar = !currentUrl.startsWith('/auth');
+
+        // Update breadcrumbs and back button
+        this.updateBreadcrumbs(currentUrl);
+        this.showBackButton = currentUrl !== '/home';
       });
 
     this.menuItems = [
@@ -54,28 +76,28 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/equity'],
         tooltipOptions: { tooltipLabel: 'Equity', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'Direct Equity', 
+          {
+            label: 'Direct Equity',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/direct-equity']
           },
-          { 
-            label: 'Mutual Funds', 
+          {
+            label: 'Mutual Funds',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/mutual-funds']
           },
-          { 
-            label: 'AIF', 
+          {
+            label: 'AIF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/aif']
           },
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/etf']
           },
-          { 
-            label: 'PMS', 
+          {
+            label: 'PMS',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/equity/PMS']
           },
@@ -87,18 +109,18 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/fixed-income'],
         tooltipOptions: { tooltipLabel: 'Fixed Income', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'Direct Debt', 
+          {
+            label: 'Direct Debt',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/direct-debt']
           },
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/etf']
           },
-          { 
-            label: 'AIF', 
+          {
+            label: 'AIF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/fixed-income/aif']
           },
@@ -110,13 +132,13 @@ export class AppComponent implements OnInit {
         routerLink: ['/features/commodities'],
         tooltipOptions: { tooltipLabel: 'Commodities', tooltipPosition: 'right' },
         items: [
-          { 
-            label: 'ETF', 
+          {
+            label: 'ETF',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/etf']
           },
-          { 
-            label: 'Direct Equity', 
+          {
+            label: 'Direct Equity',
             icon: 'pi pi-arrow-right',
             routerLink: ['/features/commodities/direct-equity']
           },
@@ -140,5 +162,59 @@ export class AppComponent implements OnInit {
         tooltipOptions: { tooltipLabel: 'Entity', tooltipPosition: 'right' }
       }
     ];
+
+    this.profileItems = [
+      {
+        label: 'Edit Profile',
+        icon: 'pi pi-user-edit',
+        command: () => this.router.navigate(['/features/profile'])
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.logout()
+      }
+    ];
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  updateBreadcrumbs(url: string) {
+    const cleanUrl = url.replace(/^\/features/, '');
+    const segments = cleanUrl.split('/').filter(seg => seg);
+
+    this.breadcrumbItems = segments.map((seg, index) => ({
+      label: this.formatLabel(seg),
+      routerLink: ['/features', ...segments.slice(0, index + 1)],
+      title: this.formatLabel(seg)
+    }));
+
+    // Detect Mutual Fund ID (like ENT-0329) and replace its label with real name
+    const lastSegment = segments[segments.length - 1];
+    if (lastSegment && lastSegment.startsWith('ENT')) {
+      this.featuresService.getEntityById(lastSegment).subscribe({
+        next: (res: any) => {
+          const fundName = res?.data?.[0]?.scripname || lastSegment;
+
+          this.breadcrumbItems = this.breadcrumbItems.map((item, i) =>
+            i === this.breadcrumbItems.length - 1
+              ? { ...item, label: fundName, title: fundName }
+              : item
+          );
+        },
+        error: (err: any) => console.error('Failed to load fund details', err)
+      });
+    }
+  }
+
+  formatLabel(str: string) {
+    return str.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  logout() {
+    console.log('User logged out');
+    this.router.navigate(['/auth/login']);
   }
 }
