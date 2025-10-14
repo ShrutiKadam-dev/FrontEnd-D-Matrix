@@ -55,11 +55,12 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         const currentUrl = event.urlAfterRedirects.split('?')[0];
 
+        // Update breadcrumbs and back button
+        this.updateBreadcrumbs(currentUrl);
+
         this.showSidebar = !currentUrl.startsWith('/auth');
         this.showNavBar = !currentUrl.startsWith('/auth');
 
-        // Update breadcrumbs and back button
-        this.updateBreadcrumbs(currentUrl);
         this.showBackButton = currentUrl !== '/home';
       });
 
@@ -89,12 +90,12 @@ export class AppComponent implements OnInit {
           {
             label: 'AIF',
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/equity/aif']
+            routerLink: ['/features/equity/AIF']
           },
           {
             label: 'ETF',
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/equity/etf']
+            routerLink: ['/features/equity/ETF']
           },
           {
             label: 'PMS',
@@ -175,6 +176,7 @@ export class AppComponent implements OnInit {
         command: () => this.logout()
       }
     ];
+
   }
 
   goBack() {

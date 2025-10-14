@@ -94,7 +94,7 @@ export class EquityComponent implements OnInit {
   }
 
   getEquityMCAPCount() {
-    this.featuresService.getallMfEquityUnderlyingCount().subscribe({
+    this.featuresService.getAllEquityUnderlyingCount().subscribe({
       next: (res: any) => {
         if (!res?.data?.length) {
           this.underlyingTableList = [];

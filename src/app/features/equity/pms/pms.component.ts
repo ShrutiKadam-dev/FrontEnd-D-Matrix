@@ -57,7 +57,7 @@ export class PMSComponent implements OnInit {
   }
   
   goToPMSDetails(pms: any) {
-    this.router.navigate(['/features/equity/pms', pms.entityid]);
+    this.router.navigate(['/features/equity/PMS', pms.entityid]);
   }
 
   getAllPMSEquity() {
