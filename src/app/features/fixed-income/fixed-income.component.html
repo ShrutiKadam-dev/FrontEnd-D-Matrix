@@ -1,1 +1,41 @@
 
+<!-- Search Section -->
+<div class="search-section">
+  <p-autoComplete [(ngModel)]="selectedEquityName" [suggestions]="filteredENames"
+    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..."
+    [minLength]="1">
+  </p-autoComplete>
+
+  <button *ngIf="selectedEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
+  </button>
+</div>
+
+<!-- Carousel -->
+<p-carousel [value]="displayEs" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" *ngIf="!selectedEquityName">
+
+  <ng-template let-e pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToEquityDetails(e)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
+      </ng-template>
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title" [pTooltip]="e.subcategory">{{ e.subcategory || 'No Subcategory' }}</div>
+      <div class="card-value">{{ e.category || 'No Category' }}</div>
+      <div class="status">Total Entity Count : {{ e.total }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+<!-- Search Result Card -->
+<div *ngIf="selectedEquityName" class="card-container">
+  <p-card *ngFor="let e of displayEs" styleClass="P-card">
+    <ng-template pTemplate="header">
+      <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
+    </ng-template>
+    <!-- Truncate with ellipsis & tooltip -->
+    <div class="card-title" [title]="e.subcategory">{{ e.nickname || 'No Name' }}</div>
+    <div class="card-value">{{ e.subcategory || 'No Subcategory' }}</div>
+    <div class="status">{{ e.entityid }}</div>
+  </p-card>
+</div>

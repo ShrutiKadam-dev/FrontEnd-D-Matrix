@@ -156,6 +156,10 @@ export class FeaturesService {
     return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllEntity`);
   }
 
+  getAllFixedIncomeHome(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllFixedIncome`);
+  }
+  
   getAllCommoditiesHome(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getCountOfAllCommodities`);
   }

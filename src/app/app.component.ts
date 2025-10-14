@@ -123,7 +123,7 @@ export class AppComponent implements OnInit {
           {
             label: 'AIF',
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/fixed-income/aif']
+            routerLink: ['/features/fixed-income/AIF']
           },
         ]
       },
