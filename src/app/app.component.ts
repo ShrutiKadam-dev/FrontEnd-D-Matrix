@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
           {
             label: 'ETF',
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/fixed-income/etf']
+            routerLink: ['/features/fixed-income/ETF']
           },
           {
             label: 'AIF',
@@ -136,7 +136,7 @@ export class AppComponent implements OnInit {
           {
             label: 'ETF',
             icon: 'pi pi-arrow-right',
-            routerLink: ['/features/commodities/etf']
+            routerLink: ['/features/commodities/ETF']
           },
           {
             label: 'Direct Equity',

@@ -72,7 +72,7 @@ export class AifComponent {
   }
 
   goToAif(item: any) {
-    this.router.navigate(['/features/fixed-income/sub-aif', item.entityid]);
+    this.router.navigate(['/features/fixed-income/AIF', item.entityid]);
   }
 
   searchAifs(event: any) {

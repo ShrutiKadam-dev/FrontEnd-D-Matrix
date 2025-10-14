@@ -13,27 +13,41 @@ export const commoditiesRoutes: Routes = [
         component: CommoditiesComponent
     },
     {
-        path: 'etf',
-        loadComponent: () => import('./etf/etf.component').then(c => c.EtfComponent)
-    },
-    {
-        path: 'etf-details/:id',
-        loadComponent: () => import('./etf/etf-details/etf-details.component').then(c => c.EtfDetailsComponent)
-    },
-        {
         path: 'direct-equity',
-        loadComponent: () => import('./direct-equity/direct-equity.component').then(c => c.DirectEquityComponent)
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import('./direct-equity/direct-equity.component').then(
+                        c => c.DirectEquityComponent
+                    )
+            },
+            {
+                path: ':id',
+                loadComponent: () =>
+                    import('./direct-equity/direct-equity-details/direct-equity-details.component').then(
+                        c => c.DirectEquityDetailsComponent
+                    )
+            }
+        ]
     },
+
     {
-        path: 'direct-equity-details/:id',
-        loadComponent: () => import('./direct-equity/direct-equity-details/direct-equity-details.component').then(c => c.DirectEquityDetailsComponent)
+        path: 'ETF',
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import('./etf/etf.component').then(c => c.EtfComponent)
+            },
+            {
+                path: ':id',
+                loadComponent: () =>
+                    import('./etf/etf-details/etf-details.component').then(
+                        c => c.EtfDetailsComponent
+                    )
+            }
+        ]
     },
-    {
-        path: 'aif',
-        loadComponent: () => import('./aif/aif.component').then(c => c.AifComponent)
-    },
-    {
-        path: 'sub-aif/:id',
-        loadComponent: () => import('./aif/sub-aif/sub-aif.component').then(c => c.SubAifComponent)
-    },
+
 ];

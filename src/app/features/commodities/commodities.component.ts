@@ -134,7 +134,7 @@ export class CommoditiesComponent implements OnInit {
 
     switch (de.subcategory?.toLowerCase()) {
       case 'etf':
-        this.router.navigate(['/features/commodities/etf']);
+        this.router.navigate(['/features/commodities/ETF']);
         break;
 
       case 'direct equity':
