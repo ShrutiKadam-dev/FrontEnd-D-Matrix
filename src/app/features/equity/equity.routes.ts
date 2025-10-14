@@ -50,7 +50,7 @@ export const equityRoutes: Routes = [
     ]
   },
   {
-    path: 'aif',
+    path: 'AIF',
     children: [
       {
         path: '',
@@ -65,7 +65,7 @@ export const equityRoutes: Routes = [
     ]
   },
   {
-    path: 'etf',
+    path: 'ETF',
     children: [
       {
         path: '',
@@ -82,7 +82,7 @@ export const equityRoutes: Routes = [
     ]
   },
   {
-    path: 'pms',
+    path: 'PMS',
     children: [
       {
         path: '',
