@@ -1,3 +1,111 @@
+<!-- MCAP Tag Allocation -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>MCAP Tag Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ actionCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let tag of mcapTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
+            <span class="label">{{ tag.tag }}</span>
+            <span class="percent">{{ tag.tag_percent | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="mcapChartData" type="pie" [data]="mcapChartData" [options]="mcapChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+
+
+<!-- Sector Allocation -->
+<div class="counts-card" style="margin-bottom: 2rem;" *ngIf="underlyingTableList.length > 0">
+  <p-card styleClass="P-card">
+    <h4>Sector Allocation</h4>
+    <div class="card-content">
+      <div class="counts-section">
+        <div>
+          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
+        </div>
+        <div *ngFor="let sector of sectorTableList">
+          <div class="count-item">
+            <span class="dot" [ngStyle]="{'background-color': sector.color || '#42A5F5'}"></span>
+            <span class="label">{{ sector.sector }}</span>
+            <span class="percent">{{ sector.sector_percent | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-section">
+        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<!-- Nav Allocation -->
+<div class="table-card" *ngIf="allNavs.length > 0">
+  <h4>Summary Of NAV</h4>
+  <div class="card">
+    <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
+  </div>
+</div>
+
+
+<!-- Summary of underlying -->
+<div class="table-card">
+  <h4>Summary Of Underlying</h4>
+  <div class="search-header p-d-flex p-ai-center p-jc-between">
+    <div class="underlying-date">
+      Last Updated At
+      <span class="date-badge">
+        {{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}
+      </span>
+    </div>
+    <div class="search-container">
+      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
+    </div>
+  </div>
+
+  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
+    [rowsPerPageOptions]="[10, 25, 100, 500, 1000]"
+    [globalFilterFields]="['scripcode','weightage','isin_code','company_name']" scrollHeight="400px"
+    [responsiveLayout]="'scroll'" columnResizeMode="expand" class="custom-table">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
+        <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
+        <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
+        <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
+        <th pSortableColumn="tag">Tag <p-sortIcon field="tag"></p-sortIcon></th>
+        <th pSortableColumn="isin_code">ISIN <p-sortIcon field="isin_code"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-entity>
+      <tr>
+        <td>{{ entity.company_name }}</td>
+        <td>{{ entity.scripcode }}</td>
+        <td>{{ entity.weightage }} %</td>
+        <td>{{ entity.sector }}</td>
+        <td>{{ entity.tag }}</td>
+        <td>{{ entity.isin_code }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">No Records found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
 
 <!-- Summary of Action -->
 <div class="table-card">
@@ -106,102 +214,7 @@
   </p-table>
 </div>
 
-<!-- MCAP Tag Allocation -->
-<div class="counts-card" style="margin-bottom: 2rem;">
-  <p-card styleClass="P-card">
-    <h4>MCAP Tag Allocation</h4>
-    <div class="card-content">
-      <div class="counts-section">
-        <div>
-          <h4>Total Number of Underlying : {{ actionCounts?.total_count }}</h4>
-        </div>
-        <div *ngFor="let tag of mcapTableList">
-          <div class="count-item">
-            <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
-            <span class="label">{{ tag.tag }}</span>
-            <span class="percent">{{ tag.tag_percent | number:'1.0-1' }}%</span>
-          </div>
-        </div>
-      </div>
-      <div class="chart-section">
-        <p-chart *ngIf="mcapChartData" type="pie" [data]="mcapChartData" [options]="mcapChartOptions"></p-chart>
-      </div>
-    </div>
-  </p-card>
-</div>
 
-<!-- Summary of underlying -->
-<div class="table-card">
-  <h4>Summary Of Underlying</h4>
-  <div class="search-header p-d-flex p-ai-center p-jc-between">
-    <div class="underlying-date">
-      Last Updated At
-      <span class="date-badge">
-        {{ underlyingTableList[0]?.created_at | date:'dd MMM yyyy' }}
-      </span>
-    </div>
-    <div class="search-container">
-      <input pInputText type="text" (input)="onGlobalFilter($event, 'underlying')" placeholder="Search underlying..." />
-    </div>
-  </div>
-
-  <p-table #underlyingTable [value]="underlyingTableList" dataKey="id" [paginator]="true" [rows]="10"
-    [rowsPerPageOptions]="[10, 25, 100, 500, 1000]"
-    [globalFilterFields]="['scripcode','weightage','isin_code','company_name']" scrollHeight="400px"
-    [responsiveLayout]="'scroll'" columnResizeMode="expand" class="custom-table">
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
-        <th pSortableColumn="scripcode">Scrip Code <p-sortIcon field="scripcode"></p-sortIcon></th>
-        <th pSortableColumn="weightage">Weightage <p-sortIcon field="weightage"></p-sortIcon></th>
-        <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
-        <th pSortableColumn="tag">Tag <p-sortIcon field="tag"></p-sortIcon></th>
-        <th pSortableColumn="isin_code">ISIN <p-sortIcon field="isin_code"></p-sortIcon></th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-entity>
-      <tr>
-        <td>{{ entity.company_name }}</td>
-        <td>{{ entity.scripcode }}</td>
-        <td>{{ entity.weightage }} %</td>
-        <td>{{ entity.sector }}</td>
-        <td>{{ entity.tag }}</td>
-        <td>{{ entity.isin_code }}</td>
-      </tr>
-    </ng-template>
-
-    <ng-template #emptymessage>
-      <tr>
-        <td colspan="6">No Records found</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
-
-<!-- Sector Allocation -->
-<div class="counts-card" style="margin-bottom: 2rem;" *ngIf="underlyingTableList.length > 0">
-  <p-card styleClass="P-card">
-    <h4>Sector Allocation</h4>
-    <div class="card-content">
-      <div class="counts-section">
-        <div>
-          <h4>Total Number of Underlying : {{ sectorCounts?.total_count }}</h4>
-        </div>
-        <div *ngFor="let sector of sectorTableList">
-          <div class="count-item">
-            <span class="dot" [ngStyle]="{'background-color': sector.color || '#42A5F5'}"></span>
-            <span class="label">{{ sector.sector }}</span>
-            <span class="percent">{{ sector.sector_percent | number:'1.0-1' }}%</span>
-          </div>
-        </div>
-      </div>
-      <div class="chart-section">
-        <p-chart *ngIf="sectorChartData" type="pie" [data]="sectorChartData" [options]="sectorChartOptions"></p-chart>
-      </div>
-    </div>
-  </p-card>
-</div>
 
 <!-- edit action table row -->
 <p-dialog header="Edit Action" [(visible)]="displayActionRowEditDialog" [modal]="true" [closable]="true"
@@ -244,14 +257,6 @@
     <p-button label="Save" styleClass="add-entity-btn" icon="pi pi-check" (click)="saveEdit()"></p-button>
   </ng-template>
 </p-dialog>
-
-<!-- Nav Allocation -->
-<div class="table-card" *ngIf="allNavs.length > 0">
-  <h4>Summary Of NAV</h4>
-  <div class="card">
-    <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-  </div>
-</div>
 
 <p-confirmDialog></p-confirmDialog>
 <p-toast></p-toast>
