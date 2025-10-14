@@ -27,11 +27,13 @@ export class CompareComponent implements OnInit {
 
   compareForm!: FormGroup;
   entityList: any[] = [];
+  filteredEntity1List: any[] = [];
   filteredEntity2List: any[] = [];
 
   selectedEntity1: any = null;
   selectedEntity2: any = null;
-  comparisonResult: number | null = null;
+  comparisonResult: any | null = null;
+  comparisonPercentage: number | null = null
 
   ngOnInit(): void {
     this.initForm();
@@ -58,6 +60,8 @@ export class CompareComponent implements OnInit {
       next: (res: any) => {
         this.entityList = Array.isArray(res.data) ? res.data : [];
         this.filteredEntity2List = [...this.entityList];
+        this.filteredEntity1List = [...this.entityList];
+        
       },
       error: (err: any) => {
         this.messageService.add({
@@ -70,20 +74,59 @@ export class CompareComponent implements OnInit {
   }
 
   compareEntities(event: Event) {
-    event.preventDefault();
-    if (this.compareForm.invalid) return;
+  event.preventDefault();
 
-    const { entity1, entity2 } = this.compareForm.value;
+  if (this.compareForm.invalid) return;
 
-    this.selectedEntity1 = this.entityList.find(e => e.scripcode === entity1);
-    this.selectedEntity2 = this.entityList.find(e => e.scripcode === entity2);
+  const entity1Id = this.compareForm.get('entity1')?.value;
+  const entity2Id = this.compareForm.get('entity2')?.value;
 
-    this.comparisonResult = Math.floor(Math.random() * 100);
+  // Find the selected entity objects to get scrip names
+const entity1Obj = this.filteredEntity1List.find(e => e.entityid === entity1Id);
+const entity2Obj = this.filteredEntity2List.find(e => e.entityid === entity2Id);
 
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Compare Triggered',
-      detail: `Comparing ${this.selectedEntity1?.scripname} with ${this.selectedEntity2?.scripname}`
-    });
-  }
+
+
+
+this.selectedEntity1 = {
+  id: entity1Id,
+  scripName: entity1Obj?.scripname || 'N/A'
+};
+
+this.selectedEntity2 = {
+  id: entity2Id,
+  scripName: entity2Obj?.scripname || 'N/A'
+};
+
+
+console.log(this.selectedEntity1, this.selectedEntity2)
+  console.log('Comparing IDs:', entity1Id, entity2Id);
+
+  // 🔹 Call your API service
+  this.featuresService.compareEntities(entity1Id, entity2Id).subscribe({
+    next: (response) => {
+      this.comparisonResult = response.data;
+      this.comparisonPercentage = this.comparisonResult.overlap?.overlap_percentage_of_mf1 || 0;
+      
+      
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Comparison Complete',
+        detail: `Compared ${entity1Id} with ${entity2Id}`,
+      });
+    },
+    error: (err) => {
+      console.error('Error comparing:', err);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to compare entities',
+      });
+     
+    },
+    
+  });
+  
+}
+
 }
