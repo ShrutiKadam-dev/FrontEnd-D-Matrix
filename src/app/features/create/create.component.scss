@@ -309,7 +309,6 @@
 
 /* Fix card height and prevent outer page scroll */
 .entity-table-wrapper {
-  height: 575px;          /* your fixed card height */
   display: flex;
   flex-direction: column;
 }
