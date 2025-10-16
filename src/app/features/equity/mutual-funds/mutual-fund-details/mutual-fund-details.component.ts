@@ -51,6 +51,7 @@ export class MutualFundDetailsComponent implements OnInit {
 
   // ---- Results
   irrResult: number | null = null;
+  unrealisedIrrResult: number | null = null;
 
   // ---- States
   isLoading = false;
@@ -519,6 +520,7 @@ export class MutualFundDetailsComponent implements OnInit {
     this.featuresService.getIrrById(entityid).subscribe({
       next: (response) => {
         this.irrResult = response?.annualized_irr_percent ?? null;
+        this.unrealisedIrrResult = response?.estimated_annualized_irr_percent ?? null;
         this.isLoading = false;
       },
       error: (err) => {

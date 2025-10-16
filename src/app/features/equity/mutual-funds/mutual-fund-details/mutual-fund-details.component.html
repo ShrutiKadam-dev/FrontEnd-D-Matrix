@@ -111,6 +111,8 @@
       Summary Of Actions
       <button pButton type="button" label="IRR = {{ irrResult || 0 }}%" class="p-button-sm ml-2"
         style="height: 28px;"></button>
+      <button pButton type="button" label="Unrealised IRR = {{ unrealisedIrrResult || 0 }}%" class="p-button-sm ml-2"
+        style="height: 28px;"></button>
     </h4>
     <div class="search-container">
       <input pInputText type="text" (input)="onGlobalFilter($event, 'action')" placeholder="Search actions..." />
