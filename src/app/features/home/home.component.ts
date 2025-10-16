@@ -1,39 +1,16 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { CommonModule } from '@angular/common';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { SHARED_IMPORTS } from '../../shared/shared-imports';
 import { FeaturesService } from '../features.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { ChartModule } from 'primeng/chart';
-
+import { Location } from '@angular/common';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    ChartModule,
-    CommonModule,
-    MessagesModule,
-    AutoCompleteModule,
-    MessageModule,
-    TableModule,
-    InputTextModule,
-    CarouselModule,
-    CardModule,
-    ReactiveFormsModule,
-    FormsModule
-  ],
+  imports: [...SHARED_IMPORTS],
+  providers: [MessageService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -79,7 +56,7 @@ export class HomeComponent implements OnInit{
         this.router.navigate(['/features/equity']);
         break;
 
-      case 'fixed income':
+      case 'fixed_income':
         this.router.navigate(['/features/fixed-income']);
         break;
 

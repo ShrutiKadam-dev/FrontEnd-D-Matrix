@@ -1,4 +1,3 @@
-<h3>Welcome To The Home</h3>
 <!-- Search Section -->
 <div class="search-section">
   <p-autoComplete [(ngModel)]="selectedInstrumentName" [suggestions]="filteredInstrumentNames"
@@ -14,28 +13,28 @@
 <p-carousel [value]="displayInstruments" [numVisible]="3" [numScroll]="3" [circular]="false"
   [responsiveOptions]="responsiveOptions" *ngIf="!selectedInstrumentName">
 
-  <ng-template let-de pTemplate="item">
-    <p-card styleClass="P-card" (click)="goToInstrumentDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+  <ng-template let-e pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToInstrumentDetails(e)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
-      <div class="card-value">{{ de.instrument || 'No Instrument Found' }}</div>
-      <div class="status">Total Instrument Count : {{ de.instrument_total_count }}</div>
+      <div class="card-title" [pTooltip]="e.instrument">{{ e.instrument || 'No instrument' }}</div>
+      <div class="card-value">{{ e.instrument || 'No instrument' }}</div>
+      <div class="status">Total Instrument Count : {{ e.instrument_total_count }}</div>
     </p-card>
   </ng-template>
 </p-carousel>
 
 <!-- Search Result Card -->
 <div *ngIf="selectedInstrumentName" class="card-container">
-  <p-card *ngFor="let de of displayInstruments" styleClass="P-card">
+  <p-card *ngFor="let e of displayInstruments" styleClass="P-card">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': e.color}"></div>
     </ng-template>
     <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="de.instrument">{{ de.instrument || 'No instrument' }}</div>
-    <div class="card-value">{{ de.instrument_total_count || 'No Instrument Count' }}</div>
-    <div class="status">{{ de.entityid }}</div>
+    <div class="card-title" [title]="e.instrument">{{ e.instrument || 'No Name' }}</div>
+    <div class="card-value">{{ e.instrument_total_count || 'No instrument' }}</div>
+    <div class="status">{{ e.entityid }}</div>
   </p-card>
 </div>
