@@ -38,3 +38,31 @@
     <div class="status">{{ e.entityid }}</div>
   </p-card>
 </div>
+
+<!-- MCAP Chart -->
+<div class="counts-card" style="margin-bottom: 2rem;">
+  <p-card styleClass="P-card">
+    <h4>Instrument Tag Allocation</h4>
+
+    <div class="card-content">
+      <div class="counts-section">
+        <h4>Total Number of Instruments : {{ actionCounts?.total_count }}</h4>
+
+        <div *ngFor="let tag of totalCountList" class="count-item">
+          <span class="dot" [ngStyle]="{'background-color': tag.color || '#42A5F5'}"></span>
+          <span class="label">{{ tag.instrument.replace('_', ' ') }}</span>
+          <span class="percent">{{ tag.percentage | number:'1.0-2' }}%</span>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <p-chart
+          *ngIf="mcapChartData"
+          type="pie"
+          [data]="mcapChartData"
+          [options]="mcapChartOptions"
+        ></p-chart>
+      </div>
+    </div>
+  </p-card>
+</div>

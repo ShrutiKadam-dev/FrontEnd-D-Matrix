@@ -20,22 +20,20 @@ export class EquityComponent implements OnInit {
   displayEs: any[] = [];
 
   MFActionTableList: any[] = [];
-  directEquityTableList:any[] = [];
-  aifTableList:any[] = [];
+  directEquityTableList: any[] = [];
+  aifTableList: any[] = [];
 
-        underlyingTableList: any[] = [];
+  underlyingTableList: any[] = [];
 
   totalActionTableCount = 0;
 
-    mcapChartData: any;
+  mcapChartData: any;
   mcapChartOptions: any;
 
-    actionCounts: any = {};
-
-
+  actionCounts: any = {};
 
   @ViewChild('dt') dt!: Table;
-  constructor(private router: Router,private location: Location) { }
+  constructor(private router: Router, private location: Location) { }
 
 
   private featuresService = inject(FeaturesService);
@@ -63,7 +61,7 @@ export class EquityComponent implements OnInit {
   ngOnInit() {
     this.getAllEntityHome();
     this.getEquityMCAPCount();
-    this.getAllActionTableEquity() 
+    this.getAllActionTableEquity()
   }
 
   getEquityMCAPCount() {
@@ -92,7 +90,7 @@ export class EquityComponent implements OnInit {
         });
 
         // Dynamic chart colors
- 
+
         this.mcapChartData = {
           labels: res.data.map((d: { tag: string }) => d.tag),
           datasets: [{
@@ -123,10 +121,10 @@ export class EquityComponent implements OnInit {
     });
   }
 
-  goBack(){
+  goBack() {
     this.location.back();
   }
-  
+
 
   goToEquityDetails(e: any) {
     if (!e) return;
@@ -139,7 +137,7 @@ export class EquityComponent implements OnInit {
       case 'etf':
         this.router.navigate(['/features/equity/ETF']);
         break;
-        
+
       case 'direct equity':
         this.router.navigate(['/features/equity/direct-equity']);
         break;
@@ -174,49 +172,49 @@ export class EquityComponent implements OnInit {
   }
 
   getAllActionTableEquity() {
-  this.featuresService.getAllActionTableEquity().subscribe({
-    next: (res: any) => {
-      if (res && res.data) {
-        const MFData = (res.data.action_data || []).map((item: any) => ({
-          scrip_name: item.scrip_name,
-          order_type: item.order_type,
-          unit: item.unit || '-',
-          order_date: item.order_date || '-',
-          purchase_amount: item.purchase_amount || '-',
-          source: 'Action'
-        }));
+    this.featuresService.getAllActionTableEquity().subscribe({
+      next: (res: any) => {
+        if (res && res.data) {
+          const MFData = (res.data.action_data || []).map((item: any) => ({
+            scrip_name: item.scrip_name,
+            order_type: item.order_type,
+            unit: item.unit || '-',
+            order_date: item.order_date || '-',
+            purchase_amount: item.purchase_amount || '-',
+            source: 'Action'
+          }));
 
-        const aifData = (res.data.aif_data || []).map((item: any) => ({
-          scrip_name: item.amc_name,
-          order_type: 'AIF Contribution',
-          unit: '-',
-          order_date: '-',
-          purchase_amount: item.contribution_amount,
-          source: 'AIF'
-        }));
+          const aifData = (res.data.aif_data || []).map((item: any) => ({
+            scrip_name: item.amc_name,
+            order_type: 'AIF Contribution',
+            unit: '-',
+            order_date: '-',
+            purchase_amount: item.contribution_amount,
+            source: 'AIF'
+          }));
 
-        const equityData = (res.data.direct_equity_data || []).map((item: any) => ({
-          scrip_name: 'Direct Equity',
-          order_type: item.order_type,
-          unit: '-',
-          order_date: '-',
-          purchase_amount: item.trade_price,
-          source: 'Equity'
-        }));
+          const equityData = (res.data.direct_equity_data || []).map((item: any) => ({
+            scrip_name: 'Direct Equity',
+            order_type: item.order_type,
+            unit: '-',
+            order_date: '-',
+            purchase_amount: item.trade_price,
+            source: 'Equity'
+          }));
 
-this.MFActionTableList = res.data.action_data;
-this.aifTableList = res.data.aif_data;
-this.directEquityTableList = res.data.direct_equity_data;
+          this.MFActionTableList = res.data.action_data;
+          this.aifTableList = res.data.aif_data;
+          this.directEquityTableList = res.data.direct_equity_data;
+        }
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: error.error?.message || 'Update failed'
+        });
       }
-    },
-    error: (error) => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Failed',
-        detail: error.error?.message || 'Update failed'
-      });
-    }
-  });
+    });
   }
 
 
@@ -261,7 +259,7 @@ this.directEquityTableList = res.data.direct_equity_data;
     return `hsl(${hue}, 70%, 85%)`;
   }
 
-    getSeverity(orderType: string) {
+  getSeverity(orderType: string) {
     switch (orderType?.trim()?.toUpperCase()) {
       case 'PURCHASE':
         return 'success';

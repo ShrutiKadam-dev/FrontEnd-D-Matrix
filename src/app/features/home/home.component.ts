@@ -20,6 +20,13 @@ export class HomeComponent implements OnInit{
   allInstruments: any[] = [];
   displayInstruments: any[] = [];
 
+
+  totalCountList: any[] = [];
+  mcapChartData: any;
+  mcapChartOptions: any;
+
+  actionCounts: any = {};
+
   constructor(private router: Router) { }
 
   private featuresService = inject(FeaturesService);
@@ -46,7 +53,74 @@ export class HomeComponent implements OnInit{
 
   ngOnInit() {
     this.getAllHomeData();
+    this.getAllInstrumentCountChart();
   }
+
+getAllInstrumentCountChart() {
+  this.featuresService.getAllInstrumentCountChart().subscribe({
+    next: (res: any) => {
+      const data = res?.data || [];
+
+      if (!data.length) {
+        this.totalCountList = [];
+        this.mcapChartData = null;
+        return;
+      }
+
+      // Assign color dynamically
+      this.totalCountList = data.map((item:any, i:any) => {
+        const hue = (i * 360) / data.length;
+        return { ...item, color: `hsl(${hue}, 70%, 50%)` };
+      });
+
+      // Calculate total instruments
+      const totalCount = data[0]?.all_instruments_total_count || 0;
+      this.actionCounts = { total_count: totalCount };
+
+      // Build dynamic actionCounts (optional use in HTML)
+      data.forEach((item:any) => {
+        const key = item.instrument.toLowerCase().replace(/\s+/g, '_');
+        this.actionCounts[`${key}_count`] = item.instrument_total_count || 0;
+        this.actionCounts[`${key}_percent`] = item.percentage || 0;
+      });
+
+      // Prepare chart data
+      this.mcapChartData = {
+        labels: data.map((d: any) => d.instrument.replace(/_/g, ' ')),
+        datasets: [
+          {
+            data: data.map((d: any) => d.percentage),
+            backgroundColor: this.totalCountList.map((s) => s.color),
+            hoverBackgroundColor: this.totalCountList.map((s) => s.color),
+          },
+        ],
+      };
+
+      // Chart options
+      this.mcapChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (context: any) =>
+                `${context.label}: ${context.raw?.toFixed(1) || 0}%`,
+            },
+          },
+        },
+      };
+    },
+    error: (err) =>
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail:
+          err.error?.message || 'Failed to load Instrument Tag Allocation chart',
+      }),
+  });
+}
+
 
   goToInstrumentDetails(de: any) {
     if (!de) return;
