@@ -79,12 +79,12 @@ export class HomeComponent implements OnInit{
         this.router.navigate(['/features/equity']);
         break;
 
-      case 'fixed Income':
-        this.router.navigate(['/']);
+      case 'fixed income':
+        this.router.navigate(['/features/fixed-income']);
         break;
 
       case 'commodities':
-        this.router.navigate(['/']);
+        this.router.navigate(['/features/commodities']);
         break;
 
       default:
