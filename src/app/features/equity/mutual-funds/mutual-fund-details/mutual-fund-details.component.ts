@@ -491,8 +491,8 @@ export class MutualFundDetailsComponent implements OnInit {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false },
-            tooltip: {
+             legend: { position: 'bottom' },
+             tooltip: {
               callbacks: {
                 label: (context: any) => {
                   const value = typeof context.raw === 'number' ? context.raw : 0;
