@@ -1,7 +1,7 @@
 
 
 <!-- Search Section -->
-<div class="search-section">
+<div class="search-section" style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedETFName" [suggestions]="filteredETFNames" (completeMethod)="searchETFs($event)"
     (onSelect)="scrollToETF($event)" field="nickname" placeholder="Search ETF..." [minLength]="1">
   </p-autoComplete>

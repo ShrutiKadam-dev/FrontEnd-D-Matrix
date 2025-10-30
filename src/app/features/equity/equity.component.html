@@ -1,5 +1,5 @@
 <!-- Search Section -->
-<div class="search-section">
+<div class="search-section"   style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedEquityName" [suggestions]="filteredENames"
     (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..."
     [minLength]="1">
