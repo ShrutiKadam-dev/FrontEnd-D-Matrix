@@ -231,10 +231,10 @@ export class EquityComponent implements OnInit {
     }
   }
 
-  searchDEs(event: any) {
+  searchEquity(event: any) {
     const query = event.query?.toLowerCase() || '';
     this.filteredENames = this.allEs.filter(e =>
-      e.nickname?.toLowerCase().includes(query)
+      e.subcategory?.toLowerCase().includes(query)
     );
   }
 

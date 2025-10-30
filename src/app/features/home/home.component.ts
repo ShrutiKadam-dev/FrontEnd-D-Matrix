@@ -158,16 +158,16 @@ getAllInstrumentCountChart() {
     });
   }
 
-  scrollToDE(de: any) {
-    if (de) {
-      this.displayInstruments = [de]; // show only selected DE card in search mode
+  scrollToInstrument(inst: any) {
+    if (inst) {
+      this.displayInstruments = [inst]; // show only selected DE card in search mode
     }
   }
 
-  searchDEs(event: any) {
+  searchInstruments(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredInstrumentNames = this.allInstruments.filter(de =>
-      de.nickname?.toLowerCase().includes(query)
+    this.filteredInstrumentNames = this.allInstruments.filter(inst =>
+      inst.instrument?.toLowerCase().includes(query)
     );
   }
 

@@ -27,6 +27,22 @@
   </ng-template>
 </p-carousel>
 
+<!-- Search Result Card -->
+<p-carousel *ngIf="selectedMfName" [value]="filteredMfNames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+    <ng-template let-mf pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToMfDetails(mf)" [ngStyle]="{ cursor: 'pointer' }">
+      <ng-template pTemplate="header">
+        <div class="card-color" [ngStyle]="{'background-color': mf.color}"></div>
+      </ng-template>
+      <div class="card-title" [pTooltip]="mf.nickname">{{ mf.nickname || 'No Name' }}</div>
+      <div class="card-value">{{ mf.subcategory || 'No Subcategory' }}</div>
+      <div class="status">{{ mf.entityid }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
+
 <!-- MCAP Chart -->
 <div class="counts-card" style="margin-bottom: 2rem;">
   <p-card styleClass="P-card">

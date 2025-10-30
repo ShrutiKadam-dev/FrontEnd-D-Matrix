@@ -126,7 +126,7 @@ export class FixedIncomeComponent {
   }
 
 
-  goToEquityDetails(e: any) {
+  goToFixedIncomeDetails(e: any) {
     if (!e) return;
 
     switch (e.subcategory?.toLowerCase()) {
@@ -226,7 +226,7 @@ export class FixedIncomeComponent {
   searchDEs(event: any) {
     const query = event.query?.toLowerCase() || '';
     this.filteredENames = this.allEs.filter(e =>
-      e.nickname?.toLowerCase().includes(query)
+      e.subcategory?.toLowerCase().includes(query)
     );
   }
 

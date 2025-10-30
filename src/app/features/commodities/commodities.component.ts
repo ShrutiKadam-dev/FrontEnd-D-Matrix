@@ -1,38 +1,14 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { CommonModule } from '@angular/common';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { Table, TableModule } from 'primeng/table';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { SHARED_IMPORTS } from '../../shared/shared-imports';
 import { FeaturesService } from '../features.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CarouselModule } from 'primeng/carousel';
-import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { ChartModule } from 'primeng/chart';
 import { Location } from '@angular/common';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-commodities',
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    ChartModule,
-    CommonModule,
-    MessagesModule,
-    AutoCompleteModule,
-    MessageModule,
-    TableModule,
-    InputTextModule,
-    CarouselModule,
-    CardModule,
-    ReactiveFormsModule,
-    FormsModule
-  ],
+  imports: [...SHARED_IMPORTS ],
   templateUrl: './commodities.component.html',
   styleUrl: './commodities.component.scss'
 })
@@ -129,10 +105,10 @@ export class CommoditiesComponent implements OnInit {
     });
   }
 
-  goToDirectEquityDetails(de: any) {
-    if (!de) return;
+  goToCommodityDetails(com: any) {
+    if (!com) return;
 
-    switch (de.subcategory?.toLowerCase()) {
+    switch (com.subcategory?.toLowerCase()) {
       case 'etf':
         this.router.navigate(['/features/commodities/ETF']);
         break;
@@ -146,7 +122,7 @@ export class CommoditiesComponent implements OnInit {
         break;
 
       default:
-        console.warn('Unknown subcategory, staying on page', de.subcategory);
+        console.warn('Unknown subcategory, staying on page', com.subcategory);
         break;
     }
   }
@@ -155,8 +131,8 @@ export class CommoditiesComponent implements OnInit {
     this.featuresService.getAllCommoditiesHome().subscribe({
       next: (res: any) => {
         this.allCommoditys = res?.data || [];
-        this.allCommoditys.forEach(de => {
-          de.color = this.getColor(de.subcategory);
+        this.allCommoditys.forEach(com => {
+          com.color = this.getColor(com.subcategory);
         });
         this.displayCDs = [...this.allCommoditys]; // for carousel
       },
@@ -210,7 +186,6 @@ export class CommoditiesComponent implements OnInit {
     });
   }
 
-
   onGlobalFilter(event: Event) {
     const input = event.target as HTMLInputElement | null;
     if (input && this.dt) {
@@ -218,16 +193,16 @@ export class CommoditiesComponent implements OnInit {
     }
   }
 
-  scrollToDE(de: any) {
-    if (de) {
-      this.displayCDs = [de]; // show only selected DE card in search mode
+  scrollToDE(com: any) {
+    if (com) {
+      this.displayCDs = [com]; // show only selected DE card in search mode
     }
   }
 
   searchDEs(event: any) {
     const query = event.query?.toLowerCase() || '';
-    this.filteredCommodityNames = this.allCommoditys.filter(de =>
-      de.nickname?.toLowerCase().includes(query)
+    this.filteredCommodityNames = this.allCommoditys.filter(com =>
+      com.subcategory?.toLowerCase().includes(query)
     );
   }
 

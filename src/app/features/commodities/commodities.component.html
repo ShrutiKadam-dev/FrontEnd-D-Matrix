@@ -1,8 +1,8 @@
 
 <!-- Search Section -->
-<div class="search-section">
+<div class="search-section" style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedCommoditiesName" [suggestions]="filteredCommodityNames"
-    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="nickname" placeholder="Search E..."
+    (completeMethod)="searchDEs($event)" (onSelect)="scrollToDE($event)" field="subcategory" placeholder="Search Commodity.."
     [minLength]="1">
   </p-autoComplete>
 
@@ -14,31 +14,37 @@
 <p-carousel [value]="displayCDs" [numVisible]="3" [numScroll]="3" [circular]="false"
   [responsiveOptions]="responsiveOptions" *ngIf="!selectedCommoditiesName">
 
-  <ng-template let-de pTemplate="item">
-    <p-card styleClass="P-card" (click)="goToDirectEquityDetails(de)" [ngStyle]="{ cursor: 'pointer' }">
+  <ng-template let-com pTemplate="item">
+    <p-card styleClass="P-card" (click)="goToCommodityDetails(com)" [ngStyle]="{ cursor: 'pointer' }">
       <ng-template pTemplate="header">
-        <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+        <div class="card-color" [ngStyle]="{'background-color': com.color}"></div>
       </ng-template>
       <!-- Truncate with ellipsis & tooltip -->
-      <div class="card-title" [title]="de.subcategory">{{ de.subcategory || 'No Subcategory' }}</div>
-      <div class="card-value">{{ de.category || 'No Category' }}</div>
-      <div class="status">Total Entity Count : {{ de.total }}</div>
+      <div class="card-title"  [pTooltip]="com.subcategory">{{ com.subcategory || 'No Subcategory' }}</div>
+      <div class="card-value">{{ com.category || 'No Category' }}</div>
+      <div class="status">Total Entity Count : {{ com.total }}</div>
     </p-card>
   </ng-template>
 </p-carousel>
 
 <!-- Search Result Card -->
-<div *ngIf="selectedCommoditiesName" class="card-container">
-  <p-card *ngFor="let de of displayCDs" styleClass="P-card">
+<p-carousel *ngIf="selectedCommoditiesName" [value]="filteredCommodityNames" [numVisible]="3" [numScroll]="3" [circular]="false"
+  [responsiveOptions]="responsiveOptions" styleClass="custom-carousel">
+  
+  <ng-template let-com pTemplate="item">
+    <p-card styleClass="P-card" [ngStyle]="{ cursor: 'pointer'}" (click)="goToCommodityDetails(com)">
     <ng-template pTemplate="header">
-      <div class="card-color" [ngStyle]="{'background-color': de.color}"></div>
+      <div class="card-color" [ngStyle]="{'background-color': com.color}"></div>
     </ng-template>
-    <!-- Truncate with ellipsis & tooltip -->
-    <div class="card-title" [title]="de.subcategory">{{ de.nickname || 'No Name' }}</div>
-    <div class="card-value">{{ de.subcategory || 'No Subcategory' }}</div>
-    <div class="status">{{ de.entityid }}</div>
-  </p-card>
-</div>
+      <!-- Truncate with ellipsis & tooltip -->
+      <!-- Truncate with ellipsis & tooltip -->
+      <div class="card-title"  [pTooltip]="com.subcategory">{{ com.subcategory || 'No Subcategory' }}</div>
+      <div class="card-value">{{ com.category || 'No Category' }}</div>
+      <div class="status">Total Entity Count : {{ com.total }}</div>
+    </p-card>
+  </ng-template>
+</p-carousel>
+
 
 
 <!-- Pie Chart Card -->
