@@ -53,8 +53,8 @@
           <td [title]="entity.scripname">{{ entity.scripname }}</td>
           <td>{{ entity.scripcode }}</td>
           <td>{{ entity.benchmark_name }}</td>
-          <td>{{ entity.category }}</td>
-          <td>{{ entity.subcategory }}</td>
+          <td>{{ entity.category.replace('_',' ') }}</td>
+          <td>{{ entity.subcategory  === 'Alternative Investment Funds' ? 'AIF' : entity.subcategory }}</td>
           <td>
             <p-button icon="pi pi-pencil" styleClass="custom-btn-edit" (click)="editEntity(entity)"></p-button>
             <p-button icon="pi pi-file-edit" styleClass="custom-btn-update" (click)="updateEntity(entity)"></p-button>
