@@ -1,7 +1,7 @@
 <!-- Search Section -->
 <div class="search-section" style="margin-left: 70px;">
   <p-autoComplete [(ngModel)]="selectedEquityName" [suggestions]="filteredENames" (completeMethod)="searchEquity($event)"
-    (onSelect)="scrollToDE($event)" field="subcategory" placeholder="Search Subcategory.." [minLength]="1">
+    (onSelect)="scrollToDE($event)" field="subcategory" placeholder="Search Equity.." [minLength]="1">
   </p-autoComplete>
 
   <button *ngIf="selectedEquityName" pButton icon="pi pi-times" class="p-button-text" (click)="clearSearch()">
